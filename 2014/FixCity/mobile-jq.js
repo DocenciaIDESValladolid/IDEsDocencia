@@ -114,8 +114,7 @@ function initLayerList() {
         .appendTo('#layerslist');
     var baseLayers = map.getLayersBy("isBaseLayer", true);
     $.each(baseLayers, function() {
-		if(this.name!='vector')
-        addLayerToList(this);
+		addLayerToList(this);
     });
 
     $('<li>', {
@@ -125,6 +124,7 @@ function initLayerList() {
         .appendTo('#layerslist');
     var overlayLayers = map.getLayersBy("isBaseLayer", false);
     $.each(overlayLayers, function() {
+		if(this.name!='vector')
         addLayerToList(this);
     });
     $('#layerslist').listview('refresh');
