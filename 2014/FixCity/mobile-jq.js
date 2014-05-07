@@ -109,7 +109,7 @@ function initLayerList() {
     $('#layerspage').page();
     $('<li>', {
             "data-role": "list-divider",
-            text: "Base Layers"
+            text: "Vista del Mapa"
         })
         .appendTo('#layerslist');
     var baseLayers = map.getLayersBy("isBaseLayer", true);
@@ -119,7 +119,7 @@ function initLayerList() {
 
     $('<li>', {
             "data-role": "list-divider",
-            text: "Overlay Layers"
+            text: "Capas"
         })
         .appendTo('#layerslist');
     var overlayLayers = map.getLayersBy("isBaseLayer", false);

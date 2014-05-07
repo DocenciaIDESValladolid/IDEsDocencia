@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-        <title>FixCity 0.1</title>
+        <title>FixCity</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css">
@@ -15,7 +15,8 @@
         <script src="mobile-jq.js"></script>
     </head>
     <body>
-        <h1 id="title">FixCity</h1>   
+        <h1 id="title">FixCity</h1>
+           
         <div data-role="page" id="mappage">
           <div data-role="content">
             <div id="map"></div>
@@ -24,7 +25,11 @@
           <div data-role="footer">
             <a href="#searchpage" data-icon="search" data-role="button">Search</a>
             <a href="#" id="locate" data-icon="locate" data-role="button">Locate</a>
-            <a href="#layerspage" data-icon="layers" data-role="button">Layers</a>
+            <a href="#layerspage" data-icon="layers" data-role="button">Capas</a>
+			<a href="#nuevadenuncia" data-icon="nueva" data-role="button">Nueva Denuncia</a>
+			<a href="#misdenuncias" data-icon="layers" data-role="button">Mis Denuncias</a>
+			<a href="#estadisticas" data-icon="layers" data-role="button">Estadísticas</a>
+			<a href="#aboutus" data-icon="layers" data-role="button">About Us</a>
           </div>
           <div id="navigation" data-role="controlgroup" data-type="vertical">
             <a href="#" data-role="button" data-icon="plus" id="plus"
@@ -55,8 +60,108 @@
             </ul>
           </div>
         </div>
+		
+		<div data-role="page" id="nuevadenuncia">
+          <div data-role="header">
+            <h1>Nueva Denuncia</h1>
+          </div>
+				<div>
+				    <div style="margin-top: 50px;margin-left: 100px;margin-right: 100px;">      
+							<form role="form">
+							  <div class="form-group">
+							  <label for="ubicacion">Ubicación</label>
+							  <input type="text" class="form-control" id="ubicacion"
+									 placeholder="Introduce tu ubicación">
+							  </div>
+							<div class="form-group">
+							  <label for="ejemplo_archivo_1">Adjuntar un archivo</label>
+							  <input type="file" id="ejemplo_archivo_1">
+							</div>
+							<div class="checkbox">
+							  <label>
+								<input type="checkbox"> Activa esta casilla para localización actual
+							  </label>
+							</div>
+							<textarea name="comentarios" rows="10" cols="80">Escriba aquí la descripción de su denuncia</textarea>
+							<button type="submit" class="btn btn-default">Enviar</button>
+							<input type="button" name="Cancelar" value="Cancelar" onClick="location.href='index.html'"> 
+						  </form>
+					</div>
+				</div>
+		</div>
+		
+		
+		
+		
+		<div data-role="page" id="misdenuncias">
+          <div data-role="header">
+            <h1>Mis Denuncias</h1>
+          </div>
 
-        <div id="popup" data-role="dialog">
+		</div>		
+		
+		<div data-role="page" id="estadisticas">
+          <div data-role="header">
+            <h1>Estadísticas</h1>
+          </div>
+
+		</div>		
+		
+		<div data-role="page" id="aboutus">
+          <div data-role="header">
+            <h1>About Us</h1>
+          </div>		
+				<div class="row" style="margin-top:50px; margin-left: 100px ;margin-right: 100px;">
+				<div class="col-lg-4">
+				  <h2>JUAN CARLOS ÁLVAREZ DIÉGUEZ</h2>
+				  <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p>
+				  <a href="#creador1" data-icon="layers" data-role="button">Juan Carlos Álvarez Diéguez</a>
+				</div>
+				<div class="col-lg-4">
+				  <h2>CARLOS ALBERTO ÁVAREZ GARCÍA</h2>
+				  <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p>
+				  <p><a class="btn btn-primary" href="creador2.html" role="button">Ver Detalles &raquo;</a></p>
+			   </div>
+				<div class="col-lg-4">
+				  <h2>JOSU ESCALADA BLANCO</h2>
+				  <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación mención en Telemática.</p>
+				  <p><a class="btn btn-primary" href="creador3.html" role="button">Ver Detalles &raquo;</a></p>
+				</div>
+			  </div>
+		</div>
+		
+		<div data-role="page" id="creador1">
+          <div data-role="header">
+            <h1>Juan Carlos Álvarez Diéguez</h1>
+          </div>
+				<table align="center" border="0" cellpadding="30">					
+				<td width="0%"><p><img src="images/images/JuanCarlosAlvarez.jpg" width="290" height="324"></td>				
+				</table> 
+			  <div align="center">
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Juan Carlos Álvarez Diéguez</font>
+					<p>
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Escuela Técnica Superior de Ingenieros de Telecomunicaciones</font>
+					<p>
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, Mención en Telemática</font>
+					</p><p>
+					<div>
+					<a href="mailto:dieguez989@gmail.com">
+					<font face="Comic Sans MS,arial,verdana" font size=4  font color="E7880C">dieguez989@gmail.com</font>
+					</p>
+					</div>
+					<div>
+					<a href="http://www.hotmail.com">
+					<td width="0%"><img src="images/images/hotmail.jpg" width="65" height="50" >
+					<a href="http://www.gmail.com">
+					<td width="0%"><img src="images/images/gmail-correo.png" width="65" height="50" >
+					<a href="http://es.mail.yahoo.com/">
+					<td width="0%"><img src="images/images/yahoo.png" width="65" height="50" >
+					</a></p></td></tr>
+					</div>
+				</div>
+		
+					
+	   <div id="popup" data-role="dialog">
             <div data-position="inline" data-theme="d" data-role="header">
                 <h1>Details</h1>
             </div>

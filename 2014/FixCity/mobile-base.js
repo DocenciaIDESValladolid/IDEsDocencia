@@ -9,7 +9,7 @@ var sm = new OpenLayers.Projection("EPSG:900913");
 
 var init = function (onSelectFeatureFunction) {
 
-    var vector = new OpenLayers.Layer.Vector("Vector Layer", {});
+    var vector = new OpenLayers.Layer.Vector("Localización", {});
 	
     var sprintersLayer = new OpenLayers.Layer.Vector("Sprinters", {
         styleMap: new OpenLayers.StyleMap({
@@ -49,56 +49,46 @@ var init = function (onSelectFeatureFunction) {
             selectControl
         ],
         layers: [
-		   new OpenLayers.Layer.OSM("OpenStreetMap", null, {
-                transitionEffect: 'resize'
-            }),
-            new OpenLayers.Layer.Bing({
-                key: apiKey,
-                type: "Road",
-                // custom metadata parameter to request the new map style - only useful
-                // before May 1st, 2011
-                metadataParams: {
-                    mapVersion: "v1"
-                },
-                name: "Bing Road",
+		   new OpenLayers.Layer.OSM("Vista Callejero", null, {
                 transitionEffect: 'resize'
             }),
             new OpenLayers.Layer.Bing({
                 key: apiKey,
                 type: "Aerial",
-                name: "Bing Aerial",
+                name: "Vista Aérea",
                 transitionEffect: 'resize'
             }),
-            new OpenLayers.Layer.Bing({
-                key: apiKey,
-                type: "AerialWithLabels",
-                name: "Bing Aerial + Labels",
-                transitionEffect: 'resize'
-            }),
-            vector,
-            sprintersLayer
-        ],
+		vector
+			
+            ],
         center: new OpenLayers.LonLat(0, 0),
         zoom: 1
     });
 	
+	
+
+	
+	/*
 	var wms = new OpenLayers.Layer.WMS("Denuncias WMS",
         "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
-        {layers: 'IDEs:denunciasprueba',transparent:true},
+        {layers: 'IDEs:denuncias',transparent:true},
         {isBaseLayer: false, transitionEffect: 'resize', singleTile:false}
-    );
+    );*/
+	
 	
 	var wfs = new OpenLayers.Layer.Vector("Denuncias", {
-        strategies: [new OpenLayers.Strategy.Fixed()],
+        //strategies: [new OpenLayers.Strategy.Fixed()],
+		strategies: [new OpenLayers.Strategy.BBOX({resFactor: 1})],
         protocol: new OpenLayers.Protocol.WFS({
             url: "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
-            featureType: "denunciasprueba",
+            featureType: "denuncias",
             featureNS: "http://www.idelab.uva.es/#IDES",
-	    srsName: "EPSG:900913"
+			srsName: "EPSG:900913",
+			version: "1.1.0"
         })
     });
 
-    map.addLayers([wms,wfs]);
+    map.addLayers([wfs]);
 
     var style = {
         fillOpacity: 0.1,
@@ -177,5 +167,7 @@ var init = function (onSelectFeatureFunction) {
 
         return reader.read(features);
     }
+
+	
 
 };
