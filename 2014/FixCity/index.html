@@ -49,6 +49,39 @@
                    autocomplete="off"/>
           </div>
           <ul data-role="listview" data-inset="true" id="search_results"></ul> 
+		  <script>
+				  function submitform() {
+					var queryString = document.forms[0].query.value;
+					OpenLayers.Request.POST({
+						url: "http://www.openrouteservice.org/php/OpenLSLUS_Geocode.php",
+						scope: this,
+						failure: this.requestFailure,
+						success: this.requestSuccess,
+						headers: {"Content-Type": "application/x-www-form-urlencoded"},
+						data: "FreeFormAdress=" + encodeURIComponent(queryString) + "&MaxResponse=1"
+					});
+				}
+				function requestSuccess(response) {
+					var format = new OpenLayers.Format.XLS();
+					var output = format.read(response.responseXML);
+					if (output.responseLists[0]) {
+						var geometry = output.responseLists[0].features[0].geometry;
+						var foundPosition = new OpenLayers.LonLat(geometry.x, geometry.y).transform(
+								new OpenLayers.Projection("EPSG:4326"),
+								map.getProjectionObject()
+								);
+						map.setCenter(foundPosition, 16);
+					} else {
+						alert("Sorry, no address found");
+					}
+				}
+				function requestFailure(response) {
+					alert("An error occurred while communicating with the OpenLS service. Please try again.");
+				}
+			</script>
+		  
+		  
+		  
         </div>
 
         <div data-role="page" id="layerspage">
