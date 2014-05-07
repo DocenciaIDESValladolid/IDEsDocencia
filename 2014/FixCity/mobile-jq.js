@@ -75,7 +75,7 @@ $('#searchpage').live('pageshow',function(event, ui){
         // Prevent form send
         e.preventDefault();
 
-        var searchUrl = 'http://ws.geonames.org/searchJSON?featureClass=P&maxRows=10';
+        var searchUrl = 'http://ws.geonames.org/searchJSON?featureClass=P&maxRows=10&username=IDE14';
         searchUrl += '&name_startsWith=' + $('#query')[0].value;
         $.getJSON(searchUrl, function(data) {
             $.each(data.geonames, function() {
