@@ -71,27 +71,56 @@
 				<div>
 				    <div style="margin-top: 50px;margin-left: 100px;margin-right: 100px;">      
 							<form role="form">
-							  <div class="form-group">
-							  <label for="ubicacion">Ubicación</label>
-							  <input type="text" class="form-control" id="ubicacion"
-									 placeholder="Introduce tu ubicación">
-							  </div>
-							<div class="form-group">
-							  <label for="ejemplo_archivo_1">Adjuntar un archivo</label>
-							  <input type="file" id="ejemplo_archivo_1">
-							</div>
-							<div class="checkbox">
-							  <label>
-								<input type="checkbox"> Activa esta casilla para localización actual
-							  </label>
-							</div>
-							<textarea name="comentarios" rows="10" cols="80">Escriba aquí la descripción de su denuncia</textarea>
-							<p><p>
-							<button type="submit" class="btn btn-default">Enviar</button>
+							
+							<p>Dirección</p>
+							<textarea name="dirección" rows="1" cols="80"></textarea>
+							
+							<p>Escriba aquí la descripción de su denuncia</p>
+							<textarea name="comentarios" rows="10" cols="80"></textarea>
+							
+							<p>Seleccione hasta 3 imágenes que identifiquen la denuncia:</p>
+							<input type="file" id="file1">
+							<br>
+							<input type="file" id="file2">
+							<br>
+							<input type="file" id="file3">
+							<br>
+							
+							<input type="button" value="Enviar " class="btn btn-default" onClick="enviarDenuncia">
 							<input type="reset" value="Borrar">
-							<p><p>
 							<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
-							</form>
+						  </form>
+					</div>
+				</div>
+		</div>
+		
+		
+		<div data-role="page" id="nuevadenuncia_loc_actual">
+          <div data-role="header">
+            <h1>Nueva Denuncia</h1>
+          </div>
+				<div>
+				    <div style="margin-top: 50px;margin-left: 100px;margin-right: 100px;">      
+							<form role="form">
+							
+							<p>La localización actual es:</p>
+							<br> patatín... </br>
+							
+							<p>Escriba aquí la descripción de su denuncia</p>
+							<textarea name="comentarios" rows="10" cols="80" ></textarea>
+							
+							<p>Seleccione hasta 3 imágenes que identifiquen la denuncia:</p>
+							<input type="file" id="file1">
+							<br>
+							<input type="file" id="file2">
+							<br>
+							<input type="file" id="file3">
+							<br>
+							
+							<input type="button" value="Enviar " class="btn btn-default" onClick="enviarDenuncia">
+							<input type="reset" value="Borrar">
+							<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+						  </form>
 					</div>
 				</div>
 		</div>
