@@ -37,6 +37,7 @@ var init = function (onSelectFeatureFunction) {
         }
     });
     // create map
+	
     map = new OpenLayers.Map({
         div: "map",
         theme: null,
@@ -61,7 +62,7 @@ var init = function (onSelectFeatureFunction) {
 		vector
 			
             ],
-        center: new OpenLayers.LonLat(0, 0),
+        center: new OpenLayers.LonLat(0, 0),	
         zoom: 1
     });
 	

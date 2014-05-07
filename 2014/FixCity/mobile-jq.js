@@ -24,6 +24,12 @@ function fixContentHeight() {
             $.mobile.changePage("#popup", "pop"); 
         });
         initLayerList();
+			var control = map.getControlsBy("id", "locate-control")[0];
+			if (control.active) {
+				control.getCurrentLocation();
+			} else {
+				control.activate();
+			}
     }
 }
 
