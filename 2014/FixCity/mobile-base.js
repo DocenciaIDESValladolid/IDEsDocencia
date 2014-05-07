@@ -9,7 +9,7 @@ var sm = new OpenLayers.Projection("EPSG:900913");
 
 var init = function (onSelectFeatureFunction) {
 
-    var vector = new OpenLayers.Layer.Vector("Localización", {});
+    var vector = new OpenLayers.Layer.Vector("vector", {});
 	
     var sprintersLayer = new OpenLayers.Layer.Vector("Sprinters", {
         styleMap: new OpenLayers.StyleMap({
