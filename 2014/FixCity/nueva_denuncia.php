@@ -40,7 +40,7 @@ $latitud = -1.000000;
 
  
   if ($resultado)
-      echo  mysql_affected_rows().' denuncias introducidas en la Base de Datos.'; 
+      echo  pg_affected_rows().' denuncias introducidas en la Base de Datos.'; 
 ?>
 
 </body>
