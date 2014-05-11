@@ -27,7 +27,7 @@ $latitud = -1.000000;
   
   $texto = addslashes($texto);
 
-  @ $db = mysql_pconnect('postgresql.idelab.uva.es', 'testDev', 'testIDELAB');
+  $db = pg_connect('host=postgresql.idelab.uva.es user=testDev password=testIDELAB dbname=idelab');
 
   if (!$db)
   {
@@ -35,7 +35,6 @@ $latitud = -1.000000;
      exit;
   }
 
-  mysql_select_db('idelab');
   $query = "INSERT INTO denuncias (texto, localizacion, fecha) VALUES 
             ('".$texto."', ST_GeomFromText('POINT(".$longitud." ".$latitud.")',4326),current_date)"; 
 
