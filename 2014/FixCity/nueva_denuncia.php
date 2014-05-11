@@ -7,35 +7,27 @@
 </head>
 
 <body>
-<h2>Resultado de la Introducción de Clientes en el Catálogo de Mi Empresa</h2>
 <?php
 
-@ $nombre=$_POST['nombre'];
-@ $email=$_POST['email'];
-@ $telefono=$_POST['telefono'];
-@ $direccion=$_POST['direccion'];
-@ $ciudad=$_POST['ciudad'];
+//@ $longitud=$_POST['longitud'];
+//@ $latitud=$_POST['latitud'];
+// Coordenadas de prueba
+$longitud = 42.000000;
+$latitud = -1.000000;
+@ $texto=$_POST['texto'];
 
-  $nombre = trim($nombre);
-  $email = trim($email);
-  $telefono = trim($telefono);
-  $direccion = trim($direccion);
-  $ciudad = trim($ciudad);
+  $texto = trim($texto);
 
-  if (!$nombre || !$email || !$telefono || !$direccion || !$ciudad)
+  if (!$latitud || !$longitud || !$texto)
   {
      echo 'No ha introducido toda la información requerida para el cliente.<br />'
           .'Por favor, vuelva a la página anterior e inténtelo de nuevo.';
      exit;
   }
   
-  $nombre = addslashes($nombre);
-  $email = addslashes($email);
-  $telefono = addslashes($telefono);
-  $direccion = addslashes($direccion);
-  $ciudad = addslashes($ciudad);
+  $texto = addslashes($texto);
 
-  @ $db = mysql_pconnect('servidor', 'login_BD', 'pass_BD');
+  @ $db = mysql_pconnect('postgresql.idelab.uva.es', 'testDev', 'testIDELAB');
 
   if (!$db)
   {
@@ -43,20 +35,13 @@
      exit;
   }
 
-  mysql_select_db('nombre_BD');
-  $query = "insert into clientes values 
-            (NULL, '$nombre', '$email', '$telefono', '$direccion', '$ciudad')"; 
-			
-			/*
-	INTO denuncias (texto, localizacion, fecha) 
-	VALUES ('Farola deteriorada', ST_GeomFromText('POINT(-4.68651 41.61355)',4326), current_date);
-*/
-//   	En caso de problemas: concatenación
-//		$query = "insert into clientes values 
-//             (NULL, '". $nombre ."', '". $email ."', '". $telefono ."', '". $direccion ."', '" . $ciudad ."')"; 
-  $resultado = mysql_query($query);
+  mysql_select_db('idelab');
+  $query = "INSERT INTO denuncias (texto, localizacion, fecha) VALUES 
+            ('".$texto."', ST_GeomFromText('POINT(".$longitud." ".$latitud.")',4326),current_date)"; 
+
+ 
   if ($resultado)
-      echo  mysql_affected_rows().' clientes introducidos en la Base de Datos.'; 
+      echo  mysql_affected_rows().' denuncias introducidas en la Base de Datos.'; 
 ?>
 
 </body>
