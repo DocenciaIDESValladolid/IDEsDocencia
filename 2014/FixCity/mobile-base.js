@@ -127,6 +127,8 @@ var init = function (onSelectFeatureFunction) {
         map.zoomToExtent(vector.getDataExtent());
     });
 	
+	/*
+	
     geolocate.events.register("locationupdated", this, function(e) {
 		var request= OpenLayers.Request.POST({
 			url: "http://www.ign.es/wfs/unidades-administrativas",
@@ -165,7 +167,7 @@ var init = function (onSelectFeatureFunction) {
 			});
 		request.send();    
     });
-	
+*/	
 
     function getFeatures() {
         var features = {
