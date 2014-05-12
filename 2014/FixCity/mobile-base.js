@@ -156,7 +156,7 @@ var init = function (onSelectFeatureFunction) {
 								 feature.attributes.description,
 								 null, true, onPopupClose);*/
 		var popup = new OpenLayers.Popup.FramedCloud("Popup", 
-								myLocation.getBounds().getCenterLonLat(), null,
+								feature.geometry.getBounds().getCenterLonLat(), null,
 								'<a href="#nuevadenuncia_loc_actual" data-icon="nueva" data-role="button">Nueva Denuncia</a>', null,
 								true, onPopupClose // <-- true if we want a close (X) button, false otherwise
 		);
