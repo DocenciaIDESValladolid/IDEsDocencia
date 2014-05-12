@@ -21,8 +21,8 @@ var init = function (onSelectFeatureFunction) {
         })
     });
 
-    //var sprinters = getFeatures();
-    //sprintersLayer.addFeatures(sprinters);
+    var sprinters = getFeatures();
+    sprintersLayer.addFeatures(sprinters);
 
     var selectControl = new OpenLayers.Control.SelectFeature(sprintersLayer, {
         autoActivate:true,
