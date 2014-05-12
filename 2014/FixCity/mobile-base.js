@@ -144,7 +144,7 @@ var init = function (onSelectFeatureFunction) {
 						+' 	  <And>\n'
 						+' 	  <PropertyIsGreaterThanOrEqualTo>\n'
 						+' 		<PropertyName>nationallevel</PropertyName>\n'
-						+' 		<Literal>'+problevel+'</Literal>\n'
+						+' 		<Literal>'+provlevel+'</Literal>\n'
 						+' 	  </PropertyIsGreaterThanOrEqualTo>\n'
 						+' 	  <Intersects>\n'
 						+' 		<PropertyName>the_geom</PropertyName>\n'
