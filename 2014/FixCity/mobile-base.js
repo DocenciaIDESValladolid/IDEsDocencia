@@ -125,22 +125,65 @@ var init = function (onSelectFeatureFunction) {
         map.zoomToExtent(vector.getDataExtent());
     });
 		
-	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
+/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
 	geolocate.events.register("locationupdated", this, eventLocationChanged);
 	
-/*FUNCION PARA EL POP-UP CON LA INFORMACIÓN DE LOCALIZACIÓN ACTUAL*/
-
+	/*FUNCION PARA EL POP-UP CON LA INFORMACIÓN DE LOCALIZACIÓN ACTUAL*/
     var myLocation = new OpenLayers.Geometry.Point(-4, 41)
         .transform('EPSG:4326', 'EPSG:3857');
-		
-    var popup = new OpenLayers.Popup.FramedCloud("Popup", 
-        myLocation.getBounds().getCenterLonLat(), null,
-		'<a href="#nuevadenuncia_loc_actual" data-icon="nueva" data-role="button">Nueva Denuncia</a>', null,
-        true // <-- true if we want a close (X) button, false otherwise
-    );
-	map.addPopup(popup);
 	
-};// End of init
+
+	
+
+		// Interaction; not needed for initial display.
+		selectControl = new OpenLayers.Control.SelectFeature(layer);
+		map.addControl(selectControl);
+		selectControl.activate();
+		layer.events.on({
+			'featureselected': onFeatureSelect,
+			'featureunselected': onFeatureUnselect
+		});
+	//map.addPopup(popup);
+	
+	};// End of init
+
+	function onFeatureSelect(evt) {
+		feature = evt.feature;
+		/*popup = new OpenLayers.Popup.FramedCloud("featurePopup",
+								 feature.geometry.getBounds().getCenterLonLat(),
+								 new OpenLayers.Size(100,100),
+								 "<h2>"+feature.attributes.title + "</h2>" +
+								 feature.attributes.description,
+								 null, true, onPopupClose);*/
+		var popup = new OpenLayers.Popup.FramedCloud("Popup", 
+								myLocation.getBounds().getCenterLonLat(), null,
+								'<a href="#nuevadenuncia_loc_actual" data-icon="nueva" data-role="button">Nueva Denuncia</a>', null,
+								true, onPopupClose // <-- true if we want a close (X) button, false otherwise
+		);
+		feature.popup = popup;
+		popup.feature = feature;
+		map.addPopup(popup, true);
+	}
+	
+	function onPopupClose(evt) {
+		// 'this' is the popup.
+		var feature = this.feature;
+		if (feature.layer) { // The feature is not destroyed
+			selectControl.unselect(feature);
+		} else { // After "moveend" or "refresh" events on POIs layer all 
+				 //     features have been destroyed by the Strategy.BBOX
+			this.destroy();
+		}
+	}
+	function onFeatureUnselect(evt) {
+		feature = evt.feature;
+		if (feature.popup) {
+			popup.feature = null;
+			map.removePopup(feature.popup);
+			feature.popup.destroy();
+			feature.popup = null;
+		}
+	}
 
 	function eventLocationChanged(e){
 	
