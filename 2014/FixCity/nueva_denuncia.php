@@ -35,11 +35,12 @@ $latitud = -1.000000;
      exit;
   }
 
-  $query = "INSERT INTO denuncias (texto, localizacion, fecha) VALUES 
+	$query = "INSERT INTO denuncias (texto, localizacion, fecha) VALUES 
             ('".$texto."', ST_GeomFromText('POINT(".$longitud." ".$latitud.")',4326),current_date)"; 
+	$result = pg_exec($db, $query);
 
  
-  if ($resultado)
+	if ($resultado)
       echo  pg_affected_rows().' denuncias introducidas en la Base de Datos.'; 
 ?>
 

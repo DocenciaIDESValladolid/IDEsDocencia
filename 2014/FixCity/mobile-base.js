@@ -36,6 +36,8 @@ var init = function (onSelectFeatureFunction) {
             timeout: 7000
         }
     });
+	
+
     // create map
 	
     map = new OpenLayers.Map({
