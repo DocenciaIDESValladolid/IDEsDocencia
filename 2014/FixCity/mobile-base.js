@@ -152,7 +152,7 @@ var init = function (onSelectFeatureFunction) {
 						  <Intersects>
 							<PropertyName>the_geom</PropertyName>
 							  <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
-								<gml:coordinates>'4','4'</gml:coordinates>
+								//<gml:coordinates>'+e.point.x+','+e.point.y+'</gml:coordinates>
 							  </gml:Point>
 							</Intersects>
 						   </And>
@@ -189,7 +189,6 @@ var init = function (onSelectFeatureFunction) {
 							<PropertyName>the_geom</PropertyName>
 							  <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
 								//<gml:coordinates>'+e.point.x+','+e.point.y+'</gml:coordinates>
-								<gml:coordinates>'4','4'</gml:coordinates>
 							  </gml:Point>
 							</Intersects>
 						   </And>
