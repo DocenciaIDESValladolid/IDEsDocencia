@@ -191,8 +191,8 @@ var init = function (onSelectFeatureFunction) {
 			headers: {
 				"Content-Type": "text/xml;charset=utf-8"
 			},
-		success: function(data){alert('EXITO');}
-		failure: function(data){alert('FAIL');}
+		//success: function(data){alert('EXITO');}
+		//failure: function(data){alert('FAIL');}
 			});
 		requestmuni.send(); 
 		var requestprov= OpenLayers.Request.POST({
@@ -201,8 +201,8 @@ var init = function (onSelectFeatureFunction) {
 			headers: {
 				"Content-Type": "application/xml"
 			},
-		success: function(data){alert('EXITO');}
-		failure: function(data){alert('FAIL');}
+		//success: function(data){alert('EXITO');}
+		//failure: function(data){alert('FAIL');}
 			});
 		requestprov.send();		
     });
