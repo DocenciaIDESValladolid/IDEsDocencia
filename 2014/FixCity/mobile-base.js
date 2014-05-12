@@ -129,17 +129,18 @@ var init = function (onSelectFeatureFunction) {
 	geolocate.events.register("locationupdated", this, eventLocationChanged);
 	
 /*FUNCION PARA EL POP-UP CON LA INFORMACIÓN DE LOCALIZACIÓN ACTUAL*/
-  var myLocation = new OpenLayers.Geometry.Point(-4, 41)
+
+    var myLocation = new OpenLayers.Geometry.Point(-4, 41)
         .transform('EPSG:4326', 'EPSG:3857');
 		
     var popup = new OpenLayers.Popup.FramedCloud("Popup", 
         myLocation.getBounds().getCenterLonLat(), null,
-		'<a href="#nuevadenuncia" data-icon="nueva" data-role="button">Nueva Denuncia</a>', null,
+		'<a href="#nuevadenuncia_loc_actual" data-icon="nueva" data-role="button">Nueva Denuncia</a>', null,
         true // <-- true if we want a close (X) button, false otherwise
     );
 	map.addPopup(popup);
 	
-};// End init
+};// End of init
 
 	function eventLocationChanged(e){
 	
