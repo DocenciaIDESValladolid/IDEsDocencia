@@ -79,6 +79,101 @@
 					alert("An error occurred while communicating with the OpenLS service. Please try again.");
 				}
 			</script>
+			
+			<div>
+										<tr>
+						  <td class="XSdataCol1" valign="top" align="bottom">[[description]]: [[help]]</td>
+						  <td class="XSdataCol2">
+							<form>
+								please add here tour search location <br>
+								<input type="text" name="adres" value=""><input type="Submit" name="Submit"value="Submit" onclick="zoekAdres_[[fieldname]]()]">
+							</form>
+							<div onclick="removeMarker_[[fieldname]]()">remove marker</div>
+							<input type="hidden" maxlength="255" name="[[fieldname]]" value="[[value]]">
+							<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<xsproc name="C_GoogleMaps::getAPIKey"></xsproc>" type="text/javascript"></script>
+							<script type="text/javascript">
+
+							  var map_[[fieldname]];
+							  var markerCount_[[fieldname]]=0;
+							  var marker_[[fieldname]];
+
+							  function updateLocatie(point) {
+								console.log(point);
+								if (point) {
+								  document.forms.mainform.[[fieldname]].value="("+ point.y + "," + point.x +")";
+								}
+							  }
+
+							  function removeMarker_[[fieldname]]() {
+								markerCount_[[fieldname]]=0;
+								document.forms.mainform.[[fieldname]].value="";
+								map_[[fieldname]].clearOverlays();
+							  }
+							  function zoekAdres_[[fieldname]](){
+
+							  }
+
+							  function load_[[fieldname]]() {
+								if (GBrowserIsCompatible()) {
+								  map_[[fieldname]]=new GMap2(document.getElementById("map_[[fieldname]]"));
+								  map_[[fieldname]].enableScrollWheelZoom();
+								  map_[[fieldname]].enableContinuousZoom();
+								  map_[[fieldname]].enableDoubleClickZoom();
+								  map_[[fieldname]].addControl(new GLargeMapControl());
+
+								  var lat_center=<xsproc name="C_GoogleMaps::getLatCenter" params="[[value]]"></xsproc>;
+								  var long_center=<xsproc name="C_GoogleMaps::getLongCenter" params="[[value]]"></xsproc>;
+
+								  var lat_point=<xsproc name="C_GoogleMaps::getLatCenter" params="[[value]]"></xsproc>;
+								  var long_point=<xsproc name="C_GoogleMaps::getLongCenter" params="[[value]]"></xsproc>;
+
+								  var zoomlevel=<xsproc name="C_GoogleMaps::getLastZoomlevel"></xsproc>;
+								  map_[[fieldname]].setCenter(new GLatLng(lat_center,long_center),zoomlevel);
+
+								  GEvent.addListener(map_[[fieldname]],'click', function(overlay,point) {
+									  //check of we al een marker hebben
+									  if (point && markerCount_[[fieldname]]==0) {
+										updateLocatie(point);
+										marker_[[fieldname]]=new GMarker(point,{icon:G_DEFAULT_ICON, draggable: true});
+										GEvent.addListener(marker_[[fieldname]], "dragend", function() {
+											updateLocatie(marker_[[fieldname]].getPoint());
+											//map_[[fieldname]].panTo(marker_[[fieldname]].getPoint()); 
+										  }
+										);
+										map_[[fieldname]].addOverlay(marker_[[fieldname]]);
+										markerCount_[[fieldname]]++;
+									  }
+									}
+								  );
+
+								  //Check of er een marker in de database was opgeslagen
+								  var p="[[value]]";
+								  if (p!="") {
+									var point=new GLatLng(lat_point,long_point);
+									marker_[[fieldname]]=new GMarker(point,{icon:G_DEFAULT_ICON, draggable: true});
+									GEvent.addListener(marker_[[fieldname]], "dragend", function() {
+										updateLocatie(marker_[[fieldname]].getPoint());
+										map_[[fieldname]].panTo(marker_[[fieldname]].getPoint()); 
+									  }
+									);
+									map_[[fieldname]].panTo(point); 
+									map_[[fieldname]].addOverlay(marker_[[fieldname]]);
+									markerCount_[[fieldname]]++;
+								  }
+								}
+							  }
+							</script>
+							<div id="map_[[fieldname]]" style="width:396px; height:300px"></div>
+							<script type="text/javascript">
+							  window.onload=load_[[fieldname]];
+							  window.onunload=GUnload;
+						  </script>       
+
+						  </td>
+						  <td class="XSdataCol">&nbsp;</td>
+					</tr>
+					
+				</div>
 		  
 		  
 		  
