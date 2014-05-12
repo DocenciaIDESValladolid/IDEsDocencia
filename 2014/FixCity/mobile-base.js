@@ -187,7 +187,14 @@ var init = function (onSelectFeatureFunction) {
 	}
 
 	function successUA(request){
-		alert(request);	
+		
+		var jsonResponse = JSON.parse(request.responseText);
+
+		var prov_name= jsonResponse.features[0].properties.nameunit;
+		var muni_name= jsonResponse.features[1].properties.nameunit;
+		var muni_code= jsonResponse.features[1].properties.nationalcode;
+alert(" estás en "+muni_name+" provincia de "+prov_name);
+		//alert(request);	
 	}
 	function failureUA(request){
 		alert('FALLO');	
