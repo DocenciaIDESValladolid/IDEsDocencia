@@ -189,7 +189,7 @@ var init = function (onSelectFeatureFunction) {
 			url: "http://www.ign.es/wfs/unidades-administrativas",
 			data: postDatamuni,
 			headers: {
-				"Content-Type": "application/xml"
+				"Content-Type": "text/xml;charset=utf-8"
 			},
 		//success: function(data){alert('EXITO');}
 		//failure: function(data){alert('FAIL');}
@@ -199,7 +199,7 @@ var init = function (onSelectFeatureFunction) {
 			url: "http://www.ign.es/wfs/unidades-administrativas",
 			data: postDataprov,
 			headers: {
-				"Content-Type": "application/xml"
+				"Content-Type": "text/xml;charset=utf-8"
 			},
 		//success: function(data){alert('EXITO');}
 		//failure: function(data){alert('FAIL');}
