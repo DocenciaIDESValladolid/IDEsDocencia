@@ -21,8 +21,8 @@ var init = function (onSelectFeatureFunction) {
         })
     });
 
-  /*  var sprinters = getFeatures();
-    sprintersLayer.addFeatures(sprinters);*/
+    //var sprinters = getFeatures();
+    //sprintersLayer.addFeatures(sprinters);
 
     var selectControl = new OpenLayers.Control.SelectFeature(sprintersLayer, {
         autoActivate:true,
@@ -127,82 +127,87 @@ var init = function (onSelectFeatureFunction) {
         map.zoomToExtent(vector.getDataExtent());
     });
 	
-	var postDatamuni='<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json"' 
-					  'xmlns:topp="http://www.openplans.org/topp"'
-					  'xmlns:wfs="http://www.opengis.net/wfs"'
-					  'xmlns="http://www.opengis.net/ogc"'
-					  'xmlns:gml="http://www.opengis.net/gml"'
-					  'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
-					  'xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">'
-					  '<wfs:Query typeName="unidades-administrativas:AU.AdministrativeUnit" >'
-						'<PropertyName>nationalcode</PropertyName>'
-						'<PropertyName>nameunit</PropertyName>'
-						'<Filter>'
-						 ' <And>'
-						 ' <PropertyIsEqualTo>'
-							'<PropertyName>nationallevel</PropertyName>'
-							'<Literal>4</Literal>'
-						  '</PropertyIsEqualTo>'
-						'  <Intersects>'
-						'	<PropertyName>the_geom</PropertyName>'
-						'	  <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">'
-						'		<gml:coordinates>-4,42</gml:coordinates>'
-						'	  </gml:Point>'
-						'	</Intersects>'
-						 '  </And>'
-						 '</Filter>'
-					  '</wfs:Query>'
-					'</wfs:GetFeature>';
+	var postDatamuni='<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json" 
+					  xmlns:topp="http://www.openplans.org/topp"
+					  xmlns:wfs="http://www.opengis.net/wfs"
+					  xmlns="http://www.opengis.net/ogc"
+					  xmlns:gml="http://www.opengis.net/gml"
+					  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					  xsi:schemaLocation="http://www.opengis.net/wfs
+										  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+					  <wfs:Query typeName="unidades-administrativas:AU.AdministrativeUnit" >
+						<PropertyName>nationalcode</PropertyName>
+						<PropertyName>nameunit</PropertyName>
+						<Filter>
+						  <And>
+						  <PropertyIsEqualTo>
+							<PropertyName>nationallevel</PropertyName>
+							<Literal>4</Literal>
+						  </PropertyIsEqualTo>
+						  <Intersects>
+							<PropertyName>the_geom</PropertyName>
+							  <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
+								<gml:coordinates>-4,42</gml:coordinates>
+							  </gml:Point>
+							</Intersects>
+						   </And>
+						 </Filter>
+					  </wfs:Query>
+					</wfs:GetFeature>';
 					
-	var postDataprov='<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json"' 
-					  'xmlns:topp="http://www.openplans.org/topp"'
-					  'xmlns:wfs="http://www.opengis.net/wfs"'
-					  'xmlns="http://www.opengis.net/ogc"'
-					  'xmlns:gml="http://www.opengis.net/gml"'
-					  'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
-					  'xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">'
-					  '<wfs:Query typeName="unidades-administrativas:AU.AdministrativeUnit" >'
-						'<PropertyName>nationalcode</PropertyName>'
-						'<PropertyName>nameunit</PropertyName>'
-						'<Filter>'
-						 ' <And>'
-						 ' <PropertyIsEqualTo>'
-							'<PropertyName>nationallevel</PropertyName>'
-							'<Literal>3</Literal>'
-						  '</PropertyIsEqualTo>'
-						'  <Intersects>'
-						'	<PropertyName>the_geom</PropertyName>'
-						'	  <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">'
-						'		<gml:coordinates>-4,42</gml:coordinates>'
-						'	  </gml:Point>'
-						'	</Intersects>'
-						 '  </And>'
-						 '</Filter>'
-					  '</wfs:Query>'
-					'</wfs:GetFeature>';
+	var postDataprov = 	'<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json"\n'
+						+' xmlns:topp="http://www.openplans.org/topp"\n'
+						+' xmlns:wfs="http://www.opengis.net/wfs"\n'
+						+' xmlns="http://www.opengis.net/ogc"\n'
+						+' xmlns:gml="http://www.opengis.net/gml"\n'
+						+' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n'
+						+' xsi:schemaLocation="http://www.opengis.net/wfs\n'
+						+'					http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">\n'
+						+' <wfs:Query typeName="unidades-administrativas:AU.AdministrativeUnit" >\n'
+						+' <PropertyName>nationalcode</PropertyName>\n'
+						+' 	<PropertyName>nameunit</PropertyName>\n'
+						+' 	<Filter>\n'
+						+' 	  <And>\n'
+						+' 	  <PropertyIsEqualTo>\n'
+						+' 		<PropertyName>nationallevel</PropertyName>\n'
+						+' 		<Literal>3</Literal>\n'
+						+' 	  </PropertyIsEqualTo>\n'
+						+' 	  <Intersects>\n'
+						+' 		<PropertyName>the_geom</PropertyName>\n'
+						+' 		  <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">\n'
+						+' 			<gml:coordinates>-4,42</gml:coordinates>\n'
+						+' 		  </gml:Point>\n'
+						+' 		</Intersects>\n'
+						+' 	   </And>\n'
+						+' 	 </Filter>\n'
+						+'   </wfs:Query>\n'
+						+' </wfs:GetFeature>\n';
+					
+
+	var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
 	
 	
-	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PATIR DEL NUTSCODE*/
+	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
 	
 	geolocate.events.register("locationupdated", this, function(e) {
 		var requestmuni= OpenLayers.Request.POST({
-			url: "http://www.ign.es/wfs/unidades-administrativas",
+			url: urlWfsUA,
 			data: postDatamuni,
 			headers: {
 				"Content-Type": "text/xml;charset=utf-8"
 			},
-		//success: function(data){alert('EXITO');}
-		//failure: function(data){alert('FAIL');}
+			//success: function(data){alert('EXITO');}
+			//failure: function(data){alert('FAIL');}
 			});
 		requestmuni.send(); 
 		var requestprov= OpenLayers.Request.POST({
-			url: "http://www.ign.es/wfs/unidades-administrativas",
+			url: urlWfsUA,
 			data: postDataprov,
 			headers: {
-				"Content-Type": "text/xml;charset=utf-8"
+				"Content-Type": "application/xml"
 			},
-		//success: function(data){alert('EXITO');}
-		//failure: function(data){alert('FAIL');}
+			//success: function(data){alert('EXITO');}
+			//failure: function(data){alert('FAIL');}
 			});
 		requestprov.send();		
     });
