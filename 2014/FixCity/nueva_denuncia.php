@@ -32,7 +32,9 @@ $latitud = -1.000000;
   if (!$db)
   {
      echo 'Error: No se ha podido realizar la conexión con la Base de Datos. Por favor, inténtelo de nuevo más tarde.';
-	 <a href="<?=$_SERVER["HTTP_REFERER"]?>">Atras</a>
+		<?php
+			echo "<input type='button' value='Atras' onClick='history.go(-1);'>";
+		?>
      exit;
   }
 
