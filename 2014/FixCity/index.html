@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <title>FixCity</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
         <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,12 +13,19 @@
         <script src="OpenLayers.js"></script>
         <script src="mobile-base.js"></script>
         <script src="mobile-jq.js"></script>
+		<script src="osm-marker-popup.js"></script>
     </head>
     <body>
-        <h1 id="title">FixCity</h1>
-           
+        <h1 id="title">FixCity</h1>           
         <div data-role="page" id="mappage">
-          <div data-role="content">
+          <div data-role="content">		  
+		<p id="shortdesc">
+            Demonstrate use of an OSM layer with a marker and a popup.
+		</p>
+        <div id="tags">
+            openstreetmap osm marker popup
+        </div>
+        <div id="map" class="smallmap"></div>
             <div id="map"></div>
           </div>
 
@@ -357,8 +364,7 @@
                 </ul>
             </div>
         </div>
-		
-		
+	
 		 <!-- Site footer -->
     <div class="footer" style="margin-left: 100px ;margin-right: 100px;">
     	<p>&copy; Infraestructura de Datos Espaciales. Universidad de Valladolid</p>
