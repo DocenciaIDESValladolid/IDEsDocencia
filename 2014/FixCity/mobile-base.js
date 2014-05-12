@@ -128,7 +128,7 @@ var init = function (onSelectFeatureFunction) {
     });
 	
 	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PATIR DEL NUTSCODE*/
-	
+	/*
 	geolocate.events.register("locationupdated", this, function(e) {
 		var requestmuni= OpenLayers.Request.POST({
 			url: "http://www.ign.es/wfs/unidades-administrativas",
@@ -203,6 +203,9 @@ var init = function (onSelectFeatureFunction) {
 			});
 		requestprov.send();		
     });
+	*/
+	
+	
 	
 
     function getFeatures() {
