@@ -126,36 +126,10 @@ var init = function (onSelectFeatureFunction) {
         ]);
         map.zoomToExtent(vector.getDataExtent());
     });
+		
+	var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3
 	
-	var postDatamuni='<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json" 
-					  xmlns:topp="http://www.openplans.org/topp"
-					  xmlns:wfs="http://www.opengis.net/wfs"
-					  xmlns="http://www.opengis.net/ogc"
-					  xmlns:gml="http://www.opengis.net/gml"
-					  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-					  xsi:schemaLocation="http://www.opengis.net/wfs
-										  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-					  <wfs:Query typeName="unidades-administrativas:AU.AdministrativeUnit" >
-						<PropertyName>nationalcode</PropertyName>
-						<PropertyName>nameunit</PropertyName>
-						<Filter>
-						  <And>
-						  <PropertyIsEqualTo>
-							<PropertyName>nationallevel</PropertyName>
-							<Literal>4</Literal>
-						  </PropertyIsEqualTo>
-						  <Intersects>
-							<PropertyName>the_geom</PropertyName>
-							  <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
-								<gml:coordinates>-4,42</gml:coordinates>
-							  </gml:Point>
-							</Intersects>
-						   </And>
-						 </Filter>
-					  </wfs:Query>
-					</wfs:GetFeature>';
-					
-	var postDataprov = 	'<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json"\n'
+	var postDataUA = 	'<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json"\n'
 						+' xmlns:topp="http://www.openplans.org/topp"\n'
 						+' xmlns:wfs="http://www.opengis.net/wfs"\n'
 						+' xmlns="http://www.opengis.net/ogc"\n'
@@ -168,18 +142,24 @@ var init = function (onSelectFeatureFunction) {
 						+' 	<PropertyName>nameunit</PropertyName>\n'
 						+' 	<Filter>\n'
 						+' 	  <And>\n'
-						+' 	  <PropertyIsEqualTo>\n'
+						+' 	  <PropertyIsGreaterThanOrEqualTo>\n'
 						+' 		<PropertyName>nationallevel</PropertyName>\n'
-						+' 		<Literal>3</Literal>\n'
-						+' 	  </PropertyIsEqualTo>\n'
+						+' 		<Literal>'+problevel+'</Literal>\n'
+						+' 	  </PropertyIsGreaterThanOrEqualTo>\n'
 						+' 	  <Intersects>\n'
 						+' 		<PropertyName>the_geom</PropertyName>\n'
 						+' 		  <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">\n'
-						+' 			<gml:coordinates>-4,42</gml:coordinates>\n'
+						+' 			<gml:coordinates>'+e.pos.x+','+e.pos.y+'</gml:coordinates>\n'
 						+' 		  </gml:Point>\n'
 						+' 		</Intersects>\n'
 						+' 	   </And>\n'
 						+' 	 </Filter>\n'
+						+'   <SortBy>\n'
+						+'		<SortProperty>\n'
+						+'			<PropertyName>nationallevel</PropertyName>\n'
+						+'			<SortOrder>ASC</SortOrder>\n'
+						+'		</SortProperty>\n'
+						+'   </SortBy>\n'
 						+'   </wfs:Query>\n'
 						+' </wfs:GetFeature>\n';
 					
@@ -190,31 +170,27 @@ var init = function (onSelectFeatureFunction) {
 	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
 	
 	geolocate.events.register("locationupdated", this, function(e) {
-		var requestmuni= OpenLayers.Request.POST({
+		var requestUA = OpenLayers.Request.POST({
 			url: urlWfsUA,
-			data: postDatamuni,
+			data: postDataUA,
 			headers: {
 				"Content-Type": "text/xml;charset=utf-8"
 			},
-			//success: function(data){alert('EXITO');}
-			//failure: function(data){alert('FAIL');}
+			success: successUA,
+			failure: failureUA,
 			});
-		requestmuni.send(); 
-		var requestprov= OpenLayers.Request.POST({
-			url: urlWfsUA,
-			data: postDataprov,
-			headers: {
-				"Content-Type": "application/xml"
-			},
-			//success: function(data){alert('EXITO');}
-			//failure: function(data){alert('FAIL');}
-			});
-		requestprov.send();		
+		requestUA.send(); 
+		
     });
 
+	function successUA(request){
+		alert(request);	
+	}
+	function failureUA(request){
+		alert('FALLO');	
+	}
 	
-	
-	
+	//var UA = eval(requestUA);
 /*
     function getFeatures() {
         var features = {
