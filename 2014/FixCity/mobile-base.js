@@ -6,6 +6,8 @@ var apiKey = "AqTGBsziZHIJYYxgivLBf0hVdrAk9mWO5cQcb8Yux8sW5M8c8opEC2lZqKR1ZZXf";
 var map;
 var gg = new OpenLayers.Projection("EPSG:4326");
 var sm = new OpenLayers.Projection("EPSG:900913");
+var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
+var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
 
 var init = function (onSelectFeatureFunction) {
 
@@ -68,16 +70,12 @@ var init = function (onSelectFeatureFunction) {
         zoom: 1
     });
 	
-	
-
-	
 	/*
 	var wms = new OpenLayers.Layer.WMS("Denuncias WMS",
         "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
         {layers: 'IDEs:denuncias',transparent:true},
         {isBaseLayer: false, transitionEffect: 'resize', singleTile:false}
     );*/
-	
 	
 	var wfs = new OpenLayers.Layer.Vector("Denuncias", {
         //strategies: [new OpenLayers.Strategy.Fixed()],
@@ -127,15 +125,22 @@ var init = function (onSelectFeatureFunction) {
         map.zoomToExtent(vector.getDataExtent());
     });
 		
-	var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
-
-	var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
-	
-	
 	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
-	
 	geolocate.events.register("locationupdated", this, eventLocationChanged);
 	
+/*FUNCION PARA EL POP-UP CON LA INFORMACIÓN DE LOCALIZACIÓN ACTUAL*/
+  var myLocation = new OpenLayers.Geometry.Point(-4, 41)
+        .transform('EPSG:4326', 'EPSG:3857');
+		
+    var popup = new OpenLayers.Popup.FramedCloud("Popup", 
+        myLocation.getBounds().getCenterLonLat(), null,
+		'<a href="#nuevadenuncia" data-icon="nueva" data-role="button">Nueva Denuncia</a>', null,
+        true // <-- true if we want a close (X) button, false otherwise
+    );
+	map.addPopup(popup);
+	
+};// End init
+
 	function eventLocationChanged(e){
 	
 		var postDataUA = 	'<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json"\n'
@@ -185,44 +190,16 @@ var init = function (onSelectFeatureFunction) {
 	
 	
 	}
-
 	function successUA(request){
-		alert(request);	
+		
+		var jsonResponse = JSON.parse(request.responseText);
+
+		var prov_name= jsonResponse.features[0].properties.nameunit;
+		var muni_name= jsonResponse.features[1].properties.nameunit;
+		var muni_code= jsonResponse.features[1].properties.nationalcode;
+		alert(" estás en "+muni_name+" provincia de "+prov_name);
+		//alert(request);	
 	}
 	function failureUA(request){
 		alert('FALLO');	
 	}
-	
-	//var UA = eval(requestUA);
-/*
-    function getFeatures() {
-        var features = {
-            "type": "FeatureCollection",
-            "features": [
-                { "type": "Feature", "geometry": {"type": "Point", "coordinates": [41.662710, -4.709251]},
-                    "properties": {"Dirección": "Calle a", "Provincia":"cast", "Ciudad":"Pucela"}},
-                
-            ]
-        };
-	
-
-        var reader = new OpenLayers.Format.GeoJSON();
-
-        return reader.read(features);
-    }
-
-*/
-
-/*FUNCION PARA EL POP-UP CON LA INFORMACIÓN DE LOCALIZACIÓN ACTUAL*/
-  var myLocation = new OpenLayers.Geometry.Point(-4, 41)
-        .transform('EPSG:4326', 'EPSG:3857');
-		
-    var popup = new OpenLayers.Popup.FramedCloud("Popup", 
-        myLocation.getBounds().getCenterLonLat(), null,
-		'<a href="#nuevadenuncia" data-icon="nueva" data-role="button">Nueva Denuncia</a>', null,
-        true // <-- true if we want a close (X) button, false otherwise
-    );
-	map.addPopup(popup);
-	
-
-};
