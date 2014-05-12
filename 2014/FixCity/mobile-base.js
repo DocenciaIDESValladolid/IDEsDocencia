@@ -125,24 +125,16 @@ var init = function (onSelectFeatureFunction) {
         map.zoomToExtent(vector.getDataExtent());
     });
 		
-/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
+		
+	/*FUNCION PARA EL POP-UP*/
+	vector.events.on({
+		'featureselected': onFeatureSelect,
+		'featureunselected': onFeatureUnselect
+	});
+	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
 	geolocate.events.register("locationupdated", this, eventLocationChanged);
 	
-	/*FUNCION PARA EL POP-UP CON LA INFORMACIÓN DE LOCALIZACIÓN ACTUAL*/
-    var myLocation = new OpenLayers.Geometry.Point(-4, 41)
-        .transform('EPSG:4326', 'EPSG:3857');
-	
 
-	
-
-		// Interaction; not needed for initial display.
-		// = new OpenLayers.Control.SelectFeature(layer);
-		//map.addControl(selectControl);
-		//selectControl.activate();
-		vector.events.on({
-			'featureselected': onFeatureSelect,
-			'featureunselected': onFeatureUnselect
-		});
 	//map.addPopup(popup);
 	
 	};// End of init
