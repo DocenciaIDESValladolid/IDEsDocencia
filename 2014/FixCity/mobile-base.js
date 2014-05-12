@@ -13,6 +13,8 @@ var init = function (onSelectFeatureFunction) {
 
     var vector = new OpenLayers.Layer.Vector("vector", {});
 	
+
+	
     var sprintersLayer = new OpenLayers.Layer.Vector("Sprinters", {
         styleMap: new OpenLayers.StyleMap({
             externalGraphic: "img/mobile-loc.png",
@@ -29,6 +31,11 @@ var init = function (onSelectFeatureFunction) {
     var selectControl = new OpenLayers.Control.SelectFeature(sprintersLayer, {
         autoActivate:true,
         onSelect: onSelectFeatureFunction});
+		
+	var popupControl = new OpenLayers.Control.SelectFeature(vector, {
+		autoActivate:true
+	});
+                
 
     var geolocate = new OpenLayers.Control.Geolocate({
         id: 'locate-control',
@@ -51,7 +58,8 @@ var init = function (onSelectFeatureFunction) {
             new OpenLayers.Control.Attribution(),
 			new OpenLayers.Control.Navigation(),
             geolocate,
-            selectControl
+            selectControl,
+			popupControl
         ],
         layers: [
 		   new OpenLayers.Layer.OSM("Vista Callejero", null, {
@@ -127,10 +135,13 @@ var init = function (onSelectFeatureFunction) {
 		
 		
 	/*FUNCION PARA EL POP-UP*/
+	
 	vector.events.on({
 		'featureselected': onFeatureSelect,
 		'featureunselected': onFeatureUnselect
 	});
+	
+	
 	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
 	geolocate.events.register("locationupdated", this, eventLocationChanged);
 	
@@ -229,7 +240,7 @@ var init = function (onSelectFeatureFunction) {
 	function successUA(request){
 		
 		var jsonResponse = JSON.parse(request.responseText);
-
+		var jsonResponse = JSON.parse(request.responseText);
 		var prov_name= jsonResponse.features[0].properties.nameunit;
 		var muni_name= jsonResponse.features[1].properties.nameunit;
 		var muni_code= jsonResponse.features[1].properties.nationalcode;
