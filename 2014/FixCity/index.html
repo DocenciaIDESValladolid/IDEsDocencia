@@ -13,6 +13,55 @@
         <script src="OpenLayers.js"></script>
         <script src="mobile-base.js"></script>
         <script src="mobile-jq.js"></script>
+		
+		<script src="facebook.js"></script>	<!-- CARGA DE SIMPLE FACEBOOK GRAPH -->
+
+<!-- SCRIPTS PROPIOS QUE USA ESTA PÁGINA -->
+<script>
+
+// Cuando la pagina carga miramos si ya hay un usuario identificado.
+fb.ready(function(){ 
+  if (fb.logged)
+  {
+    // Cambiamos el link de identificarse por el nombre y la foto del usuario.
+    html = "<p>Hola " + fb.user.name + "</p>";
+    html += '<p><img src="' + fb.user.picture + '"/></p>';
+    html += '<p><a href="#" onclick="fb.logout(); return false;">Salir</a></p>';
+    document.getElementById("conectar_facebook").innerHTML = html;
+  }
+});
+
+
+// Funcion para logarse con Facebook.
+function login() {
+  fb.login(function(){ 
+    if (fb.logged) {
+      // Cambiamos el link de identificarse por el nombre y la foto del usuario.
+      html = "<p>Hola " + fb.user.name + "</p>";
+      html += "<p><img src='" + fb.user.picture + "'/></p>";
+      document.getElementById("conectar_facebook").innerHTML = html;
+    } else {
+      alert("No se pudo identificar al usuario");
+    }
+  })
+};
+
+// Funcion para publicar un mensaje en tu muro
+var publish = function () {
+    fb.publish({
+      message : "Estoy probando un script para que la gente publique desde mi/s web/s en Facebook",
+      picture : "http://blog.ikhuerta.com/wp-content/themes/ikhuerta3/images/ikhuerta.jpg",
+      link : "http://blog.ikhuerta.com/simple-facebook-graph-javascript-sdk",
+      name : "Simple Facebook Graph Javascript SDK",
+      description : "Facebook Graph es una nueva forma de conectar tu web Facebook. Con este script es muy fácil conseguirlo :)"
+    },function(published){ 
+      if (published)
+       alert("publicado!");
+      else
+       alert("No publicado :(, seguramente porque no estas identificado o no diste permisos");
+    });  
+}
+</script>
     </head>
     <body>
         <h1 id="title">FixCity</h1>           
@@ -358,6 +407,12 @@
             </div>
         </div>
 	
+		<div data-role="page" id="aboutus" onclick="login(); return false;">
+          <div data-role="header">
+            <h1>Iniciar sesión con Facebook</h1>
+		</div>
+		
+		
 		 <!-- Site footer -->
     <div class="footer" style="margin-left: 100px ;margin-right: 100px;">
     	<p>&copy; Infraestructura de Datos Espaciales. Universidad de Valladolid</p>
