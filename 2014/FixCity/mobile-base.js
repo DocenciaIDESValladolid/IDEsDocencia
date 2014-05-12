@@ -127,12 +127,7 @@ var init = function (onSelectFeatureFunction) {
         map.zoomToExtent(vector.getDataExtent());
     });
 	
-	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PATIR DEL NUTSCODE*/
-	
-	geolocate.events.register("locationupdated", this, function(e) {
-		var requestmuni= OpenLayers.Request.POST({
-			url: "http://www.ign.es/wfs/unidades-administrativas",
-			data:'<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json" 
+	var postDatamuni="<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json" 
 					  xmlns:topp="http://www.openplans.org/topp"
 					  xmlns:wfs="http://www.opengis.net/wfs"
 					  xmlns="http://www.opengis.net/ogc"
@@ -158,17 +153,8 @@ var init = function (onSelectFeatureFunction) {
 						   </And>
 						 </Filter>
 					  </wfs:Query>
-					</wfs:GetFeature>',
-			headers: {
-				"Content-Type": "application/xml"
-			},
-		success: function(data){alert('EXITO');}
-		failure: function(data){alert('FAIL');}
-			});
-		requestmuni.send(); 
-		var requestprov= OpenLayers.Request.POST({
-			url: "http://www.ign.es/wfs/unidades-administrativas",
-			data:'<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json" 
+					</wfs:GetFeature>";
+	var postDataprov="<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json" 
 					  xmlns:topp="http://www.openplans.org/topp"
 					  xmlns:wfs="http://www.opengis.net/wfs"
 					  xmlns="http://www.opengis.net/ogc"
@@ -194,7 +180,25 @@ var init = function (onSelectFeatureFunction) {
 						   </And>
 						 </Filter>
 					  </wfs:Query>
-					</wfs:GetFeature>',
+					</wfs:GetFeature>";
+	
+	
+	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PATIR DEL NUTSCODE*/
+	
+	geolocate.events.register("locationupdated", this, function(e) {
+		var requestmuni= OpenLayers.Request.POST({
+			url: "http://www.ign.es/wfs/unidades-administrativas",
+			data: postDatamuni,
+			headers: {
+				"Content-Type": "text/xml;charset=utf-8"
+			},
+		success: function(data){alert('EXITO');}
+		failure: function(data){alert('FAIL');}
+			});
+		requestmuni.send(); 
+		var requestprov= OpenLayers.Request.POST({
+			url: "http://www.ign.es/wfs/unidades-administrativas",
+			data: postDataprov,
 			headers: {
 				"Content-Type": "application/xml"
 			},
