@@ -127,9 +127,9 @@ var init = function (onSelectFeatureFunction) {
         map.zoomToExtent(vector.getDataExtent());
     });
 	
-	/*
+	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PATIR DEL NUTSCODE*/
 	
-    geolocate.events.register("locationupdated", this, function(e) {
+	geolocate.events.register("locationupdated", this, function(e) {
 		var requestmuni= OpenLayers.Request.POST({
 			url: "http://www.ign.es/wfs/unidades-administrativas",
 			data:'<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json" 
@@ -203,7 +203,7 @@ var init = function (onSelectFeatureFunction) {
 			});
 		requestprov.send();		
     });
-*/	
+	
 
     function getFeatures() {
         var features = {
