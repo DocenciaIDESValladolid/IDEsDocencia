@@ -127,7 +127,7 @@ var init = function (onSelectFeatureFunction) {
         map.zoomToExtent(vector.getDataExtent());
     });
 	
-	var postDatamuni="<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json" 
+	var postDatamuni='<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json" 
 					  xmlns:topp="http://www.openplans.org/topp"
 					  xmlns:wfs="http://www.opengis.net/wfs"
 					  xmlns="http://www.opengis.net/ogc"
@@ -153,8 +153,9 @@ var init = function (onSelectFeatureFunction) {
 						   </And>
 						 </Filter>
 					  </wfs:Query>
-					</wfs:GetFeature>";
-	var postDataprov="<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json" 
+					</wfs:GetFeature>';
+					
+	var postDataprov='<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json" 
 					  xmlns:topp="http://www.openplans.org/topp"
 					  xmlns:wfs="http://www.opengis.net/wfs"
 					  xmlns="http://www.opengis.net/ogc"
@@ -180,7 +181,7 @@ var init = function (onSelectFeatureFunction) {
 						   </And>
 						 </Filter>
 					  </wfs:Query>
-					</wfs:GetFeature>";
+					</wfs:GetFeature>';
 	
 	
 	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PATIR DEL NUTSCODE*/
