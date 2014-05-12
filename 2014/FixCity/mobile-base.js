@@ -127,9 +127,18 @@ var init = function (onSelectFeatureFunction) {
         map.zoomToExtent(vector.getDataExtent());
     });
 		
-	var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3
+	var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
+
+	var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
 	
-	var postDataUA = 	'<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json"\n'
+	
+	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
+	
+	geolocate.events.register("locationupdated", this, eventLocationChanged);
+	
+	function eventLocationChanged(e){
+	
+		var postDataUA = 	'<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json"\n'
 						+' xmlns:topp="http://www.openplans.org/topp"\n'
 						+' xmlns:wfs="http://www.opengis.net/wfs"\n'
 						+' xmlns="http://www.opengis.net/ogc"\n'
@@ -162,14 +171,7 @@ var init = function (onSelectFeatureFunction) {
 						+'   </SortBy>\n'
 						+'   </wfs:Query>\n'
 						+' </wfs:GetFeature>\n';
-					
-
-	var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
-	
-	
-	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
-	
-	geolocate.events.register("locationupdated", this, function(e) {
+						
 		var requestUA = OpenLayers.Request.POST({
 			url: urlWfsUA,
 			data: postDataUA,
@@ -180,8 +182,9 @@ var init = function (onSelectFeatureFunction) {
 			failure: failureUA,
 			});
 		requestUA.send(); 
-		
-    });
+	
+	
+	}
 
 	function successUA(request){
 		alert(request);	
