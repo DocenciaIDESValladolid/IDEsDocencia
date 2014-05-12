@@ -139,7 +139,7 @@ var init = function (onSelectFeatureFunction) {
 		selectControl = new OpenLayers.Control.SelectFeature(layer);
 		map.addControl(selectControl);
 		selectControl.activate();
-		layer.events.on({
+		vector.events.on({
 			'featureselected': onFeatureSelect,
 			'featureunselected': onFeatureUnselect
 		});
