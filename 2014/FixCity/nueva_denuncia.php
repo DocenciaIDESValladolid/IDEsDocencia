@@ -22,7 +22,7 @@ $latitud = -1.000000;
   {
      echo 'No ha introducido toda la información requerida para el cliente.<br />'
           .'Por favor, vuelva a la página anterior e inténtelo de nuevo.';
-	 echo "<br><br><br><br>";		
+	 echo "<br><br><br><br><br><br><br><br><br><br>";		
 	 echo "<input type='button' value='Back' onClick='history.go(-1);'>";
      exit;
   }
@@ -34,7 +34,7 @@ $latitud = -1.000000;
   if (!$db)
   {
      echo 'Error: No se ha podido realizar la conexión con la Base de Datos. Por favor, inténtelo de nuevo más tarde.';	
-	 echo "<br><br><br><br>";		
+	 echo "<br><br><br><br><br><br><br><br>";		
 	 echo "<input type='button' value='Back' onClick='history.go(-1);'>";		
      exit;
   }
@@ -46,7 +46,7 @@ $latitud = -1.000000;
  
 	if ($resultado)
       echo  pg_affected_rows().' denuncias introducidas en la Base de Datos.';
-	  echo "<br><br><br><br>";		
+	  echo "<br><br><br><br><br><br><br><br>";		
 	 echo "<input type='button' value='Volver a Inicio' onClick='index.html';'>";
 ?>
 
