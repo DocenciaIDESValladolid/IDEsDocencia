@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <title>FixCity</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css">
+        <script src="jquery-1.6.4.min.js"></script>
+        <script src="jquery.mobile-1.0.1.min.js"></script>
+        <link rel="stylesheet" href="theme/default/style.mobile.css" type="text/css">
+        <link rel="stylesheet" href="style.mobile-jq.css" type="text/css">
+        <script src="OpenLayers.js"></script>
+        <script src="mobile-base.js"></script>
+        <script src="mobile-jq.js"></script>
+    </head>
+    <body>
+        <h1 id="title">FixCity</h1>
+           
+        <div data-role="page" id="mappage">
+          <div data-role="content">
+            <div id="map"></div>
+          </div>
+
+          <div data-role="footer">
+            <a href="#searchpage" data-icon="search" data-role="button">Search</a>
+            <a href="#" id="locate" data-icon="locate" data-role="button">Locate</a>
+            <a href="#layerspage" data-icon="layers" data-role="button">Capas</a>
+			<a href="#nuevadenuncia" data-icon="nueva" data-role="button">Nueva Denuncia</a>
+			<a href="#misdenuncias" data-icon="layers" data-role="button">Mis Denuncias</a>
+			<a href="#estadisticas" data-icon="layers" data-role="button">Estadísticas</a>
+			<a href="#aboutus" data-icon="layers" data-role="button">About Us</a>
+          </div>
+          <div id="navigation" data-role="controlgroup" data-type="vertical">
+            <a href="#" data-role="button" data-icon="plus" id="plus"
+               data-iconpos="notext"></a>
+            <a href="#" data-role="button" data-icon="minus" id="minus"
+               data-iconpos="notext"></a>
+          </div>
+        </div>
+
+        <div data-role="page" id="searchpage">
+          <div data-role="header">
+            <h1>Search</h1>
+          </div>
+          <div data-role="fieldcontain">
+            <input type="search" name="query" id="query"
+                   value="" placeholder="Search for places"
+                   autocomplete="off"/>
+          </div>
+          <ul data-role="listview" data-inset="true" id="search_results"></ul> 
+		  <script>
+				  function submitform() {
+					var queryString = document.forms[0].query.value;
+					OpenLayers.Request.POST({
+						url: "http://www.openrouteservice.org/php/OpenLSLUS_Geocode.php",
+						scope: this,
+						failure: this.requestFailure,
+						success: this.requestSuccess,
+						headers: {"Content-Type": "application/x-www-form-urlencoded"},
+						data: "FreeFormAdress=" + encodeURIComponent(queryString) + "&MaxResponse=1"
+					});
+				}
+				function requestSuccess(response) {
+					var format = new OpenLayers.Format.XLS();
+					var output = format.read(response.responseXML);
+					if (output.responseLists[0]) {
+						var geometry = output.responseLists[0].features[0].geometry;
+						var foundPosition = new OpenLayers.LonLat(geometry.x, geometry.y).transform(
+								new OpenLayers.Projection("EPSG:4326"),
+								map.getProjectionObject()
+								);
+						map.setCenter(foundPosition, 16);
+					} else {
+						alert("Sorry, no address found");
+					}
+				}
+				function requestFailure(response) {
+					alert("An error occurred while communicating with the OpenLS service. Please try again.");
+				}
+			</script>
+		  
+		  
+		  
+        </div>
+
+        <div data-role="page" id="layerspage">
+          <div data-role="header">
+            <h1>Layers</h1>
+          </div>
+          <div data-role="content">
+            <ul data-role="listview" data-inset="true" data-theme="d" data-dividertheme="c" id="layerslist">
+            </ul>
+          </div>
+		  <div>
+		  <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+		  </div>		  
+        </div>
+		
+		<div data-role="page" id="nuevadenuncia">
+          <div data-role="header">
+            <h1>Nueva Denuncia</h1>
+          </div>
+				<div>
+				    <div style="margin-top: 50px;margin-left: 100px;margin-right: 100px;">      
+							<!-- Formulario para la introducción de una denuncia.
+								 A esta opción se accede cuando se pulsa en el botón "Nueva Denuncia" de la pantalla principal.
+								 
+							-->
+							<form role="form" action="nueva_denuncia.php" method="post">
+								<p>Dirección</p>
+								<textarea name="dirección" rows="1" cols="80"></textarea>
+								
+								<p>Escriba aquí la descripción de su denuncia</p>
+								<textarea name="texto" rows="10" cols="80"></textarea>
+								
+								<p>Seleccione hasta 3 imágenes que identifiquen la denuncia:</p>
+								<input type="file" id="file1" name="file1">
+								<br>
+								<input type="file" id="file2" name="file2">
+								<br>
+								<input type="file" id="file3" name="file3">
+								<br>
+								
+								<input type="submit" value="Enviar">
+								<input type="reset" value="Borrar">
+								<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+						  </form>
+					</div>
+				</div>
+		</div>
+		
+		
+		<div data-role="page" id="nuevadenuncia_loc_actual">
+          <div data-role="header">
+            <h1>Nueva Denuncia</h1>
+          </div>
+				<div>
+				    <div style="margin-top: 50px;margin-left: 100px;margin-right: 100px;">      
+							<!-- Formulario para la introducción de una denuncia -->
+							<form role="form">
+								<p>La localización actual es:</p>
+								<br> Aquí mostramos la localización actual</br>
+								 
+								<p>Escriba aquí la descripción de su denuncia</p>
+								<textarea name="comentarios" rows="10" cols="80" ></textarea>
+								
+								<p>Seleccione hasta 3 imágenes que identifiquen la denuncia:</p>
+								<input type="file" id="file1">
+								<br>
+								<input type="file" id="file2">
+								<br>
+								<input type="file" id="file3">
+								<br>
+								
+								<input type="button" value="Enviar " class="btn btn-default" onClick="enviarDenuncia">
+								<input type="reset" value="Borrar">
+								<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+						  </form>
+					</div>
+				</div>
+		</div>
+		
+		
+		
+		
+		<div data-role="page" id="misdenuncias">
+          <div data-role="header">
+            <h1>Mis Denuncias</h1>
+		  </div>
+			<div>
+			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+           </div>
+
+		</div>		
+		
+		<div data-role="page" id="estadisticas">
+          <div data-role="header">
+            <h1>Estadísticas</h1>
+		  </div>
+			<div>
+			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+			</div>
+		  
+
+		</div>		
+		
+		<div data-role="page" id="aboutus">
+          <div data-role="header">
+            <h1>About Us</h1>
+          </div>		
+				<div class="row" style="margin-top:50px; margin-left: 100px ;margin-right: 100px;">
+				<div class="col-lg-4">
+				  <h2>JUAN PABLO DE CASTRO</h2>
+				  <p>Profesor de la Escuela Técnica Superior de Ingenieros de Telecomunicación, en la Universidad de Valladolid.</p>
+				  <a href="#director" data-icon="layers" data-role="button">Juan Pablo De Castro</a>
+			   </div>
+				<div class="col-lg-4">
+				  <h2>JUAN CARLOS ÁLVAREZ DIÉGUEZ</h2>
+				  <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p>
+				  <a href="#creador1" data-icon="layers" data-role="button">Juan Carlos Álvarez Diéguez</a>
+				</div>
+				<div class="col-lg-4">
+				  <h2>CARLOS ALBERTO ÁVAREZ GARCÍA</h2>
+				  <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p>
+				  <a href="#creador2" data-icon="layers" data-role="button">Carlos Alberto Álvarez García</a>
+			   </div>
+				<div class="col-lg-4">
+				  <h2>JOSU ESCALADA BLANCO</h2>
+				  <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación mención en Telemática.</p>
+				  <a href="#creador3" data-icon="layers" data-role="button">Josu Escalada Blanco</a>
+				  <p><p><p>
+				  <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+				</div>
+			  </div>
+		</div>
+		
+		<div data-role="page" id="director">
+          <div data-role="header">
+            <h1>Juan Pablo De Castro</h1>
+          </div>
+				<table align="center" border="0" cellpadding="30">					
+				<td width="0%"><p><img src="...." width="290" height="324"></td>				
+				</table> 
+			  <div align="center">
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Juan Pablo De Castro</font>
+					<p>
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">..............</font>
+					<p>
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">...............</font>
+					</p><p>
+					<div>
+					<a href="mailto:......">
+					<font face="Comic Sans MS,arial,verdana" font size=4  font color="E7880C">......com</font>
+					</p>
+					</div>
+					<div>
+					<a href="http://www.hotmail.com">
+					<td width="0%"><img src="images/images/hotmail.jpg" width="65" height="50" >
+					<a href="http://www.gmail.com">
+					<td width="0%"><img src="images/images/gmail-correo.png" width="65" height="50" >
+					<a href="http://es.mail.yahoo.com/">
+					<td width="0%"><img src="images/images/yahoo.png" width="65" height="50" >
+					</a></p></td></tr>
+					<p><p><p>
+					<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+					</div>
+				</div>
+		</div>
+		
+		
+		<div data-role="page" id="creador1">
+          <div data-role="header">
+            <h1>Juan Carlos Álvarez Diéguez</h1>
+          </div>
+				<table align="center" border="0" cellpadding="30">					
+				<td width="0%"><p><img src="images/images/JuanCarlosAlvarez.jpg" width="290" height="324"></td>				
+				</table> 
+			  <div align="center">
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Juan Carlos Álvarez Diéguez</font>
+					<p>
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Escuela Técnica Superior de Ingenieros de Telecomunicaciones</font>
+					<p>
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, Mención en Telemática</font>
+					</p><p>
+					<div>
+					<a href="mailto:dieguez989@gmail.com">
+					<font face="Comic Sans MS,arial,verdana" font size=4  font color="E7880C">dieguez989@gmail.com</font>
+					</p>
+					</div>
+					<div>
+					<a href="http://www.hotmail.com">
+					<td width="0%"><img src="images/images/hotmail.jpg" width="65" height="50" >
+					<a href="http://www.gmail.com">
+					<td width="0%"><img src="images/images/gmail-correo.png" width="65" height="50" >
+					<a href="http://es.mail.yahoo.com/">
+					<td width="0%"><img src="images/images/yahoo.png" width="65" height="50" >
+					</a></p></td></tr>
+					<p><p><p>
+					<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+					</div>
+				</div>
+		</div>
+				
+		<div data-role="page" id="creador2">
+          <div data-role="header">
+            <h1>Carlos Alberto Álvarez García</h1>
+          </div>
+				<table align="center" border="0" cellpadding="30">					
+				<td width="0%"><p><img src="...." width="290" height="324"></td>				
+				</table> 
+			  <div align="center">
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Carlos Alberto Álvarez García</font>
+					<p>
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">..............</font>
+					<p>
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">...............</font>
+					</p><p>
+					<div>
+					<a href="mailto:......">
+					<font face="Comic Sans MS,arial,verdana" font size=4  font color="E7880C">......com</font>
+					</p>
+					</div>
+					<div>
+					<a href="http://www.hotmail.com">
+					<td width="0%"><img src="images/images/hotmail.jpg" width="65" height="50" >
+					<a href="http://www.gmail.com">
+					<td width="0%"><img src="images/images/gmail-correo.png" width="65" height="50" >
+					<a href="http://es.mail.yahoo.com/">
+					<td width="0%"><img src="images/images/yahoo.png" width="65" height="50" >
+					</a></p></td></tr>
+					<p><p><p>
+					<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+					</div>
+				</div>
+		</div>
+				
+		<div data-role="page" id="creador3">
+          <div data-role="header">
+            <h1>Josu Escalada Blanco</h1>
+          </div>
+				<table align="center" border="0" cellpadding="30">					
+				<td width="0%"><p><img src="...." width="290" height="324"></td>				
+				</table> 
+			  <div align="center">
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Josu Escalada Blanco</font>
+					<p>
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">..............</font>
+					<p>
+					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">...............</font>
+					</p><p>
+					<div>
+					<a href="mailto:......">
+					<font face="Comic Sans MS,arial,verdana" font size=4  font color="E7880C">......com</font>
+					</p>
+					</div>
+					<div>
+					<a href="http://www.hotmail.com">
+					<td width="0%"><img src="images/images/hotmail.jpg" width="65" height="50" >
+					<a href="http://www.gmail.com">
+					<td width="0%"><img src="images/images/gmail-correo.png" width="65" height="50" >
+					<a href="http://es.mail.yahoo.com/">
+					<td width="0%"><img src="images/images/yahoo.png" width="65" height="50" >
+					</a></p></td></tr>
+					<p><p><p>
+					<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+					</div>
+				</div>
+		</div>
+					
+	   <div id="popup" data-role="dialog">
+            <div data-position="inline" data-theme="d" data-role="header">
+                <h1>Details</h1>
+            </div>
+            <div data-theme="c" data-role="content">
+                <ul id="details-list" data-role="listview">
+                </ul>
+            </div>
+        </div>
+		
+		
+		 <!-- Site footer -->
+    <div class="footer" style="margin-left: 100px ;margin-right: 100px;">
+    	<p>&copy; Infraestructura de Datos Espaciales. Universidad de Valladolid</p>
+    </div>
+    </body>
+</html>
