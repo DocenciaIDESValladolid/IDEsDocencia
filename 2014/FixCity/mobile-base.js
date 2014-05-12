@@ -127,40 +127,15 @@ var init = function (onSelectFeatureFunction) {
         map.zoomToExtent(vector.getDataExtent());
     });
 		
+	var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
+
+	var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
+	
 	
 	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
 	
 	geolocate.events.register("locationupdated", this, eventLocationChanged);
 	
-
-	
-	//var UA = eval(requestUA);
-/*
-    function getFeatures() {
-        var features = {
-            "type": "FeatureCollection",
-            "features": [
-                { "type": "Feature", "geometry": {"type": "Point", "coordinates": [41.662710, -4.709251]},
-                    "properties": {"Dirección": "Calle a", "Provincia":"cast", "Ciudad":"Pucela"}},
-                
-            ]
-        };
-	
-
-        var reader = new OpenLayers.Format.GeoJSON();
-
-        return reader.read(features);
-    }
-
-*/
-	
-
-};
-
-	var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
-
-	var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
-
 	function eventLocationChanged(e){
 	
 		var postDataUA = 	'<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json"\n'
@@ -212,15 +187,42 @@ var init = function (onSelectFeatureFunction) {
 	}
 
 	function successUA(request){
-		
-		var jsonResponse = JSON.parse(request.responseText);
-
-		var prov_name= jsonResponse.features[0].properties.nameunit;
-		var muni_name= jsonResponse.features[1].properties.nameunit;
-		var muni_code= jsonResponse.features[1].properties.nationalcode;
-		alert(" estás en "+muni_name+" provincia de "+prov_name);
-		//alert(request);	
+		alert(request);	
 	}
 	function failureUA(request){
 		alert('FALLO');	
 	}
+	
+	//var UA = eval(requestUA);
+/*
+    function getFeatures() {
+        var features = {
+            "type": "FeatureCollection",
+            "features": [
+                { "type": "Feature", "geometry": {"type": "Point", "coordinates": [41.662710, -4.709251]},
+                    "properties": {"Dirección": "Calle a", "Provincia":"cast", "Ciudad":"Pucela"}},
+                
+            ]
+        };
+	
+
+        var reader = new OpenLayers.Format.GeoJSON();
+
+        return reader.read(features);
+    }
+
+*/
+
+/*FUNCION PARA EL POP-UP CON LA INFORMACIÓN DE LOCALIZACIÓN ACTUAL*/
+  var myLocation = new OpenLayers.Geometry.Point(-4, 41)
+        .transform('EPSG:4326', 'EPSG:3857');
+		
+    var popup = new OpenLayers.Popup.FramedCloud("Popup", 
+        myLocation.getBounds().getCenterLonLat(), null,
+		'<a href="#nuevadenuncia" data-icon="nueva" data-role="button">Nueva Denuncia</a>', null,
+        true // <-- true if we want a close (X) button, false otherwise
+    );
+	map.addPopup(popup);
+	
+
+};
