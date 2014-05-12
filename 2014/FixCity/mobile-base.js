@@ -201,14 +201,14 @@ var init = function (onSelectFeatureFunction) {
                 
             ]
         };
-	*/
+	
 
         var reader = new OpenLayers.Format.GeoJSON();
 
         return reader.read(features);
     }
 
-
+*/
 	
 
 };
