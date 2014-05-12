@@ -154,33 +154,32 @@ var init = function (onSelectFeatureFunction) {
 					  '</wfs:Query>'
 					'</wfs:GetFeature>';
 					
-	/*var postDataprov='<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json" 
-					  xmlns:topp="http://www.openplans.org/topp"
-					  xmlns:wfs="http://www.opengis.net/wfs"
-					  xmlns="http://www.opengis.net/ogc"
-					  xmlns:gml="http://www.opengis.net/gml"
-					  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-					  xsi:schemaLocation="http://www.opengis.net/wfs
-										  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-					  <wfs:Query typeName="unidades-administrativas:AU.AdministrativeUnit" >
-						<PropertyName>nationalcode</PropertyName>
-						<PropertyName>nameunit</PropertyName>
-						<Filter>
-						  <And>
-						  <PropertyIsEqualTo>
-							<PropertyName>nationallevel</PropertyName>
-							<Literal>3</Literal>
-						  </PropertyIsEqualTo>
-						  <Intersects>
-							<PropertyName>the_geom</PropertyName>
-							  <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
-								<gml:coordinates>-4,42</gml:coordinates>
-							  </gml:Point>
-							</Intersects>
-						   </And>
-						 </Filter>
-					  </wfs:Query>
-					</wfs:GetFeature>';*/
+	var postDataprov='<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json"' 
+					  'xmlns:topp="http://www.openplans.org/topp"'
+					  'xmlns:wfs="http://www.opengis.net/wfs"'
+					  'xmlns="http://www.opengis.net/ogc"'
+					  'xmlns:gml="http://www.opengis.net/gml"'
+					  'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
+					  'xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">'
+					  '<wfs:Query typeName="unidades-administrativas:AU.AdministrativeUnit" >'
+						'<PropertyName>nationalcode</PropertyName>'
+						'<PropertyName>nameunit</PropertyName>'
+						'<Filter>'
+						 ' <And>'
+						 ' <PropertyIsEqualTo>'
+							'<PropertyName>nationallevel</PropertyName>'
+							'<Literal>3</Literal>'
+						  '</PropertyIsEqualTo>'
+						'  <Intersects>'
+						'	<PropertyName>the_geom</PropertyName>'
+						'	  <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">'
+						'		<gml:coordinates>-4,42</gml:coordinates>'
+						'	  </gml:Point>'
+						'	</Intersects>'
+						 '  </And>'
+						 '</Filter>'
+					  '</wfs:Query>'
+					'</wfs:GetFeature>';
 	
 	
 	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PATIR DEL NUTSCODE*/
