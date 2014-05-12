@@ -20,9 +20,9 @@ var init = function (onSelectFeatureFunction) {
             graphicYOffset: -26
         })
     });
-
+/*
     var sprinters = getFeatures();
-    sprintersLayer.addFeatures(sprinters);
+    sprintersLayer.addFeatures(sprinters);*/
 
     var selectControl = new OpenLayers.Control.SelectFeature(sprintersLayer, {
         autoActivate:true,
@@ -191,7 +191,7 @@ var init = function (onSelectFeatureFunction) {
 	}
 	
 	//var UA = eval(requestUA);
-
+/*
     function getFeatures() {
         var features = {
             "type": "FeatureCollection",
@@ -201,6 +201,7 @@ var init = function (onSelectFeatureFunction) {
                 
             ]
         };
+	*/
 
         var reader = new OpenLayers.Format.GeoJSON();
 
