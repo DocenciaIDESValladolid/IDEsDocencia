@@ -128,7 +128,7 @@ var init = function (onSelectFeatureFunction) {
     });
 	
 	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PATIR DEL NUTSCODE*/
-	/*
+	
 	geolocate.events.register("locationupdated", this, function(e) {
 		var requestmuni= OpenLayers.Request.POST({
 			url: "http://www.ign.es/wfs/unidades-administrativas",
@@ -152,7 +152,7 @@ var init = function (onSelectFeatureFunction) {
 						  <Intersects>
 							<PropertyName>the_geom</PropertyName>
 							  <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
-								<gml:coordinates>'+e.point.x+','+e.point.y+'</gml:coordinates>
+								<gml:coordinates>'4','4'</gml:coordinates>
 							  </gml:Point>
 							</Intersects>
 						   </And>
@@ -188,7 +188,8 @@ var init = function (onSelectFeatureFunction) {
 						  <Intersects>
 							<PropertyName>the_geom</PropertyName>
 							  <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
-								<gml:coordinates>'+e.point.x+','+e.point.y+'</gml:coordinates>
+								//<gml:coordinates>'+e.point.x+','+e.point.y+'</gml:coordinates>
+								<gml:coordinates>'4','4'</gml:coordinates>
 							  </gml:Point>
 							</Intersects>
 						   </And>
@@ -203,7 +204,7 @@ var init = function (onSelectFeatureFunction) {
 			});
 		requestprov.send();		
     });
-	*/
+
 	
 	
 	
