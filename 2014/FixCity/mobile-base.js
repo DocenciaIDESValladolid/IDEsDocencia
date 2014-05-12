@@ -127,15 +127,40 @@ var init = function (onSelectFeatureFunction) {
         map.zoomToExtent(vector.getDataExtent());
     });
 		
-	var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
-
-	var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
-	
 	
 	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
 	
 	geolocate.events.register("locationupdated", this, eventLocationChanged);
 	
+
+	
+	//var UA = eval(requestUA);
+/*
+    function getFeatures() {
+        var features = {
+            "type": "FeatureCollection",
+            "features": [
+                { "type": "Feature", "geometry": {"type": "Point", "coordinates": [41.662710, -4.709251]},
+                    "properties": {"Dirección": "Calle a", "Provincia":"cast", "Ciudad":"Pucela"}},
+                
+            ]
+        };
+	
+
+        var reader = new OpenLayers.Format.GeoJSON();
+
+        return reader.read(features);
+    }
+
+*/
+	
+
+};
+
+	var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
+
+	var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
+
 	function eventLocationChanged(e){
 	
 		var postDataUA = 	'<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json"\n'
@@ -193,32 +218,9 @@ var init = function (onSelectFeatureFunction) {
 		var prov_name= jsonResponse.features[0].properties.nameunit;
 		var muni_name= jsonResponse.features[1].properties.nameunit;
 		var muni_code= jsonResponse.features[1].properties.nationalcode;
-alert(" estás en "+muni_name+" provincia de "+prov_name);
+		alert(" estás en "+muni_name+" provincia de "+prov_name);
 		//alert(request);	
 	}
 	function failureUA(request){
 		alert('FALLO');	
 	}
-	
-	//var UA = eval(requestUA);
-/*
-    function getFeatures() {
-        var features = {
-            "type": "FeatureCollection",
-            "features": [
-                { "type": "Feature", "geometry": {"type": "Point", "coordinates": [41.662710, -4.709251]},
-                    "properties": {"Dirección": "Calle a", "Provincia":"cast", "Ciudad":"Pucela"}},
-                
-            ]
-        };
-	
-
-        var reader = new OpenLayers.Format.GeoJSON();
-
-        return reader.read(features);
-    }
-
-*/
-	
-
-};
