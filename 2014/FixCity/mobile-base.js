@@ -189,7 +189,7 @@ var init = function (onSelectFeatureFunction) {
 			url: "http://www.ign.es/wfs/unidades-administrativas",
 			data: postDatamuni,
 			headers: {
-				"Content-Type": "text/xml;charset=utf-8"
+				"Content-Type": "application/xml"
 			},
 		//success: function(data){alert('EXITO');}
 		//failure: function(data){alert('FAIL');}
