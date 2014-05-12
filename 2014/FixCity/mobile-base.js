@@ -136,9 +136,9 @@ var init = function (onSelectFeatureFunction) {
 	
 
 		// Interaction; not needed for initial display.
-		selectControl = new OpenLayers.Control.SelectFeature(layer);
-		map.addControl(selectControl);
-		selectControl.activate();
+		// = new OpenLayers.Control.SelectFeature(layer);
+		//map.addControl(selectControl);
+		//selectControl.activate();
 		vector.events.on({
 			'featureselected': onFeatureSelect,
 			'featureunselected': onFeatureUnselect
