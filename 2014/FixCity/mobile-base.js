@@ -207,7 +207,7 @@ var init = function (onSelectFeatureFunction) {
 	
 	
 	
-
+/*
     function getFeatures() {
         var features = {
             "type": "FeatureCollection",
@@ -251,6 +251,7 @@ var init = function (onSelectFeatureFunction) {
 
         return reader.read(features);
     }
+*/
 
 	
 
