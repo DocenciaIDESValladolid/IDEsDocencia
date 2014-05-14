@@ -52,9 +52,16 @@ $latitud = -1.000000;
 	  echo "<br>";
 	}*/
  
-	if ($result)
+	//if ($result)
     echo  pg_affected_rows().' denuncias introducidas en la Base de Datos.';
 	echo "<input type='button' value='Volver a Inicio' onClick='index.html';'>";
+	
+	$query = "SELECT * FROM denuncias;";
+	$result = pg_exec($db, $query);
+	while($row = pg_fetch_array($result)) {
+	  var_dump($row);
+	  echo "<br>";
+	}
 ?>
 
 </body>
