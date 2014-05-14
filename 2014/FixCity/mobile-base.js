@@ -96,6 +96,10 @@ var init = function (onSelectFeatureFunction) {
 			version: "1.1.0"
         })
     });
+	
+	/////Capa marcador
+	var marker = new OpenLayers.Layer.Markers( "Marker" );
+	
 
     map.addLayers([wfs]);
 
@@ -132,6 +136,50 @@ var init = function (onSelectFeatureFunction) {
         ]);
         map.zoomToExtent(vector.getDataExtent());
     });
+		
+		
+		
+	/************************************************************************************************/
+	/* Función para clickar y añadir marcador*/
+	OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
+		defaultHandlerOptions: {
+			'single': true,
+			'double': false,
+			'pixelTolerance': 0,
+			'stopSingle': false,
+			'stopDouble': false
+		},
+
+		initialize: function(options) {
+			this.handlerOptions = OpenLayers.Util.extend(
+				{}, this.defaultHandlerOptions
+			);
+			OpenLayers.Control.prototype.initialize.apply(
+				this, arguments
+			); 
+			this.handler = new OpenLayers.Handler.Click(
+				this, {
+					'click': this.trigger
+				}, this.handlerOptions
+			);
+		}, 
+
+		trigger: function(e) {
+			var lonlat = map.getLonLatFromPixel(e.xy);
+			alert("You clicked near " + lonlat.lat + " N, " +
+									  + lonlat.lon + " E");
+									  
+			var size = new OpenLayers.Size(21,25);
+			var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+			var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png',size,offset);
+			markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lonlat.lat,lonlat),icon));
+		}
+
+	});
+	map.addLayers([marker]);
+		
+		
+		
 		
 		
 	/*FUNCION PARA EL POP-UP*/
@@ -230,7 +278,7 @@ var init = function (onSelectFeatureFunction) {
 			headers: {
 				"Content-Type": "text/xml;charset=utf-8"
 			},
-			success: successUA,
+			callback: successUA,
 			failure: failureUA,
 			});
 		requestUA.send(); 
