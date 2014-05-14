@@ -29,7 +29,7 @@ $latitud = -1.000000;
   
   $texto = addslashes($texto);
 
-  $db = pg_connect("host=postgresql.idelab.uva.es user=testDev password=testIDELAB dbname=idelab");
+  $db = pg_connect("host=postgres.idelab.uva.es user=testDev password=testIDELAB dbname=idelab");
 
   if (!$db)
   {
