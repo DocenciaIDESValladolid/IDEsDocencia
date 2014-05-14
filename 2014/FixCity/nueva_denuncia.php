@@ -47,7 +47,7 @@ $latitud = -1.000000;
 	$result = pg_exec($db, $query);
 
     echo  pg_affected_rows().' denuncias introducidas en la Base de Datos.';
-	echo "<input type='button' value='Volver a Inicio' onClick='index.html';'>";
+	 echo "<input type='button' value='Back' onClick='history.go(-1);'>";	
 	
 	$query = "SELECT * FROM denuncias;";
 	$result = pg_exec($db, $query);
