@@ -99,7 +99,7 @@ var init = function (onSelectFeatureFunction) {
     });
 	
 	/////Capa marcador
-	var marker = new OpenLayers.Layer.Markers( "Marcador Posición" );
+	var markers = new OpenLayers.Layer.Markers( "Markers" );
 	
 
     map.addLayers([wfs]);
@@ -142,7 +142,7 @@ var init = function (onSelectFeatureFunction) {
 		
 	/************************************************************************************************/
 	//pintamos la capa del marcador a añadir
-	map.addLayers([marker]);
+	map.addLayers([markers]);
 		
 	//Añadimos control de click	
 	var click = new OpenLayers.Control.Click();
@@ -201,7 +201,7 @@ var init = function (onSelectFeatureFunction) {
 			var size = new OpenLayers.Size(21,25);
 			var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
 			var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png',size,offset);
-			marker.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lonlat.lat,lonlat.lon),icon));
+			markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lonlat.lat,lonlat.lon),icon));
 		}
 
 	}); //fin OpenLayers.Control.Click
