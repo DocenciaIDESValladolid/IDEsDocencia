@@ -14,22 +14,22 @@ error_reporting(E_ALL);
 //@ $longitud=$_POST['longitud'];
 //@ $latitud=$_POST['latitud'];
 // Coordenadas de prueba
-//$longitud = 42.000000;
-//$latitud = -1.000000;
-//@ $texto=$_POST['texto'];
+$longitud = 42.000000;
+$latitud = -1.000000;
+@ $texto=$_POST['texto'];
 
   $texto = trim($texto);
 
- /* if (!$latitud || !$longitud || !$texto)
+ if (!$latitud || !$longitud || !$texto)
   {
      echo 'No ha introducido toda la información requerida para el cliente.<br />'
           .'Por favor, vuelva a la página anterior e inténtelo de nuevo.';
 	 echo "<br><br><br><br><br><br><br><br><br><br>";		
 	 echo "<input type='button' value='Back' onClick='history.go(-1);'>";
      exit;
-  }*/
+  }
   
-  //$texto = addslashes($texto);
+  $texto = addslashes($texto);
 
   $db = pg_connect("host=postgres.idelab.uva.es user=testDev password=testIDELAB dbname=idelab");
 
