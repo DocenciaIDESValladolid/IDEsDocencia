@@ -284,7 +284,7 @@ var init = function (onSelectFeatureFunction) {
 						+'   </SortBy>\n'
 						+'   </wfs:Query>\n'
 						+' </wfs:GetFeature>\n';
-		var urlProxy = 'http://itastdevserver.tel.uva.es/cgi-bin/proxy.cgi';			
+		var urlProxy = 'http://itastdevserver.tel.uva.es/urlnoexiste';			
 		var requestUA = OpenLayers.Request.POST({
 			url: urlProxy,//urlWfsUA,
 			data: {datas:postDataUA},
@@ -295,8 +295,6 @@ var init = function (onSelectFeatureFunction) {
 			failure: failureUA,
 			});
 		requestUA.send(); 
-	
-	
 	}
 	function successUA(request){
 		
