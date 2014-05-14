@@ -287,7 +287,7 @@ var init = function (onSelectFeatureFunction) {
 		var urlProxy = 'http://itastdevserver.tel.uva.es/cgi-bin/proxy.cgi';			
 		var requestUA = OpenLayers.Request.POST({
 			url: urlProxy,//urlWfsUA,
-			data: {postDataUA,}
+			data: {postDataUA},
 			headers: {
 				"Content-Type": "text/xml;charset=utf-8"
 			},
