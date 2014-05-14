@@ -100,7 +100,7 @@ var init = function (onSelectFeatureFunction) {
 	
 	/////Capa marcador
 	var markers = new OpenLayers.Layer.Markers( "Markers" );
-	
+	/////
 
     map.addLayers([wfs]);
 
@@ -198,7 +198,7 @@ var init = function (onSelectFeatureFunction) {
 			alert("You clicked near " + lonlat.lat + " N, " +
 									  + lonlat.lon + " E");
 			
-			var markers = map.GetLayer("Markers");
+			var markers = map.getLayer('Markers');
 			var size = new OpenLayers.Size(21,25);
 			var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
 			var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png',size,offset);
