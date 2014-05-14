@@ -197,7 +197,8 @@ var init = function (onSelectFeatureFunction) {
 			var lonlat = map.getLonLatFromPixel(e.xy);
 			alert("You clicked near " + lonlat.lat + " N, " +
 									  + lonlat.lon + " E");
-									  
+			
+			var markers = map.GetLayer("Markers");
 			var size = new OpenLayers.Size(21,25);
 			var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
 			var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png',size,offset);
