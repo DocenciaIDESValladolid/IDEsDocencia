@@ -9,6 +9,8 @@
 <body>
 <?php
 
+error_reporting(E_ALL);
+
 //@ $longitud=$_POST['longitud'];
 //@ $latitud=$_POST['latitud'];
 // Coordenadas de prueba
