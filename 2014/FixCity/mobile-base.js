@@ -298,6 +298,7 @@ var init = function (onSelectFeatureFunction) {
 		requestUA.send(); */
 		$.ajax({
 			type: "POST",
+			contentType: "application/xml",  
 			url: urlWfsUA,
 			data: postDataUA,
 			success: successUA
