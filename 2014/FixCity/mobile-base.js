@@ -284,9 +284,9 @@ var init = function (onSelectFeatureFunction) {
 						+'   </SortBy>\n'
 						+'   </wfs:Query>\n'
 						+' </wfs:GetFeature>\n';
-						
+		var urlProxy = 'http://itastdevserver.tel.uva.es/cgi-bin/proxy.cgi';			
 		var requestUA = OpenLayers.Request.POST({
-			url: urlWfsUA,
+			url: urlProxy,//urlWfsUA,
 			data: postDataUA,
 			headers: {
 				"Content-Type": "text/xml;charset=utf-8"
