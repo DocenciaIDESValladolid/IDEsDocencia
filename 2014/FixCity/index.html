@@ -24,10 +24,10 @@ fb.ready(function(){
   if (fb.logged)
   {
     // Cambiamos el link de identificarse por el nombre y la foto del usuario.
-	//html = '<p>Hola ' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';}); return false;">Salir</a></p>';
-    html = '<p><a href="#" id="locate" data-icon="locate" data-role="button">Locate</a><a href="#misdenuncias" data-icon="layers" data-role="button">Mis Denuncias</a><a href="#searchpage" data-icon="search" data-role="button">Search</a></p>';
-	$( "#login_button" ).html(html);
-
+	html = '<p>Hola ' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';}); return false;">Salir</a></p>';
+	$("#login_button").html(html);
+	$("#misdenuncias_button").show();
+	$("#search_button").show();
   }
 });
 
@@ -37,10 +37,10 @@ function login() {
   fb.login(function(){ 
     if (fb.logged) {
 		// Cambiamos el link de identificarse por el nombre y la foto del usuario.
-		html = "<p>Hola " + fb.user.name + "</p>";
-		html += '<p>Email: ' + fb.user.email + '</p>';
-		html += '<p><a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';}); return false;">Salir</a></p>';
-		$( "#login_button" ).html(html);
+		html = '<p>Hola ' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';}); return false;">Salir</a></p>';
+		$("#login_button").html(html);
+		$("#misdenuncias_button").show();
+		$("#search_button").show();
     } else {
       alert("No se pudo identificar al usuario");
     }
@@ -76,7 +76,10 @@ var publish = function () {
 			<div id="login_button">
 				<a href="#iniciosesion"  data-role="button" onclick="login(); return false;">Login con Facebook</a>
 				<a href="#iniciosesion"  data-role="button">Login con Google+</a>
-			</div>
+			</div id="user_buttons">
+			<a href="#" id="locate" data-icon="locate" data-role="button">Locate</a>
+			<a href="#misdenuncias" id="misdenuncias_button" data-icon="layers" data-role="button" hidden>Mis Denuncias</a>
+			<a href="#searchpage" id="search_button" data-icon="search" data-role="button" hidden>Search</a>
             <a href="#layerspage" data-icon="layers" data-role="button">Capas</a>
 			<a href="#estadisticas" data-icon="layers" data-role="button">Estadísticas</a>
 			<a href="#aboutus" data-icon="layers" data-role="button">About Us</a>
