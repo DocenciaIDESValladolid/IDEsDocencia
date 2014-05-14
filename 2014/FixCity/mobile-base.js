@@ -304,10 +304,8 @@ var init = function (onSelectFeatureFunction) {
 			success: successUA
 			});
 	}
-	function successUA(request){
-		
-		var jsonResponse = JSON.parse(request.responseText);
-		var jsonResponse = JSON.parse(request.responseText);
+	function successUA(jsonResponse){
+	
 		var prov_name= jsonResponse.features[0].properties.nameunit;
 		var muni_name= jsonResponse.features[1].properties.nameunit;
 		var muni_code= jsonResponse.features[1].properties.nationalcode;
