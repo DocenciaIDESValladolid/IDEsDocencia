@@ -33,8 +33,7 @@ $latitud = -1.000000;
 
   if (!$db)
   {
-     echo 'Error: No se ha podido realizar la conexión con la Base de Datos. Por favor, inténtelo de nuevo más tarde.';	
-	 echo "<br><br><br><br><br><br><br><br>";		
+     echo 'Error: No se ha podido realizar la conexión con la Base de Datos. Por favor, inténtelo de nuevo más tarde.';		
 	 echo "<input type='button' value='Back' onClick='history.go(-1);'>";		
      exit;
   }
@@ -44,10 +43,9 @@ $latitud = -1.000000;
 	$result = pg_exec($db, $query);
 
  
-	if ($resultado)
-      echo  pg_affected_rows().' denuncias introducidas en la Base de Datos.';
-	  echo "<br><br><br><br><br><br><br><br>";		
-	 echo "<input type='button' value='Volver a Inicio' onClick='index.html';'>";
+	//if ($resultado)
+    echo  pg_affected_rows().' denuncias introducidas en la Base de Datos.';
+	echo "<input type='button' value='Volver a Inicio' onClick='index.html';'>";
 ?>
 
 </body>
