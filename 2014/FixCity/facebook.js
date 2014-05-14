@@ -6,7 +6,7 @@ var fb = {
 
     use_xfbml : true,
 
-    extendPermissions : 'publish_stream' , 
+    extendPermissions : 'publish_stream' , 'email', 
     // info: http://developers.facebook.com/docs/reference/api/permissions/
 
     locale : 'es_ES' 
