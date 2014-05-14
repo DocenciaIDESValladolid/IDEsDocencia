@@ -85,6 +85,7 @@ var init = function (onSelectFeatureFunction) {
         {isBaseLayer: false, transitionEffect: 'resize', singleTile:false}
     );*/
 	
+	//CAPA DE DENUNCIAS
 	var wfs = new OpenLayers.Layer.Vector("Denuncias", {
         //strategies: [new OpenLayers.Strategy.Fixed()],
 		strategies: [new OpenLayers.Strategy.BBOX({resFactor: 1})],
@@ -98,7 +99,7 @@ var init = function (onSelectFeatureFunction) {
     });
 	
 	/////Capa marcador
-	var marker = new OpenLayers.Layer.Markers( "Marker" );
+	var marker = new OpenLayers.Layer.Markers( "Marcador Posición" );
 	
 
     map.addLayers([wfs]);
@@ -140,7 +141,35 @@ var init = function (onSelectFeatureFunction) {
 		
 		
 	/************************************************************************************************/
-	/* Función para clickar y añadir marcador*/
+	//pintamos la capa del marcador a añadir
+	map.addLayers([marker]);
+		
+	//Añadimos control de click	
+	var click = new OpenLayers.Control.Click();
+	map.addControl(click);
+	click.activate();		
+		
+		
+	/*FUNCION PARA EL POP-UP*/
+	
+	vector.events.on({
+		'featureselected': onFeatureSelect,
+		'featureunselected': onFeatureUnselect
+	});
+	
+	
+	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
+	geolocate.events.register("locationupdated", this, eventLocationChanged);
+	
+
+	//map.addPopup(popup);
+	
+	};// End of init
+
+	/*
+	
+	*/
+		/* Función para clickar y añadir marcador*/
 	OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
 		defaultHandlerOptions: {
 			'single': true,
@@ -175,29 +204,13 @@ var init = function (onSelectFeatureFunction) {
 			markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lonlat.lat,lonlat.lon),icon));
 		}
 
-	});
-	map.addLayers([marker]);
-		
-		
-		
-		
-		
-	/*FUNCION PARA EL POP-UP*/
-	
-	vector.events.on({
-		'featureselected': onFeatureSelect,
-		'featureunselected': onFeatureUnselect
-	});
+	}); //fin OpenLayers.Control.Click
 	
 	
-	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
-	geolocate.events.register("locationupdated", this, eventLocationChanged);
 	
-
-	//map.addPopup(popup);
 	
-	};// End of init
-
+	
+	
 	function onFeatureSelect(evt) {
 		feature = evt.feature;
 		/*popup = new OpenLayers.Popup.FramedCloud("featurePopup",
