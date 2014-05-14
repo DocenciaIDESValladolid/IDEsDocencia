@@ -38,8 +38,7 @@ function login() {
   fb.login(function(){ 
     if (fb.logged) {
 		// Cambiamos el link de identificarse por el nombre y la foto del usuario.
-		html = "<p>Hola " + fb.user.name + "</p>";
-		html += '<p>' + fb.user.email + '</p>';
+		html = "<p>Hola " + fb.user.name + ' Email:' + fb.user.email + '</p>';
 		html += '<p><a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';}); return false;">Salir</a></p>';
 		$( "#login_button" ).html(html);
     } else {
