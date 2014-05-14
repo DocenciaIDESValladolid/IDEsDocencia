@@ -99,7 +99,9 @@ var init = function (onSelectFeatureFunction) {
     });
 	
 	/////Capa marcador
-	var markers = new OpenLayers.Layer.Markers( "Markers" );
+	markers = new OpenLayers.Layer.Markers( "Markers" );
+	markers.id = "Markers";
+	map.addLayer(markers);
 	/////
 
     map.addLayers([wfs]);
@@ -142,7 +144,7 @@ var init = function (onSelectFeatureFunction) {
 		
 	/************************************************************************************************/
 	//pintamos la capa del marcador a añadir
-	map.addLayers([markers]);
+	//map.addLayers([markers]);
 		
 	//Añadimos control de click	
 	var click = new OpenLayers.Control.Click();
@@ -198,11 +200,14 @@ var init = function (onSelectFeatureFunction) {
 			alert("You clicked near " + lonlat.lat + " N, " +
 									  + lonlat.lon + " E");
 			
-			var markers = map.getLayer('Markers');
+			
 			var size = new OpenLayers.Size(21,25);
 			var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
 			var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png',size,offset);
+			var markers = map.getLayer('Markers');
+			
 			markers.addMarker(new OpenLayers.Marker(lonlat,icon));
+			//markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lonlat.lat,lonlat.lon),icon));
 			
 			//var position = map.getLonLatFromPixel(e.xy);
 			//markerslayer.addMarker(new OpenLayers.Marker(position,icon));
