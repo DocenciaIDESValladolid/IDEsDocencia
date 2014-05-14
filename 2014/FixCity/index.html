@@ -25,7 +25,7 @@ fb.ready(function(){
   {
     // Cambiamos el link de identificarse por el nombre y la foto del usuario.
 	html = "<p>Hola " + fb.user.name + "</p>";
-    html += '<p><img src="' + fb.user.email +'"/></p>';
+    html += '<p>' + fb.user.email + '</p>';
     html += '<p><a href="#" onclick="fb.logout(); return false;">Salir</a></p>';
 	$( "#login_button" ).html(html);
 
