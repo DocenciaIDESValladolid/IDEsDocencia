@@ -25,7 +25,7 @@ fb.ready(function(){
   {
     // Cambiamos el link de identificarse por el nombre y la foto del usuario.
 	html = '<p>Hola ' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';}); return false;">Salir</a></p>';
-    html += '<p><a href="#misdenuncias" data-icon="layers" data-role="button">Mis Denuncias</a><a href="#searchpage" data-icon="search" data-role="button">Search</a></p>';
+    html += '<p><a href="#" id="locate" data-icon="locate" data-role="button">Locate</a><a href="#misdenuncias" data-icon="layers" data-role="button">Mis Denuncias</a><a href="#searchpage" data-icon="search" data-role="button">Search</a></p>';
 	$( "#login_button" ).html(html);
 
   }
@@ -77,7 +77,6 @@ var publish = function () {
 				<a href="#iniciosesion"  data-role="button" onclick="login(); return false;">Login con Facebook</a>
 				<a href="#iniciosesion"  data-role="button">Login con Google+</a>
 			</div>
-            <a href="#" id="locate" data-icon="locate" data-role="button">Locate</a>
             <a href="#layerspage" data-icon="layers" data-role="button">Capas</a>
 			<a href="#estadisticas" data-icon="layers" data-role="button">Estadísticas</a>
 			<a href="#aboutus" data-icon="layers" data-role="button">About Us</a>
