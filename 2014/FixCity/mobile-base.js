@@ -271,7 +271,7 @@ var init = function (onSelectFeatureFunction) {
 						+' 	  </PropertyIsGreaterThanOrEqualTo>\n'
 						+' 	  <Intersects>\n'
 						+' 		<PropertyName>the_geom</PropertyName>\n'
-						+' 		  <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">\n'
+						+' 		  <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#900913">\n'
 						+' 			<gml:coordinates>'+e.point.x+','+e.point.y+'</gml:coordinates>\n'
 						+' 		  </gml:Point>\n'
 						+' 		</Intersects>\n'
