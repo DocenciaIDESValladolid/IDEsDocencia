@@ -24,10 +24,11 @@ fb.ready(function(){
   if (fb.logged)
   {
     // Cambiamos el link de identificarse por el nombre y la foto del usuario.
-    html = "<p>Hola " + fb.user.name + "</p>";
+	$( "#login_button" ).html("<p>Hola " + fb.user.name + "</p>");
+    /*html = "<p>Hola " + fb.user.name + "</p>";
     html += '<p><img src="' + fb.user.picture + '"/></p>';
     html += '<p><a href="#" onclick="fb.logout(); return false;">Salir</a></p>';
-    document.getElementById("conectar_facebook").innerHTML = html;
+    document.getElementById("conectar_facebook").innerHTML = html;*/
   }
 });
 
@@ -79,7 +80,7 @@ var publish = function () {
 			<a href="#misdenuncias" data-icon="layers" data-role="button">Mis Denuncias</a>
 			<a href="#estadisticas" data-icon="layers" data-role="button">Estadísticas</a>
 			<a href="#aboutus" data-icon="layers" data-role="button">About Us</a>
-			<a href="#iniciosesion"  data-role="button" onclick="login(); return false;">Login</a>
+			<div id="login_button"><a href="#iniciosesion"  data-role="button" onclick="login(); return false;">Login</a></div>
           </div>
           <div id="navigation" data-role="controlgroup" data-type="vertical">
             <a href="#" data-role="button" data-icon="plus" id="plus"
@@ -405,13 +406,6 @@ var publish = function () {
                 </ul>
             </div>
         </div>
-	<!--
-		<div data-role="page" id="iniciosesion" onclick="login(); return false;">
-          <div data-role="header">
-            <h1>Iniciar sesión con Facebook</h1>
-		</div>
-		</div>
-		-->
 		
 		 <!-- Site footer -->
     <div class="footer" style="margin-left: 100px ;margin-right: 100px;">
