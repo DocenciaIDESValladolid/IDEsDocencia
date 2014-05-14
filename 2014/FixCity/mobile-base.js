@@ -77,7 +77,7 @@ var init = function (onSelectFeatureFunction) {
         center: new OpenLayers.LonLat(0, 0),	
         zoom: 1
     });
-	
+	OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 	/*
 	var wms = new OpenLayers.Layer.WMS("Denuncias WMS",
         "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
@@ -245,6 +245,7 @@ var init = function (onSelectFeatureFunction) {
 		var muni_name= jsonResponse.features[1].properties.nameunit;
 		var muni_code= jsonResponse.features[1].properties.nationalcode;
 		alert(" estás en "+muni_name+" provincia de "+prov_name);
+		
 		//alert(request);	
 	}
 	function failureUA(request){
