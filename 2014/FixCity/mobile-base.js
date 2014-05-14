@@ -298,7 +298,7 @@ var init = function (onSelectFeatureFunction) {
 		requestUA.send(); */
 		$.ajax({
 			type: "POST",
-			contentType: "application/xml",  
+			contentType: "text/plain", // server can forbid other types for cross-server scripting
 			url: urlWfsUA,
 			data: postDataUA,
 			success: successUA
