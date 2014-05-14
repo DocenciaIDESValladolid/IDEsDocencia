@@ -14,8 +14,8 @@ error_reporting(E_ALL);
 //@ $longitud=$_POST['longitud'];
 //@ $latitud=$_POST['latitud'];
 // Coordenadas de prueba
-$longitud = 42.000000;
-$latitud = -1.000000;
+$latitud = 42.000000;
+$longitud = -1.000000;
 @ $texto=$_POST['texto'];
 
   $texto = trim($texto);
@@ -41,7 +41,7 @@ $latitud = -1.000000;
   }
 
 	$query = "INSERT INTO denuncias (texto, the_geom, fecha) VALUES 
-            ('".$texto."', ST_GeomFromText('POINT(".$latitud." ".$longitud.")',4326),current_date)";
+            ('".$texto."', ST_GeomFromText('POINT(".$longitud." ".$latitud.")',4326),current_date)";
 			
 	//$query = "SELECT * FROM denuncias;";
 	$result = pg_exec($db, $query);
