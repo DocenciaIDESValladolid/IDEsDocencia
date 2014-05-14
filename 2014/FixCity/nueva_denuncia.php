@@ -41,7 +41,7 @@
 	/*$query = "INSERT INTO denuncias (texto, localizacion, fecha) VALUES 
             ('".$texto."', ST_GeomFromText('POINT(".$longitud." ".$latitud.")',4326),current_date)"; */
 			
-	$query = "SELECT * FROM denuncias;"
+	$query = "SELECT * FROM denuncias;";
 	$result = pg_exec($db, $query);
 
 	
