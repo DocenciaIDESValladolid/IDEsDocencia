@@ -48,7 +48,7 @@ error_reporting(E_ALL);
 
 	
 	while($row = pg_fetch_array($result)) {
-	  echo $row;
+	  var_dump($row);
 	  echo "<br>";
 	}
 
