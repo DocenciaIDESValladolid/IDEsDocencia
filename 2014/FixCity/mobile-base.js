@@ -286,7 +286,7 @@ var init = function (onSelectFeatureFunction) {
 						+'   </wfs:Query>\n'
 						+' </wfs:GetFeature>\n';
 		var urlProxy = 'http://itastdevserver.tel.uva.es/urlnoexiste';			
-		var requestUA = OpenLayers.Request.POST({
+/*		var requestUA = OpenLayers.Request.POST({
 			url: urlProxy,//urlWfsUA,
 			data: {datas:postDataUA},
 			headers: {
@@ -295,7 +295,13 @@ var init = function (onSelectFeatureFunction) {
 			callback: successUA,
 			failure: failureUA,
 			});
-		requestUA.send(); 
+		requestUA.send(); */
+		$.ajax({
+			type: "POST",
+			url: urlWfsUA,
+			data: postDataUA,
+			success: successUA
+			});
 	}
 	function successUA(request){
 		
