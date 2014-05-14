@@ -24,7 +24,7 @@ fb.ready(function(){
   if (fb.logged)
   {
     // Cambiamos el link de identificarse por el nombre y la foto del usuario.
-	html = '<p>Hola ' + fb.user.name + '</p><a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';return false;});">Salir</a>';
+	html = '<p>Hola ' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
 	/*html = '<p>Hola ' + fb.user.name + 
 		'<a href="#" onclick="fb.logout(function(response) '+
 		'{window.location.href = \'index.html\';document.getElementById("misdenuncias_button").style.visibility = "hidden";'+
@@ -41,7 +41,7 @@ function login() {
   fb.login(function(){ 
     if (fb.logged) {
 		// Cambiamos el link de identificarse por el nombre y la foto del usuario.
-		html = '<p>Hola ' + fb.user.name + '</p><a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';return false;});">Salir</a>';
+		html = '<p>Hola ' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
 		/*html = '<p>Hola ' + fb.user.name + 
 		'<a href="#" onclick="fb.logout(function(response) '+
 		'{window.location.href = \'index.html\';document.getElementById("misdenuncias_button").style.visibility = "hidden";'+
