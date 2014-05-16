@@ -22,7 +22,7 @@ var init = function (onSelectFeatureFunction) {
             graphicWidth: 16,
             graphicHeight: 26,
             graphicYOffset: -26
-        })
+        })	
     });
 /*
     var sprinters = getFeatures();
