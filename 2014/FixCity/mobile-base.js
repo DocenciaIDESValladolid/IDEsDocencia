@@ -343,7 +343,7 @@ var init = function (onSelectFeatureFunction) {
 		//alert(request);	
 	}
 	
-	function muestraConfirm(var name, var muni)
+	function muestraConfirm()
 	{
 		var pregunta = "Estás en "+muni_name+", provincia de "+prov_name + ". ¿Desea añadir una denuncia?";
 		var respuesta = confirm(pregunta);
