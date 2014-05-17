@@ -322,9 +322,11 @@ var init = function (onSelectFeatureFunction) {
 		var muni_code= jsonResponse.features[1].properties.nationalcode;
 		//alert("Estás en "+muni_name+", provincia de "+prov_name + ".");
 		
+		muestraConfirm();
+		
 		/* Código que nos permite editar un alerta.
 		En concreto, esto se usa para añadir un botón de "Nueva denuncia" y otro de "Cancelar".*/
-		import mx.controls.Alert;
+		/*import mx.controls.Alert;
 		Alert.okLabel = "Nueva denuncia";
 		Alert.cancelLabel = "Cancelar";
 		Alert.buttonWidth = 75; // El ancho de los botones
@@ -336,11 +338,27 @@ var init = function (onSelectFeatureFunction) {
 			
 			}
 		};
-		
-		Alert.show("Estás en "+muni_name+", provincia de "+prov_name + ".", "Esto que es", Alert.OK | Alert.CANCEL, null, confirmHandler, Alert.CANCEL);
+		Alert.show("Estás en "+muni_name+", provincia de "+prov_name + ".", "Esto que es", Alert.OK | Alert.CANCEL, null, confirmHandler, Alert.CANCEL);*/
 
 		//alert(request);	
 	}
+	
+	function muestraConfirm()
+	{
+		var pregunta = "¿Bla bla bla?";
+		var respuesta = confirm(pregunta);
+
+		if(respuesta) // Quiere decir que dio click en Aceptar
+		{
+			window.close();
+		}
+                else
+                {
+
+                         // Código para cambiar de frame
+                }
+	}
+	
 	function failureUA(request){
 		alert('FALLO');	
 	}
