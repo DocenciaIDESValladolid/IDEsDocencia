@@ -315,7 +315,7 @@ var init = function (onSelectFeatureFunction) {
 	
 	/* Código que nos permite editar un alerta.
 	   En concreto, esto se usa para añadir un botón de "Nueva denuncia" y otro de "Cancelar".*/
-	import mx.controls.Alert;
+	/*import mx.controls.Alert;
 	Alert.okLabel = "Nueva denuncia";
 	Alert.cancelLabel = "Cancelar";
 	Alert.buttonWidth = 75; // El ancho de los botones
@@ -326,16 +326,16 @@ var init = function (onSelectFeatureFunction) {
 		else {
 		
 		}
-	};
+	};*/
 	
 	function successUA(jsonResponse){
 	
 		var prov_name= jsonResponse.features[0].properties.nameunit;
 		var muni_name= jsonResponse.features[1].properties.nameunit;
 		var muni_code= jsonResponse.features[1].properties.nationalcode;
-		//alert("Estás en "+muni_name+", provincia de "+prov_name + ".");
+		alert("Estás en "+muni_name+", provincia de "+prov_name + ".");
 		
-		Alert.show("Estás en "+muni_name+", provincia de "+prov_name + ".", "Esto que es", Alert.OK | Alert.CANCEL, null, confirmHandler, Alert.CANCEL);
+//		Alert.show("Estás en "+muni_name+", provincia de "+prov_name + ".", "Esto que es", Alert.OK | Alert.CANCEL, null, confirmHandler, Alert.CANCEL);
 
 		//alert(request);	
 	}
