@@ -343,14 +343,14 @@ var init = function (onSelectFeatureFunction) {
 		//alert(request);	
 	}
 	
-	function muestraConfirm()
+	function muestraConfirm(var name, var muni)
 	{
-		var pregunta = "¿Bla bla bla?";
+		var pregunta = "Estás en "+muni_name+", provincia de "+prov_name + ". ¿Desea añadir una denuncia?";
 		var respuesta = confirm(pregunta);
 
-		if(respuesta) // Quiere decir que dio click en Aceptar
+		if(respuesta)
 		{
-			window.close();
+			window.location = 'http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/index.html#nuevadenuncia_loc_actual'; 
 		}
                 else
                 {
