@@ -21,6 +21,8 @@ error_reporting(E_ALL);
 
   $texto = trim($texto);
 
+  echo 'Hola, hemos pasado: '.$latitud.' y esas cosas...';
+  
  if (!$latitud || !$longitud || !$texto)
   {
      echo 'No ha introducido toda la información requerida para el cliente.<br />'
@@ -30,7 +32,7 @@ error_reporting(E_ALL);
      exit;
   }
 		
-		echo 'Hola, hemos pasado: '.$latitud.' y esas cosas...';
+		
   
   $texto = addslashes($texto);
   $latitud = 42.000000;
