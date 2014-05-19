@@ -280,10 +280,10 @@ var init = function (onSelectFeatureFunction) {
 		//var feature = markers.features;
 		var point = markers.features[0].geometry.bounds.getCenterLonLat();
 		html = 'Está a punto de introducir una denuncia en: ' + muni_name + ', provincia de ' + 
-			prov_name + '.<br>La localización exacta del problema es: ' + point.x + ', ' + point.y + '. <br>'
+			prov_name + '.<br>La localización exacta del problema es: ' + point.lon + ', ' + point.lat + '. <br>'
 		$("#loc_actual").html(html);
-		$("#longitud").val(point.x);
-		$("#latitud").val(point.y);
+		$("#longitud").val(point.lon);
+		$("#latitud").val(point.lat);
 	}
 	
 	
