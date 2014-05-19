@@ -195,7 +195,7 @@ var publish = function () {
 				<div>
 				    <div style="margin-top: 50px;margin-left: 100px;margin-right: 100px;">      
 							<!-- Formulario para la introducción de una denuncia -->
-							<form role="form">
+							<form role="form" action="nueva_denuncia.php">
 								<div id="loc_actual"></div>
 								 
 								<p>Escriba aquí la descripción de su denuncia</p>
@@ -209,7 +209,7 @@ var publish = function () {
 								<input type="file" id="file3">
 								<br>
 								
-								<input type="button" value="Enviar " class="btn btn-default" onClick="enviarDenuncia">
+								<input type="button" value="Enviar " class="btn btn-default">
 								<input type="reset" value="Borrar">
 								<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
 						  </form>
