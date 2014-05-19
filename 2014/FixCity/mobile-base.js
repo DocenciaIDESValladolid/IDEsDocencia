@@ -221,7 +221,8 @@ var init = function (onSelectFeatureFunction) {
 	
 	function addDenunciaOnClick(municipio, provincia, longitud, latitud)
 	{
-		var pregunta = "Estás en "+ municipio +", provincia de "+ provincia + ".¿Desea añadir una denuncia?";
+		var pregunta = "Estás en "+ municipio +", provincia de "+ provincia + 
+					   ". La localización escogida es: " + latitud + " N, " + longitud + " E," + "¿desea añadir una denuncia?";
 		var respuesta = confirm(pregunta);
 
 		if(respuesta)
