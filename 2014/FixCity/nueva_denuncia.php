@@ -14,9 +14,10 @@ error_reporting(E_ALL);
 //@ $longitud=$_POST['longitud'];
 //@ $latitud=$_POST['latitud'];
 // Coordenadas de prueba
-$latitud = 42.000000;
-$longitud = -1.000000;
-@ $texto=$_POST['texto'];
+
+@ $texto = $_POST['texto'];
+@ $longitud = $_POST['longitud'];
+@ $latitud = $_POST['latitud'];
 
   $texto = trim($texto);
 
@@ -28,8 +29,13 @@ $longitud = -1.000000;
 	 echo "<input type='button' value='Back' onClick='history.go(-1);'>";
      exit;
   }
+  else{
+		echo  $latitud;
+  }
   
   $texto = addslashes($texto);
+  $latitud = 42.000000;
+	$longitud = -1.000000;
 
   $db = pg_connect("host=postgres.idelab.uva.es user=testDev password=testIDELAB dbname=idelab");
 
