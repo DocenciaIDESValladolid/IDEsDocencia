@@ -278,10 +278,9 @@ var init = function (onSelectFeatureFunction) {
 	function fillForm(){
 		var markers = map.getLayer('Markers');
 		//var feature = markers.features;
-		var bounds = markers.features[0].geometry.bounds.getCenterLonLat();
-		//var pointx = feature.geometry.bounds.point.y;
+		var point = markers.features[0].geometry.bounds.getCenterLonLat();
 		html = 'Está a punto de introducir una denuncia en: ' + muni_name + ', provincia de ' + 
-			prov_name + '.<br>La localización exacta del problema es: ' + bounds.x + ', ' + bounds.y + '. <br>'
+			prov_name + '.<br>La localización exacta del problema es: ' + point.x + ', ' + point.y + '. <br>'
 		$("#loc_actual").html(html);
 		$("#longitud").val(point.x);
 		$("#latitud").val(point.y);
