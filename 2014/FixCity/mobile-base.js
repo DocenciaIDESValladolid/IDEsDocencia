@@ -262,23 +262,23 @@ var init = function (onSelectFeatureFunction) {
 	function successUA(jsonResponse){
 	if (jsonResponse.features.length==2)
 	{
-		this.prov_name= jsonResponse.features[0].properties.nameunit;
-		this.muni_name= jsonResponse.features[1].properties.nameunit;
+		prov_name= jsonResponse.features[0].properties.nameunit;
+		muni_name= jsonResponse.features[1].properties.nameunit;
 		this.muni_code= jsonResponse.features[1].properties.nationalcode;
 		$("#locationlabel").html(this.muni_name+" provincia de "+this.prov_name);
 		$("#infopanel").trigger( "updatelayout" );
 		$("#infopanel").panel("open");
-		fillForm();
+		fillForm(this.prov_name,this.muni_name);
 		}
 	}
 	
-	function fillForm(){
+	function fillForm(prov_name, muni_name){
 		var markers = map.getLayer('Markers');
 		//var feature = markers.features;
 		var bounds = markers.features[0].geometry.bounds.getCenterLonLat();
 		//var pointx = feature.geometry.bounds.point.y;
-		html = 'Está a punto de introducir una denuncia en: ' + this.muni_name + ', provincia de ' + 
-			this.prov_name + '.<br>La localización exacta del problema es: ' + bounds.x + ', ' + bounds.y + '. <br>'
+		html = 'Está a punto de introducir una denuncia en: ' + muni_name + ', provincia de ' + 
+			prov_name + '.<br>La localización exacta del problema es: ' + bounds.x + ', ' + bounds.y + '. <br>'
 		$("#loc_actual").html(html);
 		$("#longitud").val(bounds.x);
 		$("#latitud").val(bounds.y);
