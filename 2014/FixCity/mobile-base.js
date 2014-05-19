@@ -90,7 +90,14 @@ var init = function (onSelectFeatureFunction) {
             featureNS: "http://www.idelab.uva.es/#IDES",
 			srsName: "EPSG:900913",
 			version: "1.1.0"
-        })
+        }),
+		styleMap: new OpenLayers.StyleMap({
+            externalGraphic: "img/cono.png",
+            graphicOpacity: 1.0,
+            graphicWidth: 16,
+            graphicHeight: 26,
+            graphicYOffset: -26
+		})
     });
     // create map
 	
