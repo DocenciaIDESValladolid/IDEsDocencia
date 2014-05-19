@@ -74,15 +74,14 @@ var publish = function () {
 <br/>
 <h2>Posición del informe.</h2>
 <p>La marca para informar está situada en <div id="locationlabel"></div>.</p>
-<p>Pulse de nuevo en la chincheta <img src="http://www.openlayers.org/dev/img/marker.png"> para comenzar el informe de la avería o irregularidad que ha observado.</p>
+<p>Pulse de nuevo en la chincheta <img src="img/mobile-loc.png"> para comenzar el informe de la avería o irregularidad que ha observado.</p>
 <a href="#nuevadenuncia_loc_actual">Añadir denuncia</a>
 
 </div>
 			<div data-role="header">
 			<a href="#infopanel"  data-rel="panel" data-dismissible="true" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-btn-mini ui-icon-bars">Info</a>
-			<a href="#" id="iniciosesionFacebook" data-role="button" onclick="login(); return false;">Login con Facebook</a>
-			<a href="#" id="iniciosesionGoogle" data-role="button">Login con Google+</a>
-			<h3>FixCity</h3>	
+			<h3>FixCity</h3>
+			
 			</div>		
 			<div data-role="content">		  
 				<div id="map" class="smallmap"></div>
@@ -95,7 +94,8 @@ var publish = function () {
 				<a href="#layerspage" data-transition="fade" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Capas</a>
 				<a href="#estadisticas" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Estadísticas</a>
 				<a href="#aboutus" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">About Us</a>
-				
+				<a href="#" id="iniciosesionFacebook" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" onclick="login(); return false;">Facebook</a>
+				<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>
 				<script>
 				$("#misdenuncias_button").hide();
 				$("#search_button").hide();

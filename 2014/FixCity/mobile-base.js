@@ -12,10 +12,8 @@ var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
 var init = function (onSelectFeatureFunction) {
 
     var vector = new OpenLayers.Layer.Vector("vector", {});
-	
-
-	
-    var sprintersLayer = new OpenLayers.Layer.Vector("Sprinters", {
+	/////Capa marcador
+	var markers = new OpenLayers.Layer.Vector( "Markers", {
         styleMap: new OpenLayers.StyleMap({
             externalGraphic: "img/mobile-loc.png",
             graphicOpacity: 1.0,
@@ -24,14 +22,47 @@ var init = function (onSelectFeatureFunction) {
             graphicYOffset: -26
         })	
     });
-/*
-    var sprinters = getFeatures();
-    sprintersLayer.addFeatures(sprinters);*/
+	markers.id="Markers";
+/********************
+* Controles de mapa
+**********************/
+		/* Función para clickar y añadir marcador*/
+	OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
+		defaultHandlerOptions: {
+			'single': true,
+			'double': false,
+			'pixelTolerance': 10,
+			'stopSingle': false,
+			'stopDouble': false
+		},
 
-    var selectControl = new OpenLayers.Control.SelectFeature(sprintersLayer, {
-        autoActivate:true,
-        onSelect: onSelectFeatureFunction});
-		
+		initialize: function(options) {
+			this.handlerOptions = OpenLayers.Util.extend(
+				{}, this.defaultHandlerOptions
+			);
+			OpenLayers.Control.prototype.initialize.apply(
+				this, arguments
+			); 
+			this.handler = new OpenLayers.Handler.Click(
+				this, {
+					'click': this.trigger
+				}, this.handlerOptions
+			);
+		}, 
+
+		trigger: function(e) {
+			var lonlat = map.getLonLatFromPixel(e.xy);
+			var e= {point:{y:lonlat.lat,x:lonlat.lon}};
+			eventLocationChanged(e);		
+		}
+
+	}); //fin OpenLayers.Control.Click
+	//Añadimos control de click	
+	var clickControl = new OpenLayers.Control.Click();	
+	
+    var selectControl = new OpenLayers.Control.SelectFeature(markers, {
+        autoActivate:true});
+	markers.events.on({"featureselected": addReport});
 	var popupControl = new OpenLayers.Control.SelectFeature(vector, {
 		autoActivate:true
 	});
@@ -46,7 +77,18 @@ var init = function (onSelectFeatureFunction) {
         }
     });
 	
-
+//CAPA DE DENUNCIAS
+	var wfs = new OpenLayers.Layer.Vector("Denuncias", {
+        //strategies: [new OpenLayers.Strategy.Fixed()],
+		strategies: [new OpenLayers.Strategy.BBOX({resFactor: 1})],
+        protocol: new OpenLayers.Protocol.WFS({
+            url: "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
+            featureType: "denuncias",
+            featureNS: "http://www.idelab.uva.es/#IDES",
+			srsName: "EPSG:900913",
+			version: "1.1.0"
+        })
+    });
     // create map
 	
     map = new OpenLayers.Map({
@@ -59,7 +101,8 @@ var init = function (onSelectFeatureFunction) {
 			new OpenLayers.Control.Navigation(),
             geolocate,
             selectControl,
-			popupControl
+			popupControl,
+			clickControl
         ],
         layers: [
 		   new OpenLayers.Layer.OSM("Vista Callejero", null, {
@@ -71,12 +114,16 @@ var init = function (onSelectFeatureFunction) {
                 name: "Vista Aérea",
                 transitionEffect: 'resize'
             }),
-		vector
-			
+			vector,
+			markers,
+			wfs
             ],
         center: new OpenLayers.LonLat(0, 0),	
         zoom: 1
     });
+	
+	clickControl.activate();	
+	
 	OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 	/*
 	var wms = new OpenLayers.Layer.WMS("Denuncias WMS",
@@ -85,28 +132,6 @@ var init = function (onSelectFeatureFunction) {
         {isBaseLayer: false, transitionEffect: 'resize', singleTile:false}
     );*/
 	
-	//CAPA DE DENUNCIAS
-	var wfs = new OpenLayers.Layer.Vector("Denuncias", {
-        //strategies: [new OpenLayers.Strategy.Fixed()],
-		strategies: [new OpenLayers.Strategy.BBOX({resFactor: 1})],
-        protocol: new OpenLayers.Protocol.WFS({
-            url: "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
-            featureType: "denuncias",
-            featureNS: "http://www.idelab.uva.es/#IDES",
-			srsName: "EPSG:900913",
-			version: "1.1.0"
-        })
-    });
-	
-	/////Capa marcador
-	markers = new OpenLayers.Layer.Vector( "Markers" );
-	markers.id = "Markers";
-	map.addLayer(markers);
-	
-	/////
-
-    map.addLayers([wfs]);
-
     var style = {
         fillOpacity: 0.1,
         fillColor: '#000',
@@ -147,11 +172,7 @@ var init = function (onSelectFeatureFunction) {
 	//pintamos la capa del marcador a añadir
 	//map.addLayers([markers]);
 		
-	//Añadimos control de click	
-	var click = new OpenLayers.Control.Click();
-	map.addControl(click);
-	click.activate();		
-		
+	
 		
 	/*FUNCION PARA EL POP-UP*/
 	
@@ -159,54 +180,14 @@ var init = function (onSelectFeatureFunction) {
 		'featureselected': onFeatureSelect,
 		'featureunselected': onFeatureUnselect
 	});
-	markers.events.on({
-		'featureselected': addReport
-	});
+	
 	
 	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
 	geolocate.events.register("locationupdated", this, eventLocationChanged);
 	
-
-	//map.addPopup(popup);
-	
 	};// End of init
 
-	/*
-	
-	*/
-		/* Función para clickar y añadir marcador*/
-	OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
-		defaultHandlerOptions: {
-			'single': true,
-			'double': false,
-			'pixelTolerance': 0,
-			'stopSingle': false,
-			'stopDouble': false
-		},
 
-		initialize: function(options) {
-			this.handlerOptions = OpenLayers.Util.extend(
-				{}, this.defaultHandlerOptions
-			);
-			OpenLayers.Control.prototype.initialize.apply(
-				this, arguments
-			); 
-			this.handler = new OpenLayers.Handler.Click(
-				this, {
-					'click': this.trigger
-				}, this.handlerOptions
-			);
-		}, 
-
-		trigger: function(e) {
-			var lonlat = map.getLonLatFromPixel(e.xy);
-			var e= {point:{y:lonlat.lat,x:lonlat.lon}};
-			eventLocationChanged(e);		
-		}
-
-	}); //fin OpenLayers.Control.Click
-	
-	
 	function addDenunciaOnClick(municipio, provincia, longitud, latitud)
 	{
 		var pregunta = "Estás en "+ municipio +", provincia de "+ provincia + 
