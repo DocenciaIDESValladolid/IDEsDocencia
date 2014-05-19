@@ -287,12 +287,10 @@ var init = function (onSelectFeatureFunction) {
 		//var feature = markers.features;
 		var point = markers.features[0].geometry.bounds.getCenterLonLat();
 		html = 'Está a punto de introducir una denuncia en: ' + muni_name + ', provincia de ' + 
-			prov_name + '.<br>La localización exacta del problema es: ' + point.lon + ', ' + point.lat + '. <br>'
+			prov_name + '.<br>La localización exacta del problema es: ' + point.lon + ', ' + point.lat + '. <br>' + 
+			'<input type="hidden" name="longitud" value="' + point.lon + '">' + 
+			'<input type="hidden" name="latitud" value="' + point.lat + '">';
 		$("#loc_actual").html(html);
-		//$("#longitud").val(point.lon);
-		//$("#latitud").val(point.lat);
-		//document.getElementById('latitud').value = point.lat;
-		//document.getElementById('longitud').value = point.lon;
 	}
 	
 	
