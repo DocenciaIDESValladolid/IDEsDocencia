@@ -293,7 +293,7 @@ var init = function (onSelectFeatureFunction) {
 	
 	function fillForm(){
 		var markers = map.getLayer('Markers');
-		var feature = markers.getFeatures();
+		var feature = markers.getFeature();
 		var point = feature.geometry.getBounds().getCenterLonLat();
 		html = 'Está a punto de introducir una denuncia en: ' + this.muni_name + ', provincia de ' + 
 			this.prov_name + '.<br>La localización exacta del problema es: ' + point.x + ', ' + point.y + '. <br>'
