@@ -29,9 +29,8 @@ error_reporting(E_ALL);
 	 echo "<input type='button' value='Back' onClick='history.go(-1);'>";
      exit;
   }
-  else{
-		echo "Hola, hemos pasado: ".$latitud." y esas cosas...";
-  }
+		
+		echo 'Hola, hemos pasado: '.$latitud.' y esas cosas...';
   
   $texto = addslashes($texto);
   $latitud = 42.000000;
