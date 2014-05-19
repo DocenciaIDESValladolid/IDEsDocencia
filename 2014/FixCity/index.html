@@ -25,11 +25,7 @@
 fb.ready(function(){ 
   if (fb.logged)
   {
-    // Cambiamos el link de identificarse por el nombre y la foto del usuario.
-	html = '<p>Hola ' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
-	$("#login_button").html(html);
-	$("#misdenuncias_button").show();
-	$("#search_button").show();
+   updateFacebbokLoginInfo(fb)
   }
 });
 
@@ -39,16 +35,19 @@ function login() {
   fb.login(function(){ 
     if (fb.logged) {
 		// Cambiamos el link de identificarse por el nombre y la foto del usuario.
-		html = '<p>Hola ' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
-		$("#login_button").html(html);
-		$("#misdenuncias_button").show();
-		$("#search_button").show();
+		updateFacebookLoginInfo(fb);
     } else {
       alert("No se pudo identificar al usuario");
     }
   })
 };
-
+function updateFacebbokLoginInfo(fb)
+{
+	html = '' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
+	$("#iniciosesionFacebook").html(html);
+	$("#misdenuncias_button").show();
+	$("#search_button").show();
+}
 // Funcion para publicar un mensaje en tu muro
 var publish = function () {
     fb.publish({
@@ -87,8 +86,8 @@ var publish = function () {
 				<div id="map" class="smallmap"></div>
 			</div>
 			<div data-role="footer">
-				<a href="#iniciosesion"  data-role="button" onclick="login(); return false;">Login con Facebook</a>
-				<a href="#iniciosesion"  data-role="button">Login con Google+</a>
+				<a href="#" id="iniciosesionFacebook" data-role="button" onclick="login(); return false;">Login con Facebook</a>
+				<a href="#" id="iniciosesionGoogle" data-role="button">Login con Google+</a>
 				<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Locate</a>
 				<a href="#misdenuncias" id="misdenuncias_button" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Mis Denuncias</a>
 				<a href="#searchpage" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Search</a>
