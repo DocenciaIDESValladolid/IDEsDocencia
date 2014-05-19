@@ -25,7 +25,7 @@
 fb.ready(function(){ 
   if (fb.logged)
   {
-   updateFacebbokLoginInfo(fb)
+   updateFacebookLoginInfo(fb)
   }
 });
 
@@ -41,9 +41,9 @@ function login() {
     }
   })
 };
-function updateFacebbokLoginInfo(fb)
+function updateFacebookLoginInfo(fb)
 {
-	html = '' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
+	html = '<img src="'+fb.user.picture+'"/> + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
 	$("#iniciosesionFacebook").html(html);
 	$("#misdenuncias_button").show();
 	$("#search_button").show();
