@@ -33,7 +33,7 @@ error_reporting(E_ALL);
   
   $texto = addslashes($texto);
   $latitud = 42.000000;
-	$longitud = -1.000000;
+  $longitud = -1.000000;
 
   $db = pg_connect("host=postgres.idelab.uva.es user=testDev password=testIDELAB dbname=idelab");
 
