@@ -30,7 +30,7 @@ error_reporting(E_ALL);
      exit;
   }
   else{
-		echo  $latitud;
+		var_dump($latitud);
   }
   
   $texto = addslashes($texto);
