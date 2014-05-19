@@ -45,7 +45,7 @@ error_reporting(E_ALL);
   }
 
 	$query = "INSERT INTO denuncias (texto, the_geom, fecha) VALUES 
-            ('".$texto."', ST_GeomFromText('POINT(".$longitud." ".$latitud.")',4326),current_date)";
+            ('".$texto."', ST_Transform(ST_SetSRID(ST_Point(".$longitud.", ".$latitud."),900913),4326),current_date)";
 			
 	//$query = "SELECT * FROM denuncias;";
 	$result = pg_exec($db, $query);
