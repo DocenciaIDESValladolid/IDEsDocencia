@@ -287,8 +287,21 @@ var init = function (onSelectFeatureFunction) {
 		$("#locationlabel").html(this.muni_name+" provincia de "+this.prov_name);
 		$("#infopanel").trigger( "updatelayout" );
 		$("#infopanel").panel("open");
+		fillForm();
 		}
 	}
+	
+	function fillForm(){
+		var feature = map.getLayer('Markers').getFeatures();
+		var point = feature.geometry.getBounds().getCenterLonLat();
+		html = 'Está a punto de introducir una denuncia en: ' + this.muni_name + ', provincia de ' + 
+			this.prov_name + '.<br>La localización exacta del problema es: ' + point.x + ', ' + point.y + '. <br>'
+		$("#loc_actual").html(html);
+		$("#longitud").val(point.x);
+		$("#latitud").val(point.y);
+	}
+	
+	
 	function failureUA(request){
 		alert('FALLO');	
 	}
