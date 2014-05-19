@@ -200,31 +200,8 @@ var init = function (onSelectFeatureFunction) {
 
 		trigger: function(e) {
 			var lonlat = map.getLonLatFromPixel(e.xy);
-<<<<<<< .mine
 			var e= {point:{y:lonlat.lat,x:lonlat.lon}};
 			eventLocationChanged(e);		
-=======
->>>>>>> .r216
-			
-			addDenunciaOnClick("municipio", "provincia", lonlat.lon, lonlat.lat);
-			
-<<<<<<< .mine
-=======
-			/*alert("You clicked near " + lonlat.lat + " N, " +
-									  + lonlat.lon + " E");*/
-			
-			
-			var size = new OpenLayers.Size(21,25);
-			var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-			var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png',size,offset);
-			var markers = map.getLayer('Markers');
-			
-			markers.addMarker(new OpenLayers.Marker(lonlat,icon));
->>>>>>> .r216
-			//markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lonlat.lat,lonlat.lon),icon));
-			
-			//var position = map.getLonLatFromPixel(e.xy);
-			//markerslayer.addMarker(new OpenLayers.Marker(position,icon));
 		}
 
 	}); //fin OpenLayers.Control.Click
@@ -372,42 +349,5 @@ var init = function (onSelectFeatureFunction) {
 			success: successCallback,
 			error: failureCallBack,
 			});
-<<<<<<< .mine
-	}=======
 	}
-	
-	
-	
-	function successUA(jsonResponse){
-	
-		var prov_name= jsonResponse.features[0].properties.nameunit;
-		var muni_name= jsonResponse.features[1].properties.nameunit;
-		var muni_code= jsonResponse.features[1].properties.nationalcode;
-		alert("Estás en "+muni_name+", provincia de "+prov_name + ".");
-		
-		//muestraConfirm(muni_name,prov_name);
-		
-		/* Código que nos permite editar un alerta.
-		En concreto, esto se usa para añadir un botón de "Nueva denuncia" y otro de "Cancelar".*/
-		/*import mx.controls.Alert;
-		Alert.okLabel = "Nueva denuncia";
-		Alert.cancelLabel = "Cancelar";
-		Alert.buttonWidth = 75; // El ancho de los botones
-		confirmHandler = function (evt_obj:Object) {
-			if (evt_obj.detail == Alert.OK) {
-				window.location = 'http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/index.html#nuevadenuncia_loc_actual'; 
-			}
-			else {
-			
-			}
-		};
-		Alert.show("Estás en "+muni_name+", provincia de "+prov_name + ".", "Esto que es", Alert.OK | Alert.CANCEL, null, confirmHandler, Alert.CANCEL);*/
 
-		//alert(request);	
-	}
-	
-	
-	function failureUA(request){
-		alert('FALLO');	
-	}
->>>>>>> .r216
