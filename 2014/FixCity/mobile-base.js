@@ -280,8 +280,8 @@ var init = function (onSelectFeatureFunction) {
 		html = 'Está a punto de introducir una denuncia en: ' + this.muni_name + ', provincia de ' + 
 			this.prov_name + '.<br>La localización exacta del problema es: ' + bounds.x + ', ' + bounds.y + '. <br>'
 		$("#loc_actual").html(html);
-		$("#longitud").val(point.x);
-		$("#latitud").val(point.y);
+		$("#longitud").val(bounds.x);
+		$("#latitud").val(bounds.y);
 	}
 	
 	
