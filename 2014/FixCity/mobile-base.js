@@ -322,7 +322,7 @@ var init = function (onSelectFeatureFunction) {
 		var muni_code= jsonResponse.features[1].properties.nationalcode;
 		//alert("Estás en "+muni_name+", provincia de "+prov_name + ".");
 		
-		muestraConfirm();
+		muestraConfirm(muni_name,prov_name);
 		
 		/* Código que nos permite editar un alerta.
 		En concreto, esto se usa para añadir un botón de "Nueva denuncia" y otro de "Cancelar".*/
@@ -343,9 +343,9 @@ var init = function (onSelectFeatureFunction) {
 		//alert(request);	
 	}
 	
-	function muestraConfirm()
+	function muestraConfirm(municipio, provincia)
 	{
-		var pregunta = "Estás en "+muni_name+", provincia de "+prov_name + ". ¿Desea añadir una denuncia?";
+		var pregunta = "Estás en "+ municipio +", provincia de "+ provincia + ". ¿Desea añadir una denuncia?";
 		var respuesta = confirm(pregunta);
 
 		if(respuesta)
