@@ -228,10 +228,12 @@ var init = function (onSelectFeatureFunction) {
 		if(respuesta)
 		{
 			window.location = 'http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/index.html#nuevadenuncia_loc_actual';
-			html = '<p>La localización actual es: ' + latitud + " N, " + longitud + " E" + '</p>';
+			html = '<p>La localización actual es: ' + latitud + " N, " + longitud + " E" + '</p>'+
+			'<input type="hidden" name="latitud" value="'+ latitud +'">' + 
+			'<input type="hidden" name="latitud" value="'+ longitud +'">';
 			$("#loc_actual").html(html);
-			document.getElementById('latitud').value = latitud;
-			document.getElementById('longitud').value = longitud;
+			//document.getElementById('latitud').value = latitud;
+			//document.getElementById('longitud').value = longitud;
 			//$("#latitud").val(latitud);
 			//$("#longitud").val(longitud);
 		}
