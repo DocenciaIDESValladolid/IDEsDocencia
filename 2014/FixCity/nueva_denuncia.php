@@ -30,7 +30,7 @@ error_reporting(E_ALL);
      exit;
   }
   else{
-		var_dump($latitud);
+		echo "Hola, hemos pasado: ".$latitud." y esas cosas...";
   }
   
   $texto = addslashes($texto);
