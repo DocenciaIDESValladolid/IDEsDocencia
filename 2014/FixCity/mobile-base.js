@@ -92,7 +92,7 @@ var init = function (onSelectFeatureFunction) {
 			version: "1.1.0"
         }),
 		styleMap: new OpenLayers.StyleMap({
-            externalGraphic: "img/cono.png",
+            externalGraphic: "images/cono.png",
             graphicOpacity: 1.0,
             graphicWidth: 16,
             graphicHeight: 26,
