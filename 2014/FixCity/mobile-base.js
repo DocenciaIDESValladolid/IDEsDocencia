@@ -197,8 +197,11 @@ var init = function (onSelectFeatureFunction) {
 
 		trigger: function(e) {
 			var lonlat = map.getLonLatFromPixel(e.xy);
-			alert("You clicked near " + lonlat.lat + " N, " +
-									  + lonlat.lon + " E");
+			
+			addDenunciaOnClick("municipio", "provincia", lonlat.lon, lonlat.lat);
+			
+			/*alert("You clicked near " + lonlat.lat + " N, " +
+									  + lonlat.lon + " E");*/
 			
 			
 			var size = new OpenLayers.Size(21,25);
@@ -216,6 +219,20 @@ var init = function (onSelectFeatureFunction) {
 	}); //fin OpenLayers.Control.Click
 	
 	
+	function addDenunciaOnClick(municipio, provincia, longitud, latitud)
+	{
+		var pregunta = "Estás en "+ municipio +", provincia de "+ provincia + ".¿Desea añadir una denuncia?";
+		var respuesta = confirm(pregunta);
+
+		if(respuesta)
+		{
+			window.location = 'http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/index.html#nuevadenuncia_loc_actual'; 
+		}
+		else
+		{
+
+		}
+	}
 	
 	
 	
@@ -320,9 +337,9 @@ var init = function (onSelectFeatureFunction) {
 		var prov_name= jsonResponse.features[0].properties.nameunit;
 		var muni_name= jsonResponse.features[1].properties.nameunit;
 		var muni_code= jsonResponse.features[1].properties.nationalcode;
-		//alert("Estás en "+muni_name+", provincia de "+prov_name + ".");
+		alert("Estás en "+muni_name+", provincia de "+prov_name + ".");
 		
-		muestraConfirm(muni_name,prov_name);
+		//muestraConfirm(muni_name,prov_name);
 		
 		/* Código que nos permite editar un alerta.
 		En concreto, esto se usa para añadir un botón de "Nueva denuncia" y otro de "Cancelar".*/
@@ -343,20 +360,6 @@ var init = function (onSelectFeatureFunction) {
 		//alert(request);	
 	}
 	
-	function muestraConfirm(municipio, provincia)
-	{
-		var pregunta = "Estás en "+ municipio +", provincia de "+ provincia + ". ¿Desea añadir una denuncia?";
-		var respuesta = confirm(pregunta);
-
-		if(respuesta)
-		{
-			//window.location = 'http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/index.html#nuevadenuncia_loc_actual'; 
-		}
-                else
-                {
-
-                }
-	}
 	
 	function failureUA(request){
 		alert('FALLO');	
