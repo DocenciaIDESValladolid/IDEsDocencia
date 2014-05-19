@@ -50,7 +50,7 @@ error_reporting(E_ALL);
 	//$query = "SELECT * FROM denuncias;";
 	$result = pg_exec($db, $query);
 
-    echo  pg_affected_rows().' denuncias introducidas en la Base de Datos.';
+    echo  pg_affected_rows($result).' denuncias introducidas en la Base de Datos.';
 	 echo "<input type='button' value='Back' onClick='history.go(-1);'>";	
 	
 	$query = "SELECT * FROM denuncias;";
