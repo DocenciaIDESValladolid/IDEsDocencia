@@ -8,6 +8,9 @@ var gg = new OpenLayers.Projection("EPSG:4326");
 var sm = new OpenLayers.Projection("EPSG:900913");
 var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
 var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
+var prov_name;
+var muni_namet;
+var	muni_code;
 
 var init = function (onSelectFeatureFunction) {
 
@@ -264,24 +267,24 @@ var init = function (onSelectFeatureFunction) {
 	{
 		prov_name= jsonResponse.features[0].properties.nameunit;
 		muni_name= jsonResponse.features[1].properties.nameunit;
-		this.muni_code= jsonResponse.features[1].properties.nationalcode;
-		$("#locationlabel").html(this.muni_name+" provincia de "+this.prov_name);
+		muni_code= jsonResponse.features[1].properties.nationalcode;
+		$("#locationlabel").html(muni_name+" provincia de "+prov_name);
 		$("#infopanel").trigger( "updatelayout" );
 		$("#infopanel").panel("open");
-		fillForm(this.prov_name,this.muni_name);
+		fillForm();
 		}
 	}
 	
-	function fillForm(prov_name, muni_name){
+	function fillForm(){
 		var markers = map.getLayer('Markers');
 		//var feature = markers.features;
-		var bounds = markers.features[0].geometry.bounds.getCenterLonLat();
+		var bounds = markers.features.geometry.bounds.getCenterLonLat();
 		//var pointx = feature.geometry.bounds.point.y;
 		html = 'Está a punto de introducir una denuncia en: ' + muni_name + ', provincia de ' + 
 			prov_name + '.<br>La localización exacta del problema es: ' + bounds.x + ', ' + bounds.y + '. <br>'
 		$("#loc_actual").html(html);
-		$("#longitud").val(bounds.x);
-		$("#latitud").val(bounds.y);
+		$("#longitud").val(point.x);
+		$("#latitud").val(point.y);
 	}
 	
 	
