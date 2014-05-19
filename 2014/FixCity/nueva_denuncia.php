@@ -18,7 +18,7 @@ error_reporting(E_ALL);
   $texto = trim($texto);
 
   echo 'Hola, hemos pasado: '.$latitud.' y esas cosas...';
-  echo $texto;
+  echo 'Texto pasado: '.$texto;
   
  if (!$latitud || !$longitud || !$texto)
   {
