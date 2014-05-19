@@ -28,8 +28,8 @@ fb.ready(function(){
     // Cambiamos el link de identificarse por el nombre y la foto del usuario.
 	html = '<p>Hola ' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
 	$("#login_button").html(html);
-	document.getElementById("misdenuncias_button").style.visibility = "visible";
-	document.getElementById("search_button").style.visibility = "visible";
+	$("#misdenuncias_button").show();
+	$("#search_button").show();
   }
 });
 
@@ -41,8 +41,8 @@ function login() {
 		// Cambiamos el link de identificarse por el nombre y la foto del usuario.
 		html = '<p>Hola ' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
 		$("#login_button").html(html);
-		document.getElementById("misdenuncias_button").style.visibility = "visible";
-		document.getElementById("search_button").style.visibility = "visible";
+		$("#misdenuncias_button").show();
+		$("#search_button").show();
     } else {
       alert("No se pudo identificar al usuario");
     }
