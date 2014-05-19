@@ -11,10 +11,6 @@
 
 error_reporting(E_ALL);
 
-//@ $longitud=$_POST['longitud'];
-//@ $latitud=$_POST['latitud'];
-// Coordenadas de prueba
-
 @ $texto = $_POST['texto'];
 @ $longitud = $_POST['longitud'];
 @ $latitud = $_POST['latitud'];
