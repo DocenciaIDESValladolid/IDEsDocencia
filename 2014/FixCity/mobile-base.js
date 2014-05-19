@@ -99,9 +99,10 @@ var init = function (onSelectFeatureFunction) {
     });
 	
 	/////Capa marcador
-	markers = new OpenLayers.Layer.Markers( "Markers" );
+	markers = new OpenLayers.Layer.Vector( "Markers" );
 	markers.id = "Markers";
 	map.addLayer(markers);
+	
 	/////
 
     map.addLayers([wfs]);
@@ -158,7 +159,9 @@ var init = function (onSelectFeatureFunction) {
 		'featureselected': onFeatureSelect,
 		'featureunselected': onFeatureUnselect
 	});
-	
+	markers.events.on({
+		'featureselected': addReport
+	});
 	
 	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
 	geolocate.events.register("locationupdated", this, eventLocationChanged);
@@ -197,9 +200,16 @@ var init = function (onSelectFeatureFunction) {
 
 		trigger: function(e) {
 			var lonlat = map.getLonLatFromPixel(e.xy);
+<<<<<<< .mine
+			var e= {point:{y:lonlat.lat,x:lonlat.lon}};
+			eventLocationChanged(e);		
+=======
+>>>>>>> .r216
 			
 			addDenunciaOnClick("municipio", "provincia", lonlat.lon, lonlat.lat);
 			
+<<<<<<< .mine
+=======
 			/*alert("You clicked near " + lonlat.lat + " N, " +
 									  + lonlat.lon + " E");*/
 			
@@ -210,6 +220,7 @@ var init = function (onSelectFeatureFunction) {
 			var markers = map.getLayer('Markers');
 			
 			markers.addMarker(new OpenLayers.Marker(lonlat,icon));
+>>>>>>> .r216
 			//markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lonlat.lat,lonlat.lon),icon));
 			
 			//var position = map.getLonLatFromPixel(e.xy);
@@ -244,7 +255,10 @@ var init = function (onSelectFeatureFunction) {
 	}
 	
 	
-	
+	function addReport(evt)
+	{
+		$.mobile.changePage("#nuevadenuncia");
+	}
 	
 	function onFeatureSelect(evt) {
 		feature = evt.feature;
@@ -283,10 +297,39 @@ var init = function (onSelectFeatureFunction) {
 			feature.popup = null;
 		}
 	}
-
 	function eventLocationChanged(e){
-	
-		var postDataUA = 	'<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json"\n'
+		moveMark(e.point);
+		queryUA(e,successUA,failureUA);
+	}
+	function successUA(jsonResponse){
+	if (jsonResponse.features.length==2)
+	{
+		this.prov_name= jsonResponse.features[0].properties.nameunit;
+		this.muni_name= jsonResponse.features[1].properties.nameunit;
+		this.muni_code= jsonResponse.features[1].properties.nationalcode;
+		$("#locationlabel").html(this.muni_name+" provincia de "+this.prov_name);
+		$("#infopanel").trigger( "updatelayout" );
+		$("#infopanel").panel("open");
+		}
+	}
+	function failureUA(request){
+		alert('FALLO');	
+	}
+	function moveMark(point)
+	{
+		var size = new OpenLayers.Size(21,25);
+		var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+		var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png',size,offset);
+		var markers = map.getLayer('Markers');
+		markers.removeAllFeatures();
+		var newMarker = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(point.x,point.y),null);
+		markers.addFeatures(newMarker);
+	      
+           
+	}
+	function queryUA(e,successCallback,failureCallBack)
+	{
+	var postDataUA = 	'<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="json"\n'
 						+' xmlns:topp="http://www.openplans.org/topp"\n'
 						+' xmlns:wfs="http://www.opengis.net/wfs"\n'
 						+' xmlns="http://www.opengis.net/ogc"\n'
@@ -320,23 +363,17 @@ var init = function (onSelectFeatureFunction) {
 						+'   </wfs:Query>\n'
 						+' </wfs:GetFeature>\n';
 		var urlProxy = 'http://itastdevserver.tel.uva.es/urlnoexiste';			
-/*		var requestUA = OpenLayers.Request.POST({
-			url: urlProxy,//urlWfsUA,
-			data: {datas:postDataUA},
-			headers: {
-				"Content-Type": "text/xml;charset=utf-8"
-			},
-			callback: successUA,
-			failure: failureUA,
-			});
-		requestUA.send(); */
+
 		$.ajax({
 			type: "POST",
 			contentType: "text/plain", // server can forbid other types for cross-server scripting
 			url: urlWfsUA,
 			data: postDataUA,
-			success: successUA
+			success: successCallback,
+			error: failureCallBack,
 			});
+<<<<<<< .mine
+	}=======
 	}
 	
 	
@@ -373,3 +410,4 @@ var init = function (onSelectFeatureFunction) {
 	function failureUA(request){
 		alert('FALLO');	
 	}
+>>>>>>> .r216

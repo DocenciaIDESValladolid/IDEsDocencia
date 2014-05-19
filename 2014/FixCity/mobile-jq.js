@@ -7,10 +7,11 @@ var selectedFeature = null;
 function fixContentHeight() {
     var footer = $("div[data-role='footer']:visible"),
         content = $("div[data-role='content']:visible:visible"),
+		header = $("div[data-role='header']:visible:visible"),
         viewHeight = $(window).height(),
-        contentHeight = viewHeight - footer.outerHeight();
+        contentHeight = viewHeight - footer.outerHeight()- header.outerHeight();
 
-    if ((content.outerHeight() + footer.outerHeight()) !== viewHeight) {
+    if ((content.outerHeight() + footer.outerHeight()+ header.outerHeight()) !== viewHeight) {
         contentHeight -= (content.outerHeight() - content.height() + 1);
         content.height(contentHeight);
     }
@@ -35,15 +36,15 @@ function fixContentHeight() {
 
 // one-time initialisation of button handlers 
 
-$("#plus").live('click', function(){
+$("#plus").on('click', function(){
     map.zoomIn();
 });
 
-$("#minus").live('click', function(){
+$("#minus").on('click', function(){
     map.zoomOut();
 });
 
-$("#locate").live('click',function(){
+$("#locate").on('click',function(){
     var control = map.getControlsBy("id", "locate-control")[0];
     if (control.active) {
         control.getCurrentLocation();
@@ -53,15 +54,14 @@ $("#locate").live('click',function(){
 });
 
 //fix the content height AFTER jQuery Mobile has rendered the map page
-$('#mappage').live('pageshow',function (){
+$('#mappage').on('pageshow',function (){
     fixContentHeight();
 });
     
 $(window).bind("orientationchange resize pageshow", fixContentHeight);
 
 
-
-$('#popup').live('pageshow',function(event, ui){
+$('#popup').on('pageshow',function(event, ui){
     var li = "";
     for(var attr in selectedFeature.attributes){
         li += "<li><div style='width:25%;float:left'>" + attr + "</div><div style='width:75%;float:right'>" 
@@ -70,7 +70,7 @@ $('#popup').live('pageshow',function(event, ui){
     $("ul#details-list").empty().append(li).listview("refresh");
 });
 
-$('#searchpage').live('pageshow',function(event, ui){
+$('#searchpage').on('pageshow',function(event, ui){
     $('#query').bind('change', function(e){
         $('#search_results').empty();
         if ($('#query')[0].value === '') {
