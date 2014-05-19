@@ -17,8 +17,8 @@ error_reporting(E_ALL);
 
   $texto = trim($texto);
 
-  echo 'Hola, hemos pasado: '.$latitud.' y esas cosas...';
-  echo 'Texto pasado: '.$texto;
+  echo 'Hola, hemos pasado: '.$latitud.' y '.$longitud;
+  echo '<br>Texto pasado: '.$texto.'<br>';
   
  if (!$latitud || !$longitud || !$texto)
   {
@@ -32,8 +32,8 @@ error_reporting(E_ALL);
 		
   
   $texto = addslashes($texto);
-  $latitud = 42.000000;
-  $longitud = -1.000000;
+  //$latitud = 42.000000;
+  //$longitud = -1.000000;
 
   $db = pg_connect("host=postgres.idelab.uva.es user=testDev password=testIDELAB dbname=idelab");
 
