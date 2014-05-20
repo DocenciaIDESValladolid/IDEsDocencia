@@ -28,8 +28,8 @@ body {
 }
 #navigation {
     position: absolute;
-    bottom: 70px;
-    left: 10px;
+    bottom: 170px;
+    right: 10px;
     z-index: 1000;
 }
 #navigation .ui-btn-icon-notext {

@@ -75,8 +75,16 @@ var publish = function () {
 <h2>Posición del informe.</h2>
 <p>La marca para informar está situada en <div id="locationlabel"></div>.</p>
 <p>Pulse de nuevo en la chincheta <img src="img/mobile-loc.png"> para comenzar el informe de la avería o irregularidad que ha observado.</p>
-<a href="#nuevadenuncia_loc_actual">Añadir denuncia</a>
+<a href="#nuevadenuncia_loc_actual" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui_mini" >Añadir denuncia</a>
 
+</div>
+<div data-role="panel" data-position="left" data-display="overlay" id="infoDenunciaPanel">
+<br/>
+<h2>Denuncia de incidencia.</h2>
+<p>La denuncia se encuentra en <div id="reportLocationLabel"></div>.</p>
+<p>El usuario la ha descrito como:</p>
+<div id="reportDescription"></div>
+<a id="reportDetailsLink" href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Ver detalles</a>
 </div>
 			<div data-role="header">
 			<a href="#infopanel"  data-rel="panel" data-dismissible="true" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-btn-mini ui-icon-bars">Info</a>
@@ -88,50 +96,58 @@ var publish = function () {
 			</div>
 			<div data-role="footer">
 			
-				<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Locate</a>
+				<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" onclick="autolocate();return false;">Locate</a>
 				<a href="#misdenuncias" id="misdenuncias_button" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Mis Denuncias</a>
 				<a href="#searchpage" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Search</a>
 				<a href="#layerspage" data-transition="fade" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Capas</a>
 				<a href="#estadisticas" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Estadísticas</a>
-				<a href="#aboutus" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">About Us</a>
+				<a href="#aboutus"  data-prefetch="true" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">About Us</a>
+				
 				<a href="#" id="iniciosesionFacebook" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" onclick="login(); return false;">Facebook</a>
-				<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>
+				<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
 				<script>
 				$("#misdenuncias_button").hide();
-				$("#search_button").hide();
+			//	$("#search_button").hide();
 				</script>
 			</div>
           <div id="navigation" data-role="controlgroup" data-type="vertical">
             <a href="#" data-role="button" data-icon="plus" id="plus"
-               data-iconpos="notext"></a>
+               data-iconpos="notext" onclick="map.zoomIn();return false;"></a>
             <a href="#" data-role="button" data-icon="minus" id="minus"
-               data-iconpos="notext"></a>
+               data-iconpos="notext" onclick="map.zoomOut();return false;"></a>
           </div>
 	
         </div>
 		
+		
+		
+		<div data-role="page" id="estadisticas" data-theme="b">
+          <div data-role="header">
+            <h1>Estadísticas</h1>
+		  </div>
+			<div data-role="content" >
+			<form>
+				<label for="flip-checkbox-1">Flip toggle switch checkbox:</label>
+				<input type="checkbox" data-role="flipswitch" name="flip-checkbox-1" id="flip-checkbox-1">
+			</form>
+			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+			</div>
+		</div>		
 		<div data-role="page" id="searchpage" data-theme="b">
           <div data-role="header">
             <h1>Search</h1>
           </div>
-          <div data-role="fieldcontain">
-            <input type="search" name="query" id="query"
-                   value="" placeholder="Search for places"
+		  <div data-role="content">
+		  <form action="http://www.openrouteservice.org/php/OpenLSLUS_Geocode.php" id="searchform" method="POST" >
+          <label for="query">Buscar lugares</label>
+		  <input type="search" name="query" id="query"
+                   value="" placeholder="Buscar lugares"
                    autocomplete="off"/>
-          </div>
+          </form>
           <ul data-role="listview" data-inset="true" id="search_results"></ul> 
 		  <script>
-				  function submitform() {
-					var queryString = document.forms[0].query.value;
-					OpenLayers.Request.POST({
-						url: "http://www.openrouteservice.org/php/OpenLSLUS_Geocode.php",
-						scope: this,
-						failure: this.requestFailure,
-						success: this.requestSuccess,
-						headers: {"Content-Type": "application/x-www-form-urlencoded"},
-						data: "FreeFormAdress=" + encodeURIComponent(queryString) + "&MaxResponse=1"
-					});
-				}
+		  $(document).on('submit', '#searchform', submitform);
+		  
 				function requestSuccess(response) {
 					var format = new OpenLayers.Format.XLS();
 					var output = format.read(response.responseXML);
@@ -149,9 +165,24 @@ var publish = function () {
 				function requestFailure(response) {
 					alert("An error occurred while communicating with the OpenLS service. Please try again.");
 				}
+				  function submitform(form) {
+					var queryString = this.query.value;
+					$.ajax({
+							type: "POST",
+							contentType: "application/x-www-form-urlencoded",
+							url: "http://www.openrouteservice.org/php/OpenLSLUS_Geocode.php",
+							data: "FreeFormAdress=" + encodeURIComponent(queryString) + "&MaxResponse=1",
+							success: requestSuccess,
+							error: requestFailure,
+							});
+			
+			
+				}
+				
 			</script>
 			<div>
 			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+			</div>
 			</div>
 		</div>
 
@@ -166,109 +197,103 @@ var publish = function () {
           </div>		 			  		  
         </div>
 		
-		<div data-role="page" id="nuevadenuncia_loc_actual">
+		<!--
+		Denuncias 
+		-->
+		<div data-role="page" id="nuevadenuncia_loc_actual" data-theme="b">
           <div data-role="header">
             <h1>Nueva Denuncia</h1>
           </div>
-				<div>
-				    <div style="margin-top: 50px;margin-left: 100px;margin-right: 100px;">      
-							<!-- Formulario para la introducción de una denuncia -->
-							<form role="form" action="nueva_denuncia.php" method="post">
-								<div id="loc_actual"></div>
-								<div id="mapa_fijo"/> 
-								<p>Escriba aquí la descripción de su denuncia</p>
-								<textarea name="texto" rows="10" cols="80"></textarea>
-								
-								<p>Seleccione hasta 3 imágenes que identifiquen la denuncia:</p>
-								<input type="file" id="file1" name="file1">
-								<br>
-								<input type="file" id="file2" name="file2">
-								<br>
-								<input type="file" id="file3" name="file3">
-								<br>
-								
-								<input type="submit" value="Enviar">
-								<input type="reset" value="Borrar">
-								<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
-						  </form>
-					</div>
-				</div>
+		  <div data-role="content">			      
+				<!-- Formulario para la introducción de una denuncia -->
+				<form data-role="form" data-ajax="false" action="nueva_denuncia.php" method="post">
+					<div id="loc_actual"></div>
+					
+					<p>Escriba aquí la descripción de su denuncia</p>
+					<textarea name="texto" rows="10" cols="80"></textarea>	
+					<p>Seleccione hasta 3 imágenes que identifiquen la denuncia:</p>
+					<input type="file" id="file1" name="file1">
+					<br>
+					<input type="file" id="file2" name="file2">
+					<br>
+					<input type="file" id="file3" name="file3">
+					<br>			
+					<input type="submit" value="Enviar">
+					<input type="reset" value="Borrar">
+					<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+			  </form>		
+			</div>
 		</div>
-		
-		
+	
 		<div data-role="page" id="misdenuncias" data-theme="b">
           <div data-role="header">
             <h1>Mis Denuncias</h1>
 		  </div>
-			<div>
+			<div data-role="content" >
 			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
            </div>
+		</div>		
 
-		</div>		
+		<!--
+	
+		Authors
 		
-		<div data-role="page" id="estadisticas" data-theme="b">
-          <div data-role="header">
-            <h1>Estadísticas</h1>
-		  </div>
-			<div>
-			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
-			</div>
-		</div>		
-		
+		-->
 		<div data-role="page" id="aboutus" data-theme="b">
-          <div data-role="header">
-            <h1>About Us</h1>
-          </div>		
-				<div class="row" style="margin-top:50px; margin-left: 100px ;margin-right: 100px;">
-				<div class="col-lg-4">
-				  <h2>JUAN PABLO DE CASTRO</h2>
-				  <p>Profesor de la Escuela Técnica Superior de Ingenieros de Telecomunicación, en la Universidad de Valladolid.</p>
-				  <a href="#director" data-icon="layers" data-role="button">Juan Pablo De Castro</a>
-			   </div>
-				<div class="col-lg-4">
-				  <h2>JUAN CARLOS ÁLVAREZ DIÉGUEZ</h2>
-				  <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p>
-				  <a href="#creador1" data-icon="layers" data-role="button">Juan Carlos Álvarez Diéguez</a>
-				</div>
-				<div class="col-lg-4">
-				  <h2>CARLOS ALBERTO ÁVAREZ GARCÍA</h2>
-				  <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p>
-				  <a href="#creador2" data-icon="layers" data-role="button">Carlos Alberto Álvarez García</a>
-			   </div>
-				<div class="col-lg-4">
-				  <h2>JOSU ESCALADA BLANCO</h2>
-				  <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación mención en Telemática.</p>
-				  <a href="#creador3" data-icon="layers" data-role="button">Josu Escalada Blanco</a>
-				  <p><p><p>
-				  <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
-				</div>
-			  </div>
+			<div data-role="header">
+				<h1>About Us</h1>
+			</div>	
+			<div  role="content" >
+				<ul data-role="listview" data-inset="true">
+					<li><a href="#director">
+						<img src="images/images/JuanPablo.png">
+					<h2>JUAN PABLO DE CASTRO</h2>
+					<p>Profesor de la Escuela Técnica Superior de Ingenieros de Telecomunicación, en la Universidad de Valladolid.</p></a>
+					</li>
+					<li><a href="#creador1">
+						<img src="images/images/JuanCarlosAlvarez.jpg">
+					<h2>JUAN CARLOS ÁLVAREZ DIÉGUEZ</h2>
+					<p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p></a>
+					</li>
+					<li><a href="#creador2">
+						<img src="../_assets/img/album-p.jpg">
+					<h2>CARLOS ALBERTO ÁVAREZ GARCÍA</h2>
+					<p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p></a>
+					</li>
+					<li><a href="#creador3">
+						<img src="../_assets/img/album-p.jpg">
+					<h2>JOSU ESCALADA BLANCO</h2>
+					<p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p></a>
+					</li>
+				</ul>
+				
+			  <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+			</div>
 		</div>
-		
-		<div data-role="page" id="director">
-          <div data-role="header">
-            <h1>Juan Pablo De Castro</h1>
-          </div>
+		<div data-role="page" id="director" data-theme="b">
+			<div data-role="header">
+			<h1>Juan Pablo De Castro</h1>
+			</div>
+			<div data-role="content" class="ui-content">
 				<table align="center" border="0" cellpadding="30">					
 				<td width="0%"><p><img src="images/images/JuanPablo.png" height="200"></td>				
 				</table> 
-			  <div align="center">
-					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Juan Pablo De Castro</font>
-				
-					<a href="mailto:jpdecastro@tel.uva.es">
-					<font face="Comic Sans MS,arial,verdana" font size=4  font color="E7880C">jpdecastro@tel.uva.es</font>
+					<div align="center">
+						<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Juan Pablo De Castro</font>
+					
+						<a href="mailto:jpdecastro@tel.uva.es">
+						<font face="Comic Sans MS,arial,verdana" font size=4  font color="E7880C">jpdecastro@tel.uva.es</font>
 					</div>
-					<div>
+					
 					<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
-					</div>
 				</div>
 		</div>
 		
-		
-		<div data-role="page" id="creador1">
+		<div data-role="page" id="creador1" data-theme="b">
           <div data-role="header">
             <h1>Juan Carlos Álvarez Diéguez</h1>
           </div>
+		 <div data-role="main" class="ui-content"> 
 				<table align="center" border="0" cellpadding="30">					
 				<td width="0%"><p><img src="images/images/JuanCarlosAlvarez.jpg" width="290" height="324"></td>				
 				</table> 
@@ -291,17 +316,18 @@ var publish = function () {
 					<td width="0%"><img src="images/images/gmail-correo.png" width="65" height="50" >
 					<a href="http://es.mail.yahoo.com/">
 					<td width="0%"><img src="images/images/yahoo.png" width="65" height="50" >
-					</a></p></td></tr>
-					<p><p><p>
-					<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+					</a>
 					</div>
 				</div>
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+			</div>
 		</div>
 				
-		<div data-role="page" id="creador2">
+		<div data-role="page" id="creador2" data-theme="b">
           <div data-role="header">
             <h1>Carlos Alberto Álvarez García</h1>
           </div>
+		  <div data-role="main" class="ui-content">
 				<table align="center" border="0" cellpadding="30">					
 				<td width="0%"><p><img src="images/images/JuanCarlosAlvarez.jpg" width="290" height="324"></td>				
 				</table> 
@@ -325,13 +351,13 @@ var publish = function () {
 					<a href="http://es.mail.yahoo.com/">
 					<td width="0%"><img src="images/images/yahoo.png" width="65" height="50" >
 					</a></p></td></tr>
-					<p><p><p>
-					<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
 					</div>
 				</div>
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+			<div>
 		</div>
 				
-		<div data-role="page" id="creador3">
+		<div data-role="page" id="creador3" data-theme="b">
           <div data-role="header">
             <h1>Josu Escalada Blanco</h1>
           </div>
@@ -363,6 +389,9 @@ var publish = function () {
 					</div>
 				</div>
 		</div>
+	
+		
+
 					
 	   <div id="popup" data-role="dialog">
             <div data-position="inline" data-theme="d" data-role="header">

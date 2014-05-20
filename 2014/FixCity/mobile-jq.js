@@ -3,6 +3,15 @@ window.location.replace(window.location.href.split("#")[0] + "#mappage");
 
 var selectedFeature = null;
 
+function autolocate()
+{
+ var control = map.getControlsBy("id", "locate-control")[0];
+    if (control.active) {
+        control.getCurrentLocation();
+    } else {
+        control.activate();
+    }
+}
 // fix height of content
 function fixContentHeight() {
     var footer = $("div[data-role='footer']:visible"),
@@ -36,22 +45,16 @@ function fixContentHeight() {
 
 // one-time initialisation of button handlers 
 
-$("#plus").on('click', function(){
+$("#plus").on('click',function(){
     map.zoomIn();
 });
 
-$("#minus").on('click', function(){
+$("#minus").on('click',function(){
     map.zoomOut();
 });
 
-$("#locate").on('click',function(){
-    var control = map.getControlsBy("id", "locate-control")[0];
-    if (control.active) {
-        control.getCurrentLocation();
-    } else {
-        control.activate();
-    }
-});
+$("#locate").on('click',autolocate);
+
 
 //fix the content height AFTER jQuery Mobile has rendered the map page
 $('#mappage').on('pageshow',function (){

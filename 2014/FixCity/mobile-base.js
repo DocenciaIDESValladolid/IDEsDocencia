@@ -16,15 +16,26 @@ var init = function (onSelectFeatureFunction) {
 
     var vector = new OpenLayers.Layer.Vector("vector", {});
 	/////Capa marcador
-	var markers = new OpenLayers.Layer.Vector( "Markers", {
-        styleMap: new OpenLayers.StyleMap({
-            externalGraphic: "img/mobile-loc.png",
-            graphicOpacity: 1.0,
-            graphicWidth: 16,
-            graphicHeight: 26,
-            graphicYOffset: -26
-        })	
-    });
+	var styleMarkDefault = new OpenLayers.StyleMap({
+						externalGraphic: "img/mobile-loc.png",
+						pointRadius: 20,
+						graphicOpacity: 1.0,
+						graphicWidth: 16,
+						graphicHeight: 26,
+						graphicYOffset: -26});
+	var styleMarkSelect = new OpenLayers.StyleMap({
+						externalGraphic: "img/mobile-loc.png",
+						pointRadius: 20,
+						graphicOpacity: 1.0,
+						graphicWidth: 26,
+						graphicHeight: 36,
+						graphicYOffset: -36});
+	var styleMark = new OpenLayers.StyleMap({
+						'default': styleMarkDefault,
+						'select':styleMarkSelect
+						});
+						
+	var markers = new OpenLayers.Layer.Vector( "Markers", { styleMap: styleMarkDefault } );
 	markers.id="Markers";
 /********************
 * Controles de mapa
@@ -60,16 +71,17 @@ var init = function (onSelectFeatureFunction) {
 		}
 
 	}); //fin OpenLayers.Control.Click
-	//Añadimos control de click	
-	var clickControl = new OpenLayers.Control.Click();	
 	
+	//Añadimos control de click	
+//		
+	/*
     var selectControl = new OpenLayers.Control.SelectFeature(markers, {
         autoActivate:true});
 	markers.events.on({"featureselected": addReport});
 	var popupControl = new OpenLayers.Control.SelectFeature(vector, {
 		autoActivate:true
 	});
-                
+        */        
 
     var geolocate = new OpenLayers.Control.Geolocate({
         id: 'locate-control',
@@ -94,9 +106,9 @@ var init = function (onSelectFeatureFunction) {
 		styleMap: new OpenLayers.StyleMap({
             externalGraphic: "images/cono.png",
             graphicOpacity: 1.0,
-            graphicWidth: 26,
-            graphicHeight: 26,
-            graphicYOffset: -26
+            graphicWidth: 32,
+            graphicHeight: 32,
+            graphicYOffset: -32
 		})
     });
     // create map
@@ -106,13 +118,14 @@ var init = function (onSelectFeatureFunction) {
         theme: null,
         projection: sm,
         numZoomLevels: 18,
+		size: new OpenLayers.Size(400,600),
         controls: [
             new OpenLayers.Control.Attribution(),
 			new OpenLayers.Control.Navigation(),
             geolocate,
-            selectControl,
-			popupControl,
-			clickControl
+ //           selectControl,
+//			popupControl,
+//			clickControl
         ],
         layers: [
 		   new OpenLayers.Layer.OSM("Vista Callejero", null, {
@@ -124,17 +137,53 @@ var init = function (onSelectFeatureFunction) {
                 name: "Vista Aérea",
                 transitionEffect: 'resize'
             }),
-			vector,
-			markers,
-			wfs
             ],
         center: new OpenLayers.LonLat(0, 0),	
         zoom: 1
     });
+	map.updateSize();
+	map.addLayers([vector,markers,wfs]);
 	
-	clickControl.activate();	
+	 var highlightCtrl = new OpenLayers.Control.SelectFeature(wfs, {
+                hover: true,
+                highlightOnly: true,
+                renderIntent: "temporary",
+                eventListeners: {
+                    beforefeaturehighlighted: report,
+                    featurehighlighted: report,
+                    featureunhighlighted: report
+                }
+            });
+
+     var selectCtrl = new OpenLayers.Control.SelectFeature([wfs,markers],
+                {
+				clickout: true
+				}
+            );
+	/*FUNCION PARA EL POP-UP*/
 	
-	OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
+	wfs.events.on({
+		'featureselected': onWFSFeatureSelect,
+	//	'featureunselected': onFeatureUnselect
+	});
+	markers.events.on({
+		'featureselected': onFeatureSelect,
+		'featureunselected': onFeatureUnselect
+	});
+	
+	var clickControl = new OpenLayers.Control.Click();
+	 function report(e)
+	 {
+	 OpenLayers.Console.log(e.type, e.feature.id);
+	 }
+	 map.addControl(highlightCtrl);
+     map.addControl(selectCtrl);
+	 map.addControl(clickControl);
+	 clickControl.activate();
+	 highlightCtrl.activate();
+     selectCtrl.activate();
+	 
+	//OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 	/*
 	var wms = new OpenLayers.Layer.WMS("Denuncias WMS",
         "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
@@ -175,23 +224,7 @@ var init = function (onSelectFeatureFunction) {
         ]);
         map.zoomToExtent(vector.getDataExtent());
     });
-		
-		
-		
-	/************************************************************************************************/
-	//pintamos la capa del marcador a añadir
-	//map.addLayers([markers]);
-		
-	
-		
-	/*FUNCION PARA EL POP-UP*/
-	
-	vector.events.on({
-		'featureselected': onFeatureSelect,
-		'featureunselected': onFeatureUnselect
-	});
-	
-	
+
 	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
 	geolocate.events.register("locationupdated", this, eventLocationChanged);
 	
@@ -211,15 +244,8 @@ var init = function (onSelectFeatureFunction) {
 			'<input type="hidden" name="latitud" value="'+ latitud +'">' + 
 			'<input type="hidden" name="longitud" value="'+ longitud +'">';
 			$("#loc_actual").html(html);
-			//document.getElementById('latitud').value = latitud;
-			//document.getElementById('longitud').value = longitud;
-			//$("#latitud").val(latitud);
-			//$("#longitud").val(longitud);
 		}
-		else
-		{
-
-		}
+		
 	}
 	
 	
@@ -227,25 +253,41 @@ var init = function (onSelectFeatureFunction) {
 	{
 		$.mobile.changePage("#nuevadenuncia");
 	}
-	
+	/**
+	* Selección de una marca de nueva denuncia en el mapa.
+	*/
 	function onFeatureSelect(evt) {
-		feature = evt.feature;
-		/*popup = new OpenLayers.Popup.FramedCloud("featurePopup",
-								 feature.geometry.getBounds().getCenterLonLat(),
-								 new OpenLayers.Size(100,100),
-								 "<h2>"+feature.attributes.title + "</h2>" +
-								 feature.attributes.description,
-								 null, true, onPopupClose);*/
-		var popup = new OpenLayers.Popup.FramedCloud("Popup", 
-								feature.geometry.getBounds().getCenterLonLat(), null,
-								'<a href="#nuevadenuncia_loc_actual" data-icon="nueva" data-role="button">Nueva Denuncia</a>', null,
-								true, onPopupClose // <-- true if we want a close (X) button, false otherwise
-		);
-		feature.popup = popup;
-		popup.feature = feature;
-		map.addPopup(popup, true);
-	}
+		$("#infopanel").panel("open");
+		/*feature = evt.feature;
 	
+		if (typeof feature != 'undefined')
+		{
+			var lonlat = feature.geometry.getBounds().getCenterLonLat();
+			var popup = new OpenLayers.Popup.FramedCloud("Popup", 
+									lonlat, null,
+									'<a href="#nuevadenuncia_loc_actual" data-icon="nueva" data-role="button">Nueva Denuncia</a>', null,
+									true, onPopupClose // <-- true if we want a close (X) button, false otherwise
+			);
+			feature.popup = popup;
+			popup.feature = feature;
+			map.addPopup(popup, true);
+		}
+		else
+		{
+		OpenLayers.Console.log(evt.type, evt.feature.id);
+		}*/
+	}
+	/**
+	* Selección de una denuncia ya existente
+	*/
+	function onWFSFeatureSelect(evt) {
+		feature = evt.feature;
+		$("#reportDescription").html("A las "+feature.attributes.fecha+" he informado del problema: \""+feature.attributes.texto+"\"");
+		var point=feature.geometry.getBounds().getCenterLonLat();
+		$("#reportLocationLabel").html(point.lon + ', ' + point.lat);
+		$("#infoDenunciaPanel").panel("open");
+		$("#reportDetailsLink").attr("href","reportDetails.php?reportId="+feature.attributes.id_denuncia);
+	}
 	function onPopupClose(evt) {
 		// 'this' is the popup.
 		var feature = this.feature;
@@ -277,7 +319,6 @@ var init = function (onSelectFeatureFunction) {
 		muni_code= jsonResponse.features[1].properties.nationalcode;
 		$("#locationlabel").html(muni_name+" provincia de "+prov_name);
 		$("#infopanel").trigger( "updatelayout" );
-		$("#infopanel").panel("open");
 		fillForm();
 		}
 	}
@@ -305,9 +346,7 @@ var init = function (onSelectFeatureFunction) {
 		var markers = map.getLayer('Markers');
 		markers.removeAllFeatures();
 		var newMarker = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(point.x,point.y),null);
-		markers.addFeatures(newMarker);
-	      
-           
+		markers.addFeatures(newMarker);         
 	}
 	function queryUA(e,successCallback,failureCallBack)
 	{
