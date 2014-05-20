@@ -47,6 +47,7 @@ function updateFacebookLoginInfo(fb)
 	$("#iniciosesionFacebook").html(html);
 	$("#misdenuncias_button").show();
 	$("#search_button").show();
+	$("#mappage").trigger( "updatelayout" );
 }
 // Funcion para publicar un mensaje en tu muro
 var publish = function () {
