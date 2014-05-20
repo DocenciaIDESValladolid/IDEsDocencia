@@ -17,19 +17,19 @@ var init = function (onSelectFeatureFunction) {
     var vector = new OpenLayers.Layer.Vector("vector", {});
 	/////Capa marcador
 	var styleMarkDefault = new OpenLayers.StyleMap({
-						externalGraphic: "img/mobile-loc.png",
+						externalGraphic: "images/marker-icon-fixit.png",
 						pointRadius: 20,
 						graphicOpacity: 1.0,
-						graphicWidth: 16,
-						graphicHeight: 26,
-						graphicYOffset: -26});
+						graphicWidth: 56,
+						graphicHeight: 56,
+						graphicYOffset: -56});
 	var styleMarkSelect = new OpenLayers.StyleMap({
-						externalGraphic: "img/mobile-loc.png",
+						externalGraphic: "images/marker-icon-fixit.png",
 						pointRadius: 20,
 						graphicOpacity: 1.0,
-						graphicWidth: 26,
-						graphicHeight: 36,
-						graphicYOffset: -36});
+						graphicWidth: 64,
+						graphicHeight: 64,
+						graphicYOffset: -64});
 	var styleMark = new OpenLayers.StyleMap({
 						'default': styleMarkDefault,
 						'select':styleMarkSelect
@@ -45,7 +45,7 @@ var init = function (onSelectFeatureFunction) {
 		defaultHandlerOptions: {
 			'single': true,
 			'double': false,
-			'pixelTolerance': 10,
+			'pixelTolerance': 3,
 			'stopSingle': false,
 			'stopDouble': false
 		},
@@ -106,9 +106,9 @@ var init = function (onSelectFeatureFunction) {
 		styleMap: new OpenLayers.StyleMap({
             externalGraphic: "images/cono.png",
             graphicOpacity: 1.0,
-            graphicWidth: 32,
-            graphicHeight: 32,
-            graphicYOffset: -32
+            graphicWidth: 48,
+            graphicHeight: 48,
+            graphicYOffset: -48
 		})
     });
     // create map
@@ -142,9 +142,9 @@ var init = function (onSelectFeatureFunction) {
         zoom: 1
     });
 	map.updateSize();
-	map.addLayers([vector,markers,wfs]);
+	map.addLayers([vector,wfs,markers]);
 	
-	 var highlightCtrl = new OpenLayers.Control.SelectFeature(wfs, {
+	 var highlightCtrl = new OpenLayers.Control.SelectFeature([wfs,markers], {
                 hover: true,
                 highlightOnly: true,
                 renderIntent: "temporary",
@@ -167,8 +167,8 @@ var init = function (onSelectFeatureFunction) {
 	//	'featureunselected': onFeatureUnselect
 	});
 	markers.events.on({
-		'featureselected': onFeatureSelect,
-		'featureunselected': onFeatureUnselect
+		'featureselected': onMarkFeatureSelect,
+	//	'featureunselected': onFeatureUnselect
 	});
 	
 	var clickControl = new OpenLayers.Control.Click();
@@ -256,7 +256,7 @@ var init = function (onSelectFeatureFunction) {
 	/**
 	* Selección de una marca de nueva denuncia en el mapa.
 	*/
-	function onFeatureSelect(evt) {
+	function onMarkFeatureSelect(evt) {
 		$("#infopanel").panel("open");
 		/*feature = evt.feature;
 	
@@ -284,9 +284,11 @@ var init = function (onSelectFeatureFunction) {
 		feature = evt.feature;
 		$("#reportDescription").html("A las "+feature.attributes.fecha+" he informado del problema: \""+feature.attributes.texto+"\"");
 		var point=feature.geometry.getBounds().getCenterLonLat();
-		$("#reportLocationLabel").html(point.lon + ', ' + point.lat);
-		$("#infoDenunciaPanel").panel("open");
+		$("#reportLocationLabel").html('('+point.lon + ', ' + point.lat+')');
 		$("#reportDetailsLink").attr("href","reportDetails.php?reportId="+feature.attributes.id_denuncia);
+		$("#nuevadenuncia_loc_actual_button").show();
+		$("#infoDenunciaPanel").trigger( "updatelayout" );
+		$("#infoDenunciaPanel").panel("open");
 	}
 	function onPopupClose(evt) {
 		// 'this' is the popup.
@@ -310,6 +312,7 @@ var init = function (onSelectFeatureFunction) {
 	function eventLocationChanged(e){
 		moveMark(e.point);
 		queryUA(e,successUA,failureUA);
+		
 	}
 	function successUA(jsonResponse){
 	if (jsonResponse.features.length==2)
@@ -317,13 +320,29 @@ var init = function (onSelectFeatureFunction) {
 		prov_name= jsonResponse.features[0].properties.nameunit;
 		muni_name= jsonResponse.features[1].properties.nameunit;
 		muni_code= jsonResponse.features[1].properties.nationalcode;
-		$("#locationlabel").html(muni_name+" provincia de "+prov_name);
-		$("#infopanel").trigger( "updatelayout" );
+		toast(muni_name+"("+prov_name+")");
 		fillForm();
 		}
 	}
 	
+	function toast(msg){
+	$("<div class='ui-loader ui-overlay-shadow  ui-corner-all' style='background-color:black;'><p>"+msg+"</p></div>")
+	.css({ display: "block", 
+		opacity: 0.90,
+		position: "fixed",
+		padding: "7px",
+		"text-align": "center",
+		width: "270px",
+		left: ($(window).width() - 284)/2,
+		top: $(window).height()/2 })
+	.appendTo( $.mobile.pageContainer ).delay( 1500 )
+	.fadeOut( 400, function(){
+		$(this).remove();
+	});
+	}
+	
 	function fillForm(){
+		$("#locationlabel").html(muni_name+" provincia de "+prov_name);
 		var markers = map.getLayer('Markers');
 		//var feature = markers.features;
 		var point = markers.features[0].geometry.bounds.getCenterLonLat();
@@ -332,6 +351,7 @@ var init = function (onSelectFeatureFunction) {
 			'<input type="hidden" name="longitud" value="' + point.lon + '">' + 
 			'<input type="hidden" name="latitud" value="' + point.lat + '">';
 		$("#loc_actual").html(html);
+		$("#infopanel").trigger( "updatelayout" );
 	}
 	
 	
