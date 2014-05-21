@@ -103,13 +103,19 @@ var init = function (onSelectFeatureFunction) {
             graphicYOffset: -48
 		})
     });
+	var wms_concentracion = new OpenLayers.Layer.WMS("Concentración de denuncias",
+        "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
+        {layers: 'IDEs:denuncias_antig',transparent:true, styles:'heatmap'},
+        {isBaseLayer: false, transitionEffect: 'resize', singleTile:true}
+    );
+	
     // create map
 	
     map = new OpenLayers.Map({
         div: "map",
         theme: null,
         projection: sm,
-        numZoomLevels: 20,
+        numZoomLevels: 22,
 		size: new OpenLayers.Size(400,600),//para evitar null al inicializar
         controls: [
             new OpenLayers.Control.Attribution(),
@@ -131,7 +137,7 @@ var init = function (onSelectFeatureFunction) {
         zoom: 1
     });
 	map.updateSize();
-	map.addLayers([vector,wfs,markers]);
+	map.addLayers([wms_concentracion,vector,wfs,markers]);
 	
 	 var highlightCtrl = new OpenLayers.Control.SelectFeature([wfs,markers], {
                 hover: true,
@@ -173,12 +179,7 @@ var init = function (onSelectFeatureFunction) {
      selectCtrl.activate();
 	 
 	//OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
-	/*
-	var wms = new OpenLayers.Layer.WMS("Denuncias WMS",
-        "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
-        {layers: 'IDEs:denuncias',transparent:true},
-        {isBaseLayer: false, transitionEffect: 'resize', singleTile:false}
-    );*/
+	
 	
     var style = {
         fillOpacity: 0.1,
