@@ -44,7 +44,7 @@ function login() {
 function updateFacebookLoginInfo(fb)
 {
 	var fb_user_label = '<img valign="center" height="30" src="'+fb.user.picture+'"/>' + fb.user.name;
-	var html = fb_user_label + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
+	var html = fb_user_label + '<a href="#" class="ui-btn  ui-btn-icon-left ui-icon-delete" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
 	$("#estadoLogin").html(html);
 	$("#iniciosesionFacebook").hide();
 	$("#misdenuncias_button").show();
@@ -80,7 +80,7 @@ var publish = function () {
 	<div data-role="panel" data-position="left" data-swipe-close="true" data-display="overlay" id="infopanel">
 	<p>
 	<div id="estadoLogin">
-	<a href="#" id="iniciosesionFacebookEstado" class="ui-btn  ui-btn-icon-left ui-icon-fb" onclick="login(); return false;">Facebook</a>
+	<a href="#" id="iniciosesionFacebookEstado" class="ui-btn  ui-btn-icon-left ui-icon-fb ui-btn-inline" onclick="login(); return false;">Identificarse</a>
 					<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
 	</div>
 	<a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a></p>
