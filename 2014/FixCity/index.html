@@ -23,9 +23,10 @@
 
 // Cuando la pagina carga miramos si ya hay un usuario identificado.
 fb.ready(function(){ 
-	  if (fb.logged){
-		updateFacebookLoginInfo(fb);
-	  }
+  if (fb.logged)
+  {
+   updateFacebookLoginInfo(fb)
+  }
 });
 
 
@@ -33,6 +34,7 @@ fb.ready(function(){
 function login() {
   fb.login(function(){ 
     if (fb.logged) {
+		// Cambiamos el link de identificarse por el nombre y la foto del usuario.
 		updateFacebookLoginInfo(fb);
     } else {
       alert("No se pudo identificar al usuario");
@@ -41,13 +43,12 @@ function login() {
 };
 function updateFacebookLoginInfo(fb)
 {
-	//html = '<img valign="center" height="10px" width="10px" src="'+fb.user.picture+'"/>' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
-	html = fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;"> Salir</a></p>';
-	$("#iniciosesionFacebookEstado").html(html);
+	html = '<img valign="center" height="30" src="'+fb.user.picture+'"/>' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
+	$("#iniciosesionFacebookËstado").html(html);
 	$("#iniciosesionFacebook").hide();
 	$("#misdenuncias_button").show();
 	$("#search_button").show();
-	$("#mappage").trigger( "updatelayout" )
+	$("#mappage").trigger( "updatelayout" );
 }
 // Funcion para publicar un mensaje en tu muro
 var publish = function () {
@@ -69,10 +70,14 @@ var publish = function () {
     <body>
         <h1 id="title">FixCity</h1>  
 <!-- /panel -->
-		<div data-role="page" id="mappage"  data-quicklinks="true" data-theme="b">
-	<div data-role="panel" data-position="left" data-display="overlay" id="infopanel">
+		
+        <div data-role="page" id="mappage"  data-quicklinks="true" data-theme="b">
+<div data-role="panel" data-position="left" data-display="overlay" id="infopanel">
 
-
+<div id="estadoLogin">
+<a href="#" id="iniciosesionFacebookEstado" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" onclick="login(); return false;">Facebook</a>
+				<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
+</div>
 <img src="images/marker-icon-fixit.png" align="left" />
 <div class="ui-corner-all custom-corners">
   <div class="ui-bar ui-bar-a">
@@ -106,14 +111,10 @@ var publish = function () {
 </div>
 <a id="reportDetailsLink" href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Ver detalles</a>
 </div>
-		
-		<div data-role="header">
+			<div data-role="header">
 			<a href="#infopanel"  data-rel="panel" data-dismissible="true" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-icon-bars">Información</a>
 			<h3>FixCity</h3>
-			<a href="#" id="iniciosesionFacebookEstado" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Facebook</a>
-			<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
-		</div>
-			
+			</div>		
 			<div data-role="content">		  
 				<div id="map" class="smallmap"></div>
 			</div>
@@ -121,7 +122,7 @@ var publish = function () {
 			
 				<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" onclick="autolocate();return false;">Locate</a>
 				<a href="#misdenuncias" id="misdenuncias_button" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Mis Denuncias</a>
-				<a href="#searchpage" id="search_button" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Search</a>
+				<a href="#searchpage" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Search</a>
 				<a href="#layerspage" data-transition="fade" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Capas</a>
 				<a href="#estadisticas" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Estadísticas</a>
 				<a href="#aboutus"  data-prefetch="true" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">About Us</a>
@@ -256,22 +257,14 @@ var publish = function () {
 									-->
 		
 		<div data-role="page" id="misdenuncias" data-theme="b">
-			<div data-role="header">
-				<h1>Mis Denuncias</h1>
-			</div>
-			<div>
-				<?php
-					
-				?>
-				
-			</div>
+          <div data-role="header">
+            <h1>Mis Denuncias</h1>
+		  </div>
 			<div data-role="content" >
-				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
-			</div>
+			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+           </div>
 		</div>		
 
-		
-		
 		<!--
 	
 		Authors
