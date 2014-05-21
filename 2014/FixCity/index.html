@@ -42,7 +42,7 @@ function login() {
     if (fb.logged) {
 		// Cambiamos el link de identificarse por el nombre y la foto del usuario.
 		//updateFacebookLoginInfo(fb);
-		html = '<img valign="center" height="30" src="'+fb.user.picture+'"/>' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
+		html = '<img valign="center" height="15" src="'+fb.user.picture+'"/>' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
 		$("#iniciosesionFacebookEstado").html(html);
 		$("#iniciosesionFacebook").hide();
 		$("#misdenuncias_button").show();
