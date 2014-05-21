@@ -56,7 +56,7 @@ function login() {
 function updateFacebookLoginInfo(fb)
 {
 	html = '<img valign="center" height="30" src="'+fb.user.picture+'"/>' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
-	$("#iniciosesionFacebookËstado").html(html);
+	$("#iniciosesionFacebookEstado").html(html);
 	$("#iniciosesionFacebook").hide();
 	$("#misdenuncias_button").show();
 	$("#search_button").show();
@@ -123,10 +123,8 @@ var publish = function () {
 		<div data-role="header">
 			<a href="#infopanel"  data-rel="panel" data-dismissible="true" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-icon-bars">Información</a>
 			<h3>FixCity</h3>
-			<div id="estadoLogin">
-				<a href="#" id="iniciosesionFacebookEstado" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" onclick="login(); return false;">Facebook</a>
-				<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
-			</div>
+			<a href="#" id="iniciosesionFacebookEstado" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Facebook</a>
+			<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
 		</div>
 			
 			<div data-role="content">		  
