@@ -5,7 +5,8 @@ var apiKey = "AqTGBsziZHIJYYxgivLBf0hVdrAk9mWO5cQcb8Yux8sW5M8c8opEC2lZqKR1ZZXf";
 // initialize map when page ready
 var map;
 var gg = new OpenLayers.Projection("EPSG:4326");
-var sm = new OpenLayers.Projection("EPSG:900913");
+//var sm = new OpenLayers.Projection("EPSG:900913");
+var sm = new OpenLayers.Projection("EPSG:3857");
 var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
 var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
 var prov_name;
@@ -106,9 +107,30 @@ var init = function (onSelectFeatureFunction) {
 	var wms_concentracion = new OpenLayers.Layer.WMS("Concentración de denuncias",
         "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
         {layers: 'IDEs:denuncias_antig',transparent:true, styles:'heatmap'},
-        {isBaseLayer: false, transitionEffect: 'resize', singleTile:true}
+        {isBaseLayer: false, singleTile:true}
     );
-	
+	var wms_ignbasetodo = new OpenLayers.Layer.WMS("IGN Base",
+        "http://www.ign.es/wms-inspire/ign-base",
+        {layers: 'IGNBaseTodo',transparent:true},
+        {isBaseLayer: true, transitionEffect: 'resize', singleTile:false}
+    );
+	var wms_cartociudad = new OpenLayers.Layer.WMS("IGN Base",
+        "http://www.cartociudad.es/wms/CARTOCIUDAD/CARTOCIUDAD",
+        {layers: 'FondoUrbano',transparent:false},
+        {isBaseLayer: true, transitionEffect: 'resize', singleTile:false}
+    );
+	var googleStreets= new OpenLayers.Layer.Google(
+                "Google Streets", // the default
+                {numZoomLevels: 20}
+            );
+    var googleHybrid = new OpenLayers.Layer.Google(
+                "Google Hybrid",
+                {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20}
+            );
+	var googleSat= new OpenLayers.Layer.Google(
+                "Google Satellite",
+                {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}
+            );
     // create map
 	
     map = new OpenLayers.Map({
@@ -132,6 +154,10 @@ var init = function (onSelectFeatureFunction) {
                 name: "Vista Aérea",
                 transitionEffect: 'resize'
             }),
+			wms_cartociudad,
+			googleStreets,
+			googleHybrid,
+			googleSat,
             ],
         center: new OpenLayers.LonLat(0, 0),	
         zoom: 1
@@ -271,6 +297,35 @@ var init = function (onSelectFeatureFunction) {
 		OpenLayers.Console.log(evt.type, evt.feature.id);
 		}*/
 	}
+	
+	function formatDegrees(lonDecimal, latDecimal){
+		var signlat=1;
+		var signlon=1;
+	
+	 if(lonDecimal < 0)  { signlon = -1; }
+      var lonAbs = Math.abs(Math.round(lonDecimal * 1000000.));
+
+	 //Math.round is used to eliminate the small error caused by rounding in the computer:
+	 //e.g. 0.2 is not the same as 0.20000000000284
+
+     //Error checks
+     if(lonAbs > (180 * 1000000)) {  alert(' Degrees Longitude must be in the range of -180 to 180. '); lonDecimal='';  lonAbs=0; }
+
+	 if(latDecimal < 0)  { signlat = -1; }
+      var latAbs = Math.abs( Math.round(latDecimal * 1000000.));
+
+	 //Math.round is used to eliminate the small error caused by rounding in the computer:
+	 //e.g. 0.2 is not the same as 0.20000000000284
+
+     //Error checks
+     if(latAbs > (90 * 1000000)) { alert(' Degrees Latitude must be in the range of -90. to 90. '); latDecimal = '';  latAbs=0; }
+	
+	var latvalue = ((Math.floor(latAbs / 1000000) * signlat) + '&deg; ' + Math.floor(  ((latAbs/1000000) - Math.floor(latAbs/1000000)) * 60)  + '\' ' +  ( Math.floor(((((latAbs/1000000) - Math.floor(latAbs/1000000)) * 60) - Math.floor(((latAbs/1000000) - Math.floor(latAbs/1000000)) * 60)) * 100000) *60/100000 ) + '&quot;'  );
+	var lonvalue = ((Math.floor(lonAbs / 1000000) * signlon) + '&deg; ' + Math.floor(  ((lonAbs/1000000) - Math.floor(lonAbs/1000000)) * 60)  + '\' ' +  ( Math.floor(((((lonAbs/1000000) - Math.floor(lonAbs/1000000)) * 60) - Math.floor(((lonAbs/1000000) - Math.floor(lonAbs/1000000)) * 60)) * 100000) *60/100000 ) + '&quot;'  );
+
+	return latvalue+' , '+lonvalue;
+}
+	
 	/**
 	* Selección de una denuncia ya existente
 	*/
@@ -278,7 +333,11 @@ var init = function (onSelectFeatureFunction) {
 		feature = evt.feature;
 		$("#reportDescription").html("A las "+feature.attributes.fecha+" he informado del problema: \""+feature.attributes.texto+"\"");
 		var point=feature.geometry.getBounds().getCenterLonLat();
-		$("#reportLocationLabel").html('('+point.lon + ', ' + point.lat+')');
+		
+		var pointProj=new OpenLayers.LonLat(point.lon,point.lat);
+		pointProj.transform(map.getProjectionObject(), gg);
+		var latlonString = formatDegrees(pointProj.lat, pointProj.lon);
+		$("#reportLocationLabel").html('('+latlonString+')');
 		$("#reportDetailsLink").attr("href","reportDetails.php?reportId="+feature.attributes.id_denuncia);
 		$("#nuevadenuncia_loc_actual_button").show();
 		$("#infoDenunciaPanel").trigger( "updatelayout" );
