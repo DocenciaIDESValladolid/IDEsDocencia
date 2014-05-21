@@ -9,8 +9,10 @@ var sm = new OpenLayers.Projection("EPSG:900913");
 var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
 var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
 var prov_name;
-var muni_namet;
+var muni_name;
 var	muni_code;
+var geolocation_accuracy;
+var geolocation_msg='';
 
 var init = function (onSelectFeatureFunction) {
 
@@ -71,23 +73,13 @@ var init = function (onSelectFeatureFunction) {
 		}
 
 	}); //fin OpenLayers.Control.Click
-	
-	//Añadimos control de click	
-//		
-	/*
-    var selectControl = new OpenLayers.Control.SelectFeature(markers, {
-        autoActivate:true});
-	markers.events.on({"featureselected": addReport});
-	var popupControl = new OpenLayers.Control.SelectFeature(vector, {
-		autoActivate:true
-	});
-        */        
+
 
     var geolocate = new OpenLayers.Control.Geolocate({
         id: 'locate-control',
         geolocationOptions: {
-            enableHighAccuracy: false,
-            maximumAge: 0,
+            enableHighAccuracy: true,
+            maximumAge: 2,
             timeout: 7000
         }
     });
@@ -117,15 +109,12 @@ var init = function (onSelectFeatureFunction) {
         div: "map",
         theme: null,
         projection: sm,
-        numZoomLevels: 18,
-		size: new OpenLayers.Size(400,600),
+        numZoomLevels: 20,
+		size: new OpenLayers.Size(400,600),//para evitar null al inicializar
         controls: [
             new OpenLayers.Control.Attribution(),
 			new OpenLayers.Control.Navigation(),
             geolocate,
- //           selectControl,
-//			popupControl,
-//			clickControl
         ],
         layers: [
 		   new OpenLayers.Layer.OSM("Vista Callejero", null, {
@@ -198,6 +187,7 @@ var init = function (onSelectFeatureFunction) {
         strokeOpacity: 0.6
     };
     geolocate.events.register("locationupdated", this, function(e) {
+		
         vector.removeAllFeatures();
         vector.addFeatures([
             new OpenLayers.Feature.Vector(
@@ -223,10 +213,13 @@ var init = function (onSelectFeatureFunction) {
             )
         ]);
         map.zoomToExtent(vector.getDataExtent());
+		geolocation_accuracy=e.position.coords.accuracy;
+		geolocation_msg= "<p>Localizado con "+ geolocation_accuracy+" metros de precisión.</p>";
+		queryUA(e,successGeolocationUA);
     });
 
 	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
-	geolocate.events.register("locationupdated", this, eventLocationChanged);
+	//geolocate.events.register("locationupdated", this, eventLocationChanged);
 	
 	};// End of init
 
@@ -311,8 +304,8 @@ var init = function (onSelectFeatureFunction) {
 	}
 	function eventLocationChanged(e){
 		moveMark(e.point);
+		geolocation_msg="";
 		queryUA(e,successUA,failureUA);
-		
 	}
 	function successUA(jsonResponse){
 	if (jsonResponse.features.length==2)
@@ -320,11 +313,19 @@ var init = function (onSelectFeatureFunction) {
 		prov_name= jsonResponse.features[0].properties.nameunit;
 		muni_name= jsonResponse.features[1].properties.nameunit;
 		muni_code= jsonResponse.features[1].properties.nationalcode;
-		toast(muni_name+"("+prov_name+")");
+		toast("<p>"+muni_name+"("+prov_name+")</p>"+ geolocation_msg);
 		fillForm();
 		}
 	}
-	
+	function successGeolocationUA(jsonResponse){
+	if (jsonResponse.features.length==2)
+	{
+		var prov_name= jsonResponse.features[0].properties.nameunit;
+		var muni_name= jsonResponse.features[1].properties.nameunit;
+		var muni_code= jsonResponse.features[1].properties.nationalcode;
+		toast("<p>"+muni_name+"("+prov_name+")</p>"+ geolocation_msg);
+		}
+	}
 	function toast(msg){
 	$("<div class='ui-loader ui-overlay-shadow  ui-corner-all' style='background-color:black;'><p>"+msg+"</p></div>")
 	.css({ display: "block", 
