@@ -11,7 +11,7 @@ var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los
 var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
 var prov_name;
 var muni_name;
-var	muni_code;
+var muni_code;
 var geolocation_accuracy;
 var geolocation_msg='';
 
@@ -80,7 +80,7 @@ var init = function (onSelectFeatureFunction) {
         id: 'locate-control',
         geolocationOptions: {
             enableHighAccuracy: true,
-            maximumAge: 2,
+            maximumAge: 0,
             timeout: 7000
         }
     });
@@ -119,7 +119,7 @@ var init = function (onSelectFeatureFunction) {
         {layers: 'FondoUrbano',transparent:false},
         {isBaseLayer: true, transitionEffect: 'resize', singleTile:false}
     );
-	var googleStreets= new OpenLayers.Layer.Google(
+/*	var googleStreets= new OpenLayers.Layer.Google(
                 "Google Streets", // the default
                 {numZoomLevels: 20}
             );
@@ -131,7 +131,7 @@ var init = function (onSelectFeatureFunction) {
                 "Google Satellite",
                 {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}
             );
-    // create map
+*/    // create map
 	
     map = new OpenLayers.Map({
         div: "map",
@@ -155,9 +155,9 @@ var init = function (onSelectFeatureFunction) {
                 transitionEffect: 'resize'
             }),
 			wms_cartociudad,
-			googleStreets,
-			googleHybrid,
-			googleSat,
+		//	googleStreets,
+		//	googleHybrid,
+		//	googleSat,
             ],
         center: new OpenLayers.LonLat(0, 0),	
         zoom: 1
