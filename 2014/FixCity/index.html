@@ -237,10 +237,10 @@ var publish = function () {
 		Denuncias 
 		-->
 		<div data-role="page" id="nuevadenuncia_loc_actual" data-theme="b">
-          <div data-role="header">
-            <h1>Nueva Denuncia</h1>
-          </div>
-		  <div data-role="content">			      
+			<div data-role="header" data-position="fixed">
+			<h1>Nueva Denuncia</h1>
+			</div>
+			<div data-role="content">			      
 				<!-- Formulario para la introducción de una denuncia -->
 				<form data-role="form" data-ajax="false" action="nueva_denuncia.php" method="post">
 					<div id="loc_actual"></div>
@@ -258,6 +258,9 @@ var publish = function () {
 					<input type="reset" value="Borrar">
 					<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
 			  </form>		
+			</div>
+			<div data-role="footer" data-position="fixed" >
+				FixCity
 			</div>
 		</div>
 	

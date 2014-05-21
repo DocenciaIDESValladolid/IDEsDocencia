@@ -48,7 +48,7 @@ body {
 }
 #navigation .ui-btn-icon-notext {
     display: block;
-    padding: 7px 6px 7px 8px;
+    /*padding: 7px 6px 7px 8px;*/
 }
 #title, #tags, #shortdesc {
     display: none;
