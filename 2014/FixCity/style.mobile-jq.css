@@ -25,7 +25,7 @@ body {
     background-image: url(images/FixCityLogo.png), url(images/FixCityLogo.png);
     background-repeat:repeat-x;
     background-position:0% 100%;
-    background-size:30% 50%;
+    background-size:180px 32px;
 }
 .olControlAttribution {
     font-size: 10px;

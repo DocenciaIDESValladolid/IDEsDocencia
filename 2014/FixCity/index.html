@@ -72,91 +72,89 @@ var publish = function () {
     <body>
         <h1 id="title">FixCity</h1>  
 <!-- Página principal de la aplicación-->
-        <div data-role="page" id="mappage"  data-quicklinks="true" data-theme="b">	
-<!----
-Panel de información de la marca
--->
-<div data-role="panel" data-position="left" data-swipe-close="true" data-display="overlay" id="infopanel">
-<p>
-<div id="estadoLogin">
-<a href="#" id="iniciosesionFacebookEstado" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-user" onclick="login(); return false;">Facebook</a>
-				<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
-</div>
-<a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a></p>
-<img src="images/marker-icon-fixit.png" align="left" />
-<div class="ui-corner-all custom-corners">
-  <div class="ui-bar ui-bar-a">
-	<h3>La marca para informar está situada en </h3>
-    </div>
-  <div class="ui-body ui-body-a">
-	<p id="locationlabel"></p>
-</div>
-</div>
-<p>En cualquier momento pulse en la chincheta <img src="images/marker-icon-fixit.png" height="32"> para comenzar el informe de la avería o irregularidad que ha observado.</p>
+<div data-role="page" id="mappage"  data-quicklinks="true" data-theme="b">	
+	<!----
+	Panel de información de la marca
+	-->
+	<div data-role="panel" data-position="left" data-swipe-close="true" data-display="overlay" id="infopanel">
+	<p>
+	<div id="estadoLogin">
+	<a href="#" id="iniciosesionFacebookEstado" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-user" onclick="login(); return false;">Facebook</a>
+					<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
+	</div>
+	<a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a></p>
+	<img src="images/marker-icon-fixit.png" align="left" />
+	<div class="ui-corner-all custom-corners">
+	  <div class="ui-bar ui-bar-a">
+		<h3>La marca para informar está situada en </h3>
+		</div>
+	  <div class="ui-body ui-body-a">
+		<p id="locationlabel"></p>
+	</div>
+	</div>
+	<p>En cualquier momento pulse en la chincheta <img src="images/marker-icon-fixit.png" height="32"> para comenzar el informe de la avería o irregularidad que ha observado.</p>
 
-<a href="#nuevadenuncia_loc_actual" id="nuevadenuncia_loc_actual_button" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui_mini" >Añadir denuncia</a>
+	<a href="#nuevadenuncia_loc_actual" id="nuevadenuncia_loc_actual_button" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui_mini" >Añadir denuncia</a>
 
-</div>
-<!----
-Panel de información de la denuncia seleccionada
--->
-<div data-role="panel" data-position="left" data-display="overlay" id="infoDenunciaPanel">
-<br/>
-<img src="images/cono.png" align="left"/>
-<div class="ui-corner-all custom-corners">
-  <div class="ui-bar ui-bar-a"><h3>Denuncia de incidencia en</h3>
-  </div>
-  <div class="ui-body ui-body-a">
-<p><b id="reportLocationLabel"></b>.</p>
-</div>
-</div>
-<div class="ui-corner-all custom-corners">
-  <div class="ui-bar ui-bar-a"><h3>Descripción del ciudadano</h3>
-  </div>
-  <div class="ui-body ui-body-a">
-<p id="reportDescription"></p>
-</div>
-</div>
-<a id="reportDetailsLink" href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Ver detalles</a>
-</div>
-<!--
-Cabecera y barra de herramientas.
--->
-			<div data-role="header" class="bgimg" >
-			<a href="#infopanel"  data-rel="panel" data-dismissible="true" class="ui-btn ui-btn-left ui-btn-inline ui-icon-bars ui-btn-icon-notext">Información</a>
-			<h1><img src="images/marker-icon-fixit.png" height="24"> FixCity</h1>
-			</div>		
-			<div data-role="content">		  
-				<div id="map" class="smallmap"></div>
+	</div>
+	<!----
+	Panel de información de la denuncia seleccionada
+	-->
+	<div data-role="panel" data-position="left" data-display="overlay" id="infoDenunciaPanel">
+			<br/>
+			<img src="images/cono.png" align="left"/>
+			<div class="ui-corner-all custom-corners">
+			  <div class="ui-bar ui-bar-a"><h3>Denuncia de incidencia en</h3>
+			  </div>
+			  <div class="ui-body ui-body-a">
+			<p><b id="reportLocationLabel"></b>.</p>
 			</div>
-			<div data-role="footer" >
-			
-				<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" onclick="autolocate();return false;">Locate</a>
-				<a href="#misdenuncias" id="misdenuncias_button" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Mis Denuncias</a>
-				<a href="#searchpage" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Search</a>
-				<a href="#layerspage" data-transition="fade" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Capas</a>
-				<a href="#estadisticas" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Estadísticas</a>
-				<a href="#aboutus"  data-prefetch="true" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">About Us</a>
-				<a href="#" id="iniciosesionFacebook" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" onclick="login(); return false;">Facebook</a>
-				<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
+			</div>
+			<div class="ui-corner-all custom-corners">
+			  <div class="ui-bar ui-bar-a"><h3>Descripción del ciudadano</h3>
+			  </div>
+			  <div class="ui-body ui-body-a">
+			<p id="reportDescription"></p>
+			</div>
+			</div>
+			<a id="reportDetailsLink" href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Ver detalles</a>
+	</div>
+	<!--
+	Cabecera y barra de herramientas.
+	-->
+				<div data-role="header" class="bgimg" >
+				<a href="#infopanel"  data-rel="panel" data-dismissible="true" class="ui-btn ui-btn-left ui-btn-inline ui-icon-bars ui-btn-icon-notext">Información</a>
+				<h1><img src="images/marker-icon-fixit.png" height="24"> FixCity</h1>
+				</div>		
+				<div data-role="content">		  
+					<div id="map" class="smallmap"></div>
+				</div>
+				<div data-role="footer" >
 				
-				<script>
-				$("#misdenuncias_button").hide();
-				$("#nuevadenuncia_loc_actual_button").hide();
-			//	$("#search_button").hide();
-				</script>
-			</div>
-          <div id="navigation" data-role="controlgroup" data-type="vertical">
-            <a href="#" data-role="button" data-icon="plus" id="plus"
-               data-iconpos="notext" onclick="map.zoomIn();return false;"></a>
-            <a href="#" data-role="button" data-icon="minus" id="minus"
-               data-iconpos="notext" onclick="map.zoomOut();return false;"></a>
-          </div>
+					<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" onclick="autolocate();return false;">Locate</a>
+					<a href="#misdenuncias" id="misdenuncias_button" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Mis Denuncias</a>
+					<a href="#searchpage" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Search</a>
+					<a href="#layerspage" data-transition="fade" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Capas</a>
+					<a href="#estadisticas" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Estadísticas</a>
+					<a href="authors.html"  data-prefetch="true" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">About Us</a>
+					<a href="#" id="iniciosesionFacebook" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" onclick="login(); return false;">Facebook</a>
+					<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
+					
+					<script>
+					$("#misdenuncias_button").hide();
+					$("#nuevadenuncia_loc_actual_button").hide();
+				//	$("#search_button").hide();
+					</script>
+				</div>
+			  <div id="navigation" data-role="controlgroup" data-type="vertical">
+				<a href="#" data-role="button" data-icon="plus" id="plus"
+				   data-iconpos="notext" onclick="map.zoomIn();return false;"></a>
+				<a href="#" data-role="button" data-icon="minus" id="minus"
+				   data-iconpos="notext" onclick="map.zoomOut();return false;"></a>
+			  </div>
 	
-        </div>
-		
-		
-		
+</div> <!-- mappage -->
+			
 		<div data-role="page" id="estadisticas" data-theme="b">
           <div data-role="header">
             <h1>Estadísticas</h1>
@@ -168,7 +166,8 @@ Cabecera y barra de herramientas.
 			</form>
 			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
 			</div>
-		</div>		
+		</div>	
+		
 		<div data-role="page" id="searchpage" data-theme="b">
           <div data-role="header">
             <h1>Search</h1>
@@ -269,166 +268,7 @@ Cabecera y barra de herramientas.
 			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
            </div>
 		</div>		
-
-		<!--
-	
-		Authors
-		
-		-->
-		<div data-role="page" id="aboutus" data-theme="b">
-			<div data-role="header">
-				<h1>About Us</h1>
-			</div>	
-			<div  role="content" >
-				<ul data-role="listview" data-inset="true">
-					<li><a href="#director">
-						<img src="images/images/JuanPablo.png">
-					<h2>JUAN PABLO DE CASTRO</h2>
-					<p>Profesor de la Escuela Técnica Superior de Ingenieros de Telecomunicación, en la Universidad de Valladolid.</p></a>
-					</li>
-					<li><a href="#creador1">
-						<img src="images/images/JuanCarlosAlvarez.jpg">
-					<h2>JUAN CARLOS ÁLVAREZ DIÉGUEZ</h2>
-					<p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p></a>
-					</li>
-					<li><a href="#creador2">
-						<img src="../_assets/img/album-p.jpg">
-					<h2>CARLOS ALBERTO ÁVAREZ GARCÍA</h2>
-					<p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p></a>
-					</li>
-					<li><a href="#creador3">
-						<img src="../_assets/img/album-p.jpg">
-					<h2>JOSU ESCALADA BLANCO</h2>
-					<p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p></a>
-					</li>
-				</ul>
 				
-			  <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
-			</div>
-		</div>
-		<div data-role="page" id="director" data-theme="b">
-			<div data-role="header">
-			<h1>Juan Pablo De Castro</h1>
-			</div>
-			<div data-role="content" class="ui-content">
-				<table align="center" border="0" cellpadding="30">					
-				<td width="0%"><p><img src="images/images/JuanPablo.png" height="200"></td>				
-				</table> 
-					<div align="center">
-						<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Juan Pablo De Castro</font>
-					
-						<a href="mailto:jpdecastro@tel.uva.es">
-						<font face="Comic Sans MS,arial,verdana" font size=4  font color="E7880C">jpdecastro@tel.uva.es</font>
-					</div>
-					
-					<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
-				</div>
-		</div>
-		
-		<div data-role="page" id="creador1" data-theme="b">
-          <div data-role="header">
-            <h1>Juan Carlos Álvarez Diéguez</h1>
-          </div>
-		 <div data-role="main" class="ui-content"> 
-				<table align="center" border="0" cellpadding="30">					
-				<td width="0%"><p><img src="images/images/JuanCarlosAlvarez.jpg" width="290" height="324"></td>				
-				</table> 
-			  <div align="center">
-					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Juan Carlos Álvarez Diéguez</font>
-					<p>
-					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Escuela Técnica Superior de Ingenieros de Telecomunicaciones</font>
-					<p>
-					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, Mención en Telemática</font>
-					</p><p>
-					<div>
-					<a href="mailto:dieguez989@gmail.com">
-					<font face="Comic Sans MS,arial,verdana" font size=4  font color="E7880C">dieguez989@gmail.com</font>
-					</p>
-					</div>
-					<div>
-					<a href="http://www.hotmail.com">
-					<td width="0%"><img src="images/images/hotmail.jpg" width="65" height="50" >
-					<a href="http://www.gmail.com">
-					<td width="0%"><img src="images/images/gmail-correo.png" width="65" height="50" >
-					<a href="http://es.mail.yahoo.com/">
-					<td width="0%"><img src="images/images/yahoo.png" width="65" height="50" >
-					</a>
-					</div>
-				</div>
-				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
-			</div>
-		</div>
-				
-		<div data-role="page" id="creador2" data-theme="b">
-          <div data-role="header">
-            <h1>Carlos Alberto Álvarez García</h1>
-          </div>
-		  <div data-role="main" class="ui-content">
-				<table align="center" border="0" cellpadding="30">					
-				<td width="0%"><p><img src="images/images/JuanCarlosAlvarez.jpg" width="290" height="324"></td>				
-				</table> 
-			  <div align="center">
-					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Carlos Alberto Álvarez García</font>
-					<p>
-					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">..............</font>
-					<p>
-					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">...............</font>
-					</p><p>
-					<div>
-					<a href="mailto:......">
-					<font face="Comic Sans MS,arial,verdana" font size=4  font color="E7880C">......com</font>
-					</p>
-					</div>
-					<div>
-					<a href="http://www.hotmail.com">
-					<td width="0%"><img src="images/images/hotmail.jpg" width="65" height="50" >
-					<a href="http://www.gmail.com">
-					<td width="0%"><img src="images/images/gmail-correo.png" width="65" height="50" >
-					<a href="http://es.mail.yahoo.com/">
-					<td width="0%"><img src="images/images/yahoo.png" width="65" height="50" >
-					</a></p></td></tr>
-					</div>
-				</div>
-				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
-			<div>
-		</div>
-				
-		<div data-role="page" id="creador3" data-theme="b">
-          <div data-role="header">
-            <h1>Josu Escalada Blanco</h1>
-          </div>
-				<table align="center" border="0" cellpadding="30">					
-				<td width="0%"><p><img src="images/images/JuanCarlosAlvarez.jpg" width="290" height="324"></td>				
-				</table> 
-			  <div align="center">
-					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">Josu Escalada Blanco</font>
-					<p>
-					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">..............</font>
-					<p>
-					<font face="Comic Sans MS,arial,verdana" font size=4 font color="E7880C">...............</font>
-					</p><p>
-					<div>
-					<a href="mailto:......">
-					<font face="Comic Sans MS,arial,verdana" font size=4  font color="E7880C">......com</font>
-					</p>
-					</div>
-					<div>
-					<a href="http://www.hotmail.com">
-					<td width="0%"><img src="images/images/hotmail.jpg" width="65" height="50" >
-					<a href="http://www.gmail.com">
-					<td width="0%"><img src="images/images/gmail-correo.png" width="65" height="50" >
-					<a href="http://es.mail.yahoo.com/">
-					<td width="0%"><img src="images/images/yahoo.png" width="65" height="50" >
-					</a></p></td></tr>
-					<p><p><p>
-					<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
-					</div>
-				</div>
-		</div>
-	
-		
-
-					
 	   <div id="popup" data-role="dialog">
             <div data-position="inline" data-theme="d" data-role="header">
                 <h1>Details</h1>
@@ -440,8 +280,8 @@ Cabecera y barra de herramientas.
         </div>
 		
 		 <!-- Site footer -->
-    <div class="footer" style="margin-left: 100px ;margin-right: 100px;">
+ <!--   <div class="footer" style="margin-left: 100px ;margin-right: 100px;">
     	<p>&copy; Infraestructura de Datos Espaciales. Universidad de Valladolid</p>
-    </div>
+    </div> -->
     </body>
 </html>
