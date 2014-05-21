@@ -42,7 +42,7 @@ function login() {
 function updateFacebookLoginInfo(fb)
 {
 	//html = '<img valign="center" height="10px" width="10px" src="'+fb.user.picture+'"/>' + fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
-	html = fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
+	html = fb.user.name + '<a href="#" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;"> Salir</a></p>';
 	$("#iniciosesionFacebookEstado").html(html);
 	$("#iniciosesionFacebook").hide();
 	$("#misdenuncias_button").show();
