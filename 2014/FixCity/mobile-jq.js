@@ -133,7 +133,7 @@ function initLayerList() {
         .appendTo('#layerslist');
     var overlayLayers = map.getLayersBy("isBaseLayer", false);
     $.each(overlayLayers, function() {
-		if(this.name!='vector')
+		if(this.name!='vector' && this.name.indexOf("OpenLayers_Control_SelectFeature")==-1)
         addLayerToList(this);
     });
     $('#layerslist').listview('refresh');

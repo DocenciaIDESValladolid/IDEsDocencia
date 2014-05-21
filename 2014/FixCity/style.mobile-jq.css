@@ -27,6 +27,14 @@ body {
     background-position:0% 100%;
     background-size:180px 32px;
 }
+.ui-icon-geolocation:after {
+	background-image: url("images/geolocation.png");
+	background-size: 25px 25px;
+}
+.ui-icon-fb:after {
+	background-image: url("images/fb.jpg");
+	background-size: 25px 25px;
+}
 .olControlAttribution {
     font-size: 10px;
     bottom: 5px;
