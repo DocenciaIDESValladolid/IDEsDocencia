@@ -73,14 +73,19 @@ $('#popup').on('pageshow',function(event, ui){
     $("ul#details-list").empty().append(li).listview("refresh");
 });
 
-$('#searchpage').on('pageshow',function(event, ui){
-    $('#query').bind('change', function(e){
+$(document).on('pagecontainershow',function(event, ui){
+	var pageId = $('body').pagecontainer('getActivePage').prop('id');
+	if (pageId=='searchpage')
+    {
+	$('#query').on('input propertychange paste', function(e){
         $('#search_results').empty();
         if ($('#query')[0].value === '') {
             return;
         }
-        $.mobile.showPageLoadingMsg();
-
+       // $.mobile.showPageLoadingMsg();
+$.mobile.loading( "show", {
+					text: "Buscando",
+					textVisible: true});
         // Prevent form send
         e.preventDefault();
 
@@ -106,11 +111,13 @@ $('#searchpage').on('pageshow',function(event, ui){
                     .show();
             });
             $('#search_results').listview('refresh');
-            $.mobile.hidePageLoadingMsg();
+           // $.mobile.hidePageLoadingMsg();
+		   $.mobile.loading( "hide");
         });
     });
     // only listen to the first event triggered
-    $('#searchpage').die('pageshow', arguments.callee);
+ //   $('#searchpage').die('pageshow', arguments.callee);
+	}
 });
 
 
