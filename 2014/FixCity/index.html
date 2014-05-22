@@ -55,6 +55,10 @@ function updateFacebookLoginInfo(fb)
 	
 	$("#id_facebook").val(fb.user.id);
 	$("#email_facebook").val(fb.user.email);
+	
+	html = 'Usuario info: ' + fb.user.id + ' correo es: ' + fb.user.email;
+	$("#usuario_info_prueba").html(html);
+	
 }
 // Funcion para publicar un mensaje en tu muro
 var publish = function () {
@@ -248,6 +252,7 @@ var publish = function () {
 				<form data-role="form" data-ajax="false" action="nueva_denuncia.php" method="post">
 					
 					<div id="loc_actual"></div>
+					<div id="usuario_info_prueba"></div>
 					
 					<input type="hidden" name="id_facebook" id="id_facebook">
 					<input type="hidden" name="email" id="email_facebook">
