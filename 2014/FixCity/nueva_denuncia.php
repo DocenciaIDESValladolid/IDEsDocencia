@@ -63,18 +63,18 @@
 	// Comprobamos que el usuario que introduce la denuncia se encuentra registrado en la aplicación
 	$query = "SELECT * FROM usuarios WHERE id_facebook LIKE '".$id_facebook."'";
 	$result = pg_exec($db, $query);
-	/*if($result){
+	if($result){
 		// El usuario se encuentra registrado.
 		// Dado que el email del usuario puede haber cambiado desde el momento en el que se 
 		// almacenó el usuario por primera vez, actualizamos el emai.
 		$update = "UPDATE usuarios SET email='$email' WHERE id_facebook LIKE '$id_facebook';";
 		pg_exec($db, $update);
-	}*/
-	//else{
+	}
+	else{
 		// Si el usuario no se encuentra registrado, insertamos una nueva fila en la BD.
 		$insert = "INSERT INTO usuarios (id_facebook, email) VALUES ('$id_facebook','$email');";
 		pg_exec($db, $insert);
-	//}
+	}
 
 	
 	/* ------------------------------------ *
@@ -91,7 +91,7 @@
 	else{
 		// Si el municipio no existe en la tabla, lo creamos.
 		$nuevo_municipio = "INSERT INTO municipios (codigoine, nombre, provincia) 
-								VALUES ($codigoine, \"$nombre\", (
+								VALUES ($codigoine, '$nombre', (
 									SELECT id_provincia FROM provincias WHERE nombre LIKE \"$provincia\"));";
 		pg_exec($db, $nuevo_municipio);
 	}
@@ -110,7 +110,7 @@
   
 	// Inserción de la denuncia en la tabla de denuncias
 	$query = "INSERT INTO denuncias (texto, the_geom, fecha) VALUES 
-            ('".$texto."', ST_Transform(ST_SetSRID(ST_Point(".$longitud.", ".$latitud."),900913),4326),\"".date("Y-m-d")."\") RETURNING foo_id";
+            ('".$texto."', ST_Transform(ST_SetSRID(ST_Point(".$longitud.", ".$latitud."),900913),4326),'".date("Y-m-d")."') RETURNING foo_id";
 	$result = pg_exec($db, $query);
 
     if(pg_affected_rows($result)<1){
@@ -124,18 +124,18 @@
 	}
 	
 	// Inserción de la denuncia en la tabla de denunciantes.
-	$denunciante = "SELECT _id FROM usuarios WHERE id_facebook LIKE \"$id_facebook\";";
-	$insert = "INSERT INTO denunciantes (id_denuncia, id_denunciante, fecha) VALUES ($id_denuncia,$denunciante, \"".date("Y-m-d")."\");";
+	$denunciante = "SELECT _id FROM usuarios WHERE id_facebook LIKE '$id_facebook';";
+	$insert = "INSERT INTO denunciantes (id_denuncia, id_denunciante, fecha) VALUES ($id_denuncia,$denunciante, '".date("Y-m-d")."');";
 	$result = pg_exec($db, $insert);
 	
 	// Inserción en estado_usuario
 	$estado_usuario = "INSERT INTO estado_usuario (id_denuncia, id_usuario, fecha, estado)
-		VALUES ($id_denuncia, $denunciante, \"".date("Y-m-d")."\", 0);";
+		VALUES ($id_denuncia, $denunciante, '".date("Y-m-d")."', 0);";
 	$result = pg_exec($db, $estado_usuario);
 	
 	// Inserción en estado_ayto
 	$estado_ayto = "INSERT INTO estado_ayto (id_denuncia, id_ayto, fecha, estado)
-		VALUES ($id_denuncia, $codigoine, \"".date("Y-m-d")."\", 0);";
+		VALUES ($id_denuncia, $codigoine, '".date("Y-m-d")."', 0);";
 	$result = pg_exec($db, $estado_ayto);
 	
 	
