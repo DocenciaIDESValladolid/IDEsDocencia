@@ -407,8 +407,12 @@ var init = function (onSelectFeatureFunction) {
 		var markers = map.getLayer('Markers');
 		//var feature = markers.features;
 		var point = markers.features[0].geometry.bounds.getCenterLonLat();
+		var pointProj = new OpenLayers.LonLat(point.lon,point.lat);
+		pointProj.transform(map.getProjectionObject(), gg);
+		var latlonString = formatDegrees(pointProj.lat, pointProj.lon);
+		
 		html = 'Está a punto de introducir una denuncia en: ' + muni_name + ', provincia de ' + 
-			prov_name + '.<br>La localización exacta del problema es: ' + point.lon + ', ' + point.lat + '. <br>' + 
+			prov_name + '.<br>La localización exacta del problema es: ' + latlonString + '. <br>' + 
 			'<input type="hidden" name="longitud" value="' + point.lon + '">' + 
 			'<input type="hidden" name="latitud" value="' + point.lat + '">';
 		$("#loc_actual").html(html);
