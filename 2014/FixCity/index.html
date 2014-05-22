@@ -52,6 +52,9 @@ function updateFacebookLoginInfo(fb)
 	$("#search_button").show();
 	$("#mappage").trigger( "updatelayout" );
 	toast(fb_user_label);
+	
+	$("#id_facebook").val(fb.user.id);
+	$("#email_facebook").val(fb.user.email);
 }
 // Funcion para publicar un mensaje en tu muro
 var publish = function () {
@@ -243,7 +246,11 @@ var publish = function () {
 			<div data-role="content">			      
 				<!-- Formulario para la introducción de una denuncia -->
 				<form data-role="form" data-ajax="false" action="nueva_denuncia.php" method="post">
+					
 					<div id="loc_actual"></div>
+					
+					<input type="hidden" name="id_facebook" id="id_facebook">
+					<input type="hidden" name="email" id="email_facebook">
 					
 					<p>Escriba aquí la descripción de su denuncia</p>
 					<textarea name="texto" rows="10" cols="80"></textarea>	
@@ -253,7 +260,7 @@ var publish = function () {
 					<input type="file" id="file2" name="file2">
 					<br>
 					<input type="file" id="file3" name="file3">
-					<br>			
+					<br>	
 					<input type="submit" value="Enviar">
 					<input type="reset" value="Borrar">
 					<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
