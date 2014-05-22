@@ -414,7 +414,10 @@ var init = function (onSelectFeatureFunction) {
 		html = 'Está a punto de introducir una denuncia en: ' + muni_name + ', provincia de ' + 
 			prov_name + '.<br>La localización exacta del problema es: ' + latlonString + '. <br>' + 
 			'<input type="hidden" name="longitud" value="' + point.lon + '">' + 
-			'<input type="hidden" name="latitud" value="' + point.lat + '">';
+			'<input type="hidden" name="latitud" value="' + point.lat + '">'+
+			'<input type="hidden" name="codigoine" value="' + muni_code + '">'+
+			'<input type="hidden" name="municipio" value="' + muni_name + '">'+
+			'<input type="hidden" name="provincia" value="' + prov_name + '">'+
 		$("#loc_actual").html(html);
 		$("#infopanel").trigger( "updatelayout" );
 	}
