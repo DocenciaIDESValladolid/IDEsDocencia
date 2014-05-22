@@ -63,6 +63,10 @@
 	// Comprobamos que el usuario que introduce la denuncia se encuentra registrado en la aplicación
 	$query = "SELECT * FROM usuarios WHERE id_facebook LIKE '".$id_facebook."'";
 	$result = pg_exec($db, $query);
+	while($row = pg_fetch_array($result)) {
+	  var_dump($row);
+	  echo "<br> EY";
+	}
 	if($result){
 		// El usuario se encuentra registrado.
 		// Dado que el email del usuario puede haber cambiado desde el momento en el que se 
