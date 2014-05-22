@@ -16,6 +16,7 @@
 	@ $municipio = $_POST['municipio'];
 	@ $provincia = $_POST['provincia'];
 	//@ $email_ayto = $_POST['email_ayto'];
+	$email_ayto = "josuesbla@gmail.com";
 	@ $id_facebook = $_POST['id_facebook'];	// Gestión de usuarios
 	@ $email = $_POST['email'];
 	
