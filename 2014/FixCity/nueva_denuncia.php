@@ -20,7 +20,7 @@
 	@ $email = $_POST['email'];
 	
 	// Comprobamos que las variables que hemos pasado no están vacías.
-	if (!$latitud || !$longitud || !$texto || 	@ $codigoine || @ $municipio || $provincia || $id_facebook || $email )//|| $email_ayto)
+	if (!$latitud || !$longitud || !$texto || $codigoine || $municipio || $provincia || $id_facebook || $email )//|| $email_ayto)
 	{
 		echo 'No ha introducido toda la información requerida para el cliente.<br/>'
 			  .'Por favor, vuelva a la página anterior e inténtelo de nuevo.';
