@@ -5,12 +5,16 @@ var selectedFeature = null;
 
 function autolocate()
 {
+$.mobile.loading( "show", {
+					text: "Localizando",
+					textVisible: true});
  var control = map.getControlsBy("id", "locate-control")[0];
     if (control.active) {
         control.getCurrentLocation();
     } else {
         control.activate();
     }
+$.mobile.loading("hide");
 }
 // fix height of content
 function fixContentHeight() {
@@ -140,7 +144,7 @@ function initLayerList() {
         .appendTo('#layerslist');
     var overlayLayers = map.getLayersBy("isBaseLayer", false);
     $.each(overlayLayers, function() {
-		if(this.name!='vector' && this.name.indexOf("OpenLayers_Control_SelectFeature")==-1)
+		if(this.name!='vector' && this.name!='Markers' && this.name.indexOf("OpenLayers_Control_SelectFeature")==-1)
         addLayerToList(this);
     });
     $('#layerslist').listview('refresh');
