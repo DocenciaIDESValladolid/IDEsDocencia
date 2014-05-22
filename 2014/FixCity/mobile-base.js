@@ -417,7 +417,7 @@ var init = function (onSelectFeatureFunction) {
 			'<input type="hidden" name="latitud" value="' + point.lat + '">'+
 			'<input type="hidden" name="codigoine" value="' + muni_code + '">'+
 			'<input type="hidden" name="municipio" value="' + muni_name + '">'+
-			'<input type="hidden" name="provincia" value="' + prov_name + '">'+
+			'<input type="hidden" name="provincia" value="' + prov_name + '">';
 		$("#loc_actual").html(html);
 		$("#infopanel").trigger( "updatelayout" );
 	}
