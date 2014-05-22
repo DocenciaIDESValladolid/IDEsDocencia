@@ -24,7 +24,16 @@
 	{
 		echo 'No ha introducido toda la información requerida para el cliente.<br/>'
 			  .'Por favor, vuelva a la página anterior e inténtelo de nuevo.';
-		echo "<br><br>";		
+		echo "<br><br>";
+		echo '<h1>'.$latitud.'</h1><br>';
+		echo '<h1>'.$longitud.'</h1><br>';
+		echo '<h1>'.$texto.'</h1><br>';
+		echo '<h1>'.$codigoine.'</h1><br>';
+		echo '<h1>'.$municipio.'</h1><br>';
+		echo '<h1>'.$provincia.'</h1><br>';
+		echo '<h1>'.$id_facebook.'</h1><br>';
+		echo '<h1>'.$email.'</h1><br>';
+		echo "<br><br>";
 		echo "<input type='button' value='Back' onClick='history.go(-1);'>";
 		exit;
 	}
