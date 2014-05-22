@@ -15,12 +15,12 @@
 	@ $codigoine = $_POST['codigoine'];
 	@ $municipio = $_POST['municipio'];
 	@ $provincia = $_POST['provincia'];
-	@ $email_ayto = $_POST['email_ayto'];
+	//@ $email_ayto = $_POST['email_ayto'];
 	@ $id_facebook = $_POST['id_facebook'];	// Gestión de usuarios
 	@ $email = $_POST['email'];
 	
 	// Comprobamos que las variables que hemos pasado no están vacías.
-	if (!$latitud || !$longitud || !$texto || 	@ $codigoine || @ $municipio || $provincia || $email_ayto || $id_facebook || $email)
+	if (!$latitud || !$longitud || !$texto || 	@ $codigoine || @ $municipio || $provincia || $id_facebook || $email )//|| $email_ayto)
 	{
 		echo 'No ha introducido toda la información requerida para el cliente.<br/>'
 			  .'Por favor, vuelva a la página anterior e inténtelo de nuevo.';
@@ -76,30 +76,22 @@
 	$existe_municipio = pg_exec($db, $query_municipios);
 	
 	if($existe_municipio){
-		// Si el municipio ya existe en la tabla, comprobamos el correo
-		$query_email_municipios = "SELECT email WHERE id_municipio=$existe_municipio";
-		$coincide_email = pg_exec($db, $query_email_municipios);
-		if($coincide_mail = $email_ayto){
-			// Si el email introducido es el que tenemos almacenado, enviamos un correo electrónico al ayuntamiento.
-			// -- ENVIAR -- //
-		}
-		else {
-			// Almacenamos el nuevo correo electrónico en la base de datos.
-			$insert_new_email = "INSERT INTO email (id_municipio, email) VALUES ($codigoine, $email_ayto);"
-			// Enviamos un correo electronico a todas las direcciones almacenadas para este municipio.
-			// -- ENVIAR -- //
-		}
+		// Proseguimos ...
 	}
 	else{
 		// Si el municipio no existe en la tabla, lo creamos.
 		$nuevo_municipio = "INSERT INTO municipios (codigoine, nombre, provincia) 
 								VALUES ($codigoine, \"$nombre\", (
 									SELECT id_provincia FROM provincias WHERE nombre LIKE \"$provincia\"));";
-		
+		pg_exec($db, $nuevo_municipio);
 	}
 	
-	
-	
+	// Nota JOSU:
+	// -- EMAILY CYRUS --
+	// Habrá que gestionar aquí lo de los emails.
+	// IDEA:
+	// Crear aquí un formulario pasando el codigoine, y en una nueva página, dar al usuario a elegir
+	// entre seleccionar un email (si hay disponibles) o introducir uno nuevo.
 	
 	
 	/* ------------------------------------ *
