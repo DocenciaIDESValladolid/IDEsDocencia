@@ -120,12 +120,12 @@
 	
 	// Inserción en estado_usuario
 	$estado_usuario = "INSERT INTO estado_usuario (id_denuncia, id_usuario, fecha, estado)
-		VALUES ($id_denuncia, $denunciante, \"".date("Y-m-d")."\", 0);"
+		VALUES ($id_denuncia, $denunciante, \"".date("Y-m-d")."\", 0);";
 	$result = pg_exec($db, $estado_usuario);
 	
 	// Inserción en estado_ayto
 	$estado_ayto = "INSERT INTO estado_ayto (id_denuncia, id_ayto, fecha, estado)
-		VALUES ($id_denuncia, $codigoine, \"".date("Y-m-d")."\", 0);"
+		VALUES ($id_denuncia, $codigoine, \"".date("Y-m-d")."\", 0);";
 	$result = pg_exec($db, $estado_ayto);
 	
 	
