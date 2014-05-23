@@ -21,10 +21,10 @@
 	@ $email = $_POST['email'];
 	
 	// Comprobamos que las variables que hemos pasado no están vacías.
-	if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio || !$provincia || !$id_facebook || !$email )//|| $email_ayto)
-	{
-		echo 'No ha introducido toda la información requerida para el cliente.<br/>'
-			  .'Por favor, vuelva a la página anterior e inténtelo de nuevo.';
+	//if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio || !$provincia || !$id_facebook || !$email )//|| $email_ayto)
+	//{
+	//	echo 'No ha introducido toda la información requerida para el cliente.<br/>'
+	//		  .'Por favor, vuelva a la página anterior e inténtelo de nuevo.';
 		echo "<br><br>";
 		echo '<h1>'.$latitud.'</h1><br>';
 		echo '<h1>'.$longitud.'</h1><br>';
@@ -36,8 +36,8 @@
 		echo '<h1>'.$email.'</h1><br>';
 		echo "<br><br>";
 		echo "<input type='button' value='Back' onClick='history.go(-1);'>";
-		exit;
-	}
+	//	exit;
+	//}
 	
 	// Mostramos por pantalla los datos que hemos pasado.
 	echo "Acaba de añadir una nueva denuncia en $municipio, provincia de $provincia.<br>";
