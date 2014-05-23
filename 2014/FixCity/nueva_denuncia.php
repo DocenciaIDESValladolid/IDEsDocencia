@@ -109,8 +109,8 @@
 	 * ------------------------------------ */
   
 	// Inserción de la denuncia en la tabla de denuncias
-	$query = "INSERT INTO denuncias (texto, the_geom, fecha) VALUES 
-            ('".$texto."', ST_Transform(ST_SetSRID(ST_Point(".$longitud.", ".$latitud."),900913),4326),'".date("Y-m-d")."') RETURNING id_denuncia";
+	$query = "INSERT INTO denuncias (texto, the_geom, fecha, codigoine) VALUES 
+            ('".$texto."', ST_Transform(ST_SetSRID(ST_Point(".$longitud.", ".$latitud."),900913),4326),'".date("Y-m-d")."' , $codigoine) RETURNING id_denuncia";
 	$result = pg_exec($db, $query);
 
     if(pg_affected_rows($result)<1){
