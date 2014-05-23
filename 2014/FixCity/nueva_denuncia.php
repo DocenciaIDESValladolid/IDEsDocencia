@@ -67,8 +67,8 @@
 		// El usuario se encuentra registrado.
 		// Dado que el email del usuario puede haber cambiado desde el momento en el que se 
 		// almacenó el usuario por primera vez, actualizamos el emai.
-		//$update = "UPDATE usuarios SET email='$email' WHERE id_facebook LIKE '$id_facebook';";
-		//pg_exec($db, $update);
+		$update = "UPDATE usuarios SET email='$email' WHERE id_facebook LIKE '$id_facebook';";
+		pg_exec($db, $update);
 	}
 	else{
 		// Si el usuario no se encuentra registrado, insertamos una nueva fila en la BD.
