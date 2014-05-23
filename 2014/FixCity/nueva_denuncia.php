@@ -114,8 +114,9 @@
 	$result = pg_exec($db, $query);
 
     if(pg_affected_rows($result)<1){
-		echo 'Error al introducir la denuncia en la base de datos.';
-		echo "<input type='button' value='Back' onClick='history.go(-1);'>";
+		/*echo 'Error al introducir la denuncia en la base de datos.';
+		echo "<input type='button' value='Back' onClick='history.go(-1);'>";*/
+		<a href="#misdenuncias"/a>
 	}
 	else{
 		// Obtenemos el ID que se ha generado de la denuncia introducida, para usarlo en las posteriores sentencias.
