@@ -142,6 +142,45 @@
 	$result = pg_exec($db, $estado_ayto);
 	
 	
+	/* ------------------------------------ *
+	 * 			GESTIÓN DE IMÁGENES 		*
+	 * ------------------------------------ */
+	
+	echo "<br><br>";
+	echo "<br><br>";
+	echo "<br><br>";
+	echo "<br><br>";
+	echo "<br><br>";
+	echo "<br><br>";
+	echo "<br><br>";
+	
+	$uploadedfileload="true";
+	$uploadedfile_size = $_FILES['file1'][size];
+	echo $_FILES[file1][name];
+	if ($_FILES[file1][size]>2000000){
+		$msg=$msg."El archivo es mayor que 2000KB, debes reduzcirlo antes de subirlo<BR>";
+		$uploadedfileload="false";
+	}
+
+	if (!($_FILES[file1][type] == "image/pjpeg" OR $_FILES[file1][type] == "image/gif")){
+		$msg=$msg." Tu archivo tiene que ser JPG o GIF. Otros archivos no son permitidos<BR>";
+		$uploadedfileload="false";
+	}
+
+	$file_name=$_FILES[file1][name];
+	$add="uploads/$file_name";
+	
+	if($uploadedfileload=="true"){
+		if(move_uploaded_file ($_FILES[file1][tmp_name], $add)){
+			echo "Ha sido subido satisfactoriamente";
+		}
+		else{
+			echo "Error al subir el archivo";
+		}
+	}
+	else{echo $msg;}
+
+
 	/*
 	$query = "SELECT * FROM denuncias;";
 	$result = pg_exec($db, $query);
