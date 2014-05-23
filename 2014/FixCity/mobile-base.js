@@ -1,7 +1,6 @@
 // API key for http://openlayers.org. Please get your own at
 // http://bingmapsportal.com/ and use that instead.
 var apiKey = "AqTGBsziZHIJYYxgivLBf0hVdrAk9mWO5cQcb8Yux8sW5M8c8opEC2lZqKR1ZZXf";
-
 // initialize map when page ready
 var map;
 var gg = new OpenLayers.Projection("EPSG:4326");
@@ -9,6 +8,8 @@ var gg = new OpenLayers.Projection("EPSG:4326");
 var sm = new OpenLayers.Projection("EPSG:3857");
 var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
 var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
+var urlWmsUA = 'http://www.ign.es/wms-inspire/unidades-administrativas';
+var administrativeUnitsFeatureType= 'unidades-administrativas:AU.AdministrativeUnit';
 var prov_name;
 var muni_name;
 var muni_code;
@@ -37,7 +38,6 @@ var init = function (onSelectFeatureFunction) {
 						'default': styleMarkDefault,
 						'select':styleMarkSelect
 						});
-						
 	var markers = new OpenLayers.Layer.Vector( "Markers", { styleMap: styleMarkDefault } );
 	markers.id="Markers";
 /********************
@@ -85,30 +85,7 @@ var init = function (onSelectFeatureFunction) {
         }
     });
 	
-//CAPA DE DENUNCIAS
-	var wfs = new OpenLayers.Layer.Vector("Denuncias", {
-        //strategies: [new OpenLayers.Strategy.Fixed()],
-		strategies: [new OpenLayers.Strategy.BBOX({resFactor: 1})],
-        protocol: new OpenLayers.Protocol.WFS({
-            url: "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
-            featureType: "denuncias",
-            featureNS: "http://www.idelab.uva.es/#IDES",
-			srsName: "EPSG:900913",
-			version: "1.1.0"
-        }),
-		styleMap: new OpenLayers.StyleMap({
-            externalGraphic: "images/cono.png",
-            graphicOpacity: 1.0,
-            graphicWidth: 48,
-            graphicHeight: 48,
-            graphicYOffset: -48
-		})
-    });
-	var wms_concentracion = new OpenLayers.Layer.WMS("Concentración de denuncias",
-        "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
-        {layers: 'IDEs:denuncias_antig',transparent:true, styles:'heatmap'},
-        {isBaseLayer: false, singleTile:true}
-    );
+	// Capas base
 	var wms_ignbasetodo = new OpenLayers.Layer.WMS("IGN Base",
         "http://www.ign.es/wms-inspire/ign-base",
         {layers: 'IGNBaseTodo',transparent:true},
@@ -141,7 +118,7 @@ var init = function (onSelectFeatureFunction) {
 		size: new OpenLayers.Size(400,600),//para evitar null al inicializar
         controls: [
             new OpenLayers.Control.Attribution(),
-			new OpenLayers.Control.Navigation(),
+			new OpenLayers.Control.Navigation({enableKinetic: true}),
             geolocate,
         ],
         layers: [
@@ -163,9 +140,24 @@ var init = function (onSelectFeatureFunction) {
         zoom: 1
     });
 	map.updateSize();
-	map.addLayers([wms_concentracion,vector,wfs,markers]);
-	
-	 var highlightCtrl = new OpenLayers.Control.SelectFeature([wfs,markers], {
+	if (typeof addThematicUALayers == 'function')
+	{
+	var uaLayer= addThematicUALayers();
+	map.addLayer(uaLayer);
+	}
+	var wms_concentracion=createHeatmapLayer();
+	map.addLayer(wms_concentracion);
+	// CAPA DE POSICIÓN ACTUAL
+	map.addLayer(vector);
+	//CAPA DE DENUNCIAS
+	var wfs=createWFSLayer();
+	map.addLayer(wfs);
+	// CAPA DE MARCAS
+	map.addLayer(markers);
+	/********
+	* Controles 
+	**********/
+	var highlightCtrl = new OpenLayers.Control.SelectFeature([wfs,markers], {
                 hover: true,
                 highlightOnly: true,
                 renderIntent: "temporary",
@@ -245,9 +237,6 @@ var init = function (onSelectFeatureFunction) {
 		queryUA(e,successGeolocationUA);
     });
 
-	/*FUNCIONES USADAS PARA OBTENER MUNICIPIO Y PROVINCIA A PARTIR DEL NUTSCODE*/
-	//geolocate.events.register("locationupdated", this, eventLocationChanged);
-	
 	};// End of init
 
 
@@ -268,7 +257,6 @@ var init = function (onSelectFeatureFunction) {
 		
 	}
 	
-	
 	function addReport(evt)
 	{
 		$.mobile.changePage("#nuevadenuncia");
@@ -278,24 +266,6 @@ var init = function (onSelectFeatureFunction) {
 	*/
 	function onMarkFeatureSelect(evt) {
 		$("#infopanel").panel("open");
-		/*feature = evt.feature;
-	
-		if (typeof feature != 'undefined')
-		{
-			var lonlat = feature.geometry.getBounds().getCenterLonLat();
-			var popup = new OpenLayers.Popup.FramedCloud("Popup", 
-									lonlat, null,
-									'<a href="#nuevadenuncia_loc_actual" data-icon="nueva" data-role="button">Nueva Denuncia</a>', null,
-									true, onPopupClose // <-- true if we want a close (X) button, false otherwise
-			);
-			feature.popup = popup;
-			popup.feature = feature;
-			map.addPopup(popup, true);
-		}
-		else
-		{
-		OpenLayers.Console.log(evt.type, evt.feature.id);
-		}*/
 	}
 	
 	function formatDegrees(lonDecimal, latDecimal){
@@ -331,6 +301,22 @@ var init = function (onSelectFeatureFunction) {
 	*/
 	function onWFSFeatureSelect(evt) {
 		feature = evt.feature;
+		//Si es un cluster ignorar
+		if (typeof feature.cluster != 'undefined')
+		{
+		if (feature.attributes.count==1)
+			feature=feature.cluster[0];
+			else
+			{
+			var bounds = new OpenLayers.Bounds();
+			for (i=0;i<feature.attributes.count;i++)
+			{
+				bounds.extend(feature.cluster[i].geometry.getBounds());
+			}
+			map.zoomToExtent(bounds);
+			return;
+			}
+		}
 		$("#reportDescription").html("A las "+feature.attributes.fecha+" he informado del problema: \""+feature.attributes.texto+"\"");
 		var point=feature.geometry.getBounds().getCenterLonLat();
 		
@@ -424,7 +410,7 @@ var init = function (onSelectFeatureFunction) {
 	
 	
 	function failureUA(request){
-		alert('FALLO');	
+		alert('Fallo de conexión con servicio INSPIRE Administrative Units');	
 	}
 	function moveMark(point)
 	{
@@ -446,7 +432,7 @@ var init = function (onSelectFeatureFunction) {
 						+' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n'
 						+' xsi:schemaLocation="http://www.opengis.net/wfs\n'
 						+'					http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">\n'
-						+' <wfs:Query typeName="unidades-administrativas:AU.AdministrativeUnit" >\n'
+						+' <wfs:Query typeName="'+administrativeUnitsFeatureType+'" >\n'
 						+' <PropertyName>nationalcode</PropertyName>\n'
 						+' 	<PropertyName>nameunit</PropertyName>\n'
 						+' 	<Filter>\n'
@@ -482,4 +468,4 @@ var init = function (onSelectFeatureFunction) {
 			error: failureCallBack,
 			});
 	}
-
+	
