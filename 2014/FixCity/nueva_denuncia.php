@@ -137,8 +137,8 @@
 	$result = pg_exec($db, $estado_usuario);
 	
 	// Inserción en estado_ayto
-	$estado_ayto = "INSERT INTO estado_ayto (id_denuncia, id_ayto, fecha, estado)
-		VALUES ($id_denuncia, 2, '".date("Y-m-d")."', 0);";
+	$estado_ayto = "INSERT INTO estado_ayto (id_denuncia, fecha, estado, id_ayto)
+		VALUES ($id_denuncia, '".date("Y-m-d")."', 0, '$codigoine');";
 	$result = pg_exec($db, $estado_ayto);
 	
 	
