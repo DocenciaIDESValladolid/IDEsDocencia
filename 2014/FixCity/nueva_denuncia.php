@@ -156,6 +156,10 @@
 	
 	if(isset($_POST['submit'])){
 		$name = $_FILES["file1"]["name"];
+		$tmp_name = $_FILES["file1"]["tmp_name"];
+		
+		echo $name;
+		echo $tmp_name;
 		
 		if (isset ($name)) {
 			if (!empty($name)) {
