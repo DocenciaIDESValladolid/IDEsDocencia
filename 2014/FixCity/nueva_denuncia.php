@@ -161,27 +161,22 @@
 		echo $name;
 		echo $tmp_name;
 		
-		if (isset ($name)) {
-			if (!empty($name)) {
-				$location = 'uploads/';
-				if  (move_uploaded_file($tmp_name, $location.$name)){
-					echo 'Uploaded';    
-				}
-
-			} 
-			else {
-				echo 'please choose a file';
+		if (!empty($name)) {
+			$location = 'uploads/';
+			if  (move_uploaded_file($tmp_name, $location.$name.$id_denuncia)){
+				echo 'Uploaded';    
 			}
-		}
+
+		} 
 		
 		if ($_FILES["file1"]["error"] > 0) {
 			echo "Error: " . $_FILES["file1"]["error"] . "<br>";
 		} 
 		else {
-			echo "Upload: " . $_FILES["file1"]["name"] . "<br>";
-			echo "Type: " . $_FILES["file1"]["type"] . "<br>";
-			echo "Size: " . ($_FILES["file1"]["size"] / 1024) . " kB<br>";
-			echo "Stored in: " . $_FILES["file1"]["tmp_name"];
+			//echo "Upload: " . $_FILES["file1"]["name"] . "<br>";
+			//echo "Type: " . $_FILES["file1"]["type"] . "<br>";
+			//echo "Size: " . ($_FILES["file1"]["size"] / 1024) . " kB<br>";
+			//echo "Stored in: " . $_FILES["file1"]["tmp_name"];
 		}
 	}
 	
