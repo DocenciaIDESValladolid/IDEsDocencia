@@ -155,7 +155,7 @@
 	echo "<br><br>";
 	
 	if(isset($_POST['submit'])){
-		$name = $_FILES["file"]["name"];
+		$name = $_FILES["file1"]["name"];
 		
 		if (isset ($name)) {
 			if (!empty($name)) {
@@ -170,14 +170,14 @@
 			}
 		}
 		
-		if ($_FILES["file"]["error"] > 0) {
-			echo "Error: " . $_FILES["file"]["error"] . "<br>";
+		if ($_FILES["file1"]["error"] > 0) {
+			echo "Error: " . $_FILES["file1"]["error"] . "<br>";
 		} 
 		else {
-			echo "Upload: " . $_FILES["file"]["name"] . "<br>";
-			echo "Type: " . $_FILES["file"]["type"] . "<br>";
-			echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
-			echo "Stored in: " . $_FILES["file"]["tmp_name"];
+			echo "Upload: " . $_FILES["file1"]["name"] . "<br>";
+			echo "Type: " . $_FILES["file1"]["type"] . "<br>";
+			echo "Size: " . ($_FILES["file1"]["size"] / 1024) . " kB<br>";
+			echo "Stored in: " . $_FILES["file1"]["tmp_name"];
 		}
 	}
 	
