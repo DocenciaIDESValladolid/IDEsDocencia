@@ -222,11 +222,11 @@
 	}
 	else{
 		// Si el municipio no existe en la tabla, lo creamos.
-		$nuevo_municipio = "INSERT INTO municipios (codigoine, nombre, provincia) 
+		/*$nuevo_municipio = "INSERT INTO municipios (codigoine, nombre, provincia) 
 								VALUES ($codigoine, '$nombre', (
 									SELECT id_provincia FROM provincias WHERE nombre LIKE \"$provincia\"));";
 		pg_exec($db, $nuevo_municipio);
-	}
+	*/}
 	
 	
 	
