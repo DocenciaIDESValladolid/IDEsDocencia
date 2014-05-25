@@ -19,7 +19,7 @@
 		SUM(CASE WHEN estado=0 THEN 1 ELSE 0 END) AS Total
 		FROM estado_ayto GROUP BY id_ayto
 		ORDER BY Percentage DESC LIMIT 10;";
-	$result = pg_exec($db, $municipio_mas_resuelven);
+	$result = pg_exec($db, $municipios_mas_resuelven);
 
 	while($row = pg_fetch_array($result) ) {
 		echo "Codigoine: ".$row[0] . " Porcentaje de casos resueltos:" . 
