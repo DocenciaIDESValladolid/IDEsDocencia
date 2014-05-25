@@ -21,10 +21,10 @@
 	@ $email = $_POST['email'];
 	
 	// Comprobamos que las variables que hemos pasado no están vacías.
-	//if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio || !$provincia || !$id_facebook || !$email )//|| $email_ayto)
-	//{
-	//	echo 'No ha introducido toda la información requerida para el cliente.<br/>'
-	//		  .'Por favor, vuelva a la página anterior e inténtelo de nuevo.';
+	if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio || !$provincia || !$id_facebook || !$email )//|| $email_ayto)
+	{
+		echo 'No ha introducido toda la información requerida para el cliente.<br/>'
+			.'Por favor, vuelva a la página anterior e inténtelo de nuevo.';
 		echo "<br><br>";
 		echo '<h1>'.$latitud.'</h1><br>';
 		echo '<h1>'.$longitud.'</h1><br>';
@@ -36,8 +36,8 @@
 		echo '<h1>'.$email.'</h1><br>';
 		echo "<br><br>";
 		echo "<input type='button' value='Back' onClick='history.go(-1);'>";
-	//	exit;
-	//}
+		exit;
+	}
 	
 	// Mostramos por pantalla los datos que hemos pasado.
 	echo "Acaba de añadir una nueva denuncia en $municipio, provincia de $provincia.<br>";
@@ -75,33 +75,6 @@
 		$insert = "INSERT INTO usuarios (id_facebook, email) VALUES ('$id_facebook','$email');";
 		pg_exec($db, $insert);
 	}
-
-	
-	/* ------------------------------------ *
-	 *	    	GESTIÓN DE MUNICIPIOS		*
-	 * ------------------------------------ */
-	
-	// Comprobamos que el municipio se encuentra en la base de datos
-	$query_municipios = "SELECT codigoine FROM municipios WHERE codigoine=$codigoine";
-	$existe_municipio = pg_exec($db, $query_municipios);
-	
-	if($existe_municipio){
-		// Proseguimos ...
-	}
-	else{
-		// Si el municipio no existe en la tabla, lo creamos.
-		$nuevo_municipio = "INSERT INTO municipios (codigoine, nombre, provincia) 
-								VALUES ($codigoine, '$nombre', (
-									SELECT id_provincia FROM provincias WHERE nombre LIKE \"$provincia\"));";
-		pg_exec($db, $nuevo_municipio);
-	}
-	
-	// Nota JOSU:
-	// -- EMAILY CYRUS --
-	// Habrá que gestionar aquí lo de los emails.
-	// IDEA:
-	// Crear aquí un formulario pasando el codigoine, y en una nueva página, dar al usuario a elegir
-	// entre seleccionar un email (si hay disponibles) o introducir uno nuevo.
 	
 	
 	/* ------------------------------------ *
@@ -217,6 +190,33 @@
 	  var_dump($row);
 	  echo "<br>";
 	}*/
+	
+	
+	/* ------------------------------------ *
+	 *	    	GESTIÓN DE MUNICIPIOS		*
+	 * ------------------------------------ */
+	
+	// Comprobamos que el municipio se encuentra en la base de datos
+	$query_municipios = "SELECT codigoine FROM municipios WHERE codigoine=$codigoine";
+	$existe_municipio = pg_exec($db, $query_municipios);
+	
+	if($existe_municipio){
+		// Proseguimos ...
+	}
+	else{
+		// Si el municipio no existe en la tabla, lo creamos.
+		$nuevo_municipio = "INSERT INTO municipios (codigoine, nombre, provincia) 
+								VALUES ($codigoine, '$nombre', (
+									SELECT id_provincia FROM provincias WHERE nombre LIKE \"$provincia\"));";
+		pg_exec($db, $nuevo_municipio);
+	}
+	
+	// Nota JOSU:
+	// -- EMAILY CYRUS --
+	// Habrá que gestionar aquí lo de los emails.
+	// IDEA:
+	// Crear aquí un formulario pasando el codigoine, y en una nueva página, dar al usuario a elegir
+	// entre seleccionar un email (si hay disponibles) o introducir uno nuevo.
 ?>
 
 </body>
