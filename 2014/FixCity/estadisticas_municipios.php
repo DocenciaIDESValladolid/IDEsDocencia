@@ -48,7 +48,7 @@
 	echo'<br>Municipios que MAS conflictos reciben:<br>';
 	// Lectura de base de datos
 	$municipios_mas_reciben = 
-		"SELECT id_ayto, COUNT(estado) FROM estado_ayto
+		"SELECT id_ayto, COUNT(estado) AS Percentage FROM estado_ayto
 			WHERE estado = 0 GROUP BY id_ayto ORDER BY Percentage DESC LIMIT 10;";
 	$result = pg_exec($db, $municipios_mas_reciben);
 	// Mostramos por pantalla la consulta
