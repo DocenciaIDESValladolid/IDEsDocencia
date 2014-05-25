@@ -43,6 +43,19 @@
 				$row[1] . " Num Resueltos: " . $row[2] . " Num Total: " . $row[3];
 		echo "<br>";
 	}
+	
+	echo'<br>Municipios que MAS conflictos reciben:<br>';
+	// Lectura de base de datos
+	$municipios_mas_reciben = 
+		"";
+	$result = pg_exec($db, $municipios_mas_reciben);
+	// Mostramos por pantalla la consulta
+	while($row = pg_fetch_array($result) ) {
+		echo ;
+		echo "<br>";
+	}
+	
+	
 
 
 ?>
