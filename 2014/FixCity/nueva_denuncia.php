@@ -210,14 +210,14 @@
 		// Mostramos por pantalla la consulta
 		if($existe_email){
 			echo "Tenemos en nuestra base de datos los siguientes emails. ";
-			while($row = pg_fetch_array($existe_email) ) {
+			while($row = pg_fetch_array($existe_email)) {
 				echo $row[0];
 				echo "<br>";
 			}
 		}
 		else{
 			echo "En nuestra base de datos no tenemos ningun email almacenado para contactar con este ayuntamiento. 
-				Por favor, introduce uno si quieres que esta denuncia pueda ser solucionada con mayor agilidad."
+				Por favor, introduce uno si quieres que esta denuncia pueda ser solucionada con mayor agilidad.";
 		}
 	}
 	else{
