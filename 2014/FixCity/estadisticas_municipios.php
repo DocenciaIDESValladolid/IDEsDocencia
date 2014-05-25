@@ -44,14 +44,16 @@
 		echo "<br>";
 	}
 	
+	// Municipios con que mas conflictos reciben
 	echo'<br>Municipios que MAS conflictos reciben:<br>';
 	// Lectura de base de datos
 	$municipios_mas_reciben = 
-		"";
+		"SELECT id_ayto, COUNT(estado) FROM estado_ayto
+			WHERE estado = 0 GROUP BY id_ayto LIMIT 10;";
 	$result = pg_exec($db, $municipios_mas_reciben);
 	// Mostramos por pantalla la consulta
 	while($row = pg_fetch_array($result) ) {
-		echo ;
+		echo "Municipio: " . $row[0] . " Num Total: " . $row[1];
 		echo "<br>";
 	}
 	
