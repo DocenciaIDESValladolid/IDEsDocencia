@@ -49,7 +49,7 @@
 	// Lectura de base de datos
 	$municipios_mas_reciben = 
 		"SELECT id_ayto, COUNT(estado) FROM estado_ayto
-			WHERE estado = 0 GROUP BY id_ayto LIMIT 10;";
+			WHERE estado = 0 GROUP BY id_ayto ORDER BY Percentage DESC LIMIT 10;";
 	$result = pg_exec($db, $municipios_mas_reciben);
 	// Mostramos por pantalla la consulta
 	while($row = pg_fetch_array($result) ) {
