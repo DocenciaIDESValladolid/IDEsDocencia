@@ -118,7 +118,7 @@
 	/* ------------------------------------ *
 	 * 			GESTIÓN DE IMÁGENES 		*
 	 * ------------------------------------ */
-	
+	/*
 	echo "<br><br>";
 	echo "<br><br>";
 	echo "<br><br>";
@@ -152,7 +152,7 @@
 			//echo "Stored in: " . $_FILES["file1"]["tmp_name"];
 		}
 	}
-	
+	*/
 	
 	
 	/*
@@ -196,12 +196,29 @@
 	 *	    	GESTIÓN DE MUNICIPIOS		*
 	 * ------------------------------------ */
 	
+	echo "<br><br>";
+	echo "<br><br>";
+	
 	// Comprobamos que el municipio se encuentra en la base de datos
-	$query_municipios = "SELECT codigoine FROM municipios WHERE codigoine=$codigoine";
+	$query_municipios = "SELECT codigoine FROM municipios WHERE codigoine='$codigoine'";
 	$existe_municipio = pg_exec($db, $query_municipios);
 	
 	if($existe_municipio){
-		// Proseguimos ...
+		echo $municipio." se encuentra en nuestra base de datos de municipios. <br>"; 
+		$query_emails = "SELECT email FROM email WHERE id_municipio='$codigoine'";
+		$existe_email = pg_exec($db, $query_emails);
+		// Mostramos por pantalla la consulta
+		if($existe_email){
+			echo "Tenemos en nuestra base de datos los siguientes emails. "
+			while($row = pg_fetch_array($existe_email) ) {
+				echo $row[0];
+				echo "<br>";
+			}
+		}
+		else{
+			echo "En nuestra base de datos no tenemos ningun email almacenado para contactar con este ayuntamiento. 
+				Por favor, introduce uno si quieres que esta denuncia pueda ser solucionada con mayor agilidad."
+		}
 	}
 	else{
 		// Si el municipio no existe en la tabla, lo creamos.
@@ -210,6 +227,15 @@
 									SELECT id_provincia FROM provincias WHERE nombre LIKE \"$provincia\"));";
 		pg_exec($db, $nuevo_municipio);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	// Nota JOSU:
 	// -- EMAILY CYRUS --
