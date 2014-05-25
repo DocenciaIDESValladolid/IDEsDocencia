@@ -209,7 +209,7 @@
 		$existe_email = pg_exec($db, $query_emails);
 		// Mostramos por pantalla la consulta
 		if($existe_email){
-			echo "Tenemos en nuestra base de datos los siguientes emails. "
+			echo "Tenemos en nuestra base de datos los siguientes emails. ";
 			while($row = pg_fetch_array($existe_email) ) {
 				echo $row[0];
 				echo "<br>";
