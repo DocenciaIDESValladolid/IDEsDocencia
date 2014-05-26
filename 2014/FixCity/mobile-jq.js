@@ -128,9 +128,18 @@ $.mobile.loading( "show", {
 	$.getJSON('emails.php',{codigoine:muni_code},
 		function (data)
 		{
-		alert(data);
+		var select = $('#emailMunicipalitySelect');
+		for (email in data)
+		{
+			select.append($("<option></option>")
+				.attr("value",email)
+				.text(email)); 
 		}
 		);
+	$('#emailMunicipalitySelect').on('input propertychange', 
+		function(){
+			$('#emailMunicipality').value = $('#emailMunicipalitySelect').value;
+		});
 	}
 });
 

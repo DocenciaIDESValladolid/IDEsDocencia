@@ -148,17 +148,17 @@ var publish = function () {
 				</div>
 				<div data-role="footer" >
 					<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-geolocation ui-btn-icon-notext" onclick="autolocate();return false;">Locate</a>
-					<a href="#misdenuncias" id="misdenuncias_button" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Mis Denuncias</a>
+					<a href="misdenuncias.php" id="misdenuncias_button" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Mis Denuncias</a>
 					<a href="#searchpage" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-search">Search</a>
 					<a href="#layerspage" data-transition="fade" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-bullets">Capas</a>
-					<a href="#estadisticas" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Estadísticas</a>
+					<a href="estadisticas.php" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Estadísticas</a>
 					<a href="#" id="iniciosesionFacebook" class="ui-btn  ui-btn-icon-right ui-icon-fb ui-btn-icon-notext ui-btn-inline " onclick="login(); return false;">Login</a>
 
 					<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
 					
 					<script>
 					$("#misdenuncias_button").hide();
-					$("#nuevadenuncia_loc_actual_button").hide();
+				//	$("#nuevadenuncia_loc_actual_button").hide();
 				//	$("#search_button").hide();
 					</script>
 				</div>
@@ -251,19 +251,21 @@ var publish = function () {
 			</div>
 			<div data-role="content">			      
 				<!-- Formulario para la introducción de una denuncia -->
-				<form data-role="form" data-ajax="false" action="nueva_denuncia.php" method="post" enctype="multipart/form-data">
-					
+				<form id="newReportForm" data-role="form" data-ajax="false" action="nueva_denuncia.php" method="post" enctype="multipart/form-data">
 					<div id="loc_actual"></div>
 					<div id="email_ayto"></div>
 					
 					<div id="usuario_info_prueba"></div>
-					
 					<p>Escriba aquí la descripción de su denuncia</p>
 					<textarea name="texto" rows="10" cols="80"></textarea>	
 					<p>Seleccione hasta 3 imágenes que identifiquen la denuncia:</p>
-					<label for="file">Filename:</label>
-					<input type="hidden" name="MAX_FILE_SIZE" value="200000">
-					<input type="file" id="file" name="file">
+					<label for="emailMunicipality">Correo de contacto del municipio:</label>
+					<input type="email" name="emailMunicipality" id="emailMunicipality"></input>
+					<select name="emailMunicipalitySelect" id="emailMunicipality">
+					<option>uno</option>
+					<option>dos</option>
+					</select>
+
 					<input type="submit" value="Enviar" name="submit">
 					<input type="reset" value="Borrar">
 					<input type="hidden" name="id_facebook" id="id_facebook">
