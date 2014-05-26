@@ -164,7 +164,7 @@
 		{
 			?>
 			<form action="" method="post" enctype="multipart/form-data">
-				<input type="file" name="foto" id="foto" accept="image/*" /> 
+				<input type="file" name="file" id="file" accept="image/*" /> 
 				<input type="hidden" name="key" value="b0e52afb3ea0d34035cce1db10ddb40b"/> 
 				<input type="submit" name="submit" value="Subir" />
 			</form>
