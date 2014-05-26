@@ -204,12 +204,18 @@
 		}
 	}
 	else{
-		// Si el municipio no existe en la tabla, lo creamos.
-		/*$nuevo_municipio = "INSERT INTO municipios (codigoine, nombre, provincia) 
-								VALUES ($codigoine, '$nombre', (
-									SELECT id_provincia FROM provincias WHERE nombre LIKE \"$provincia\"));";
-		pg_exec($db, $nuevo_municipio);
-	*/}
+	
+		$nuevo_municipio = "INSERT INTO municipios VALUES ('$municipio', 
+							(SELECT id_provincia FROM provincias WHERE nombre = '$provincia') ,'$codigoine')";
+		echo "<br>Acabamos de añadir a nuestra base de datos el municipio ".$municipio.".";
+		echo "<br>Para cumplir con los objetivos de esta plataforma, por favor, introduzca un email de contacto para este municipio,
+				de cara a que la aplicación pueda contactar con los organismos pertinentes y poder solucionar este conflicto.
+				<br>Email:<br>
+				<>
+				<input type=\"email\" name=\"email\" onClick=\"\">";
+
+		
+	}
 	
 	
 	
