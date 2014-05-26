@@ -122,6 +122,16 @@ $.mobile.loading( "show", {
     // only listen to the first event triggered
  //   $('#searchpage').die('pageshow', arguments.callee);
 	}
+	else
+	if (pageId=='nuevadenuncia_loc_actual')
+	{
+	$.get('emails.php',{codigoine:muni_code},
+		function (data)
+		{
+		alert(data);
+		}
+		);
+	}
 });
 
 
