@@ -130,10 +130,11 @@ $.mobile.loading( "show", {
 		{
 		var select = $('#emailMunicipalitySelect');
 		for (email in data)
-		{
-			select.append($("<option></option>")
-				.attr("value",email)
-				.text(email)); 
+			{
+				select.append($("<option></option>")
+					.attr("value",email)
+					.text(email)); 
+			}
 		}
 		);
 	$('#emailMunicipalitySelect').on('input propertychange', 
