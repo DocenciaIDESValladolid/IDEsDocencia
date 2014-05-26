@@ -135,6 +135,8 @@ $.mobile.loading( "show", {
 					.attr("value",data[emailindex])
 					.text(data[emailindex])); 
 			}
+		select.selectmenu();
+        select.selectmenu('refresh', true);
 		}
 		);
 	$('#emailMunicipalitySelect').on('input propertychange', 
