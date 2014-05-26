@@ -141,77 +141,6 @@
 	 * 			GESTIÓN DE IMÁGENES 		*
 	 * ------------------------------------ */
 	/*
-	echo "<br><br>";
-	echo "<br><br>";
-	echo "<br><br>";
-	echo "<br><br>";
-	echo "<br><br>";
-	echo "<br><br>";
-	echo "<br><br>";
-	
-	if(isset($_POST['submit'])){
-		$name = $_FILES["file1"]["name"];
-		$tmp_name = $_FILES["file1"]["tmp_name"];
-		
-		echo $name;
-		echo $tmp_name;
-		
-		if (!empty($name)) {
-			$location = 'uploads/';
-			if  (move_uploaded_file($tmp_name, $location.$name.$id_denuncia)){
-				echo 'Uploaded';    
-			}
-
-		} 
-		
-		if ($_FILES["file1"]["error"] > 0) {
-			echo "Error: " . $_FILES["file1"]["error"] . "<br>";
-		} 
-		else {
-			//echo "Upload: " . $_FILES["file1"]["name"] . "<br>";
-			//echo "Type: " . $_FILES["file1"]["type"] . "<br>";
-			//echo "Size: " . ($_FILES["file1"]["size"] / 1024) . " kB<br>";
-			//echo "Stored in: " . $_FILES["file1"]["tmp_name"];
-		}
-	}
-	*/
-	
-	
-	/*
-	$uploadedfileload="true";
-	$uploadedfile_size = $_FILES['file1'][size];
-	echo $_FILES[file1][name];
-	if ($_FILES[file1][size]>2000000){
-		$msg=$msg."El archivo es mayor que 2000KB, debes reduzcirlo antes de subirlo<BR>";
-		$uploadedfileload="false";
-	}
-
-	if (!($_FILES[file1][type] == "image/pjpeg" OR $_FILES[file1][type] == "image/gif")){
-		$msg=$msg." Tu archivo tiene que ser JPG o GIF. Otros archivos no son permitidos<BR>";
-		$uploadedfileload="false";
-	}
-
-	$file_name=$_FILES[file1][name];
-	$add="uploads/$file_name";
-	
-	if($uploadedfileload=="true"){
-		if(move_uploaded_file ($_FILES[file1][tmp_name], $add)){
-			echo "Ha sido subido satisfactoriamente";
-		}
-		else{
-			echo "Error al subir el archivo";
-		}
-	}
-	else{echo $msg;}
-
-
-	/*
-	$query = "SELECT * FROM denuncias;";
-	$result = pg_exec($db, $query);
-	while($row = pg_fetch_array($result)) {
-	  var_dump($row);
-	  echo "<br>";
-	}*/
 	
 	
 	/* ------------------------------------ *
@@ -225,12 +154,12 @@
 	$query_municipios = "SELECT codigoine FROM municipios WHERE codigoine='$codigoine'";
 	$existe_municipio = pg_exec($db, $query_municipios);
 	
-	if($existe_municipio){
+	if(pg_numrows($existe_municipio)!=0){
 		echo $municipio." se encuentra en nuestra base de datos de municipios. <br>"; 
 		$query_emails = "SELECT email FROM email WHERE id_municipio='$codigoine'";
 		$existe_email = pg_exec($db, $query_emails);
 		// Mostramos por pantalla la consulta
-		if($existe_email){
+		if(pg_numrows($existe_email)!=0){
 			echo "Tenemos en nuestra base de datos los siguientes emails. ";
 			while($row = pg_fetch_array($existe_email)) {
 				echo $row[0];
