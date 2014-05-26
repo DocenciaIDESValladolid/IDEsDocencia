@@ -132,19 +132,19 @@ $.mobile.loading( "show", {
 		
 		$.getJSON('emails.php',{codigoine:muni_code},
 			function (data){
-				var select = $('#emailMunicipalitySelect');
+				//var select = $('#emailMunicipalitySelect');
 				for (emailindex in data)
 					{
 						html = html + '<option>' + data[emailindex] + '</option>';
 					}
-				select.selectmenu();
-				select.selectmenu('refresh', true);
+				
 			}
 		);
 		
 		html = html + '</select>';
 		
 		$('#email_ayto').html(html);
+		
 	}
 });
 
