@@ -11,7 +11,7 @@
 	@ $codigoine = $_GET['codigoine'];
 	
 	$query = "SELECT email FROM email WHERE id_municipio = '$codigoine'";
-	$result = pg_exec($db, $update);
+	$result = pg_exec($db, $query);
 	
 	if(pg_numrows($result)<1){
 	
