@@ -57,7 +57,12 @@
 	}
 	
 	// Mostramos por pantalla los datos que hemos pasado.
-	echo "Acaba de añadir una nueva denuncia en $municipio, provincia de $provincia.<br>";
+	echo"<div data-role=\"page\" id=\"#\" data-theme="b">
+			<div data-role=\"header\"><h1>Acaba de añadir una nueva denuncia en $municipio, provincia de $provincia</h1></div>
+			<div data-role=\"content\" >
+            </div></div>"
+			
+	//echo "Acaba de añadir una nueva denuncia en $municipio, provincia de $provincia.<br>";
 	echo 'Localización geográfica: '.$latitud.' LAT y '.$longitud.'LON<br>';
 	echo '<h1>'.$texto.'</h1><br>';
 	echo "Recibirá en su correo $email los distintos detalles sobre posibles modificaciones en su denuncia.";
