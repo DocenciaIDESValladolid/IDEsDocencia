@@ -217,21 +217,6 @@
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	// Nota JOSU:
-	// -- EMAILY CYRUS --
-	// Habrá que gestionar aquí lo de los emails.
-	// IDEA:
-	// Crear aquí un formulario pasando el codigoine, y en una nueva página, dar al usuario a elegir
-	// entre seleccionar un email (si hay disponibles) o introducir uno nuevo.
 ?>
 
 </body>

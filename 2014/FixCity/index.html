@@ -112,7 +112,6 @@ var publish = function () {
 	<p>En cualquier momento pulse en la chincheta <img src="images/marker-icon-fixit.png" height="32"> para comenzar el informe de la avería o irregularidad que ha observado.</p>
 
 	<a href="#nuevadenuncia_loc_actual" id="nuevadenuncia_loc_actual_button" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui_mini" >Añadir denuncia</a>
-
 	</div>
 	<!----
 	Panel de información de la denuncia seleccionada
@@ -255,7 +254,10 @@ var publish = function () {
 				<form data-role="form" data-ajax="false" action="nueva_denuncia.php" method="post" enctype="multipart/form-data">
 					
 					<div id="loc_actual"></div>
+					<div id="email_ayto"></div>
+					
 					<div id="usuario_info_prueba"></div>
+					
 					
 					<p>Escriba aquí la descripción de su denuncia</p>
 					<textarea name="texto" rows="10" cols="80"></textarea>	

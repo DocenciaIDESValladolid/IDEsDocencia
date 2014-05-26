@@ -239,23 +239,6 @@ var init = function (onSelectFeatureFunction) {
 
 	};// End of init
 
-
-	function addDenunciaOnClick(municipio, provincia, longitud, latitud)
-	{
-		var pregunta = "Estás en "+ municipio +", provincia de "+ provincia + 
-					   ". La localización escogida es: " + latitud + " N, " + longitud + " E," + "¿desea añadir una denuncia?";
-		var respuesta = confirm(pregunta);
-
-		if(respuesta)
-		{
-			window.location = 'http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/index.html#nuevadenuncia_loc_actual';
-			html = '<p>La localización actual es: ' + latitud + " N, " + longitud + " E" + '</p>'+
-			'<input type="hidden" name="latitud" value="'+ latitud +'">' + 
-			'<input type="hidden" name="longitud" value="'+ longitud +'">';
-			$("#loc_actual").html(html);
-		}
-		
-	}
 	
 	function addReport(evt)
 	{
