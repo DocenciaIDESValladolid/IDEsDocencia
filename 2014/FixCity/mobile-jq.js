@@ -129,11 +129,11 @@ $.mobile.loading( "show", {
 		function (data)
 		{
 		var select = $('#emailMunicipalitySelect');
-		for (email in data)
+		for (emailindex in data)
 			{
 				select.append($("<option></option>")
-					.attr("value",email)
-					.text(email)); 
+					.attr("value",data[emailindex])
+					.text(data[emailindex])); 
 			}
 		}
 		);
