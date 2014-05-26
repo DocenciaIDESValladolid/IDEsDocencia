@@ -17,6 +17,7 @@
 	
 	}
 	else{
+		header('Content-Type: application/json');
 		echo "[";
 		while($row = pg_fetch_array($result)) {
 			echo "\"$row[0]\",";
