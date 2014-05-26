@@ -21,7 +21,7 @@
 		echo "[";
 		$array = array();
 		while($row = pg_fetch_array($result)) {
-			$array[]=row[0];
+			$array[]=$row[0];
 		}
 		echo join($array,',');
 		echo "]";
