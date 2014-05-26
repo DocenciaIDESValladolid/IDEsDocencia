@@ -125,40 +125,41 @@ $.mobile.loading( "show", {
 	else
 	if (pageId=='nuevadenuncia_loc_actual')
 	{
+	var data=['hola','adios','dsdfsfs'];
+	for (emailindex in data)
+		{
+			$('select').append($("<option></option>")
+				.attr("value",data[emailindex])
+				.text(data[emailindex])); 
+		}
+	$('select').selectmenu();
+	$('select').selectmenu('refresh', true);
+	
 		
-		var html = '<label for="emailMunicipality">Correo de contacto del municipio:</label>'+
-					'<input type=\"email\" name=\"emailMunicipality\" id=\"emailMunicipality\"></input>'+
-					'<select name=\"emailMunicipalitySelect\" id=\"emailMunicipality\">';
 		
-		$.getJSON('emails.php',{codigoine:muni_code},
-			function (data){
-				//var select = $('#emailMunicipalitySelect');
-				for (emailindex in data)
-					{
-						html = html + '<option>' + data[emailindex] + '</option>';
-					}
-				
+		
+	$.getJSON('emails.php',{codigoine:muni_code},
+		function (data)
+		{
+		var select = $('select');
+		for (emailindex in data)
+			{
+				select.append($("<option></option>")
+					.attr("value",data[emailindex])
+					.text(data[emailindex])); 
 			}
+		select.selectmenu();
+        select.selectmenu('refresh', true);
+		$('select').selectmenu('refresh', true);
+		}
 		);
-		
-		html = html + '</select>';
-		
-		$('#email_ayto').html(html);
-		
+	$('#emailMunicipalitySelect').on('input propertychange', 
+		function(){
+			$('#emailMunicipality').value = $('#emailMunicipalitySelect').value;
+		});
 	}
 });
 
-
-/*
-
-<label for="emailMunicipality">Correo de contacto del municipio:</label>
-					<input type="email" name="emailMunicipality" id="emailMunicipality"></input>
-					<select name="emailMunicipalitySelect" id="emailMunicipality">
-					<option>uno</option>
-					<option>dos</option>
-					</select>
-
-*/
 
 function initLayerList() {
     $('#layerspage').page();
