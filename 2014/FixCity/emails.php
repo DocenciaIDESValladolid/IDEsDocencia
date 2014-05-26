@@ -18,7 +18,7 @@
 	}
 	else{
 		echo "[";
-		while($row = pg_fetch_array($existe_email)) {
+		while($row = pg_fetch_array($result)) {
 			echo "\"$row[0]\",";
 		}
 		echo "]";
