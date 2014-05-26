@@ -46,6 +46,8 @@ function login() {
     }
   })
 };
+
+// Funcion para actualizar la información de facebook
 function updateFacebookLoginInfo(fb)
 {
 	var fb_user_label = '<img valign="center" height="30" src="'+fb.user.picture+'"/>' + fb.user.name;
@@ -65,6 +67,7 @@ function updateFacebookLoginInfo(fb)
 	$("#usuario_info_prueba").html(html);
 	
 }
+
 // Funcion para publicar un mensaje en tu muro
 var publish = function () {
     fb.publish({
@@ -80,6 +83,7 @@ var publish = function () {
        alert("No publicado :(, seguramente porque no estas identificado o no diste permisos");
     });  
 }
+<!-- Script principal de la aplicación-->
 </script>
     </head>
     <body>
@@ -167,7 +171,10 @@ var publish = function () {
 			  </div>
 	
 </div> <!-- mappage -->
-		
+
+		<!--
+		Página de busqueda.
+		-->		
 		<div data-role="page" id="searchpage" data-theme="b">
           <div data-role="header">
             <h1>Search</h1>
@@ -219,8 +226,11 @@ var publish = function () {
 			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
 			</div>
 			</div>
-		</div>
+		</div><!--Fin de página de busqueda.-->
 
+		<!--
+		Página de capas.
+		-->
         <div data-role="page" id="layerspage" data-theme="b">
           <div data-role="header">
             <h1>Layers</h1>
@@ -230,7 +240,8 @@ var publish = function () {
             </ul>
 			 <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
           </div>		 			  		  
-        </div>
+        </div><!--Fin de página de capas.
+		-->
 		
 		<!--
 		Denuncias 
@@ -267,15 +278,21 @@ var publish = function () {
 			<div data-role="footer" data-position="fixed" >
 				FixCity
 			</div>
-		</div>
+		</div><!--Fin de denuncias.-->
 	
+		<!--
+		Página Mis Denuncias.
+		-->
 		<div data-role="page" id="misdenuncias" data-theme="b">
 			<div data-role="header"><h1>Mis Denuncias</h1></div>
 			<div data-role="content" >
 				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
             </div>
-		</div>		
+		</div><!--Fin de página Mis Denuncias.-->
 				
+		<!--
+		Zona de detalles.
+		-->		
 	   <div id="popup" data-role="dialog">
             <div data-position="inline" data-theme="d" data-role="header">
                 <h1>Details</h1>
@@ -284,15 +301,18 @@ var publish = function () {
                 <ul id="details-list" data-role="listview">
                 </ul>
             </div>
-        </div>
+        </div><!--Fin de zona de detalles.-->	
 		
+		<!--
+		Página de estadísticas.
+		-->	
 		<div data-role="page" id="estadisticas" data-theme="b">
 			<div data-role="header"><h1>Estadísticas</h1></div>
 			<div data-role="content" >
 				<input type="button" value="Estadísticas de municipios" onclick="location.href='estadisticas_municipios.php';" />
 				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
             </div>
-		</div>	
+		</div><!--Fin de página de estadísticas.-->	
 		
 		
 		 <!-- Site footer -->
