@@ -19,9 +19,11 @@
 	else{
 		header('Content-Type: application/json');
 		echo "[";
+		$array = array();
 		while($row = pg_fetch_array($result)) {
-			echo "\"$row[0]\",";
+			$array[]=row[0];
 		}
+		echo join($array,',');
 		echo "]";
 	}
 	
