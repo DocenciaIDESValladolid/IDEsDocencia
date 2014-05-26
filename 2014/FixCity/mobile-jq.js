@@ -125,7 +125,7 @@ $.mobile.loading( "show", {
 	else
 	if (pageId=='nuevadenuncia_loc_actual')
 	{
-	$.get('emails.php',{codigoine:muni_code},
+	$.getJSON('emails.php',{codigoine:muni_code},
 		function (data)
 		{
 		alert(data);
