@@ -139,8 +139,40 @@
 	
 	/* ------------------------------------ *
 	 * 			GESTIÓN DE IMÁGENES 		*
-	 * ------------------------------------ */
-	/*
+	 * ------------------------------------ */	
+	
+					<?php
+					if(isset($_POST['submit'])){
+					$file = $_FILES['file'];
+					// Si es una imagen continuamos, si no, mandamos el error :3
+					if($file['type'] == 'image/jpg' || $file['type'] == 'image/png' || $file['type'] == 'image/gif' || $file['type'] == 'image/jpeg' || $file['type'] == 'image/ico')
+						   {
+						$data = file_get_contents($file['tmp_name']);
+						$pvars = array('image' => base64_encode($data), 'key' => 'b0e52afb3ea0d34035cce1db10ddb40b');
+						$curl = curl_init();
+						curl_setopt($curl, CURLOPT_URL, 'http://api.imgur.com/2/upload.xml');
+						curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+						curl_setopt($curl, CURLOPT_POST, 1);
+						curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+						curl_setopt($curl, CURLOPT_POSTFIELDS, $pvars);
+						$xml = curl_exec($curl);
+						preg_match ("/<original>(.*)<\/original>/xsmUi", $xml, $matches);
+						echo '<img src="'.$matches[1].'"><br />'.$matches[1];
+						curl_close ($curl); 
+					} else { echo '0: No es un archivo de imagen.'; };  }
+					else
+					{
+						?>
+						<form action="" method="post" enctype="multipart/form-data">
+							<input type="file" name="file" id="file" accept="image/*" /> 
+							<input type="submit" name="submit" value="Subir" />
+						</form>
+						<br /> KeviNxDTM - 2013
+						<?php
+					};
+					?>
+	
+	
 	
 	
 	/* ------------------------------------ *
