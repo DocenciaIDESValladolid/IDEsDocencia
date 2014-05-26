@@ -171,49 +171,6 @@
 			<?php
 		};
 					
-		
-	
-	/* ------------------------------------ *
-	 *	    	GESTIÓN DE MUNICIPIOS		*
-	 * ------------------------------------ */
-	
-	echo "<br><br>";
-	echo "<br><br>";
-	
-	// Comprobamos que el municipio se encuentra en la base de datos
-	$query_municipios = "SELECT codigoine FROM municipios WHERE codigoine='$codigoine'";
-	$existe_municipio = pg_exec($db, $query_municipios);
-	
-	if(pg_numrows($existe_municipio)!=0){
-		echo $municipio." se encuentra en nuestra base de datos de municipios. <br>"; 
-		$query_emails = "SELECT email FROM email WHERE id_municipio='$codigoine'";
-		$existe_email = pg_exec($db, $query_emails);
-		// Mostramos por pantalla la consulta
-		if(pg_numrows($existe_email)!=0){
-			echo "Tenemos en nuestra base de datos los siguientes emails. ";
-			while($row = pg_fetch_array($existe_email)) {
-				echo $row[0];
-				echo "<br>";
-			}
-		}
-		else{
-			echo "En nuestra base de datos no tenemos ningun email almacenado para contactar con este ayuntamiento. 
-				Por favor, introduce uno si quieres que esta denuncia pueda ser solucionada con mayor agilidad.";
-		}
-	}
-	else{
-	
-		$nuevo_municipio = "INSERT INTO municipios VALUES ('$municipio', 
-							(SELECT id_provincia FROM provincias WHERE nombre = '$provincia') ,'$codigoine')";
-		echo "<br>Acabamos de añadir a nuestra base de datos el municipio ".$municipio.".";
-		echo "<br>Para cumplir con los objetivos de esta plataforma, por favor, introduzca un email de contacto para este municipio,
-				de cara a que la aplicación pueda contactar con los organismos pertinentes y poder solucionar este conflicto.
-				<br>Email:<br>
-				<>
-				<input type=\"email\" name=\"email\" onClick=\"\">";
-
-		
-	}
 	
 ?>
 
