@@ -135,7 +135,7 @@ $.mobile.loading( "show", {
 				var select = $('#emailMunicipalitySelect');
 				for (emailindex in data)
 					{
-						html = html + '<option>' + data[emailindex]) + '</option>';
+						html = html + '<option>' + data[emailindex] + '</option>';
 					}
 				select.selectmenu();
 				select.selectmenu('refresh', true);
