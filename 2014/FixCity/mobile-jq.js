@@ -144,6 +144,7 @@ $.mobile.loading( "show", {
 		function(){
 			$('#emailMunicipality').val($('select').val());
 		});
+		
 	}
 });
 

@@ -275,27 +275,27 @@ var publish = function () {
 					<label for="filesinput">Seleccione hasta 3 imágenes que identifiquen la denuncia:</label>
 					<input type="file" id="filesinput" multiple></input>
 					<div id="images_uploaded"></div>
-					 <script>
+					<script>
 					var files = document.getElementById("filesinput");
 					var emailSelect = document.getElementById("filesinput");
-            //process files
-			files.addEventListener("change", function (e) {
-                var files = e.target.files;
-                for(i=0; i<files.length; i++) {
-                    var file = files[i];
-                    if(file.type.match(/image.*/))
-					{
-					$.mobile.loading( "show", {text: "Enviando imagen",	textVisible: true});
-                        upload(file, function (links)
-						{
-						$.mobile.loading( "hide");
-						$('filesinput').val('');
-						$('#images_uploaded').append($('<img></img>').attr('src',links.small_square));
-						$('#photo_urls').val($('#photo_urls').val()+','+ links.original);
-						});
-                    }
-                }
-            }, false);
+					//process files
+					files.addEventListener("change", function (e) {
+						var files = e.target.files;
+						for(i=0; i<files.length; i++) {
+							var file = files[i];
+							if(file.type.match(/image.*/))
+							{
+							$.mobile.loading( "show", {text: "Enviando imagen",	textVisible: true});
+								upload(file, function (links)
+								{
+								$.mobile.loading( "hide");
+								$('filesinput').val('');
+								$('#images_uploaded').append($('<img></img>').attr('src',links.small_square));
+								$('#photo_urls').val($('#photo_urls').val()+','+ links.original);
+								});
+							}
+						}
+					}, false);
 					 </script>
 			</div>
 			<div data-role="footer" data-position="fixed" >
