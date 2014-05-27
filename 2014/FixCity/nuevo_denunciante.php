@@ -21,9 +21,13 @@
 </head>
 <body>
 <?php
+
 	
 	error_reporting(E_ALL);		// Sentencia para que se muestren los errores PHP por pantalla
 	require('db.php');			// Fichero de conexión a la base de datos
+
+
+/*
 	
 	// Variables de formulario
 	@ $texto = $_POST['texto'];				// Texto de la denuncia
@@ -57,11 +61,12 @@
 	$id_facebook = trim($id_facebook);
 	$email = trim($email);
 
+*/
 
 	/* ------------------------------------ *
 	 * 			GESTIÓN DE USUARIOS			*
 	 * ------------------------------------ */
-	 
+/* 
 	// Comprobamos que el usuario que introduce la denuncia se encuentra registrado en la aplicación
 	$query = "SELECT * FROM usuarios WHERE id_facebook LIKE '".$id_facebook."'";
 	$result = pg_exec($db, $query);
@@ -78,7 +83,7 @@
 		pg_exec($db, $insert);
 	}
 	
-	
+*/	
 	/* ------------------------------------ *
 	 * 			GESTIÓN DE DENUNCIAS		*
 	 * ------------------------------------ */
