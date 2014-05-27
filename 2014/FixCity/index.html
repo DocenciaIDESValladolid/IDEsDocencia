@@ -13,7 +13,7 @@
 
 		<script src="jquery-1.9.0.js"></script>
         <script src="jquery.mobile-1.4.2.min.js"></script>
-	
+		<script src="upload_photo.js"></script>
 		<script src="AnimatedCluster.js"></script>
 		<script src="thematicLayers.js"></script>
 		<script src="reportingLayers.js"></script>
@@ -259,23 +259,47 @@ var publish = function () {
 					<div id="usuario_info_prueba"></div>
 					<p>Escriba aquí la descripción de su denuncia</p>
 					<textarea name="texto" rows="10" cols="80"></textarea>	
-					<p>Seleccione hasta 3 imágenes que identifiquen la denuncia:</p>
-					<label for="emailMunicipality">Correo de contacto del municipio:</label>
+					<label for="emailMunicipality">Nuevo correo de contacto del municipio:</label>
 					<input type="email" name="emailMunicipality" id="emailMunicipality"></input>
-					<select name="emailMunicipalitySelect" id="emailMunicipality">
-					<option>uno</option>
-					<option>dos</option>
+					<label for="emailMunicipalitySelect">O seleccione un email ya registrado al que notificar.</label>
+					<select name="emailMunicipalitySelect" id="emailMunicipalitySelect">
 					</select>
 
-					<input type="submit" value="Enviar" name="submit">
-					<input type="reset" value="Borrar">
+					<input type="submit" value="Enviar" name="submit" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-b ui-mini">
+					<input type="reset" value="Borrar" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-b ui-mini">
+					<input type="hidden" name="photo_urls" id="photo_urls">
 					<input type="hidden" name="id_facebook" id="id_facebook">
 					<input type="hidden" name="email" id="email_facebook">
-					<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
-			  </form>		
+					
+			  </form>
+					<label for="filesinput">Seleccione hasta 3 imágenes que identifiquen la denuncia:</label>
+					<input type="file" id="filesinput" multiple></input>
+					<div id="images_uploaded"></div>
+					 <script>
+					   var files = document.getElementById("filesinput");
+						var emailSelect = document.getElementById("filesinput");
+            //process files
+			files.addEventListener("change", function (e) {
+                var files = e.target.files;
+                for(i=0; i<files.length; i++) {
+                    var file = files[i];
+                    if(file.type.match(/image.*/))
+					{
+					$.mobile.loading( "show", {text: "Enviando imagen",	textVisible: true});
+                        upload(file, function (links)
+						{
+						$.mobile.loading( "hide");
+						$('filesinput').val('');
+						$('#images_uploaded').append($('<img></img>').attr('src',links.small_square));
+						$('#photo_urls').val($('#photo_urls').val()+','+ links.original);
+						});
+                    }
+                }
+            }, false);
+					 </script>
 			</div>
 			<div data-role="footer" data-position="fixed" >
-				FixCity
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
 			</div>
 		</div><!--Fin de denuncias.-->
 	
