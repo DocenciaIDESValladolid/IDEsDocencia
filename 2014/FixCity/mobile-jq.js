@@ -130,11 +130,15 @@ $.mobile.loading( "show", {
 		{
 		var select = $('select');
 		select.html('');
+		var first=true;
 		for (emailindex in data)
 			{
-				select.append($("<option></option>")
+				var option=$("<option></option>")
 					.attr("value",data[emailindex])
-					.text(data[emailindex])); 
+					.text(data[emailindex]);
+				if (first)
+					option.attr("selected","true");
+				select.append(option); 
 			}
 		select.selectmenu();
         select.selectmenu('refresh', true);
