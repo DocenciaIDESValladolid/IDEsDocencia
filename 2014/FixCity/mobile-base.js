@@ -17,6 +17,7 @@ var geolocation_accuracy;
 var geolocation_msg='';
 
 var munis = new Array(10);
+
 munis[0]='34074747075'; //Íscar
 munis[1]='34074747186'; //Valladolid
 munis[2]='34074747087'; //Megeces

@@ -22,8 +22,6 @@ colorMasCumplidores[7]= '#00ff99';
 colorMasCumplidores[8]= '#33ff66'; 
 colorMasCumplidores[9]= '#00ff33';
 
-
-
 function addThematicUALayers(arrayMun, n)
 {
 	alert(n);
