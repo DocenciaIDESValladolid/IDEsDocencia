@@ -124,24 +124,12 @@ $.mobile.loading( "show", {
 	}
 	else
 	if (pageId=='nuevadenuncia_loc_actual')
-	{
-	var data=['hola','adios','dsdfsfs'];
-	for (emailindex in data)
-		{
-			$('select').append($("<option></option>")
-				.attr("value",data[emailindex])
-				.text(data[emailindex])); 
-		}
-	$('select').selectmenu();
-	$('select').selectmenu('refresh', true);
-	
-		
-		
-		
+	{		
 	$.getJSON('emails.php',{codigoine:muni_code},
 		function (data)
 		{
 		var select = $('select');
+		select.html('');
 		for (emailindex in data)
 			{
 				select.append($("<option></option>")
@@ -150,12 +138,11 @@ $.mobile.loading( "show", {
 			}
 		select.selectmenu();
         select.selectmenu('refresh', true);
-		$('select').selectmenu('refresh', true);
 		}
 		);
-	$('#emailMunicipalitySelect').on('input propertychange', 
+	$('select').on('input propertychange', 
 		function(){
-			$('#emailMunicipality').value = $('#emailMunicipalitySelect').value;
+			$('#emailMunicipality').value = $('select').value;
 		});
 	}
 });
