@@ -1,6 +1,35 @@
-function addThematicUALayers()
+colorMenosCumplidores = new Array(10);
+colorMenosCumplidores[0] = '#660000'; //Rojos Oscuros a Naranjas
+colorMenosCumplidores[1]= '#990000';  
+colorMenosCumplidores[2]= '#cc0000';  
+colorMenosCumplidores[3]= '#ff0000'; 
+colorMenosCumplidores[4]= '#ff3300';  
+colorMenosCumplidores[5]= '#cc33ff'; 
+colorMenosCumplidores[6]= '#ff6600'; 
+colorMenosCumplidores[7]= '#cc6600'; 
+colorMenosCumplidores[8]= '#ff9900'; 
+colorMenosCumplidores[9]= '#ffcc00';
+
+colorMasCumplidores = new Array(10);
+colorMasCumplidores[0]= '#0000ff'; //Azules Oscuros a Verdes
+colorMasCumplidores[1]= '#0033ff';  
+colorMasCumplidores[2]= '#0066ff';  
+colorMasCumplidores[3]= '#0099ff'; 
+colorMasCumplidores[4]= '#00ccff';  
+colorMasCumplidores[5]= '#00ffff'; 
+colorMasCumplidores[6]= '#66ff00'; 
+colorMasCumplidores[7]= '#00ff99'; 
+colorMasCumplidores[8]= '#33ff66'; 
+colorMasCumplidores[9]= '#00ff33';
+
+
+
+function addThematicUALayers(arrayMun, n)
 {
-	var sld=generateCustomUASld('nameunit',['Valladolid','Boecillo','Laguna de Duero','Cistérniga'],['#ff0000','#aa7777','#ff00ff','#00ffff']);
+	alert(n);
+	if (n==0) {var sld=generateCustomUASld('nationalcode',arrayMun,colorMasCumplidores);}
+	if (n==1) {var sld=generateCustomUASld('nationalcode',arrayMun,colorMenosCumplidores);}
+	
 	var wms_UA = new OpenLayers.Layer.WMS("Menos cumplidores",
         urlWmsUA,
         {	
@@ -56,7 +85,7 @@ function generateCustomUASld(attribute,codes,colors)
                 sld+= '<CssParameter name="fill">';
                 sld+= '<Literal>'+colors[i]+'</Literal>';
                 sld+= '</CssParameter>';
-				sld+= '<CssParameter name="fill-opacity">0.3</CssParameter>';
+				sld+= '<CssParameter name="fill-opacity">0.5</CssParameter>';
                 sld+= '</Fill>';
                 sld+= '</PolygonSymbolizer>';
 				sld+= '<TextSymbolizer><Label><PropertyName>nameunit</PropertyName></Label>';

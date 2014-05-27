@@ -16,6 +16,18 @@ var muni_code;
 var geolocation_accuracy;
 var geolocation_msg='';
 
+var munis = new Array(10);
+munis[0]='34074747075'; //Íscar
+munis[1]='34074747186'; //Valladolid
+munis[2]='34074747087'; //Megeces
+munis[3]='34074747231'; //Zaratán
+munis[4]='34074747098'; //Mucientes
+munis[5]='34073434010'; //Ampudia
+munis[6]='34073434120'; //Palencia
+munis[7]='34074747193'; //Viana de Cega
+munis[8]='34074747082'; //Matapozuelos
+munis[9]='34074747158'; //La Seca
+
 var init = function (onSelectFeatureFunction) {
 
     var vector = new OpenLayers.Layer.Vector("vector", {});
@@ -142,7 +154,7 @@ var init = function (onSelectFeatureFunction) {
 	map.updateSize();
 	if (typeof addThematicUALayers == 'function')
 	{
-	var uaLayer= addThematicUALayers();
+	var uaLayer= addThematicUALayers(munis,1); //si es 1 el segundo parámetro, son los menos cumplidores, si es 0, son los más cumplidores
 	map.addLayer(uaLayer);
 	}
 	var wms_concentracion=createHeatmapLayer();
