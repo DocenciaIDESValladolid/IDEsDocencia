@@ -20,6 +20,7 @@
 	<script src="mobile-jq.js"></script>	
 </head>
 <body>
+
 <?php
 	
 	error_reporting(E_ALL);		// Sentencia para que se muestren los errores PHP por pantalla
@@ -32,13 +33,16 @@
 	@ $codigoine = $_POST['codigoine'];
 	@ $municipio = $_POST['municipio'];
 	@ $provincia = $_POST['provincia'];
+	@ $photo_urls = $_POST['photo_urls'];
+	// Para el email del ayuntamiento comprobamos primero el primer input.
+	// Si el usuario no ha escrito nada, leemos el correo seleccionado en el "select"
 	@ $email_ayto = $_POST['emailMunicipality'];
 	if(!$email_ayto){
 		@ $email_ayto = $_POST['emailMunicipalitySelect'];
 	}
 	@ $id_facebook = $_POST['id_facebook'];	// Gestión de usuarios
 	@ $email = $_POST['email'];
-	@ $photo_urls = $_POST['photo_urls'];
+	
 	
 	// Comprobamos que las variables que hemos pasado no están vacías.
 	if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio 
@@ -90,16 +94,7 @@
 		exit;
 		
 	}
-	
-	// Mostramos por pantalla los datos que hemos pasado.
-	
-			
-	echo "Acaba de añadir una nueva denuncia en $municipio, provincia de $provincia.<br>";
-	echo 'Localización geográfica: '.$latitud.' LAT y '.$longitud.'LON<br>';
-	echo '<h1>'.$texto.'</h1><br>';
-	echo "Recibirá en su correo $email los distintos detalles sobre posibles modificaciones en su denuncia.";
 
-	
 	// Formateamos textos para introducir en la base de datos.
 	$texto = trim($texto);		
 	$texto = addslashes($texto);
@@ -109,7 +104,8 @@
 	$email_ayto = trim($email_ayto);
 	$id_facebook = trim($id_facebook);
 	$email = trim($email);
-
+	$photo_urls = trim($photo_urls);
+	
 
 	/* ------------------------------------ *
 	 * 			GESTIÓN DE USUARIOS			*
@@ -135,7 +131,7 @@
 	/* ------------------------------------ *
 	 * 			GESTIÓN DE DENUNCIAS		*
 	 * ------------------------------------ */
-  
+
 	// Inserción de la denuncia en la tabla de denuncias
 	$query = "INSERT INTO denuncias (texto, the_geom, fecha, codigoine) VALUES 
             ('".$texto."', ST_Transform(ST_SetSRID(ST_Point(".$longitud.", ".$latitud."),900913),4326),'".date("Y-m-d")."' , '$codigoine') 
@@ -145,7 +141,7 @@
     if(pg_affected_rows($result)<1){
 		echo 'Error al introducir la denuncia en la base de datos.';
 		echo "<input type='button' value='Back' onClick='history.go(-1);'>";
-		
+		exit;
 	}
 	else{
 		// Obtenemos el ID que se ha generado de la denuncia introducida, para usarlo en las posteriores sentencias.
@@ -154,7 +150,6 @@
 	}
 	
 	// Inserción de la denuncia en la tabla de denunciantes.
-	//$denunciante = "SELECT _id FROM usuarios WHERE id_facebook LIKE '$id_facebook';";
 	$insert = "INSERT INTO denunciantes (id_denuncia, id_denunciante, fecha) VALUES ($id_denuncia,
 				(SELECT _id FROM usuarios WHERE id_facebook LIKE '$id_facebook'), '".date("Y-m-d")."');";
 	$result = pg_exec($db, $insert);
@@ -163,11 +158,6 @@
 	$estado_usuario = "INSERT INTO estado_usuario (id_denuncia, id_usuario, fecha, estado)
 		VALUES ($id_denuncia, (SELECT _id FROM usuarios WHERE id_facebook LIKE '$id_facebook'), '".date("Y-m-d")."', 0);";
 	$result = pg_exec($db, $estado_usuario);
-	
-	// Inserción en estado_ayto
-	$estado_ayto = "INSERT INTO estado_ayto (id_denuncia, fecha, estado, id_ayto)
-		VALUES ($id_denuncia, '".date("Y-m-d")."', 0, '$codigoine');";
-	$result = pg_exec($db, $estado_ayto);
 	
 	
 	/* ------------------------------------ *
@@ -182,6 +172,11 @@
 	}
 	
 	
+	
+	echo "Acaba de añadir una nueva denuncia en $municipio, provincia de $provincia.<br>";
+	echo 'Localización geográfica: '.$latitud.' LAT y '.$longitud.'LON<br>';
+	echo '<h1>'.$texto.'</h1><br>';
+	echo "Recibirá en su correo $email los distintos detalles sobre posibles modificaciones en su denuncia.";
 	
 	
 ?>
