@@ -35,7 +35,7 @@
 	@ $email_ayto = $_POST['email_ayto'];
 	@ $id_facebook = $_POST['id_facebook'];	// Gestión de usuarios
 	@ $email = $_POST['email'];
-	@ $photo_urls = $_POST['photo_urls']
+	@ $photo_urls = $_POST['photo_urls'];
 	
 	// Comprobamos que las variables que hemos pasado no están vacías.
 	/*if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio 
