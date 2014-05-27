@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>FixCity - Estadísticas</title>
+	<title>FixCity - Mis denuncias</title>
 	<script src="jquery-1.9.0.js"></script>
     <script src="jquery.mobile-1.4.2.min.js"></script>
 </head>
