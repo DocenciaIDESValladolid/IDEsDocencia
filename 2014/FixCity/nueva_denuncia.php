@@ -32,7 +32,10 @@
 	@ $codigoine = $_POST['codigoine'];
 	@ $municipio = $_POST['municipio'];
 	@ $provincia = $_POST['provincia'];
-	@ $email_ayto = $_POST['email_ayto'];
+	@ $email_ayto = $_POST['emailMunicipality'];
+	if(!$email_ayto){
+		@ $email_ayto = $_POST['emailMunicipalitySelect'];
+	}
 	@ $id_facebook = $_POST['id_facebook'];	// Gestión de usuarios
 	@ $email = $_POST['email'];
 	@ $photo_urls = $_POST['photo_urls'];
