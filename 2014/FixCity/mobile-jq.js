@@ -142,7 +142,7 @@ $.mobile.loading( "show", {
 		);
 	$('select').on('input propertychange', 
 		function(){
-			$('#emailMunicipality').value = $('select').value;
+			$('#emailMunicipality').val($('select').val());
 		});
 	}
 });
