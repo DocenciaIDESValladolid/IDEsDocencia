@@ -11,7 +11,7 @@
 	
 	//@ $id_facebook = $_POST['id_facebook'];
 	$id_facebook = "752480921449446";
-	$query = "SELECT * FROM denuncias WHERE id_denuncia =
+	$query = "SELECT * FROM denuncias WHERE id_denuncia IN
 				(SELECT id_denuncia FROM estado_usuario WHERE id_usuario = '$id_facebook') ORDER BY fecha;";
 	$result = pg_exec($db, $query);
 
