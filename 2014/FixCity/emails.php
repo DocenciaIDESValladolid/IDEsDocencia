@@ -10,8 +10,12 @@
 	 
 	@ $codigoine = $_GET['codigoine'];
 	
-	$query = "SELECT email FROM email WHERE id_municipio = '$codigoine'";
-	$result = pg_exec($db, $query);
+	$query = 'SELECT email FROM email WHERE id_municipio = $1';
+	// Prepare a query for execution
+	$result = pg_prepare($dbconn, "Select emails", $query );
+	// Execute the prepared query.  Note that it is not necessary to escape the string $codigoine in any way
+	$result = pg_execute($db, "Select emails", array($codigoine));
+	//	$result = pg_exec($db, $query);
 	
 	if(pg_numrows($result)<1){
 	
