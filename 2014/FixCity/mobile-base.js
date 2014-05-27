@@ -314,6 +314,10 @@ var init = function (onSelectFeatureFunction) {
 			}
 		}
 		$("#reportDescription").html("A las "+feature.attributes.fecha+" he informado del problema: \""+feature.attributes.texto+"\"");
+		if (typeof feature.attributes.img != 'undefined')
+		{
+		$("#reportDescription").append($('<img></img>').attr('src',feature.attributes.img));
+		}
 		var point=feature.geometry.getBounds().getCenterLonLat();
 		
 		var pointProj=new OpenLayers.LonLat(point.lon,point.lat);

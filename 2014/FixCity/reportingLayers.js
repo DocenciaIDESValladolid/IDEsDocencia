@@ -8,9 +8,9 @@ function createWFSLayer()
         protocol: new OpenLayers.Protocol.WFS(
 			{
             url: "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
-            featureType: "denuncias",
+            featureType: "denuncias_image",
             featureNS: "http://www.idelab.uva.es/#IDES",
-			srsName: "EPSG:900913",
+			srsName: "EPSG:3857",
 			version: "1.1.0"
 			}),
 		styleMap: options.styleMap,
