@@ -32,29 +32,61 @@
 	@ $codigoine = $_POST['codigoine'];
 	@ $municipio = $_POST['municipio'];
 	@ $provincia = $_POST['provincia'];
-	//@ $email_ayto = $_POST['email_ayto'];
-	$email_ayto = "josuesbla@gmail.com";
+	@ $email_ayto = $_POST['email_ayto'];
 	@ $id_facebook = $_POST['id_facebook'];	// Gestión de usuarios
 	@ $email = $_POST['email'];
+	@ $photo_urls = $_POST['photo_urls']
 	
 	// Comprobamos que las variables que hemos pasado no están vacías.
-	if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio || !$provincia || !$id_facebook || !$email )//|| $email_ayto)
-	{
-		echo 'No ha introducido toda la información requerida para el cliente.<br/>'
-			.'Por favor, vuelva a la página anterior e inténtelo de nuevo.';
-		echo "<br><br>";
-		echo '<h1>'.$latitud.'</h1><br>';
-		echo '<h1>'.$longitud.'</h1><br>';
-		echo '<h1>'.$texto.'</h1><br>';
-		echo '<h1>'.$codigoine.'</h1><br>';
-		echo '<h1>'.$municipio.'</h1><br>';
-		echo '<h1>'.$provincia.'</h1><br>';
-		echo '<h1>'.$id_facebook.'</h1><br>';
-		echo '<h1>'.$email.'</h1><br>';
-		echo "<br><br>";
+	/*if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio 
+		|| !$provincia || !$id_facebook || !$email || !$email_ayto || !$photo_urls)
+	{*/
+		echo "	<table>
+					<tr>
+					  <td>Latitud</td>
+					  <td>$latitud</td>
+					</tr>
+					<tr>
+					  <td>Longitud</td>
+					  <td>$longitud</td>
+					</tr>
+					<tr>
+					  <td>Texto</td>
+					  <td>$texto</td>
+					</tr>
+					<tr>
+					  <td>Codigo</td>
+					  <td>$codigoine</td>
+					</tr>
+					<tr>
+					  <td>Municipio</td>
+					  <td>$municipio</td>
+					</tr>
+					<tr>
+					  <td>Provincia</td>
+					  <td>$provincia</td>
+					</tr>
+					<tr>
+					  <td>ID Facebook</td>
+					  <td>$id_facebook</td>
+					</tr>
+					<tr>
+					  <td>Email de denunciante</td>
+					  <td>$email</td>
+					</tr>
+					<tr>
+					  <td>Email Ayuntamiento</td>
+					  <td>$email_ayto</td>
+					</tr>
+					<tr>
+					  <td>URLs para las imágenes</td>
+					  <td>$photo_urls</td>
+					</tr>
+					";
 		echo "<input type='button' value='Back' onClick='history.go(-1);'>";
 		exit;
-	}
+		
+//	}
 	
 	// Mostramos por pantalla los datos que hemos pasado.
 	
@@ -140,36 +172,7 @@
 	/* ------------------------------------ *
 	 * 			GESTIÓN DE IMÁGENES 		*
 	 * ------------------------------------ */	
-	
-					
-		if(isset($_POST['submit'])){
-		$file = $_FILES['file'];
-		// Si es una imagen continuamos, si no, mandamos el error :3
-		if($file['type'] == 'image/jpg' || $file['type'] == 'image/png' || $file['type'] == 'image/gif' || $file['type'] == 'image/jpeg' || $file['type'] == 'image/ico')
-			   {
-			$data = file_get_contents($file['tmp_name']);
-			$pvars = array('image' => base64_encode($data), 'key' => 'b0e52afb3ea0d34035cce1db10ddb40b');
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL, 'http://api.imgur.com/2/upload.xml');
-			curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-			curl_setopt($curl, CURLOPT_POST, 1);
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, $pvars);
-			$xml = curl_exec($curl);
-			preg_match ("/<original>(.*)<\/original>/xsmUi", $xml, $matches);
-			echo '<img src="'.$matches[1].'"><br />'.$matches[1];
-			curl_close ($curl); 
-		} else { echo '0: No es un archivo de imagen.'; };  }
-		else
-		{
-			?>
-			<form action="" method="post" enctype="multipart/form-data">
-				<input type="file" name="file" id="file" accept="image/*" /> 
-				<input type="hidden" name="key" value="b0e52afb3ea0d34035cce1db10ddb40b"/> 
-				<input type="submit" name="submit" value="Subir" />
-			</form>
-			<?php
-		};
+
 					
 	
 ?>
