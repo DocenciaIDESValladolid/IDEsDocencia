@@ -41,9 +41,9 @@
 	@ $photo_urls = $_POST['photo_urls'];
 	
 	// Comprobamos que las variables que hemos pasado no están vacías.
-	/*if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio 
+	if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio 
 		|| !$provincia || !$id_facebook || !$email || !$email_ayto || !$photo_urls)
-	{*/
+	{
 		echo "	<table>
 					<tr>
 					  <td>Latitud</td>
@@ -89,7 +89,7 @@
 		echo "<input type='button' value='Back' onClick='history.go(-1);'>";
 		exit;
 		
-//	}
+	}
 	
 	// Mostramos por pantalla los datos que hemos pasado.
 	
@@ -98,9 +98,7 @@
 	echo 'Localización geográfica: '.$latitud.' LAT y '.$longitud.'LON<br>';
 	echo '<h1>'.$texto.'</h1><br>';
 	echo "Recibirá en su correo $email los distintos detalles sobre posibles modificaciones en su denuncia.";
-	
-	
-	
+
 	
 	// Formateamos textos para introducir en la base de datos.
 	$texto = trim($texto);		
@@ -176,7 +174,15 @@
 	 * 			GESTIÓN DE IMÁGENES 		*
 	 * ------------------------------------ */	
 
-					
+	$array_url = preg_split ( ',' , $photo_urls);
+	for($i=1;$i<count($array_url);$i++){
+		echo "<br>Imagen $i es $array_url[$i]";
+		$query_url = "INSERT INTO imagenes (id_denuncia, ruta) VALUES ($id_denuncia, $array_url[$i])";
+		pg_exec($db, $query_url);
+	}
+	
+	
+	
 	
 ?>
 
