@@ -24,7 +24,6 @@ colorMasCumplidores[9]= '#00ff33';
 
 function addThematicUALayers(arrayMun, n)
 {
-	alert(n);
 	if (n==0) {var sld=generateCustomUASld('nationalcode',arrayMun,colorMasCumplidores);}
 	if (n==1) {var sld=generateCustomUASld('nationalcode',arrayMun,colorMenosCumplidores);}
 	
