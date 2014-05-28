@@ -105,10 +105,6 @@
 		
 	}
 
-
-
-	
-
 	/* ------------------------------------ *
 	 * 			GESTIÓN DE USUARIOS			*
 	 * ------------------------------------ */
@@ -121,16 +117,12 @@
 		// Dado que el email del usuario puede haber cambiado desde el momento en el que se 
 		// almacenó el usuario por primera vez, actualizamos el emai.
 		
-		$array =  pg_fetch_row($result);
-		echo "$array[0] eyyyyyyyyyyyy";
-		
 		$update = "UPDATE usuarios SET email='$email' WHERE id_facebook LIKE '$id_facebook';";
 		pg_exec($db, $update);
 	}
 	else{
-		echo "QUE te pasaaa";
 		// Si el usuario no se encuentra registrado, insertamos una nueva fila en la BD.
-		$insert = "INSERT INTO usuarios (id_facebook, email) VALUES (\"$id_facebook\",\"$email\");";
+		$insert = "INSERT INTO usuarios (id_facebook, email) VALUES ('$id_facebook','$email');";
 		pg_exec($db, $insert);
 		echo "pg_affected_rows() eyyyyyyyyy";
 	}
