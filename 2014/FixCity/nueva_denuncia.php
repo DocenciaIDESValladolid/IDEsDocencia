@@ -168,11 +168,10 @@
 	echo 'La localización geográfica de la denuncia añadida es: '.$latitud.' LAT y '.$longitud.'LON<br>';
 	echo '<h1>'.$texto.'</h1><br>';
 	echo "Recibirá en su correo $email los distintos detalles sobre posibles modificaciones en su denuncia.<br>";
-	echo "Su denuncia irá acompañada de la suiguiente imagen.<br>"; 
+	echo "Su denuncia irá acompañada de las siguientes imagenes.<br>"; 
 	 
 	$array_url = explode(',' , $photo_urls);
 	for($i=1;$i<count($array_url);$i++){
-		echo "<br>Imagen $i es $array_url[$i]";
 		echo "<img src='$array_url[$i]'>";  
 		$query_url = "INSERT INTO imagenes (id_denuncia, ruta) VALUES ($id_denuncia, '$array_url[$i]');";
 		pg_exec($db, $query_url);
