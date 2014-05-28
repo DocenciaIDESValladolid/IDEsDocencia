@@ -123,6 +123,7 @@
 		pg_exec($db, $update);
 	}
 	else{
+		echo "QUE te pasaaa";
 		// Si el usuario no se encuentra registrado, insertamos una nueva fila en la BD.
 		$insert = "INSERT INTO usuarios (id_facebook, email) VALUES ('$id_facebook','$email');";
 		pg_exec($db, $insert);
