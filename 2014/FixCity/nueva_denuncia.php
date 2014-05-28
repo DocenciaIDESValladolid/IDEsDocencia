@@ -120,7 +120,7 @@
 		// almacenó el usuario por primera vez, actualizamos el emai.
 		
 		$array =  pg_fetch_row($result);
-		echo "$array[0] eyyyyyyyyyyyy;
+		echo "$array[0] eyyyyyyyyyyyy";
 		
 		$update = "UPDATE usuarios SET email='$email' WHERE id_facebook LIKE '$id_facebook';";
 		pg_exec($db, $update);
