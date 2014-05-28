@@ -184,11 +184,11 @@
 		pg_exec($db, $query_url);
 		
 			/*Funcion HTML que permite visualizar la galeria de imagenes que se envian.*/
-			echo '
-			<a href="#popupPhotoLandscape" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Imagen $i</a>
-			<div data-role="popup" id="popupPhotoLandscape" class="photopopup" data-overlay-theme="a" data-corners="false" data-tolerance="30,15">
-				<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img src="'.$array_url[$i].'">
-			</div>';
+			echo "
+			<a href=\"#popupPhotoLandscape\" data-rel=\"popup\" data-position-to=\"window\" class=\"ui-btn ui-corner-all ui-shadow ui-btn-inline\">Imagen $i</a>
+			<div data-role=\"popup\" id=\"popupPhotoLandscape\" class=\"photopopup\" data-overlay-theme=\"a\" data-corners=\"false\" data-tolerance=\"30,15\">
+				<a href=\"#\" data-rel=\"back\" class=\"ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right\">Close</a><img src=\"$array_url[$i]\">
+			</div>";
 			/*FIN de Funcion HTML */
 						
 	}
