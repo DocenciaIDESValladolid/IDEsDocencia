@@ -208,7 +208,7 @@
 
 	echo $html;
 	
-	
+	echo '
 	$( document ).on( "pagecreate", function() 
 			{
 				$( ".photopopup" ).on({
@@ -217,7 +217,7 @@
 				$( ".photopopup img" ).css( "max-height", maxHeight );
 				}
 				});
-			});
+			});';
 
 	
 
