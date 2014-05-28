@@ -18,12 +18,12 @@
 	
 	echo "<table>";
 
-	
+	/*
 	while ($row = pg_fetch_row($result)) {
 		echo "$row[0]  $row[1] $row[2] $row[3] $row[4]";
 	}
-	
-	/*
+	*/
+
 	while($row = pg_fetch_array($result) ) {
 		
 		$query_municipio = "SELECT nombre, provincia FROM municipios WHERE codigoine = \"$row[4]\";";
@@ -49,7 +49,7 @@
 		}
 		echo "</tr>";
 	}
-	echo "</table>";*/
+	echo "</table>";
 	
 ?>
 </body>
