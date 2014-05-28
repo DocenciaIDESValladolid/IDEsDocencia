@@ -28,7 +28,7 @@
 			$array = array();	
 			$array['codigoine']="\"$row[0]\"";
 			$array['porcentaje']="\"$row[1]\"";
-			echo '{'+join($array,',')+'} ,';
+			echo '{'+join(',',$array,)+'} ,';
 		}
 		echo "]";
 	
