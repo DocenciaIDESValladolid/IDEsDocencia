@@ -1,16 +1,8 @@
-<html>
-<head>
-	<title>FixCity - Estadísticas</title>
-	<script src="jquery-1.9.0.js"></script>
-    <script src="jquery.mobile-1.4.2.min.js"></script>
-</head>
-<body>
+
 <?php
 	error_reporting(E_ALL);		// Sentencia para que se muestren los errores PHP por pantalla
 	require('db.php');			// Fichero de conexión a la base de datos
-	
-	
-	echo'<br>Municipios que MAS resuelven los conflictos.<br>';
+
 	// Lectura de base de datos
 	$municipios_mas_resuelven = 
 		"SELECT codigoine, 
@@ -89,5 +81,3 @@
 
 
 ?>
-</body>
-</html>
