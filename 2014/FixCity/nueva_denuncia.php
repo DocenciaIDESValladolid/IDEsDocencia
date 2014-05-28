@@ -151,12 +151,12 @@
 	
 	// Inserción de la denuncia en la tabla de denunciantes.
 	$insert = "INSERT INTO denunciantes (id_denuncia, id_denunciante, fecha) VALUES ($id_denuncia,
-				(SELECT _id FROM usuarios WHERE id_facebook LIKE '$id_facebook'), '".date("Y-m-d")."');";
+				'$id_facebook', '".date("Y-m-d")."');";
 	$result = pg_exec($db, $insert);
 	
 	// Inserción en estado_usuario
 	$estado_usuario = "INSERT INTO estado_usuario (id_denuncia, fecha, estado, id_usuario)
-		VALUES ($id_denuncia, '".date("Y-m-d")."', 0, (SELECT _id FROM usuarios WHERE id_facebook LIKE '$id_facebook'));";
+		VALUES ($id_denuncia, '".date("Y-m-d")."', 0, '$id_facebook');";
 	$result = pg_exec($db, $estado_usuario);
 	
 	
