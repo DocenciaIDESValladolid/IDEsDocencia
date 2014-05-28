@@ -167,14 +167,15 @@
 	$array_url = explode(',' , $photo_urls);
 	for($i=1;$i<count($array_url);$i++){
 		echo "<br>Imagen $i es $array_url[$i]";
+		echo "<img src='$array_url[$i]'>";  
 		$query_url = "INSERT INTO imagenes (id_denuncia, ruta) VALUES ($id_denuncia, '$array_url[$i]');";
 		pg_exec($db, $query_url);
 	}
 	
 	
 	
-	echo "Acaba de añadir una nueva denuncia en $municipio, provincia de $provincia.<br>";
-	echo 'Localización geográfica: '.$latitud.' LAT y '.$longitud.'LON<br>';
+	echo "<br>Acaba de añadir una nueva denuncia en $municipio, provincia de $provincia.<br>";
+	echo 'La localización geográfica de la denuncia añadida es: '.$latitud.' LAT y '.$longitud.'LON<br>';
 	echo '<h1>'.$texto.'</h1><br>';
 	echo "Recibirá en su correo $email los distintos detalles sobre posibles modificaciones en su denuncia.";
 	
