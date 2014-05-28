@@ -65,13 +65,13 @@ function getDenunciasConfig()
 	}
 	function getDenunciasConfigAnimCluster()
 	{
-	var animCluster= new OpenLayers.Strategy.AnimatedCluster({
+/*	var animCluster= new OpenLayers.Strategy.AnimatedCluster({
             distance: 20,
             animationMethod: OpenLayers.Easing.Expo.easeOut,
             animationDuration: 10
-        });
+        });*/
 	var animCluster=new OpenLayers.Strategy.Cluster({
-            distance: 20,
+            distance: 40,threshold:2,
         });
 	var strategies = [ new OpenLayers.Strategy.BBOX({resFactor: 1}),animCluster];
 	// Define three colors that will be used to style the cluster features
@@ -81,16 +81,45 @@ function getDenunciasConfig()
                 middle: "rgb(241, 211, 87)", 
                 high: "rgb(253, 156, 115)"
             };
-            
+             var photoRule = new OpenLayers.Rule({
+                filter: new OpenLayers.Filter.Logical({
+						type: OpenLayers.Filter.Logical.NOT,
+						filters: [
+						new OpenLayers.Filter.Comparison({
+									type: OpenLayers.Filter.Comparison.IS_NULL,
+									property: "id_denuncia"})
+								]})	,
+				symbolizer: {
+					externalGraphic:"${img}",//"images/cono.png",
+					graphicWidth: 48,
+					graphicHeight: 48,
+					graphicOpacity: 1.0,
+				}
+            });
+			var conoRule = new OpenLayers.Rule({
+                filter: new OpenLayers.Filter.Logical({
+						type: OpenLayers.Filter.Logical.NOT,
+						filters: [
+						new OpenLayers.Filter.Comparison({
+									type: OpenLayers.Filter.Comparison.IS_NULL,
+									property: "id_denuncia"})
+								]})	,
+				symbolizer: {
+					externalGraphic:"images/cono.png",
+					graphicWidth: 48,
+					graphicHeight: 48,
+					graphicOpacity: 1.0,
+				}
+            });
             // Define three rules to style the cluster features.
             var lowRule = new OpenLayers.Rule({
                 filter: new OpenLayers.Filter.Comparison({
                     type: OpenLayers.Filter.Comparison.LESS_THAN,
                     property: "count",
-                    value: 15
+                    value: 2
                 }),
                 symbolizer: {
-					externalGraphic: "images/cono.png",
+					externalGraphic:"${img}",//"images/cono.png",
 					graphicWidth: 48,
 					graphicHeight: 48,
 					graphicOpacity: 1.0,
@@ -148,7 +177,7 @@ function getDenunciasConfig()
             
             // Create a Style that uses the three previous rules
             var style = new OpenLayers.Style(null, {
-                rules: [lowRule, middleRule, highRule]
+                rules: [photoRule, lowRule, middleRule, highRule]
             }); 
 			var	styleMap= new OpenLayers.StyleMap({
 			"default": style,
