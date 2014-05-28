@@ -208,7 +208,7 @@
 
 	echo $html;
 	
-	echo '
+	echo ' <script>
 	$( document ).on( "pagecreate", function() 
 			{
 				$( ".photopopup" ).on({
@@ -217,7 +217,8 @@
 				$( ".photopopup img" ).css( "max-height", maxHeight );
 				}
 				});
-			});';
+			});
+			</script>';
 
 	
 
