@@ -21,11 +21,39 @@
 		ORDER BY Percentage DESC LIMIT 10;";
 	$result = pg_exec($db, $municipios_mas_resuelven);
 	// Mostramos por pantalla la consulta
-	while($row = pg_fetch_array($result) ) {
+	/*while($row = pg_fetch_array($result) ) {
 		echo "Codigoine: ".$row[0] . " Porcentaje de casos resueltos:" . 
 				$row[1] . " Num Resueltos: " . $row[2] . " Num Total: " . $row[3];
 		echo "<br>";
-	}
+	}*/
+	
+	
+	
+	header('Content-Type: application/json');
+		echo "[";
+		
+		while($row = pg_fetch_array($result)) {
+			$array = array();	
+			$array['codigoine']="\"$row[0]\"";
+			$array['porcentaje']="\"$row[1]\"";
+			echo '{'+join($array,',')+'} ,';
+		}
+		echo "]";
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
 	
 	echo'<br>Municipios que MENOS resuelven los conflictos.<br>';
 	// Lectura de base de datos
@@ -57,7 +85,7 @@
 		echo "<br>";
 	}
 	
-	
+	*/
 
 
 ?>

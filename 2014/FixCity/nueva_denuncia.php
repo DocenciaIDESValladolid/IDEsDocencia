@@ -114,7 +114,7 @@
 	// Comprobamos que el usuario que introduce la denuncia se encuentra registrado en la aplicación
 	$query = "SELECT * FROM usuarios WHERE id_facebook LIKE '".$id_facebook."'";
 	$result = pg_exec($db, $query);
-	if(count(pg_fetch_row($result))>=1){
+	if($result){
 		// El usuario se encuentra registrado.
 		// Dado que el email del usuario puede haber cambiado desde el momento en el que se 
 		// almacenó el usuario por primera vez, actualizamos el emai.
