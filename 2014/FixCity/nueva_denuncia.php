@@ -155,8 +155,8 @@
 	$result = pg_exec($db, $insert);
 	
 	// Inserción en estado_usuario
-	$estado_usuario = "INSERT INTO estado_usuario (id_denuncia, fecha, estado, id_usuario, codigoine)
-		VALUES ($id_denuncia, '".date("Y-m-d")."', 0, '$id_facebook', '$codigoine');";
+	$estado_usuario = "INSERT INTO estado_usuario (id_denuncia, fecha, estado, id_usuario)
+		VALUES ($id_denuncia, '".date("Y-m-d")."', 0, '$id_facebook');";
 	$result = pg_exec($db, $estado_usuario);
 	
 	
@@ -187,7 +187,7 @@
 			echo '
 			<a href="#popupPhotoLandscape" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Imagen $i</a>
 			<div data-role="popup" id="popupPhotoLandscape" class="photopopup" data-overlay-theme="a" data-corners="false" data-tolerance="30,15">
-				<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img src="'.$array_url[$i].'">
+				<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img src="'$array_url[$i]'">
 			</div>';
 			/*FIN de Funcion HTML */
 						
