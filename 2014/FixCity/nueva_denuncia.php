@@ -178,7 +178,7 @@
 	echo "Recibirá en su correo $email los distintos detalles sobre posibles modificaciones en su denuncia.<br>";
 	echo "Su denuncia irá acompañada de las siguientes imagenes.<br>"; 
 	
-	
+	$array_url = explode(',' , $photo_urls);
 	
 	/*Funcion HTML que permite visualizar la galeria de imagenes que se envian.*/
 		$html = '
@@ -197,7 +197,7 @@
 
 	/*FIN de Funcion HTML */
 	 
-	$array_url = explode(',' , $photo_urls);
+	
 	for($i=1;$i<count($array_url);$i++){
 		//echo "Imagen $i --><img src='$array_url[$i]'><br>"; 
 		/*echo $html; */
