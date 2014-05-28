@@ -189,7 +189,9 @@
 			</div>
 			<div data-role="popup" id="popupPhotoPortrait" class="photopopup" data-overlay-theme="a" data-corners="false" data-tolerance="30,15">
 				<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img src="'.$array_url[1].'" alt="Photo portrait">
-			</div>';
+			</div>
+			<img src="'.$array_url[1].'" alt="Photo portrait">
+			';
 
 	/*FIN de Funcion HTML */
 	 echo $html; 
