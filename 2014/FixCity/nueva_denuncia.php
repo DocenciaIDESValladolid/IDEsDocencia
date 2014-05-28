@@ -177,16 +177,19 @@
 	echo '<h1>'.$texto.'</h1><br>';
 	echo "Recibirá en su correo $email los distintos detalles sobre posibles modificaciones en su denuncia.<br>";
 	echo "Su denuncia irá acompañada de las siguientes imagenes.<br>"; 
+	
 	 
 	$array_url = explode(',' , $photo_urls);
 	for($i=1;$i<count($array_url);$i++){
-		echo "<img src='$array_url[$i]'><br>";  
+		echo "Imagen $i --><img src='$array_url[$i]'><br>";  
 		$query_url = "INSERT INTO imagenes (id_denuncia, ruta) VALUES ($id_denuncia, '$array_url[$i]');";
 		pg_exec($db, $query_url);
-	}
-	
-		
+	}		
 ?>
+
+
+
+
 
 </body>
 </html>
