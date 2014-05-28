@@ -81,13 +81,14 @@ function getDenunciasConfig()
                 middle: "rgb(241, 211, 87)", 
                 high: "rgb(253, 156, 115)"
             };
+			
              var photoRule = new OpenLayers.Rule({
                 filter: new OpenLayers.Filter.Logical({
 						type: OpenLayers.Filter.Logical.NOT,
 						filters: [
 						new OpenLayers.Filter.Comparison({
 									type: OpenLayers.Filter.Comparison.IS_NULL,
-									property: "id_denuncia"})
+									property: "img"})
 								]})	,
 				symbolizer: {
 					externalGraphic:"${img}",//"images/cono.png",
