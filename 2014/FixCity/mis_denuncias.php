@@ -18,6 +18,8 @@
 	
 	echo "<table>";
 
+	var_dump($result);
+	
 	while($row = pg_fetch_array($result) ) {
 		
 		$query_municipio = "SELECT nombre, provincia FROM municipios WHERE codigoine = \"$row[4]\";";
