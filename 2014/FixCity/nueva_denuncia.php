@@ -43,6 +43,16 @@
 	@ $id_facebook = $_POST['id_facebook'];	// Gestión de usuarios
 	@ $email = $_POST['email'];
 	
+	// Formateamos textos para introducir en la base de datos.
+	$texto = trim($texto);		
+	$texto = addslashes($texto);
+	$municipio = trim($municipio);
+	$municipio = addslashes($municipio);
+	$provincia = trim($provincia);
+	$email_ayto = trim($email_ayto);
+	$id_facebook = trim($id_facebook);
+	$email = trim($email);
+	$photo_urls = trim($photo_urls);
 	
 	// Comprobamos que las variables que hemos pasado no están vacías.
 	/*if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio 
@@ -95,16 +105,8 @@
 		
 	//}
 
-	// Formateamos textos para introducir en la base de datos.
-	$texto = trim($texto);		
-	$texto = addslashes($texto);
-	$municipio = trim($municipio);
-	$municipio = addslashes($municipio);
-	$provincia = trim($provincia);
-	$email_ayto = trim($email_ayto);
-	$id_facebook = trim($id_facebook);
-	$email = trim($email);
-	$photo_urls = trim($photo_urls);
+
+
 	
 
 	/* ------------------------------------ *
