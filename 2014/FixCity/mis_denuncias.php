@@ -30,8 +30,9 @@
 		$result_municipio = pg_exec($db, $query_municipio);
 		
 		$municipio = pg_fetch_array($result_municipio);
+		echo "$municipio[0]";
 		
-		$query_provincia = "SELECT nombre FROM provincias WHERE id_provincia = $municipio[1] ";
+		$query_provincia = "SELECT nombre FROM provincias WHERE id_provincia = $municipio[1]";
 		$result_provincia = pg_exec($db, $query_provincia);
 		
 		$provincia = pg_fetch_array($result_provincia);
