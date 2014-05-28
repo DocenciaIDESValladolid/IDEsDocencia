@@ -13,11 +13,11 @@
 	echo'<br>Municipios que MAS resuelven los conflictos.<br>';
 	// Lectura de base de datos
 	$municipios_mas_resuelven = 
-		"SELECT id_ayto, 
+		"SELECT codigoine, 
 		SUM(CASE WHEN estado=1 THEN 1 ELSE 0 END)*100/SUM(CASE WHEN estado=0 THEN 1 ELSE 0 END) AS Percentage,
 		SUM(CASE WHEN estado=1 THEN 1 ELSE 0 END) AS Resolved,
 		SUM(CASE WHEN estado=0 THEN 1 ELSE 0 END) AS Total
-		FROM estado_ayto GROUP BY id_ayto
+		FROM estado_usuario GROUP BY codigoine
 		ORDER BY Percentage DESC LIMIT 10;";
 	$result = pg_exec($db, $municipios_mas_resuelven);
 	// Mostramos por pantalla la consulta
