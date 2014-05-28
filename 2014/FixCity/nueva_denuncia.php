@@ -55,9 +55,9 @@
 	$photo_urls = trim($photo_urls);
 	
 	// Comprobamos que las variables que hemos pasado no están vacías.
-	/*if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio 
+	if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio 
 		|| !$provincia || !$id_facebook || !$email || !$email_ayto || !$photo_urls)
-	{*/
+	{
 		echo "	<table>
 					<tr>
 					  <td>Latitud</td>
@@ -103,7 +103,7 @@
 		echo "<input type='button' value='Back' onClick='history.go(-1);'>";
 	exit;
 		
-	//}
+	}
 
 
 
