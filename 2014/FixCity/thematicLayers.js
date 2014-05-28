@@ -22,12 +22,10 @@ colorMasCumplidores[7]= '#00ff99';
 colorMasCumplidores[8]= '#33ff66'; 
 colorMasCumplidores[9]= '#00ff33';
 
-function addThematicUALayers(arrayMun, n)
+function addThematicUALayers(arrayMun, layerId,layerTitle,property, values, colors)
 {
-	if (n==0) {var sld=generateCustomUASld('nationalcode',arrayMun,colorMasCumplidores);}
-	if (n==1) {var sld=generateCustomUASld('nationalcode',arrayMun,colorMenosCumplidores);}
-	
-	var wms_UA = new OpenLayers.Layer.WMS("Menos cumplidores",
+	var sld=generateCustomUASld(property,values,colors);
+	var wms_UA = new OpenLayers.Layer.WMS(layerTitle,
         urlWmsUA,
         {	
 		//layers: 'AU.AdministrativeUnit',
@@ -37,12 +35,12 @@ function addThematicUALayers(arrayMun, n)
 		},
         {isBaseLayer: false, singleTile:true, tileOptions: {maxGetUrlLength: 2048}, visibility:false}
     );
-	wms_UA.id='thematicUA';
+	wms_UA.id=layerId;
 	return wms_UA;
 }
-function updateThematicUALayer(property, values, colors)
+function updateThematicUALayer(layerId,property, values, colors)
 {
-var layer= map.getLayer('thematicUA');
+var layer= map.getLayer(layerId);
 var sld=generateCustomUASld(property,values,colors);
 layer.params.SLD_BODY = sld;
 layer.redraw();

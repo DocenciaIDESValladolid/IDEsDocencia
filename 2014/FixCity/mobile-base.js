@@ -155,8 +155,12 @@ var init = function (onSelectFeatureFunction) {
 	map.updateSize();
 	if (typeof addThematicUALayers == 'function')
 	{
-	var uaLayer= addThematicUALayers(munis,1); //si es 1 el segundo parámetro, son los menos cumplidores, si es 0, son los más cumplidores
+	var uaLayer= addThematicUALayers(munis,"thematicUAmenosCumplidoras","Menos cumplidores",'nationalcode',[],[]);
 	map.addLayer(uaLayer);
+	uaLayer= addThematicUALayers([],"thematicUAmasCumplidoras","Más cumplidores",'nationalcode',[],[]);
+	map.addLayer(uaLayer);
+	
+	updateThematicUALayer("thematicUAmenosCumplidoras",'nationalcode', munis, colorMenosCumplidores);
 	}
 	var wms_concentracion=createHeatmapLayer();
 	map.addLayer(wms_concentracion);
