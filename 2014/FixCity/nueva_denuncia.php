@@ -194,20 +194,17 @@
 			';
 
 	/*FIN de Funcion HTML */
-	 echo $html; 
+	  
 	
 	for($i=1;$i<count($array_url);$i++){
 		//echo "Imagen $i --><img src='$array_url[$i]'><br>"; 
 		$query_url = "INSERT INTO imagenes (id_denuncia, ruta) VALUES ($id_denuncia, '$array_url[$i]');";
 		pg_exec($db, $query_url);
 	}		
+	
+	echo $html;
 
-
- 
-echo $html; 
-
-
-
+	
 
 
 
