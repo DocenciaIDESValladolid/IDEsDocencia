@@ -22,16 +22,11 @@
 	
 	
 	header('Content-Type: application/json');
-		echo "[";
-		
-		while($row = pg_fetch_array($result)) {
-			$array = array();	
-			$array['codigoine']="\"$row[0]\"";
-			$array['porcentaje']="\"$row[1]\"";
-			echo '{'+join(',',$array)+'} ,';
+	$final_result=array();		
+	while($row = pg_fetch_array($result)) {
+		$final_result[]=$row;
 		}
-		echo "]";
-	
+	echo  json_encode($final_result);
 	
 	
 	
