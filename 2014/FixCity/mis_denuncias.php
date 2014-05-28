@@ -26,7 +26,7 @@
 
 	while($row = pg_fetch_array($result) ) {
 		
-		$query_municipio = "SELECT nombre, provincia FROM municipios WHERE codigoine = \"$row[4]\";";
+		$query_municipio = "SELECT nombre, provincia FROM municipios WHERE codigoine = '$row[4]';";
 		$result_municipio = pg_exec($db, $query_municipio);
 		
 		$municipio = pg_fetch_array($result_municipio);
