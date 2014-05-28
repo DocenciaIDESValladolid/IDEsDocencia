@@ -181,7 +181,7 @@
 	
 	
 	/*Funcion HTML que permite visualizar la galeria de imagenes que se envian.*/
-		$html = <<<html 
+		/*$html = <<<html 
 		<html> 
 		<head> 
 			<a href="#popupPhotoLandscape" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Photo landscape</a>
@@ -199,7 +199,7 @@
 	$array_url = explode(',' , $photo_urls);
 	for($i=1;$i<count($array_url);$i++){
 		//echo "Imagen $i --><img src='$array_url[$i]'><br>"; 
-		echo $html; 
+		/*echo $html; */
 		$query_url = "INSERT INTO imagenes (id_denuncia, ruta) VALUES ($id_denuncia, '$array_url[$i]');";
 		pg_exec($db, $query_url);
 	}		
