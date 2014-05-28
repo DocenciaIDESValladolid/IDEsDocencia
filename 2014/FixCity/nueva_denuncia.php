@@ -187,14 +187,11 @@
 		$html = '
 			<a href="#popupPhotoLandscape" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Photo landscape</a>
 			<a href="#popupPhotoPortrait" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" data-transition="fade">Photo portrait</a>
-			<div data-role="popup" id="popupPhotoLandscape" class="photopopup" data-overlay-theme="a" data-corners="false" data-tolerance="30,15">
-				<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img src="'.$array_url[1].'" alt="Phlsajdlfkje">
-			</div>
-			<div data-role="popup" id="popupPhotoPortrait" class="photopopup" data-overlay-theme="a" data-corners="false" data-tolerance="30,15">
-				<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img src="'.$array_url[1].'" alt="Photo portrait">
-			</div>
 			';
-			
+		$html2 = '
+			<div data-role="popup" id="popupPhotoLandscape" class="photopopup" data-overlay-theme="a" data-corners="false" data-tolerance="30,15">
+				<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img src="'.$array_url[$i].'" alt="Phlsajdlfkje">
+			</div>';
 			
 			
 			
@@ -206,6 +203,7 @@
 		//echo "Imagen $i --><img src='$array_url[$i]'><br>"; 
 		$query_url = "INSERT INTO imagenes (id_denuncia, ruta) VALUES ($id_denuncia, '$array_url[$i]');";
 		pg_exec($db, $query_url);
+		echo $html2;			
 	}
 
 	echo $html;
