@@ -155,8 +155,8 @@
 	$result = pg_exec($db, $insert);
 	
 	// Inserción en estado_usuario
-	$estado_usuario = "INSERT INTO estado_usuario (id_denuncia, id_usuario, fecha, estado)
-		VALUES ($id_denuncia, (SELECT _id FROM usuarios WHERE id_facebook LIKE '$id_facebook'), '".date("Y-m-d")."', 0);";
+	$estado_usuario = "INSERT INTO estado_usuario (id_denuncia, fecha, estado, id_usuario)
+		VALUES ($id_denuncia, '".date("Y-m-d")."', 0, (SELECT _id FROM usuarios WHERE id_facebook LIKE '$id_facebook'));";
 	$result = pg_exec($db, $estado_usuario);
 	
 	
