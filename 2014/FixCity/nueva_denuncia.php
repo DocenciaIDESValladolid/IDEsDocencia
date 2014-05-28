@@ -176,6 +176,7 @@
 	
 	echo "<br>Acaba de añadir una nueva denuncia en $municipio, provincia de $provincia.<br>";
 	echo 'La localización geográfica de la denuncia añadida es: '.$latitud.' LAT y '.$longitud.'LON<br>';
+	echo "El texto de la denuncia es:";
 	echo '<h1>'.$texto.'</h1><br>';
 	echo "Recibirá en su correo $email los distintos detalles sobre posibles modificaciones en su denuncia.<br>";
 	echo "Su denuncia irá acompañada de las siguientes imagenes.<br>"; 
@@ -194,6 +195,7 @@
 			</div>
 			<img src="'.$array_url[1].'" alt="Photo portrait">
 			';
+			
 
 	/*FIN de Funcion HTML */
 	  
@@ -202,9 +204,20 @@
 		//echo "Imagen $i --><img src='$array_url[$i]'><br>"; 
 		$query_url = "INSERT INTO imagenes (id_denuncia, ruta) VALUES ($id_denuncia, '$array_url[$i]');";
 		pg_exec($db, $query_url);
-	}		
-	
+	}
+
 	echo $html;
+	
+	
+	$( document ).on( "pagecreate", function() 
+			{
+				$( ".photopopup" ).on({
+				popupbeforeposition: function() {
+				var maxHeight = $( window ).height() - 60 + "px";
+				$( ".photopopup img" ).css( "max-height", maxHeight );
+				}
+				});
+			});
 
 	
 
