@@ -169,8 +169,11 @@
 	
 	if($existe_municipio){
 		// Do nothing
+		echo "Existe municipipo";
 	}
 	else{
+	
+		echo "$municipio $provincia lkañlalalal";
 		$nuevo_municipio = "INSERT INTO municipios VALUES ('$municipio', 
 					(SELECT id_provincia FROM provincias WHERE nombre = '$provincia'),
 					'$codigoine')";
