@@ -336,7 +336,7 @@ var init = function (onSelectFeatureFunction) {
 			function(data)
 			{
 			$("#reportImageList").html('');
-			for(a=0;a<2;a++)for (i in data)
+			for (i in data)
 				{
 				$("#reportImageList").append($('<img></img>').attr('src',data[i].thumbnail).attr('width',60));//.append($('<br/>'));
 				}
