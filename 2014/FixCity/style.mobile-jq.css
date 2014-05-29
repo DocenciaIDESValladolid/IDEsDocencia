@@ -80,3 +80,7 @@ body {
 #details-list li{
 	padding:15px 10px;
 }
+#minimap {
+height: 200px;
+width: 100%;
+}
