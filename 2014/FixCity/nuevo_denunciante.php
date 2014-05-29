@@ -25,6 +25,7 @@
 	error_reporting(E_ALL);		// Sentencia para que se muestren los errores PHP por pantalla
 	require('db.php');			// Fichero de conexión a la base de datos
 
+	@ $id_denuncia = $_GET['id_denuncia'];	// Gestión de usuarios
 	@ $id_facebook = $_POST['id_facebook'];	// Gestión de usuarios
  
 	// Inserción de la denunciante en la tabla de denunciantes
