@@ -170,13 +170,16 @@
 	$query_municipios = "SELECT nombre FROM municipios WHERE nombre = '$municipio'";
 	$existe_municipio = pg_exec($db, $query_municipios);
 	
-	if(!$existe_municipio){
-		echo "$municipio $provincia lkañlalalal";
-		$nuevo_municipio = "INSERT INTO municipios VALUES ('$municipio', 
+	while($row = pg_fetch_array($result) ) {
+		if(!(strcmp ( $municipio , $row[0])==0)){
+			echo "$municipio $provincia lkañlalalal";
+			$nuevo_municipio = "INSERT INTO municipios VALUES ('$municipio', 
 					(SELECT id_provincia FROM provincias WHERE nombre = '$provincia'),
 					'$codigoine')";
-		pg_exec($db, $nuevo_municipio);
+			pg_exec($db, $nuevo_municipio);
+		}
 	}
+
 	
 	/*
 	CREATE TABLE municipios
