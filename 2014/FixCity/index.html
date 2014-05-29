@@ -116,12 +116,9 @@ var publish = function () {
 	<!----
 	Panel de información de la denuncia seleccionada
 	-->
-	<div data-role="panel" data-position-fixed="true" data-position="left" data-display="overlay" id="infoDenunciaPanel" >	
-			
-            <img src="images/cono.png" align="left" width="50px"/><h1>Incidencia</h1>
-			<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
-			<div id="nuevo_denunciante"></div>
-			<a href="detalle.php?id=110" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Detalle</a>
+	<div data-role="panel" data-position="left" data-display="overlay" id="infoDenunciaPanel">
+			<br/>
+			<img src="images/cono.png" align="left"/>
 			<div class="ui-corner-all custom-corners">
 			  <div class="ui-bar ui-bar-a"><h3>Denuncia de incidencia en</h3>
 			  </div>
@@ -134,7 +131,6 @@ var publish = function () {
 			  </div>
 			  <div class="ui-body ui-body-a">
 			<p id="reportDescription"></p>
-			<p id="reportImageList"></p>
 			</div>
 			</div>
 			
@@ -153,10 +149,10 @@ var publish = function () {
 				</div>
 				<div data-role="footer" >
 					<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-geolocation ui-btn-icon-notext" onclick="autolocate();return false;">Locate</a>
-					<a href="mis_denuncias.php" id="misdenuncias_button" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Mis Denuncias</a>
+					<a href="misdenuncias.php" id="misdenuncias_button" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Mis Denuncias</a>
 					<a href="#searchpage" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-search">Search</a>
 					<a href="#layerspage" data-transition="fade" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-bullets">Capas</a>
-					<a href="estadisticas_municipios.php" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Estadísticas</a>
+					<a href="estadisticas.php" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Estadísticas</a>
 					<a href="#" id="iniciosesionFacebook" class="ui-btn  ui-btn-icon-right ui-icon-fb ui-btn-icon-notext ui-btn-inline " onclick="login(); return false;">Login</a>
 
 					<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
@@ -264,17 +260,17 @@ var publish = function () {
 					<div id="usuario_info_prueba"></div>
 					<p>Escriba aquí la descripción de su denuncia</p>
 					<textarea name="texto" rows="10" cols="80"></textarea>	
-					<label for="emailMunicipality">Nuevo correo de contacto del municipio:</label>
+					<label for="emailMunicipality">Introduzca el correo de contacto del municipio:</label>
 					<input type="email" name="emailMunicipality" id="emailMunicipality"></input>
-					<label for="emailMunicipalitySelect">O seleccione un email ya registrado al que notificar.</label>
-					<select name="emailMunicipalitySelect" id="emailMunicipalitySelect">
+					<!--<label for="emailMunicipalitySelect">O seleccione un email ya registrado al que notificar.</label>-->
+					<select name="emailMunicipalitySelect" id="emailMunicipalitySelect" data-native-menu="false">
 					</select>
-
-					<input type="submit" value="Enviar" name="submit" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-b ui-mini">
-					<input type="reset" value="Borrar" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-b ui-mini">
 					<input type="hidden" name="photo_urls" id="photo_urls">
 					<input type="hidden" name="id_facebook" id="id_facebook">
 					<input type="hidden" name="email" id="email_facebook">
+					<input data-role="button" type="submit" value="Enviar" name="submit" data-inline="true">
+					<input data-role="button" type="reset" value="Borrar" data-inline="true">
+					<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
 					
 			  </form>
 					<label for="filesinput">Seleccione hasta 3 imágenes que identifiquen la denuncia:</label>
@@ -304,7 +300,6 @@ var publish = function () {
 					 </script>
 			</div>
 			<div data-role="footer" data-position="fixed" >
-				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
 			</div>
 		</div><!--Fin de denuncias.-->
 	
