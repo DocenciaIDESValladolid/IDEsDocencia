@@ -3,6 +3,7 @@
 var apiKey = "AqTGBsziZHIJYYxgivLBf0hVdrAk9mWO5cQcb8Yux8sW5M8c8opEC2lZqKR1ZZXf";
 // initialize map when page ready
 var map;
+var id_facebook;
 var selectCtrl;
 var gg = new OpenLayers.Projection("EPSG:4326");
 //var sm = new OpenLayers.Projection("EPSG:900913");
@@ -30,6 +31,68 @@ munis[6]='34073434120'; //Palencia
 munis[7]='34074747193'; //Viana de Cega
 munis[8]='34074747082'; //Matapozuelos
 munis[9]='34074747158'; //La Seca
+
+/* FACEBOOK */
+// Cuando la pagina carga miramos si ya hay un usuario identificado.
+fb.ready(function(){ 
+  if (fb.logged)
+  {
+   updateFacebookLoginInfo(fb)
+  }
+});
+
+
+// Funcion para logarse con Facebook.
+function login() {
+  fb.login(function(){ 
+    if (fb.logged) {
+		// Cambiamos el link de identificarse por el nombre y la foto del usuario.
+		updateFacebookLoginInfo(fb);
+    } else {
+      toast("No se pudo identificar al usuario");
+    }
+  })
+};
+
+// Funcion para actualizar la información de facebook
+function updateFacebookLoginInfo(fb)
+{
+	id_facebook = fb.user.id;
+	var fb_user_label = '<img valign="center" height="30" src="'+fb.user.picture+'"/>' + fb.user.name;
+	var html = fb_user_label + '<a href="#" class="ui-btn  ui-btn-icon-left ui-icon-delete" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
+	$("#estadoLogin").html(html);
+	$("#iniciosesionFacebook").hide();
+	$("#misdenuncias_button").show();
+	$("#nuevadenuncia_loc_actual_button").show();
+	$("#search_button").show();
+	$("#mappage").trigger( "updatelayout" );
+	toast(fb_user_label);
+	
+	$("#id_facebook").val(fb.user.id);
+	$("#email_facebook").val(fb.user.email);
+	
+	html = 'Usuario info: ' + fb.user.id + ' correo es: ' + fb.user.email;
+	$("#usuario_info_prueba").html(html);
+	
+}
+
+// Funcion para publicar un mensaje en tu muro
+var publish = function () {
+    fb.publish({
+      message : "Estoy probando un script para que la gente publique desde mi/s web/s en Facebook",
+      picture : "http://blog.ikhuerta.com/wp-content/themes/ikhuerta3/images/ikhuerta.jpg",
+      link : "http://blog.ikhuerta.com/simple-facebook-graph-javascript-sdk",
+      name : "Simple Facebook Graph Javascript SDK",
+      description : "Facebook Graph es una nueva forma de conectar tu web Facebook. Con este script es muy fácil conseguirlo :)"
+    },function(published){ 
+      if (published)
+       alert("publicado!");
+      else
+       alert("No publicado :(, seguramente porque no estas identificado o no diste permisos");
+    });  
+}
+
+
 
 var init = function (onSelectFeatureFunction) {
 
@@ -358,7 +421,7 @@ var init = function (onSelectFeatureFunction) {
 					'<form id="nuevo_denunciante_form" data-role="form" data-ajax="false"' + 
 					'action="nuevo_denunciante.php?id_denuncia=' + feature.attributes.id_denuncia +'"' +
 					'method="post" enctype="multipart/form-data">'+
-					'<input type="hidden" name="id_facebook" id="id_facebook">'+
+					'<input type="hidden" name="id_facebook" id="id_facebook" value="'+ id_facebook +'">'+
 					'<input type="submit" value="Apoyar denuncia" name="submit" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-b ui-mini">'+
 					'</form>';
 		$("#nuevo_denunciante").html(html);
