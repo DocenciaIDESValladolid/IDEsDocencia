@@ -46,8 +46,9 @@ $id=$_GET['id'];
 			<p><b id="reportLocationLabel"></b>
 <div id="minimap"></div>
 <script>
+{
 var sm = new OpenLayers.Projection("EPSG:3857");
-map = new OpenLayers.Map({
+mapmini = new OpenLayers.Map({
         div: "minimap",
         theme: null,
         projection: sm,
@@ -66,15 +67,16 @@ map = new OpenLayers.Map({
         zoom: 20
     });
 
-map.updateSize();
-var markers = new OpenLayers.Layer.Markers( "Markers" );
-map.addLayer(markers);
+mapmini.updateSize();
+var markersMini = new OpenLayers.Layer.Markers( "Markers" );
+mapmini.addLayer(markersmini);
 
 var size = new OpenLayers.Size(56,56);
 var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
 var icon = new OpenLayers.Icon('images/marker-icon-fixit.png', size, offset);
-markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(<?php echo $row["x"].','.$row["y"]; ?>),icon));
- map.zoomToExtent(markers.getDataExtent());
+markersmini.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(<?php echo $row["x"].','.$row["y"]; ?>),icon));
+mapmini.zoomToExtent(markersmini.getDataExtent());
+}
 </script>
 
 </p>
