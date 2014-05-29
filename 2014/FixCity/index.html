@@ -116,9 +116,12 @@ var publish = function () {
 	<!----
 	Panel de información de la denuncia seleccionada
 	-->
-	<div data-role="panel" data-position="left" data-display="overlay" id="infoDenunciaPanel">
-			<br/>
-			<img src="images/cono.png" align="left"/>
+	<div data-role="panel" data-position-fixed="true" data-position="left" data-display="overlay" id="infoDenunciaPanel" >	
+			
+            <img src="images/cono.png" align="left" width="50px"/><h1>Incidencia</h1>
+			<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+			<div id="nuevo_denunciante"></div>
+			<a href="detalle.php?id=110" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Detalle</a>
 			<div class="ui-corner-all custom-corners">
 			  <div class="ui-bar ui-bar-a"><h3>Denuncia de incidencia en</h3>
 			  </div>
@@ -131,9 +134,10 @@ var publish = function () {
 			  </div>
 			  <div class="ui-body ui-body-a">
 			<p id="reportDescription"></p>
+			<p id="reportImageList"></p>
 			</div>
 			</div>
-			<div id="nuevo_denunciante"></div>
+			
 			
 	</div>
 	<!--

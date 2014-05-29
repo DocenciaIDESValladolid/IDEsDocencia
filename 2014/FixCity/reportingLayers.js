@@ -136,8 +136,8 @@ function getDenunciasConfig()
                 symbolizer: {
 					externalGraphic: "images/cono.png",
 					graphicOpacity: 1.0,
-					graphicWidth: 48,
-					graphicHeight: 48,
+					graphicWidth: 64,
+					graphicHeight: 64,
                     fillColor: colors.middle,
                     fillOpacity: 1, 
                     strokeColor: colors.middle,
@@ -148,7 +148,7 @@ function getDenunciasConfig()
                     labelOutlineWidth: 1,
                     fontColor: "#000000",
                     fontOpacity: 1,
-                    fontSize: "20px"
+                    fontSize: "28px"
                 }
             });
             var highRule = new OpenLayers.Rule({
@@ -159,8 +159,8 @@ function getDenunciasConfig()
                 }),
                 symbolizer: {
 					externalGraphic: "images/cono.png",
-					graphicWidth: 48,
-					graphicHeight: 48,
+					graphicWidth: 80,
+					graphicHeight: 80,
 					graphicOpacity: 1.0,
                     fillColor: colors.high,
                     fillOpacity: 1, 
@@ -172,7 +172,7 @@ function getDenunciasConfig()
                     labelOutlineWidth: 1,
                     fontColor: "#00000",
                     fontOpacity: 1,
-                    fontSize: "20px"
+                    fontSize: "30px"
                 }
             });
             
@@ -182,6 +182,7 @@ function getDenunciasConfig()
             }); 
 			var	styleMap= new OpenLayers.StyleMap({
 			"default": style,
+			"temporary": { graphicWidth:120, graphicHeight:120, fontSize: "80px" },
             /*externalGraphic: "images/cono.png",
             graphicOpacity: 1.0,
             graphicWidth: 48,

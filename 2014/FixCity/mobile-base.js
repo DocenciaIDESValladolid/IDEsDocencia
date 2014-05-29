@@ -3,12 +3,14 @@
 var apiKey = "AqTGBsziZHIJYYxgivLBf0hVdrAk9mWO5cQcb8Yux8sW5M8c8opEC2lZqKR1ZZXf";
 // initialize map when page ready
 var map;
+var selectCtrl;
 var gg = new OpenLayers.Projection("EPSG:4326");
 //var sm = new OpenLayers.Projection("EPSG:900913");
 var sm = new OpenLayers.Projection("EPSG:3857");
 var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
 var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
 var urlWmsUA = 'http://www.ign.es/wms-inspire/unidades-administrativas';
+var url_base='http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/';// DEBUG Para depurar en local con servicios remotos
 var administrativeUnitsFeatureType= 'unidades-administrativas:AU.AdministrativeUnit';
 var prov_name;
 var muni_name;
@@ -49,7 +51,7 @@ var init = function (onSelectFeatureFunction) {
 						graphicYOffset: -64});
 	var styleMark = new OpenLayers.StyleMap({
 						'default': styleMarkDefault,
-						'select':styleMarkSelect
+						'temporary':styleMarkSelect
 						});
 	var markers = new OpenLayers.Layer.Vector( "Markers", { styleMap: styleMarkDefault } );
 	markers.id="Markers";
@@ -160,7 +162,17 @@ var init = function (onSelectFeatureFunction) {
 	uaLayer= addThematicUALayers([],"thematicUAmasCumplidoras","Más cumplidores",'nationalcode',[],[]);
 	map.addLayer(uaLayer);
 	
-	updateThematicUALayer("thematicUAmenosCumplidoras",'nationalcode', munis, colorMenosCumplidores);
+	$.getJSON(url_base+'estadisticas_municipios.php', function(data)
+			{
+				var munis=[];
+				for ( munind in data)
+					{
+					if (data[munind].codigoine != null)
+						munis.push(data[munind].codigoine);
+					}
+				updateThematicUALayer("thematicUAmasCumplidoras",'nationalcode', munis, colorMasCumplidores);
+			});
+	
 	}
 	var wms_concentracion=createHeatmapLayer();
 	map.addLayer(wms_concentracion);
@@ -178,14 +190,9 @@ var init = function (onSelectFeatureFunction) {
                 hover: true,
                 highlightOnly: true,
                 renderIntent: "temporary",
-                eventListeners: {
-                    beforefeaturehighlighted: report,
-                    featurehighlighted: report,
-                    featureunhighlighted: report
-                }
             });
 
-     var selectCtrl = new OpenLayers.Control.SelectFeature([wfs,markers],
+    selectCtrl = new OpenLayers.Control.SelectFeature([wfs,markers],
                 {
 				clickout: true
 				}
@@ -266,6 +273,7 @@ var init = function (onSelectFeatureFunction) {
 	*/
 	function onMarkFeatureSelect(evt) {
 		$("#infopanel").panel("open");
+		selectCtrl.unselectAll();
 	}
 	
 	function formatDegrees(lonDecimal, latDecimal){
@@ -301,6 +309,8 @@ var init = function (onSelectFeatureFunction) {
 	*/
 	function onWFSFeatureSelect(evt) {
 		feature = evt.feature;
+		selectCtrl.unselectAll();
+
 		//Si es un cluster ignorar
 		if (typeof feature.cluster != 'undefined')
 		{
@@ -320,8 +330,18 @@ var init = function (onSelectFeatureFunction) {
 		$("#reportDescription").html("A las "+feature.attributes.fecha+" he informado del problema: \""+feature.attributes.texto+"\"");
 		if (typeof feature.attributes.img != 'undefined')
 		{
-		$("#reportDescription").append($('<img></img>').attr('src',feature.attributes.img).attr('width',200));
+		$("#reportImageList").append($('<img></img>').attr('src',feature.attributes.img).attr('width',200));
 		}
+		$.get(url_base+'photos.php',{id: feature.attributes.id_denuncia}, 
+			function(data)
+			{
+			$("#reportImageList").html('');
+			for(a=0;a<2;a++)for (i in data)
+				{
+				$("#reportImageList").append($('<img></img>').attr('src',data[i].thumbnail).attr('width',60));//.append($('<br/>'));
+				}
+			});
+			
 		var point=feature.geometry.getBounds().getCenterLonLat();
 		
 		var pointProj=new OpenLayers.LonLat(point.lon,point.lat);

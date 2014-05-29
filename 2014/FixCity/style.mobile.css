@@ -68,7 +68,9 @@ div.olMapViewport {
     -ms-perspective: 1000;
     perspective: 1000;
 }
+
 #minimap {
 height: 200px;
 width: 100%;
 }
+
