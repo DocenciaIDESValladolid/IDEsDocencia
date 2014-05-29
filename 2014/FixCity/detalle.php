@@ -68,7 +68,7 @@ mapmini = new OpenLayers.Map({
     });
 
 mapmini.updateSize();
-var markersMini = new OpenLayers.Layer.Markers( "Markers" );
+var markersmini = new OpenLayers.Layer.Markers( "Markers" );
 mapmini.addLayer(markersmini);
 
 var size = new OpenLayers.Size(56,56);
