@@ -29,7 +29,7 @@
  
 	// Inserción de la denunciante en la tabla de denunciantes
 	$query = "INSERT INTO denunciantes (id_denuncia, id_denunciante, fecha) VALUES 
-            ('"$id_denuncia"', '"$id_facebook"','".date("Y-m-d")."')";
+            ($id_denuncia, '$id_facebook','".date("Y-m-d")."')";
 	
 	$result = pg_exec($db, $query);
 ?>
