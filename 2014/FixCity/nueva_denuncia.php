@@ -171,7 +171,9 @@
 	$existe_municipio = pg_exec($db, $query_municipios);
 	
 	while($row = pg_fetch_array($result) ) {
+	echo "HOLA 1";
 		if(!(strcmp ( $municipio , $row[0])==0)){
+			echo "HOLA 2";
 			echo "$municipio $provincia lkañlalalal";
 			$nuevo_municipio = "INSERT INTO municipios VALUES ('$municipio', 
 					(SELECT id_provincia FROM provincias WHERE nombre = '$provincia'),
