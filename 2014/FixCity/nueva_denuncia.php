@@ -161,6 +161,33 @@
 	
 	
 	/* ------------------------------------ *
+	 * 			GESTIÓN DE MUNICIPIOS		*
+	 * ------------------------------------ */
+	
+	$query_municipios = "SELECT nombre FROM municipios WHERE nombre = '$municipio'";
+	$existe_municipio = pg_exec($db, $query_municipios);
+	
+	if($existe_municipio){
+		// Do nothing
+	}
+	else{
+		$nuevo_municipio = "INSERT INTO municipios VALUES ('$municipio', 
+					(SELECT id_provincia FROM provincias WHERE nombre = '$provincia'),
+					'$codigoine')";
+		pg_exec($db, $nuevo_municipio);
+	}
+	
+	/*
+	CREATE TABLE municipios
+	(
+	  nombre text,
+	  provincia integer NOT NULL,
+	  codigoine text NOT NULL,
+	  CONSTRAINT municipios_pkey PRIMARY KEY (codigoine)
+	)
+	*/
+	
+	/* ------------------------------------ *
 	 * 			GESTIÓN DE IMÁGENES 		*
 	 * ------------------------------------ */	
 
