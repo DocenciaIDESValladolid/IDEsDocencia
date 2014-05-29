@@ -117,10 +117,13 @@
 		// Dado que el email del usuario puede haber cambiado desde el momento en el que se 
 		// almacenó el usuario por primera vez, actualizamos el emai.
 		
+		echo "usuario update";
+		
 		$update = "UPDATE usuarios SET email='$email' WHERE id_facebook LIKE '$id_facebook';";
 		pg_exec($db, $update);
 	}
 	else{
+		echo "ussuario insert";
 		// Si el usuario no se encuentra registrado, insertamos una nueva fila en la BD.
 		$insert = "INSERT INTO usuarios (id_facebook, email) VALUES ('$id_facebook','$email');";
 		pg_exec($db, $insert);
@@ -167,7 +170,7 @@
 	$query_municipios = "SELECT nombre FROM municipios WHERE nombre = '$municipio'";
 	$existe_municipio = pg_exec($db, $query_municipios);
 	
-	if($existe_municipio){
+	if(count(pg_fetch_array($existe_municipio))==0){
 		// Do nothing
 		echo "Existe municipipo";
 	}
