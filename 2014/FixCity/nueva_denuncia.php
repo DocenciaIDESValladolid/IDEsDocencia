@@ -123,7 +123,6 @@
 		// Si el usuario no se encuentra registrado, insertamos una nueva fila en la BD.
 		$insert = "INSERT INTO usuarios (id_facebook, email) VALUES ('$id_facebook','$email');";
 		pg_exec($db, $insert);
-		echo "pg_affected_rows() eyyyyyyyyy";
 	}
 	else{
 		// El usuario se encuentra registrado.
@@ -191,6 +190,20 @@
 		pg_exec($db, $nuevo_municipio);
 	}
 
+	$query_email = "SELECT email FROM email WHERE id_municipio LIKE '$codigoine'";
+	$existe_email = pg_exec($db, $query_email);
+	$e = 0;
+	while($row = pg_fetch_array($existe_email) ) {
+		if(strcmp($row[0],$email_ayto)==0){
+			$e = 1;
+		}
+	}
+	
+	if($e == 0){
+		$nuevo_email = "INSERT INTO email VALUES ('$email_ayto', '$codigoine')";
+		pg_exec($db, $nuevo_email);
+	}
+	
 	
 	/*
 	CREATE TABLE municipios
