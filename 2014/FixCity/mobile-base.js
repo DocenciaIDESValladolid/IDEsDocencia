@@ -355,7 +355,9 @@ var init = function (onSelectFeatureFunction) {
 		
 		
 		var html =  '¿Quiere Apoyar la denuncia?'+ 
-					'<form id="nuevo_denunciante_form" data-role="form" data-ajax="false" action="nuevo_denunciante.php" method="post" enctype="multipart/form-data">'+
+					'<form id="nuevo_denunciante_form" data-role="form" data-ajax="false"' + 
+					'action="nuevo_denunciante.php?id_denuncia=' + feature.attributes.id_denuncia +'"' +
+					'method="post" enctype="multipart/form-data">'+
 					'<input type="hidden" name="id_facebook" id="id_facebook">'+
 					'<input type="hidden" name="id_denuncia" value="' + feature.attributes.id_denuncia +'">'+
 					'<input type="submit" value="Apoyar denuncia" name="submit" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-b ui-mini">'+
