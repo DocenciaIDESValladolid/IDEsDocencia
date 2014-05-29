@@ -348,7 +348,7 @@ var init = function (onSelectFeatureFunction) {
 		pointProj.transform(map.getProjectionObject(), gg);
 		var latlonString = formatDegrees(pointProj.lat, pointProj.lon);
 		$("#reportLocationLabel").html('('+latlonString+')');
-		$("#reportDetailsLink").attr("href","reportDetails.php?reportId="+feature.attributes.id_denuncia);
+		$("#reportDetailsLink").attr("href","detalle.php?id="+feature.attributes.id_denuncia);
 		$("#nuevadenuncia_loc_actual_button").show();
 		$("#infoDenunciaPanel").trigger( "updatelayout" );
 		$("#infoDenunciaPanel").panel("open");
