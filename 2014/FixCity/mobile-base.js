@@ -359,7 +359,6 @@ var init = function (onSelectFeatureFunction) {
 					'action="nuevo_denunciante.php?id_denuncia=' + feature.attributes.id_denuncia +'"' +
 					'method="post" enctype="multipart/form-data">'+
 					'<input type="hidden" name="id_facebook" id="id_facebook">'+
-					'<input type="hidden" name="id_denuncia" value="' + feature.attributes.id_denuncia +'">'+
 					'<input type="submit" value="Apoyar denuncia" name="submit" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-b ui-mini">'+
 					'</form>';
 		$("#nuevo_denunciante").html(html);
