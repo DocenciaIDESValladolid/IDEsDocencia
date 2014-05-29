@@ -171,7 +171,7 @@
 	$existe_municipio = pg_exec($db, $query_municipios);
 	
 	$m = 0;
-	while($row = pg_fetch_array($result) ) {
+	while($row = pg_fetch_array($existe_municipio) ) {
 		$m = 1;
 	}
 	
