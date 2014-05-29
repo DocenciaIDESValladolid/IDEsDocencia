@@ -32,7 +32,13 @@ munis[7]='34074747193'; //Viana de Cega
 munis[8]='34074747082'; //Matapozuelos
 munis[9]='34074747158'; //La Seca
 
-/* FACEBOOK */
+
+
+
+
+var init = function (onSelectFeatureFunction) {
+
+	/* FACEBOOK */
 // Cuando la pagina carga miramos si ya hay un usuario identificado.
 fb.ready(function(){ 
   if (fb.logged)
@@ -93,8 +99,6 @@ var publish = function () {
 }
 
 
-
-var init = function (onSelectFeatureFunction) {
 
     var vector = new OpenLayers.Layer.Vector("vector", {});
 	/////Capa marcador
