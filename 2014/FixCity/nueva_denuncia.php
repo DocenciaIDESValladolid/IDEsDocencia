@@ -175,7 +175,7 @@
 		$m = 1;
 	}
 	
-	if($m == 1){
+	if($m == 0){
 		echo "HOLA 2";
 		echo "$municipio $provincia lkañlalalal";
 		$nuevo_municipio = "INSERT INTO municipios VALUES ('$municipio', 
