@@ -112,7 +112,20 @@
 	// Comprobamos que el usuario que introduce la denuncia se encuentra registrado en la aplicación
 	$query = "SELECT * FROM usuarios WHERE id_facebook LIKE '".$id_facebook."'";
 	$result = pg_exec($db, $query);
-	if($result){
+	
+	$u = 0;
+	while($row = pg_fetch_array($result) ) {
+		$u = 1;
+	}
+	
+	if($u == 0){
+		echo "ussuario insert";
+		// Si el usuario no se encuentra registrado, insertamos una nueva fila en la BD.
+		$insert = "INSERT INTO usuarios (id_facebook, email) VALUES ('$id_facebook','$email');";
+		pg_exec($db, $insert);
+		echo "pg_affected_rows() eyyyyyyyyy";
+	}
+	else{
 		// El usuario se encuentra registrado.
 		// Dado que el email del usuario puede haber cambiado desde el momento en el que se 
 		// almacenó el usuario por primera vez, actualizamos el emai.
@@ -122,13 +135,7 @@
 		$update = "UPDATE usuarios SET email='$email' WHERE id_facebook LIKE '$id_facebook';";
 		pg_exec($db, $update);
 	}
-	else{
-		echo "ussuario insert";
-		// Si el usuario no se encuentra registrado, insertamos una nueva fila en la BD.
-		$insert = "INSERT INTO usuarios (id_facebook, email) VALUES ('$id_facebook','$email');";
-		pg_exec($db, $insert);
-		echo "pg_affected_rows() eyyyyyyyyy";
-	}
+
 	
 	
 	/* ------------------------------------ *
@@ -167,7 +174,7 @@
 	 * 			GESTIÓN DE MUNICIPIOS		*
 	 * ------------------------------------ */
 	
-	$query_municipios = "SELECT nombre FROM municipios WHERE nombre = '$municipio'";
+	$query_municipios = "SELECT nombre FROM municipios WHERE nombre LIKE '$municipio'";
 	$existe_municipio = pg_exec($db, $query_municipios);
 	
 	$m = 0;
@@ -179,7 +186,7 @@
 		echo "HOLA 2";
 		echo "$municipio $provincia lkañlalalal";
 		$nuevo_municipio = "INSERT INTO municipios VALUES ('$municipio', 
-				(SELECT id_provincia FROM provincias WHERE nombre = '$provincia'),
+				(SELECT id_provincia FROM provincias WHERE nombre LIKE '$provincia'),
 				'$codigoine')";
 		pg_exec($db, $nuevo_municipio);
 	}
