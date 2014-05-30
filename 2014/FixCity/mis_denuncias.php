@@ -30,7 +30,7 @@ SELECT
   municipios.nombre as nombre_municipio, 
   municipios.codigoine as id_municipio, 
   estado_usuario.fecha as fecha_estado_usuario, 
-  estado_usuario.estado
+  estado_usuario.estado as estado_usuario
 FROM 
   public.denuncias, 
   public.denunciantes, 
@@ -66,7 +66,14 @@ SQL;
 		echo '</td>';
 		echo '<td>Municipio:'. $row['nombre_municipio'].'</td>'.
 			'<td>Provincia:'. $row['nombre_provincia'].'</td>'.
-			'<td>Fecha: '.$row['fecha'].'</td>';
+			'<td>Fecha: '.$row['fecha'].'</td>'.
+			'<td>Solucionado: ';
+		if($row['estado_usuario']==0){
+			echo 'NO</td>';
+		}
+		else {
+			echo 'SÕ</td>';
+		}
 		echo '</tr>';
 		echo '<tr><td colspan="4" >Descripci√≥n: '.$row['texto'].'</td>';
 		echo '</tr><tr>';
@@ -76,7 +83,6 @@ SQL;
 			echo '<img style="max-height:100px;max-width:100px" src="'.$imagen['ruta'].'"/>';
 		}
 		echo "</td></tr>";
-		echo '<tr><td></td></tr>';
 		
 	}
 	echo "</table>";
