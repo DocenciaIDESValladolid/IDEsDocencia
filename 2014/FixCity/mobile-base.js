@@ -75,6 +75,7 @@ function updateFacebookLoginInfo(fb)
 	toast(fb_user_label);
 	
 	$("#id_facebook").val(fb.user.id);
+	$("#misdenuncias_button").attr('href','mis_denuncias.php?id='+fb.user.id);
 	$("#email_facebook").val(fb.user.email);
 	
 	html = 'Usuario info: ' + fb.user.id + ' correo es: ' + fb.user.email;

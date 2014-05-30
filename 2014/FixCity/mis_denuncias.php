@@ -8,8 +8,8 @@
 <?php
 	error_reporting(E_ALL);		// Sentencia para que se muestren los errores PHP por pantalla
 	
-	//@ $id_facebook = $_POST['id_facebook'];
-	$id_facebook = "10201589618256882";
+	@ $id_facebook = $_POST['id'];
+	//$id_facebook = "10201589618256882";
 	$query = <<< SQL
 SELECT 
   denuncias.id_denuncia, 
