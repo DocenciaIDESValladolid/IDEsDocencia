@@ -78,7 +78,7 @@ SQL;
 		echo '</tr>';
 		echo '<tr><td colspan="4" >Descripción: '.$row['texto'].'</td>';
 		echo '</tr><tr>';
-		echo '<td colspan="4">';		
+		echo '<td colspan="6">';		
 		$result_imagenes = pg_execute($db, 'Imagenes',array($id_denuncia));
 		while($imagen = pg_fetch_array($result_imagenes) ) {
 			echo '<img style="max-height:100px;max-width:100px" src="'.$imagen['ruta'].'"/>';

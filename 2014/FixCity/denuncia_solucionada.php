@@ -12,5 +12,8 @@
 	if(pg_affected_rows($result)==0){
 		echo 'ERROR.';
 	}
+	else{
+		echo 'Correcto.'
+	}
 	
 ?>
