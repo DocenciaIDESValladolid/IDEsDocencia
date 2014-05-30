@@ -256,6 +256,7 @@ else
 			});
 			</script>';
 }// Había datos para la denuncia
+echo  '<a  href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-grid">Detalle</a>';
 ?>
 	</div>
 	<div data-role="footer">
