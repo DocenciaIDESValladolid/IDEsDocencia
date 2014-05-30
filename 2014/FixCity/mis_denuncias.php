@@ -74,6 +74,7 @@ SQL;
 		else {
 			echo 'SÕ</td>';
 		}
+		echo '<a href="denuncia_solucionada.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Marcar como solucionado</a>';
 		echo '</tr>';
 		echo '<tr><td colspan="4" >Descripci√≥n: '.$row['texto'].'</td>';
 		echo '</tr><tr>';
