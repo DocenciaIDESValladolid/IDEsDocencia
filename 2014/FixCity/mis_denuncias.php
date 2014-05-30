@@ -62,7 +62,7 @@ SQL;
 	$id_denuncia= $row['id_denuncia'];
 		echo '<tr>';
 		echo '<td>';
-		echo '<a href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Detalle</a>';
+			echo '<a href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Detalle</a>';
 		echo '</td>';
 		echo '<td>Municipio:'. $row['nombre_municipio'].'</td>'.
 			'<td>Provincia:'. $row['nombre_provincia'].'</td>'.
@@ -74,11 +74,11 @@ SQL;
 		else {
 			echo 'SÕ</td>';
 		}
-		echo '<a href="denuncia_solucionada.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Marcar como solucionado</a>';
+		echo '<tr><a href="denuncia_solucionada.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Marcar como solucionado</a>';
 		echo '</tr>';
 		echo '<tr><td colspan="4" >Descripci√≥n: '.$row['texto'].'</td>';
 		echo '</tr><tr>';
-		echo '<td colspan="6">';		
+		echo '<td colspan="4">';		
 		$result_imagenes = pg_execute($db, 'Imagenes',array($id_denuncia));
 		while($imagen = pg_fetch_array($result_imagenes) ) {
 			echo '<img style="max-height:100px;max-width:100px" src="'.$imagen['ruta'].'"/>';
