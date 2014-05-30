@@ -61,8 +61,7 @@ SQL;
 	{
 	
 	$id_denuncia= $row['denuncias.id_denuncia'];
-		echo "	<tr>
-					<td>Municipio: $row['municipios.nombre']</td>
+		echo "	<tr><td>Municipio: $row['municipios.nombre']</td>
 					<td>Provincia: $row['provincias.nombre']</td>
 					<td>Fecha: $row['denunciantes.fecha']</td>
 					<td>Conflicto: $row['denuncias.texto']</td>";
