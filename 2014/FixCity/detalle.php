@@ -5,7 +5,7 @@ $id=$_GET['id'];
 	$query = 'SELECT st_x(st_centroid(st_transform(the_geom,3857))) as x, st_y(st_centroid(st_transform(the_geom,3857))) as y , * FROM denuncias WHERE id_denuncia = $1';
 	// Prepare a query for execution
 	$result = pg_prepare($db, "Select denuncias", $query );
-	// Execute the prepared query.  Note that it is not necessary to escape the string $codigoine in any way
+	// Execute the prepared query.  Note that it is not necessary to escape the string $id in any way
 	$result = pg_execute($db, "Select denuncias", array($id));
 	$row=pg_fetch_array($result);
 	if ($row==false)
