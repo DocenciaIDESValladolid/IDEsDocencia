@@ -76,7 +76,9 @@ SQL;
 			echo '<img style="max-height:100px;max-width:100px" src="'.$imagen['ruta'].'"/>';
 		}
 		echo "</td></tr>";
-		echo '<tr></tr>';
+		echo '<tr><br></tr>';
+		echo '<tr><br></tr>';
+		echo '<tr><br></tr>';
 	}
 	echo "</table>";
 	
