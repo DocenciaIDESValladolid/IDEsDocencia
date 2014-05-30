@@ -7,14 +7,47 @@
 <body>
 <?php
 	error_reporting(E_ALL);		// Sentencia para que se muestren los errores PHP por pantalla
-	require('db.php');			// Fichero de conexión a la base de datos
 	
 	//@ $id_facebook = $_POST['id_facebook'];
 	$id_facebook = "10201589618256882";
-	$query = "SELECT * FROM denuncias WHERE id_denuncia IN
-				(SELECT id_denuncia FROM estado_usuario WHERE id_usuario = '$id_facebook') ORDER BY fecha;";
-	$result = pg_exec($db, $query);
+	$query = <<< SQL
+SELECT 
+  denuncias.id_denuncia, 
+  denuncias.texto, 
+  denuncias.fecha, 
+  st_x(st_centroid(st_transform(denuncias.the_geom,3857))) as x, st_y(st_centroid(st_transform(denuncias.the_geom,3857))) as y , 
+  denuncias.email, 
+  denunciantes.fecha, 
+  denunciantes.id_denunciante, 
+  provincias.nombre, 
+  municipios.nombre, 
+  municipios.codigoine, 
+  estado_usuario.fecha, 
+  estado_usuario.estado
+FROM 
+  public.denuncias, 
+  public.denunciantes, 
+  public.municipios, 
+  public.provincias, 
+  public.estado_usuario
+WHERE 
+  denuncias.id_denuncia = denunciantes.id_denuncia AND
+  denuncias.codigoine = municipios.codigoine AND
+  denuncias.id_denuncia = estado_usuario.id_denuncia AND
+  municipios.provincia = provincias.id_provincia AND
+  denunciantes.id_denunciante = $1
+ORDER BY
+  denunciantes.fecha DESC;
+SQL;
 
+	require('db.php');			// Fichero de conexión a la base de datos
+
+//"SELECT * FROM denuncias WHERE id_denuncia IN
+//				(SELECT id_denuncia FROM estado_usuario WHERE id_usuario = '$id_facebook') ORDER BY fecha;";
+	$result = pg_prepare($db,'Mis denuncias', $query);
+// Execute the prepared query.  Note that it is not necessary to escape the string $id in any way
+	$result = pg_execute($db, 'Mis denuncias', array($id_facebook));
+	$row=pg_fetch_array($result);
 	
 	echo "<table>";
 
@@ -24,29 +57,21 @@
 	}
 	*/
 
-	while($row = pg_fetch_array($result) ) {
-		
-		$query_municipio = "SELECT nombre, provincia FROM municipios WHERE codigoine = '$row[4]';";
-		$result_municipio = pg_exec($db, $query_municipio);
-		
-		$municipio = pg_fetch_array($result_municipio);
-		echo "$municipio[0]";
-		
-		$query_provincia = "SELECT nombre FROM provincias WHERE id_provincia = $municipio[1]";
-		$result_provincia = pg_exec($db, $query_provincia);
-		
-		$provincia = pg_fetch_array($result_provincia);
+	while($row = pg_fetch_array($result) ) 
+	{
 	
+	$id_denuncia= $row['denuncias.id_denuncia'];
 		echo "	<tr>
-					<td>Municipio: $municipio[0]</td>
-					<td>Provincia: $provincia[0]</td>
-					<td>Fecha: $row[3]</td>
-					<td>Conflicto: $row[1]</td>";
+					<td>Municipio: $row['municipios.nombre']</td>
+					<td>Provincia: $row['provincias.nombre']</td>
+					<td>Fecha: $row['denunciantes.fecha']</td>
+					<td>Conflicto: $row['denuncias.texto']</td>";
 		
-		$query_imagenes = "SELECT ruta FROM imagenes WHERE id_denuncia = $row[0];";
-		$result_imagenes = pg_exec($db, $query_imagenes);
+		$query_imagenes = 'SELECT * FROM imagenes WHERE id_denuncia = $1';
+		$result_imagenes = pg_prepare($db,'Imagenes', $query_imagenes);
+		$result_imagenes = pg_execute($db, 'Imagenes',array($id_denuncia));
 		while($imagen = pg_fetch_array($result_imagenes) ) {
-			echo "<td><img src=\"$imagen[0]\"/></td>";
+			echo "<td><img src=\"$imagen['ruta']\"/></td>";
 		}
 		echo "</tr>";
 	}
