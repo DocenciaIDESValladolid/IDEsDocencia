@@ -13,7 +13,7 @@
 		echo 'ERROR.';
 	}
 	else{
-		echo 'Correcto.'
+		echo 'Correcto.';
 	}
 	
 ?>
