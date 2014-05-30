@@ -3,12 +3,19 @@
 	<title>FixCity - Mis denuncias</title>
 	<script src="jquery-1.9.0.js"></script>
     <script src="jquery.mobile-1.4.2.min.js"></script>
+ <script src="mobile-base.js"></script>
+        <script src="mobile-jq.js"></script>
 </head>
 <body>
+<div data-role="page" data-theme="b">
+<div data-role="header" >
+	<h1><img src="images/marker-icon-fixit.png" height="24">Mis Denuncias</h1>
+</div>
+<div data-role="content">
 <?php
 	error_reporting(E_ALL);		// Sentencia para que se muestren los errores PHP por pantalla
 	
-	@ $id_facebook = $_POST['id'];
+	@ $id_facebook = $_GET['id'];
 	//$id_facebook = "10201589618256882";
 	$query = <<< SQL
 SELECT 
@@ -47,34 +54,36 @@ SQL;
 	$result = pg_prepare($db,'Mis denuncias', $query);
 // Execute the prepared query.  Note that it is not necessary to escape the string $id in any way
 	$result = pg_execute($db, 'Mis denuncias', array($id_facebook));
-	$row=pg_fetch_array($result);
-	
 	echo "<table>";
-
-	/*
-	while ($row = pg_fetch_row($result)) {
-		echo "$row[0]  $row[1] $row[2] $row[3] $row[4]";
-	}
-	*/
-
+	$query_imagenes = 'SELECT * FROM imagenes WHERE id_denuncia = $1';
+	$result_imagenes = pg_prepare($db,'Imagenes', $query_imagenes);
 	while($row = pg_fetch_array($result) ) 
 	{
 	$id_denuncia= $row['id_denuncia'];
-		echo '<tr><td>Municipio:'. $row['nombre_municipio'].'</td>'.
+		echo '<tr>';
+		echo '<td>';
+		echo '<a href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Detalle</a>';
+		echo '</td>';
+		echo '<td>Municipio:'. $row['nombre_municipio'].'</td>'.
 			'<td>Provincia:'. $row['nombre_provincia'].'</td>'.
-			'<td>Fecha: '.$row['fecha'].'</td>'.
-			'<td>Conflicto: '.$row['texto'].'</td>';
-		
-		$query_imagenes = 'SELECT * FROM imagenes WHERE id_denuncia = $1';
-		$result_imagenes = pg_prepare($db,'Imagenes', $query_imagenes);
+			'<td>Fecha: '.$row['fecha'].'</td>';
+		echo '</tr>';
+		echo '<tr><td colspan="4" >Descripción: '.$row['texto'].'</td>';
+		echo '</tr><tr>';
+		echo '<td colspan="4">';		
 		$result_imagenes = pg_execute($db, 'Imagenes',array($id_denuncia));
 		while($imagen = pg_fetch_array($result_imagenes) ) {
-			echo '<td><img src="'.$imagen['ruta'].'"/></td>';
+			echo '<img style="max-height:100px;max-width:100px" src="'.$imagen['ruta'].'"/>';
 		}
-		echo "</tr>";
+		echo "</td></tr>";
 	}
 	echo "</table>";
 	
 ?>
+</div>
+<div data-role="footer">
+<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+</div>
+</div>
 </body>
 </html>
