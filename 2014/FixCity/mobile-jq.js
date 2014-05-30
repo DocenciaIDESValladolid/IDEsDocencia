@@ -124,7 +124,7 @@ $.mobile.loading( "show", {
 	}
 	else
 	if (pageId=='nuevadenuncia_loc_actual')
-	{		
+	{
 	$.getJSON('emails.php',{codigoine:muni_code},
 		function (data)
 		{
@@ -134,10 +134,13 @@ $.mobile.loading( "show", {
 		for (emailindex in data)
 			{
 				var option=$("<option></option>")
-					.attr("value",data[emailindex])
-					.text(data[emailindex]);
+					.attr("value",data[emailindex].email)
+					.text(data[emailindex].email);
 				if (first)
+					{
 					option.attr("selected","true");
+					first=false;
+					}
 				select.append(option); 
 			}
 		select.selectmenu();
@@ -148,7 +151,7 @@ $.mobile.loading( "show", {
 		function(){
 			$('#emailMunicipality').val($('select').val());
 		});
-		
+	
 	}
 });
 

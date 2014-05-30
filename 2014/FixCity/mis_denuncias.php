@@ -17,12 +17,12 @@ SELECT
   denuncias.fecha, 
   st_x(st_centroid(st_transform(denuncias.the_geom,3857))) as x, st_y(st_centroid(st_transform(denuncias.the_geom,3857))) as y , 
   denuncias.email, 
-  denunciantes.fecha, 
+  denunciantes.fecha as fecha_denunciante, 
   denunciantes.id_denunciante, 
-  provincias.nombre, 
-  municipios.nombre, 
-  municipios.codigoine, 
-  estado_usuario.fecha, 
+  provincias.nombre as nombre_provincia, 
+  municipios.nombre as nombre_municipio, 
+  municipios.codigoine as id_municipio, 
+  estado_usuario.fecha as fecha_estado_usuario, 
   estado_usuario.estado
 FROM 
   public.denuncias, 
@@ -59,18 +59,17 @@ SQL;
 
 	while($row = pg_fetch_array($result) ) 
 	{
-	
-	$id_denuncia= $row['denuncias.id_denuncia'];
-		echo "	<tr><td>Municipio: $row['municipios.nombre']</td>
-					<td>Provincia: $row['provincias.nombre']</td>
-					<td>Fecha: $row['denunciantes.fecha']</td>
-					<td>Conflicto: $row['denuncias.texto']</td>";
+	$id_denuncia= $row['id_denuncia'];
+		echo '<tr><td>Municipio:'. $row['nombre_municipio'].'</td>'.
+			'<td>Provincia:'. $row['nombre_provincia'].'</td>'.
+			'<td>Fecha: '.$row['fecha'].'</td>'.
+			'<td>Conflicto: '.$row['texto'].'</td>';
 		
 		$query_imagenes = 'SELECT * FROM imagenes WHERE id_denuncia = $1';
 		$result_imagenes = pg_prepare($db,'Imagenes', $query_imagenes);
 		$result_imagenes = pg_execute($db, 'Imagenes',array($id_denuncia));
 		while($imagen = pg_fetch_array($result_imagenes) ) {
-			echo "<td><img src=\"$imagen['ruta']\"/></td>";
+			echo '<td><img src="'.$imagen['ruta'].'"/></td>';
 		}
 		echo "</tr>";
 	}

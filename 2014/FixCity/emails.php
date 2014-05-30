@@ -10,25 +10,17 @@
 	 
 	@ $codigoine = $_GET['codigoine'];
 	
-	$query = 'SELECT email FROM email WHERE id_municipio = $1';
+	$query = 'SELECT * FROM email WHERE id_municipio = $1 order by popularity desc';
 	// Prepare a query for execution
 	$result = pg_prepare($db, "Select emails", $query );
 	// Execute the prepared query.  Note that it is not necessary to escape the string $codigoine in any way
 	$result = pg_execute($db, "Select emails", array($codigoine));
 	//	$result = pg_exec($db, $query);
 	
-	if(pg_numrows($result)<1){
-	
+	header('Content-Type: application/json');
+	$array = array();
+	while($row = pg_fetch_array($result)) {
+		$array[]=$row;
 	}
-	else{
-		header('Content-Type: application/json');
-		echo "[";
-		$array = array();
-		while($row = pg_fetch_array($result)) {
-			$array[]="\"$row[0]\"";
-		}
-		echo join($array,',');
-		echo "]";
-	}
-	
+echo json_encode($array);	
 ?>

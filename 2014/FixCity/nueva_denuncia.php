@@ -20,7 +20,9 @@
 	<script src="mobile-jq.js"></script>	
 </head>
 <body>
-
+<div data-role="page" data-theme="b">
+<div data-role="header"><h2>Nueva denuncia</h2></div>
+<div data-role="content">
 <?php
 	
 	error_reporting(E_ALL);		// Sentencia para que se muestren los errores PHP por pantalla
@@ -102,10 +104,10 @@
 					  <td>$photo_urls</td>
 					</tr>
 					";
-		echo '<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>';
-	exit;	
-	}
 	
+	}
+else
+{	
 
 	/* ------------------------------------ *
 	 * 			GESTIÓN DE USUARIOS			*
@@ -145,10 +147,10 @@
 	$query = 'INSERT INTO denuncias (texto, the_geom, fecha, codigoine) VALUES 
             ($1, ST_Transform(ST_SetSRID(ST_Point($2,$3),900913),4326),$4,$5) RETURNING id_denuncia';
 	$result = pg_prepare($db, "insert denuncias", $query );
-	$result = pg_execute($db, "insert denuncias", array($texto,$longitud, $latitud,date("Y-m-d"),$codigoine);		
+	$result = pg_execute($db, "insert denuncias", array($texto,$longitud, $latitud,date("Y-m-d"),$codigoine));		
 	
 
-    if(pg_affected_rows($result)<1){
+    if($result==false){
 		echo 'Error al introducir la denuncia en la base de datos.';
 		echo '<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>';
 		exit;
@@ -160,21 +162,21 @@
 	}
 	
 	// Inserción de la denuncia en la tabla de denunciantes.
-	$insert = 'INSERT INTO denunciantes (id_denuncia, id_denunciante, fecha) VALUES ($1,$2,$3);'
+	$insert = 'INSERT INTO denunciantes (id_denuncia, id_denunciante, fecha) VALUES ($1,$2,$3);';
 	$result = pg_prepare($db, "insert denunciantes",$insert );
-	$result = pg_execute($db, "insert denunciantes", array($id_denuncia,$id_facebook,date("Y-m-d"));
+	$result = pg_execute($db, "insert denunciantes", array($id_denuncia,$id_facebook,date("Y-m-d")));
 	
 	// Inserción en estado_usuario
 	$estado_usuario = "INSERT INTO estado_usuario (id_denuncia, fecha, estado, id_usuario, codigoine) VALUES ($1,$2,$3,$4,$5);";
 	$result = pg_prepare($db, "insert estado",$estado_usuario );
-	$result = pg_execute($db, "insert estado", array($id_denuncia,date("Y-m-d"),0,$id_facebook,$codigoine);
+	$result = pg_execute($db, "insert estado", array($id_denuncia,date("Y-m-d"),0,$id_facebook,$codigoine));
 	
 	/* ------------------------------------ *
 	 * 			GESTIÓN DE MUNICIPIOS		*
 	 * ------------------------------------ */
 	
 	$query_municipios = 'SELECT nombre FROM municipios WHERE nombre LIKE $1';
-	$result = pg_prepare($db, "select municipio",$existe_municipio );
+	$result = pg_prepare($db, "select municipio",$query_municipios );
 	$result = pg_execute($db, "select municipio", array($municipio));
 	$row = pg_fetch_array($result);
 	if($row == false)
@@ -217,13 +219,11 @@
 	/* ------------------------------------ *
 	 * 			GESTIÓN DE IMÁGENES 		*
 	 * ------------------------------------ */	
+	$query_url = 'INSERT INTO imagenes (id_denuncia, ruta) VALUES ($1,$2);';
+	$result = pg_prepare($db, "insert image",$query_url );
 	$array_url = explode(',' , $photo_urls);
 	for($i=1;$i<count($array_url);$i++){
-		$query_url = 'INSERT INTO imagenes (id_denuncia, ruta) VALUES ($1,$2);';
-		$result = pg_prepare($db, "insert image",$query_url );
 		$result = pg_execute($db, "insert image", array($id_denuncia,$array_url[$i]));
-		pg_exec($db, $query_url);
-		
 	}
 	
 	/*Texto que mostrará la información de la nueva denuncia y las imagenes que acompañan la queja.*/
@@ -240,7 +240,7 @@
 			echo "
 			<a href=\"#popupPhotoLandscape$i\" data-rel=\"popup\" data-position-to=\"window\" class=\"ui-btn ui-corner-all ui-shadow ui-btn-inline\">Imagen $i</a>
 			<div data-role=\"popup\" id=\"popupPhotoLandscape$i\" class=\"photopopup\" data-overlay-theme=\"a\" data-corners=\"false\" data-tolerance=\"30,15\">
-				<a href=\"#\" data-rel=\"back\" class=\"ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right\">Close</a><img src=\"$array_url[$i]\">
+				<a href=\"#\" data-rel=\"back\" class=\"ui-btn ui-corner-all ui-shadow ui-btn-right\"><img src=\"$array_url[$i]\"></a>
 			</div>";
 			/*FIN de Funcion HTML */
 			}
@@ -255,11 +255,12 @@
 				});
 			});
 			</script>';
-
-	
-
-
-
+}// HabÃ­a datos para la denuncia
 ?>
+	</div>
+	<div data-role="footer">
+			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+	</div>
+	</div>
 </body>
 </html>
