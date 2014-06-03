@@ -44,6 +44,7 @@
 		@ $email_ayto = $_POST['emailMunicipalitySelect'];
 	}
 	@ $id_facebook = $_POST['id_facebook'];	// Gestión de usuarios
+	@ $name_facebook = $_POST['name_facebook'];	// Notificación de email
 	@ $email = $_POST['email'];
 	
 	// Formateamos textos para introducir en la base de datos.
@@ -52,10 +53,17 @@
 	$municipio = trim($municipio);
 	$municipio = addslashes($municipio);
 	$provincia = trim($provincia);
+	$provincia = addslashes($provincia);
 	$email_ayto = trim($email_ayto);
+	$email_ayto = addslashes($email_ayto);
 	$id_facebook = trim($id_facebook);
+	$id_facebook = addslashes($id_facebook);
+	$name_facebook = trim($id_facebook);
+	$name_facebook = addslashes($id_facebook);
 	$email = trim($email);
+	$email = addslashes($email);
 	$photo_urls = trim($photo_urls);
+	
 	
 	// Comprobamos que las variables que hemos pasado no están vacías.
 	if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio 
@@ -257,7 +265,9 @@ else
 			</script>';
 }// HabÃ­a datos para la denuncia
 echo  '<a  href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-grid">Detalle</a>';
+echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-mail" href="mailto:'.$email_ayto.'?subject=Ciudadano informa de un problema en '+ "$municipio($provincia)" +'&body=Estimado ayuntamiento,\n he encontrado un problema en la vía pública que supongo que le interesará por ser de su competencia. Se trata de: '.$texto.'\n\n He puesto más detalles, situación exacta y fotografías en http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/detalle.php?id='+$id_denuncia+'\n\n Espero haber colaborado a tener entre todos un mejor municipio. Un saludo, atentamente:\n\n '.name_facebook.'" > Avisar con un email</a>;
 ?>
+
 	</div>
 	<div data-role="footer">
 			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>

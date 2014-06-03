@@ -4,6 +4,7 @@ var apiKey = "AqTGBsziZHIJYYxgivLBf0hVdrAk9mWO5cQcb8Yux8sW5M8c8opEC2lZqKR1ZZXf";
 // initialize map when page ready
 var map;
 var id_facebook;
+var naem_facebook;
 var selectCtrl;
 var gg = new OpenLayers.Projection("EPSG:4326");
 //var sm = new OpenLayers.Projection("EPSG:900913");
@@ -64,6 +65,7 @@ function login() {
 function updateFacebookLoginInfo(fb)
 {
 	id_facebook = fb.user.id;
+	name_facebook = fb.user.name;
 	var fb_user_label = '<img valign="center" height="30" src="'+fb.user.picture+'"/>' + fb.user.name;
 	var html = fb_user_label + '<a href="#" class="ui-btn  ui-btn-icon-left ui-icon-delete" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
 	$("#estadoLogin").html(html);
@@ -75,6 +77,7 @@ function updateFacebookLoginInfo(fb)
 	toast(fb_user_label);
 	
 	$("#id_facebook").val(fb.user.id);
+	$("#name_facebook").val(fb.user.name);
 	$("#misdenuncias_button").attr('href','mis_denuncias.php?id='+fb.user.id);
 	$("#email_facebook").val(fb.user.email);
 	
