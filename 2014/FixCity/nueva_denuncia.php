@@ -265,7 +265,7 @@ else
 			</script>';
 }// Hab√≠a datos para la denuncia
 echo  '<a  href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-grid">Detalle</a>';
-echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-mail" href="mailto:'.$email_ayto.'?subject=Ciudadano informa de un problema en '+ "$municipio($provincia)" +'&body=Estimado ayuntamiento,\n he encontrado un problema en la vÌa p˙blica que supongo que le interesar· por ser de su competencia. Se trata de: '.$texto.'\n\n He puesto m·s detalles, situaciÛn exacta y fotografÌas en http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/detalle.php?id='+$id_denuncia+'\n\n Espero haber colaborado a tener entre todos un mejor municipio. Un saludo, atentamente:\n\n '.name_facebook.'" > Avisar con un email</a>;
+echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-mail" href="mailto:'.$email_ayto.'?subject=Ciudadano informa de un problema en '+ "$municipio($provincia)" +'&body=Estimado ayuntamiento,\n he encontrado un problema en la vÌa p˙blica que supongo que le interesar· por ser de su competencia. Se trata de: '.$texto.'\n\n He puesto m·s detalles, situaciÛn exacta y fotografÌas en http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/detalle.php?id='+$id_denuncia+'\n\n Espero haber colaborado a tener entre todos un mejor municipio. Un saludo, atentamente:\n\n '.name_facebook.'" > Avisar con un email</a>';
 ?>
 
 	</div>
