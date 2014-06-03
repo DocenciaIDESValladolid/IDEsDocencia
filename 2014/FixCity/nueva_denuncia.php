@@ -58,8 +58,8 @@
 	$email_ayto = addslashes($email_ayto);
 	$id_facebook = trim($id_facebook);
 	$id_facebook = addslashes($id_facebook);
-	$name_facebook = trim($id_facebook);
-	$name_facebook = addslashes($id_facebook);
+	$name_facebook = trim($name_facebook);
+	$name_facebook = addslashes($name_facebook);
 	$email = trim($email);
 	$email = addslashes($email);
 	$photo_urls = trim($photo_urls);

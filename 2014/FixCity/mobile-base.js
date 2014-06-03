@@ -4,7 +4,7 @@ var apiKey = "AqTGBsziZHIJYYxgivLBf0hVdrAk9mWO5cQcb8Yux8sW5M8c8opEC2lZqKR1ZZXf";
 // initialize map when page ready
 var map;
 var id_facebook;
-var naem_facebook;
+var name_facebook;
 var selectCtrl;
 var gg = new OpenLayers.Projection("EPSG:4326");
 //var sm = new OpenLayers.Projection("EPSG:900913");
@@ -81,7 +81,7 @@ function updateFacebookLoginInfo(fb)
 	$("#misdenuncias_button").attr('href','mis_denuncias.php?id='+fb.user.id);
 	$("#email_facebook").val(fb.user.email);
 	
-	html = 'Usuario info: ' + fb.user.id + ' correo es: ' + fb.user.email;
+	html = 'Usuario: ' + fb.user.name + ' correo es: ' + fb.user.email;
 	$("#usuario_info_prueba").html(html);
 	
 }
