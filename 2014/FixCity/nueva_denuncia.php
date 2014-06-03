@@ -69,46 +69,46 @@
 	if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio 
 		|| !$provincia || !$id_facebook || !$email || !$email_ayto || !$photo_urls)
 	{
-		echo "Faltan campos del formulario.";
+		echo "Faltan campos del formulario. Los valores que he recibido son:";
 		echo "	<table>
 					<tr>
-					  <td>Latitud</td>
+					  <td>Latitud=</td>
 					  <td>$latitud</td>
 					</tr>
 					<tr>
-					  <td>Longitud</td>
+					  <td>Longitud=</td>
 					  <td>$longitud</td>
 					</tr>
 					<tr>
-					  <td>Texto</td>
+					  <td>Texto=</td>
 					  <td>$texto</td>
 					</tr>
 					<tr>
-					  <td>Codigo</td>
+					  <td>Codigo=</td>
 					  <td>$codigoine</td>
 					</tr>
 					<tr>
-					  <td>Municipio</td>
+					  <td>Municipio=</td>
 					  <td>$municipio</td>
 					</tr>
 					<tr>
-					  <td>Provincia</td>
+					  <td>Provincia=</td>
 					  <td>$provincia</td>
 					</tr>
 					<tr>
-					  <td>ID Facebook</td>
+					  <td>ID Facebook=</td>
 					  <td>$id_facebook</td>
 					</tr>
 					<tr>
-					  <td>Email de denunciante</td>
+					  <td>Email de denunciante=</td>
 					  <td>$email</td>
 					</tr>
 					<tr>
-					  <td>Email Ayuntamiento</td>
+					  <td>Email Ayuntamiento=</td>
 					  <td>$email_ayto</td>
 					</tr>
 					<tr>
-					  <td>URLs para las imágenes</td>
+					  <td>URLs para las imágenes=</td>
 					  <td>$photo_urls</td>
 					</tr>
 					";
