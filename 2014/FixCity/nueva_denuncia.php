@@ -63,7 +63,7 @@
 	$email = trim($email);
 	$email = addslashes($email);
 	$photo_urls = trim($photo_urls);
-	
+	$id_denuncia=null;
 	
 	// Comprobamos que las variables que hemos pasado no están vacías.
 	if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio 
@@ -157,7 +157,7 @@ else
 	$result = pg_prepare($db, "insert denuncias", $query );
 	$result = pg_execute($db, "insert denuncias", array($texto,$longitud, $latitud,date("Y-m-d"),$codigoine));		
 	
-
+	
     if($result==false){
 		echo 'Error al introducir la denuncia en la base de datos.';
 		echo '<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>';
@@ -263,9 +263,11 @@ else
 				});
 			});
 			</script>';
-}// HabÃ­a datos para la denuncia
+			
 echo  '<a  href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-grid">Detalle</a>';
 echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-mail" href="mailto:'.$email_ayto.'?subject=Ciudadano informa de un problema en '+ "$municipio($provincia)" +'&body=Estimado ayuntamiento,\n he encontrado un problema en la vía pública que supongo que le interesará por ser de su competencia. Se trata de: '.$texto.'\n\n He puesto más detalles, situación exacta y fotografías en http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/detalle.php?id='+$id_denuncia+'\n\n Espero haber colaborado a tener entre todos un mejor municipio. Un saludo, atentamente:\n\n '.$name_facebook.'" > Avisar con un email</a>';
+}// HabÃ­a datos para la denuncia
+
 ?>
 
 	</div>
