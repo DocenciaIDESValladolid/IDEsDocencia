@@ -265,7 +265,7 @@ else
 			</script>';
 			
 echo  '<a  href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-grid">Detalle</a>';
-$email_href='mailto:'.$email_ayto."?subject=Ciudadano informa de un problema en $municipio($provincia)&body=Estimado ayuntamiento,\n he encontrado un problema en la vía pública que supongo que le interesará por ser de su competencia. Se trata de: $texto \n\n He puesto más detalles, situación exacta y fotografías en http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/detalle.php?id=$id_denuncia \n\n Espero haber colaborado a tener entre todos un mejor municipio. Un saludo, atentamente\n\n $user_name";
+$email_href='mailto:'.$email_ayto."?subject=Ciudadano informa de un problema en $municipio($provincia)&body=Estimado ayuntamiento,\n he encontrado un problema en la vía pública que supongo que le interesará por ser de su competencia. Se trata de: $texto \n\n He puesto más detalles, situación exacta y fotografías en http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/detalle.php?id=$id_denuncia&authtoken=kjh2342kj3h4234kj23h4jk2h4234kj24 \n\n Espero haber colaborado a tener entre todos un mejor municipio. Un saludo, atentamente\n\n $user_name";
 echo '<!--'.$email_href.'-->';
 echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-mail" href="'.$email_href.'" > Avisar con un email</a>';
 }// HabÃ­a datos para la denuncia
