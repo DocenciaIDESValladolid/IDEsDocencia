@@ -29,7 +29,7 @@
 	
  
  	// Inserción de la denunciante en la tabla de denunciantes
-	$query = "SELECT * FROM denunciantes WHERE id_denunciante LIKE '$id_denuncia'";
+	$query = "SELECT * FROM denunciantes WHERE id_denunciante = $id_denuncia";
 	$result = pg_exec($db, $query);
 	$array = pg_fetch_array($result);
 	if($array == false){
