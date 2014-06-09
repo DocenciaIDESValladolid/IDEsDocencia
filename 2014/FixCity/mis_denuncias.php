@@ -25,7 +25,7 @@ SELECT
   st_x(st_centroid(st_transform(denuncias.the_geom,3857))) as x, st_y(st_centroid(st_transform(denuncias.the_geom,3857))) as y , 
   denuncias.email, 
   denunciantes.fecha as fecha_denunciante, 
-  denunciantes.id_denunciante, 
+  denuncias.id_usuario, 
   provincias.nombre as nombre_provincia, 
   municipios.nombre as nombre_municipio, 
   municipios.codigoine as id_municipio, 
@@ -40,7 +40,10 @@ FROM
 WHERE 
 	denuncias.id_usuario = $1 AND
 	denuncias.codigoine = municipios.codigoine AND
-	denuncias.id_denuncia = estado_usuario.id_denuncia AND 
+	denunciantes.id_denunciante = $1 AND
+	denunciantes.id_denuncia= denuncias.id_denuncia AND
+	estado_usuario.id_usuario = $1 AND
+	estado_usuario.id_denuncia = denuncias.id_denuncia AND
 	(estado_usuario.estado = 1 OR 
 	(estado_usuario.estado = 0 AND estado_usuario.id_denuncia NOT IN (SELECT id_denuncia FROM estado_usuario GROUP BY id_denuncia HAVING COUNT(id_denuncia)>1))) AND
 	municipios.provincia = provincias.id_provincia
