@@ -28,7 +28,7 @@
 	$result = pg_prepare($db,"Mis denuncias", $update);
 	$result = pg_execute($db, "Mis denuncias", array($id_denuncia));
 	$row=pg_fetch_array($result);
-	if($row==false){
+	if(pg_fetch_array($result)==0){
 		echo 'ERROR.';
 	}
 	else{
