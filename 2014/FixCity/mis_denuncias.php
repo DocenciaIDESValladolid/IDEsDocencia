@@ -73,11 +73,11 @@ SQL;
 			'<td>Solucionado: ';
 		if($row['estado_usuario']==0){
 			echo 'NO</td>';
+			echo '<td><a href="denuncia_solucionada.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Marcar como solucionado</a>';
 		}
 		else {
-			echo 'SÕ</td>';
+			echo 'SI</td>';
 		}
-		echo '<td><a href="denuncia_solucionada.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Marcar como solucionado</a>';
 		echo '</td>';
 		echo '<tr><td colspan="4" >Descripci√≥n: '.$row['texto'].'</td>';
 		echo '</tr><tr>';
