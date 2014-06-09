@@ -24,9 +24,17 @@
 	
 	$id_denuncia = $_GET['id'];
 	
-	$update = 'UPDATE estado_usuario SET estado = 1 WHERE id_denuncia = $1';
-	$result = pg_prepare($db,"Mis denuncias", $update);
-	$result = pg_execute($db, "Mis denuncias", array($id_denuncia));
+	$query = 'SELECT * FROM estado_usuario WHERE id_denuncia = $1';
+	$denuncia = pg_prepare($db,"Denuncia", $query);
+	$denuncia = pg_execute($db,"Denuncia", array($id_denuncia));
+	
+	$array_denuncia = pg_fetch_array($denuncia);
+	
+	
+	$insert = 'INSERT INTO estado_usuario (id_denuncia,fecha,estado,id_usuario,codigoine) 
+				VALUES ($array_denuncia[\'id_denuncia\'], date("Y-m-d"),1,$array_denuncia[\'id_usuario\'],$array_denuncia[\'codigoine\'])';
+	$result = pg_prepare($db,"Insert Resuelto", $insert);
+	$result = pg_execute($db, "Insert Resuelto", array());
 	$row=pg_fetch_array($result);
 	if(pg_fetch_array($result)==0){
 		echo 'ERROR.';
