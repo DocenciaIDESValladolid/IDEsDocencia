@@ -22,7 +22,6 @@
 <body>
 <?php
 
-	error_reporting(E_ALL);		// Sentencia para que se muestren los errores PHP por pantalla
 	require('db.php');			// Fichero de conexión a la base de datos
 
 	@ $id_denuncia = $_GET['id_denuncia'];	// Gestión de usuarios
@@ -41,7 +40,7 @@
 	
 	$result = pg_exec($db, $query);
 	
-	if($result){
+	if($result!=false){
 		echo '<div data-role="page" data-theme="b">
 		<div data-role="header"><h2>DENUNCIA APOYADA</h2></div>
 		<div data-role="content">
