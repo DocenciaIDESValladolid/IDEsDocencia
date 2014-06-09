@@ -28,7 +28,10 @@
 	@ $id_denuncia = $_GET['id_denuncia'];	// Gestión de usuarios
 	@ $id_facebook = $_POST['id_facebook'];	// Gestión de usuarios
  
-	echo "Denuncia apoyada.";
+	echo '<div data-role="page" data-theme="b">
+<div data-role="header"><h2>DENUNCIA APOYADA</h2></div>
+<div data-role="content">
+Gracias por su colaboración';
 	
  
 	// Inserción de la denunciante en la tabla de denunciantes
