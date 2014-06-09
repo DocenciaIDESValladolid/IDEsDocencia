@@ -29,10 +29,10 @@
 	
  
  	// Inserción de la denunciante en la tabla de denunciantes
-	$query = "SELECT * FROM denunciantes WHERE id_denunciante = '$id_facebook'";
+	$query = "SELECT id_denuncia FROM denunciantes WHERE id_denunciante = '$id_facebook'";
 	$result = pg_exec($db, $query);
 	$array = pg_fetch_array($result);
-	if($array[0] == $id_denuncia){
+	if($array['id_denuncia'] == $id_denuncia){
 		echo '<div data-role="page" data-theme="b">
 		<div data-role="header"><h2>DENUNCIA YA APOYADA PREVIAMENTE</h2></div>
 		<div data-role="content">
