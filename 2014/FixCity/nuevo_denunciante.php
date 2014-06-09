@@ -32,7 +32,7 @@
 	$query = "SELECT * FROM denunciantes WHERE id_denunciante = $id_denuncia";
 	$result = pg_exec($db, $query);
 	$array = pg_fetch_array($result);
-	if($array == false){
+	if($array[0] == $id_denuncia){
 		// Inserción de la denunciante en la tabla de denunciantes
 		$query = "INSERT INTO denunciantes (id_denuncia, id_denunciante, fecha) VALUES 
 				($id_denuncia, '$id_facebook','".date("Y-m-d")."')";
