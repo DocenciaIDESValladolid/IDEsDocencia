@@ -94,8 +94,8 @@ mapmini.zoomToExtent(markersmini.getDataExtent());
 	$query = 'SELECT COUNT(id_denuncia) FROM denunciantes WHERE id_denuncia = $1';
 	$result = pg_prepare($db, "Denunciantes", $query );
 	$result = pg_execute($db, "Denunciantes", array($id));
-	while($row = pg_fetch_array($result)) {
-		echo 'Número de denunciantes: '.$row[0].'.';
+	while($num = pg_fetch_array($result)) {
+		echo 'Número de denunciantes: '.$num[0].'.';
 	}
 ?></p>
 			
@@ -108,7 +108,12 @@ mapmini.zoomToExtent(markersmini.getDataExtent());
 			  <div class="ui-body ui-body-a">
 			<p id="reportDescription">
 <?php
-echo "A las ".$row['fecha']." he informado del problema: <br>". $row['texto']; 
+	$query = 'SELECT fecha FROM estado_usuario WHERE id_denuncia = $1';
+		$result = pg_prepare($db, "Fecha", $query );
+		$result = pg_execute($db, "Fecha", array($id));
+		while($fecha = pg_fetch_array($result)) {
+			echo "A las ".$fecha[0]." se ha informado del problema: <br>". $row['texto'];
+		}
 ?></p>
 
 			<p id="reportImageList">
