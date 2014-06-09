@@ -79,9 +79,29 @@ mapmini.zoomToExtent(markersmini.getDataExtent());
 }
 </script>
 
+
+
 </p>
-			</div>
-			</div>
+</div>
+</div>
+			
+			<div class="ui-corner-all custom-corners">
+			  <div class="ui-bar ui-bar-a"><h3>Denunciantes que apoyan la denuncia</h3>
+			  </div>
+			  <div class="ui-body ui-body-a">
+			<p id="reportDescription">
+<?php
+	$query = 'SELECT COUNT(id_denuncia) FROM denunciantes WHERE id_denuncia = $1';
+	$result = pg_prepare($db, "Denunciantes", $query );
+	$result = pg_execute($db, "Denunciantes", array($id));
+	while($row = pg_fetch_array($result)) {
+		echo 'Número de denunciantes: '.$row[0].'.';
+	}
+?></p>
+			
+			
+			
+			
 			<div class="ui-corner-all custom-corners">
 			  <div class="ui-bar ui-bar-a"><h3>Descripción del ciudadano</h3>
 			  </div>
@@ -90,6 +110,7 @@ mapmini.zoomToExtent(markersmini.getDataExtent());
 <?php
 echo "A las ".$row['fecha']." he informado del problema: <br>". $row['texto']; 
 ?></p>
+
 			<p id="reportImageList">
 <?php
 	$query = 'SELECT * FROM imagenes WHERE id_denuncia = $1';
