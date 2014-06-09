@@ -30,9 +30,9 @@
 	
 	$array_denuncia = pg_fetch_array($denuncia);
 	
-	$insert = "INSERT INTO estado_usuario VALUES ($array_denuncia[0], date("Y-m-d"),1,$array_denuncia[3],$array_denuncia[4])";
+	$insert = "INSERT INTO estado_usuario VALUES ($1, $2,1,$3,$4)";
 	$result = pg_prepare($db,"Insert Resuelto", $insert);
-	$result = pg_execute($db, "Insert Resuelto", array());
+	$result = pg_execute($db, "Insert Resuelto", array($array_denuncia[0],date("Y-m-d"),$array_denuncia[3],$array_denuncia[4]));
 	$row=pg_fetch_array($result);
 	if(pg_fetch_array($result)==0){
 		echo 'ERROR.';
