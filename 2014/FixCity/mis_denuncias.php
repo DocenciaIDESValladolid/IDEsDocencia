@@ -48,8 +48,6 @@ WHERE
 ORDER BY
   denunciantes.fecha DESC;
 SQL;
-	}
-	
 	
 
 	require('db.php');			// Fichero de conexión a la base de datos
