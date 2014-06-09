@@ -41,8 +41,8 @@ WHERE
   denuncias.id_denuncia = denunciantes.id_denuncia AND
   denuncias.codigoine = municipios.codigoine AND
   denuncias.id_denuncia = estado_usuario.id_denuncia AND 
-  estado_usuario.estado=1 AND 
-  (estado_usuario.estado=0 AND estado.usuario.id_denuncia NOT IN (SELECT id_denuncia FROM estado_usuario GROUP BY id_denuncia HAVING COUNT(id_denuncia)>1)
+  (estado_usuario.estado = 1 OR 
+  (estado_usuario.estado = 0 AND estado_usuario.id_denuncia NOT IN (SELECT id_denuncia FROM estado_usuario GROUP BY id_denuncia HAVING COUNT(id_denuncia)>1))) AND
   municipios.provincia = provincias.id_provincia AND
   denunciantes.id_denunciante = $1
 ORDER BY
