@@ -99,8 +99,8 @@ mapmini.zoomToExtent(markersmini.getDataExtent());
 	}
 ?></p>
 			
-			
-			
+		</div>	
+		</div>	
 			
 			<div class="ui-corner-all custom-corners">
 			  <div class="ui-bar ui-bar-a"><h3>Descripción del ciudadano</h3>
