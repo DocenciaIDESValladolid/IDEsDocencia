@@ -24,12 +24,11 @@
 	
 	$id_denuncia = $_GET['id'];
 	
-	
 	$update = 'UPDATE estado_usuario SET estado = 1 WHERE id_denuncia = $1';
 	$result = pg_prepare($db,"Mis denuncias", $update);
-	$result = pg_execute($db, $update, array($id_denuncia));
-
-	if(pg_affected_rows($result)==0){
+	$result = pg_execute($db, "Mis denuncias", array($id_denuncia));
+	$row=pg_fetch_array($result);
+	if($row==false){
 		echo 'ERROR.';
 	}
 	else{
