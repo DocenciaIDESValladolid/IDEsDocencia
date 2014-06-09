@@ -28,7 +28,8 @@
 	@ $id_denuncia = $_GET['id_denuncia'];	// Gestión de usuarios
 	@ $id_facebook = $_POST['id_facebook'];	// Gestión de usuarios
  
-	echo "ID de Facebook: $id_facebook";
+	echo "Denuncia apoyada.";
+	
  
 	// Inserción de la denunciante en la tabla de denunciantes
 	$query = "INSERT INTO denunciantes (id_denuncia, id_denunciante, fecha) VALUES 
@@ -36,5 +37,10 @@
 	
 	$result = pg_exec($db, $query);
 ?>
+
+	<div data-role="footer">
+			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+	</div>
+	
 </body>
 </html>
