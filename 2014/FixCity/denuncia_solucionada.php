@@ -30,8 +30,7 @@
 	
 	$array_denuncia = pg_fetch_array($denuncia);
 	
-	
-	$insert = 'INSERT INTO estado_usuario (id_denuncia,fecha,estado,id_usuario,codigoine) VALUES ($array_denuncia[\'id_denuncia\'], date("Y-m-d"),1,$array_denuncia[\'id_usuario\'],$array_denuncia[\'codigoine\'])';
+	$insert = 'INSERT INTO estado_usuario (id_denuncia,fecha,estado,id_usuario,codigoine) VALUES ($array_denuncia[0], date("Y-m-d"),1,$array_denuncia[3],$array_denuncia[4])';
 	$result = pg_prepare($db,"Insert Resuelto", $insert);
 	$result = pg_execute($db, "Insert Resuelto", array());
 	$row=pg_fetch_array($result);
