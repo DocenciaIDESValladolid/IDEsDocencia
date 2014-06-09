@@ -16,8 +16,8 @@
 	error_reporting(E_ALL);		// Sentencia para que se muestren los errores PHP por pantalla
 	
 	@ $id_facebook = $_GET['id'];
-	//$id_facebook = "10201589618256882";
-	$query = <<< SQL
+	
+			$query = <<< SQL
 SELECT 
   denuncias.id_denuncia, 
   denuncias.texto, 
@@ -40,12 +40,17 @@ FROM
 WHERE 
   denuncias.id_denuncia = denunciantes.id_denuncia AND
   denuncias.codigoine = municipios.codigoine AND
-  denuncias.id_denuncia = estado_usuario.id_denuncia AND
+  denuncias.id_denuncia = estado_usuario.id_denuncia AND 
+  estado_usuario.estado=1 AND 
+  (estado_usuario.estado=0 AND estado.usuario.id_denuncia NOT IN (SELECT id_denuncia FROM estado_usuario GROUP BY id_denuncia HAVING COUNT(id_denuncia)>1)
   municipios.provincia = provincias.id_provincia AND
   denunciantes.id_denunciante = $1
 ORDER BY
   denunciantes.fecha DESC;
 SQL;
+	}
+	
+	
 
 	require('db.php');			// Fichero de conexión a la base de datos
 
