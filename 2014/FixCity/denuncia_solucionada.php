@@ -33,17 +33,15 @@
 	$insert = "INSERT INTO estado_usuario VALUES ($1, $2,1,$3,$4)";
 	$result = pg_prepare($db,"Insert Resuelto", $insert);
 	$result = pg_execute($db, "Insert Resuelto", array($array_denuncia[0],date("Y-m-d"),$array_denuncia[3],$array_denuncia[4]));
-	$row=pg_fetch_array($result);
-	if(pg_fetch_array($result)==0){
-		echo 'ERROR.';
-	}
-	else{
-		echo 'Correcto.';
-	}
-	
-?>
-	
-	
+	?>
+	<div data-role="page" data-theme="b">
+	<div data-role="header"><h2>DENUNCIA SOLUCIONADA</h2></div>
+	<div data-role="content">
+		<h2>Gracias por su colaboración.</h2>
+	</div>
+	<div data-role="footer">
+		<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+	</div>
 	
 	</body>
 </html>
