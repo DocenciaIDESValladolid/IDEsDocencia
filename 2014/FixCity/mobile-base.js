@@ -244,7 +244,7 @@ var publish = function () {
 				updateThematicUALayer("thematicUAmasCumplidoras",'nationalcode', munis, colorMasCumplidores);
 			});
 			
-	//falta actualizar la capa de menosCumplidores
+	//actualizar la capa de menosCumplidores
 	$.getJSON(url_base+'estadisticas_municipios.php?cumpli=0', function(data)
 			{
 				var munis=[];
