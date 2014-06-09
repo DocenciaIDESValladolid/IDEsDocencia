@@ -98,7 +98,7 @@ echo "A las ".$row['fecha']." he informado del problema: <br>". $row['texto'];
 	// Execute the prepared query.  Note that it is not necessary to escape the string $codigoine in any way
 	$result = pg_execute($db, "Select imagenes", array($id));
 	while($row = pg_fetch_array($result)) {
-		echo '<img src="'.$row['ruta'].'"></img>';
+		echo '<img src="'.$row['ruta'].'" maxwidth="100%"></img>';
 		}
 ?>
 			</p>
