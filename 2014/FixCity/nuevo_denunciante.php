@@ -26,34 +26,34 @@
 
 	@ $id_denuncia = $_GET['id_denuncia'];	// Gestión de usuarios
 	@ $id_facebook = $_POST['id_facebook'];	// Gestión de usuarios
- 
-	echo '<div data-role="page" data-theme="b">
-		<div data-role="header"><h2>DENUNCIA APOYADA</h2></div>
-		<div data-role="content">
-		<h2>Gracias por su colaboración.</h2>
-		</div>';
 	
  
-	// Inserción de la denunciante en la tabla de denunciantes
-	$query = "INSERT INTO denunciantes (id_denuncia, id_denunciante, fecha) VALUES 
-            ($id_denuncia, '$id_facebook','".date("Y-m-d")."')";
-	
+ 	// Inserción de la denunciante en la tabla de denunciantes
+	$query = "SELECT * FROM denunciantes WHERE id_denunciante LIKE '$id_denuncia'";
 	$result = pg_exec($db, $query);
-	
-	if($result!=false){
+	if(pg_fetch_array($result)){
 		echo '<div data-role="page" data-theme="b">
-		<div data-role="header"><h2>DENUNCIA APOYADA</h2></div>
+		<div data-role="header"><h2>DENUNCIA YA APOYADA PREVIAMENTE</h2></div>
 		<div data-role="content">
-		<h2>Gracias por su colaboración.</h2>
+		<h2>Gracias por su colaboración, pero ya apoyó esta denuncia.</h2>
 		</div>';
 	}
 	else{
+		// Inserción de la denunciante en la tabla de denunciantes
+		$query = "INSERT INTO denunciantes (id_denuncia, id_denunciante, fecha) VALUES 
+				($id_denuncia, '$id_facebook','".date("Y-m-d")."')";
+		
+		$result = pg_exec($db, $query);
+		
 		echo '<div data-role="page" data-theme="b">
-		<div data-role="header"><h2>DENUNCIA YA APOYADA</h2></div>
+		<div data-role="header"><h2>DENUNCIA APOYADA</h2></div>
 		<div data-role="content">
-		<h2>Gracias por su colaboración, pero ya apoyó previamente esta denuncia.</h2>
+		<h2>Gracias por su colaboración.</h2>
 		</div>';
 	}
+ 
+ 
+
 	
 ?>
 
