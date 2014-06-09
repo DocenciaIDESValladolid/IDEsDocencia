@@ -29,11 +29,18 @@
 	
  
  	// Inserción de la denunciante en la tabla de denunciantes
-	$query = "SELECT * FROM denunciantes WHERE id_denunciante = $id_denuncia";
+	$query = "SELECT * FROM denunciantes WHERE id_denunciante = $id_facebook";
 	$result = pg_exec($db, $query);
 	$array = pg_fetch_array($result);
 	if($array[0] == $id_denuncia){
-		// Inserción de la denunciante en la tabla de denunciantes
+		echo '<div data-role="page" data-theme="b">
+		<div data-role="header"><h2>DENUNCIA YA APOYADA PREVIAMENTE</h2></div>
+		<div data-role="content">
+		<h2>Gracias por su colaboración, pero ya apoyó esta denuncia.</h2>
+		</div>';
+	}
+	else{
+			// Inserción de la denunciante en la tabla de denunciantes
 		$query = "INSERT INTO denunciantes (id_denuncia, id_denunciante, fecha) VALUES 
 				($id_denuncia, '$id_facebook','".date("Y-m-d")."')";
 		
@@ -44,13 +51,6 @@
 		<h2>Gracias por su colaboración.</h2>
 		</div>';
 
-	}
-	else{
-		echo '<div data-role="page" data-theme="b">
-		<div data-role="header"><h2>DENUNCIA YA APOYADA PREVIAMENTE</h2></div>
-		<div data-role="content">
-		<h2>Gracias por su colaboración, pero ya apoyó esta denuncia.</h2>
-		</div>';
 	}
  
  
