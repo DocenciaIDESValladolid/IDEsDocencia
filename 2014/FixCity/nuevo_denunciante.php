@@ -31,7 +31,8 @@
 	echo '<div data-role="page" data-theme="b">
 <div data-role="header"><h2>DENUNCIA APOYADA</h2></div>
 <div data-role="content">
-Gracias por su colaboración';
+<h2>Gracias por su colaboración.</h2>
+</div>';
 	
  
 	// Inserción de la denunciante en la tabla de denunciantes
