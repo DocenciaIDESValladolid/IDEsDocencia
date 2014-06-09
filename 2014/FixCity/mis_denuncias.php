@@ -38,7 +38,7 @@ FROM
   public.provincias, 
   public.estado_usuario
 WHERE 
-	denuncias.id_denunciante = $1 AND
+	denuncias.id_usuario = $1 AND
 	denuncias.codigoine = municipios.codigoine AND
 	denuncias.id_denuncia = estado_usuario.id_denuncia AND 
 	(estado_usuario.estado = 1 OR 
