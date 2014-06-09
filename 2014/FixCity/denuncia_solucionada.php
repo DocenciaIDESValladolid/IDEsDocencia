@@ -4,6 +4,8 @@
 	
 	@ $id_denuncia = $_GET['id'];
 	
+	echo "HOLA CHAVALES $id_denuncia";
+	
 	$update = "UPDATE estado_usuario SET estado = 1 WHERE id_denuncia = $1";
 	
 	$result = pg_prepare($db,'Mis denuncias', $update);
