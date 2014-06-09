@@ -112,7 +112,7 @@ mapmini.zoomToExtent(markersmini.getDataExtent());
 		$result = pg_prepare($db, "Fecha", $query );
 		$result = pg_execute($db, "Fecha", array($id));
 		while($fecha = pg_fetch_array($result)) {
-			echo "A las ".$fecha[0]." se ha informado del problema: <br>". $row['texto'];
+			echo "El día ".$fecha[0]." se ha informado del problema: <br>". $row['texto'];
 		}
 ?></p>
 
