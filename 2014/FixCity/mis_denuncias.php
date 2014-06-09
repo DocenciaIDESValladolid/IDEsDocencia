@@ -43,7 +43,7 @@ WHERE
   (estado_usuario.estado = 1 OR 
   (estado_usuario.estado = 0 AND estado_usuario.id_denuncia NOT IN (SELECT id_denuncia FROM estado_usuario GROUP BY id_denuncia HAVING COUNT(id_denuncia)>1))) AND
   municipios.provincia = provincias.id_provincia AND
-  denunciantes.id_denunciante = $1
+  estado_usuario.id_denunciante = $1
 ORDER BY
   denunciantes.fecha DESC;
 SQL;
