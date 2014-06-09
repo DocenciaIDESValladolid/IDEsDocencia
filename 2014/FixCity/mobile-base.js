@@ -233,16 +233,30 @@ var publish = function () {
 	uaLayer= addThematicUALayers([],"thematicUAmasCumplidoras","Más cumplidores",'nationalcode',[],[]);
 	map.addLayer(uaLayer);
 	
-	$.getJSON(url_base+'estadisticas_municipios.php', function(data)
+	$.getJSON(url_base+'estadisticas_municipios.php?cumpli=1', function(data)
 			{
 				var munis=[];
-				for ( munind in data)
+				for ( munind in data)	
 					{
 					if (data[munind].codigoine != null)
 						munis.push(data[munind].codigoine);
 					}
 				updateThematicUALayer("thematicUAmasCumplidoras",'nationalcode', munis, colorMasCumplidores);
 			});
+			
+	//falta actualizar la capa de menosCumplidores
+	$.getJSON(url_base+'estadisticas_municipios.php?cumpli=0', function(data)
+			{
+				var munis=[];
+				for ( munind in data)	
+					{
+					if (data[munind].codigoine != null)
+						munis.push(data[munind].codigoine);
+					}
+				updateThematicUALayer("thematicUAmenosCumplidoras",'nationalcode', munis, colorMenosCumplidores);
+			});
+	
+	
 	
 	}
 	var wms_concentracion=createHeatmapLayer();
