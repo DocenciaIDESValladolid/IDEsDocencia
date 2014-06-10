@@ -123,9 +123,12 @@ mapmini.zoomToExtent(markersmini.getDataExtent());
 	$result = pg_prepare($db, "Select imagenes", $query );
 	// Execute the prepared query.  Note that it is not necessary to escape the string $codigoine in any way
 	$result = pg_execute($db, "Select imagenes", array($id));
+	echo '<table border="0"';
+	
 	while($row = pg_fetch_array($result)) {
-		echo '<a href="'.$row['ruta'].'"><img src="'.$row['ruta'].'" style="max-width:100%"></img></a>';
-		}
+		echo '<tr><td><a href="'.$row['ruta'].'"><img src="'.$row['ruta'].'" style="max-width:100%"></img></a></td></tr>';
+	}
+	</table>	
 ?>
 			</p>
 			</div>
