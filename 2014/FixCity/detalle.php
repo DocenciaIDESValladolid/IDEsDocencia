@@ -128,7 +128,7 @@ mapmini.zoomToExtent(markersmini.getDataExtent());
 	while($row = pg_fetch_array($result)) {
 		echo '<tr><td><a href="'.$row['ruta'].'"><img src="'.$row['ruta'].'" style="max-width:100%"></img></a></td></tr>';
 	}
-	</table>	
+	echo '</table>';
 ?>
 			</p>
 			</div>
