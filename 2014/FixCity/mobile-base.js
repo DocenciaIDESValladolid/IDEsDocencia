@@ -439,13 +439,14 @@ var publish = function () {
 		$("#infoDenunciaPanel").panel("open");
 		
 		
-		var html =  '¿Quiere Apoyar la denuncia?'+ 
+		/*var html =  '¿Quiere Apoyar la denuncia?'+ 
 					'<form id="nuevo_denunciante_form" data-role="form" data-ajax="false"' + 
 					'action="nuevo_denunciante.php?id_denuncia=' + feature.attributes.id_denuncia +'"' +
 					'method="post" enctype="multipart/form-data">'+
 					'<input type="hidden" name="id_facebook" id="id_facebook" value="'+ id_facebook +'">'+
 					'<input type="submit" value="Apoyar denuncia" name="submit" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-b ui-mini">'+
-					'</form>';
+					'</form>';*/
+		var html= '<a href="nuevo_denunciante.php?id_denuncia=' + feature.attributes.id_denuncia +'&id_facebook='+id_facebook +'" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-b ui-mini">Apoyar denuncia</a>';
 		$("#nuevo_denunciante").html(html);
 	}
 	function onPopupClose(evt) {
