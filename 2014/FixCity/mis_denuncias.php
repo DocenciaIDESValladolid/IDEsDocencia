@@ -59,7 +59,14 @@ SQL;
 	$result = pg_prepare($db,'Mis denuncias', $query);
 // Execute the prepared query.  Note that it is not necessary to escape the string $id in any way
 	$result = pg_execute($db, 'Mis denuncias', array($id_facebook));
-	echo "<table>";
+	echo '<table border="1">
+		<thead><tr>
+		<th>Denuncia</th>
+		<th>Municipio</th>
+		<th>Fecha</th>
+		<th>Solucionado</th>
+		</tr></thead>
+		<tbody>';
 	$query_imagenes = 'SELECT * FROM imagenes WHERE id_denuncia = $1';
 	$result_imagenes = pg_prepare($db,'Imagenes', $query_imagenes);
 	while($row = pg_fetch_array($result) ) 
@@ -69,21 +76,21 @@ SQL;
 		echo '<td>';
 			echo '<a href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Detalle</a>';
 		echo '</td>';
-		echo '<td>Municipio:'. $row['nombre_municipio'].'</td>'.
-			'<td>Provincia:'. $row['nombre_provincia'].'</td>'.
-			'<td>Fecha: '.$row['fecha'].'</td>'.
-			'<td>Solucionado: ';
+		echo '<td>'. $row['nombre_municipio'].' '.
+			'('. $row['nombre_provincia'].')</td>'.
+			'<td>'.$row['fecha'].'</td>'.
+			'<td align="center">';
 		if($row['estado_usuario']==0){
-			echo 'NO</td>';
-			echo '<td><a href="denuncia_solucionada.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Marcar como solucionado</a>';
+			echo 'NO';
+			echo '<a href="denuncia_solucionada.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Solucionar</a>';
 		}
 		else {
 			echo 'SI</td>';
 		}
 		echo '</td>';
-		echo '<tr><td colspan="4" >Descripción: '.$row['texto'].'</td>';
+		echo '<tr><td colspan="5" >Descripción: '.$row['texto'].'</td>';
 		echo '</tr><tr>';
-		echo '<td colspan="4">';		
+		echo '<td colspan="5">';		
 		$result_imagenes = pg_execute($db, 'Imagenes',array($id_denuncia));
 		while($imagen = pg_fetch_array($result_imagenes) ) {
 			echo '<img style="max-height:100px;max-width:100px" src="'.$imagen['ruta'].'"/>';
@@ -91,7 +98,7 @@ SQL;
 		echo "</td></tr>";
 		
 	}
-	echo "</table>";
+	echo "</tbody></table>";
 	
 ?>
 </div>
