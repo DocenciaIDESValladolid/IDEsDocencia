@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <title>FixCity</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+		
+        <link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
+		<link rel="stylesheet" href="theme/default/style.mobile.css" type="text/css">
+        <link rel="stylesheet" href="style.mobile-jq.css" type="text/css">
+		<script src="lib/OpenLayers.js"></script>
+
+		<script src="jquery-1.9.0.js"></script>
+        <script src="jquery.mobile-1.4.2.min.js"></script>
+		<script src="upload_photo.js"></script>
+		<script src="AnimatedCluster.js"></script>
+		<script src="thematicLayers.js"></script>
+		<script src="reportingLayers.js"></script>
+      
+        <script src="mobile-base.js"></script>
+        <script src="mobile-jq.js"></script>
+		
+		<script src="facebook.js"></script>	<!-- CARGA DE SIMPLE FACEBOOK GRAPH -->
+
+<!-- SCRIPTS PROPIOS QUE USA ESTA PÁGINA -->
+<script>
+
+
+<!-- Script principal de la aplicación-->
+</script>
+    </head>
+    <body>
+        <h1 id="title">FixCity</h1>  
+<!-- Página principal de la aplicación-->
+<div data-role="page" id="mappage"  data-quicklinks="true" data-theme="b">	
+	<!----
+	Panel de información de la marca
+	-->
+	<div data-role="panel" data-position="left" data-swipe-close="true" data-display="overlay" id="infopanel">
+	<p>
+	<div id="estadoLogin">
+	<a href="#" id="iniciosesionFacebookEstado" class="ui-btn  ui-btn-icon-left ui-icon-fb ui-btn-inline" onclick="login(); return false;">Identificarse</a>
+					<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
+	</div>
+	<a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a></p>
+	<img src="images/marker-icon-fixit.png" align="left" />
+	<div class="ui-corner-all custom-corners">
+	  <div class="ui-bar ui-bar-a">
+		<h3>La marca para informar está situada en </h3>
+		</div>
+	  <div class="ui-body ui-body-a">
+		<p id="locationlabel"></p>
+	</div>
+	</div>
+	<p>En cualquier momento pulse en la chincheta <img src="images/marker-icon-fixit.png" height="32"> para comenzar el informe de la avería o irregularidad que ha observado.</p>
+
+	<a href="#nuevadenuncia_loc_actual" id="nuevadenuncia_loc_actual_button" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui_mini" >Añadir denuncia</a>
+	</div>
+	<!----
+	Panel de información de la denuncia seleccionada
+	-->
+	<div data-role="panel"  data-position="left" data-display="overlay" id="infoDenunciaPanel" >	
+			
+            <img src="images/cono.png" align="left" width="50px"/><h1>Incidencia</h1>
+			<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+			<div id="nuevo_denunciante"></div>
+			<a id="reportDetailsLink" href="detalle.php" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Detalle</a>
+			<div class="ui-corner-all custom-corners">
+			  <div class="ui-bar ui-bar-a"><h3>Denuncia de incidencia en</h3>
+			  </div>
+			  <div class="ui-body ui-body-a">
+			<p><b id="reportLocationLabel"></b>.</p>
+			</div>
+			</div>
+			<div class="ui-corner-all custom-corners">
+			  <div class="ui-bar ui-bar-a"><h3>Descripción del ciudadano</h3>
+			  </div>
+			  <div class="ui-body ui-body-a">
+			<p id="reportDescription"></p>
+			<p id="reportImageList"></p>
+			</div>
+			</div>
+			
+			
+	</div>
+	<!--
+	Cabecera y barra de herramientas.
+	-->
+				<div data-role="header" class="bgimg" >
+				<a href="#infopanel"  data-rel="panel" data-dismissible="true" class="ui-btn ui-btn-left ui-btn-inline ui-icon-bars ui-btn-icon-notext">Información</a>
+				<a href="authors.html"  data-prefetch="true" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-btn-inline ui-icon-info ui-btn-icon-notext">About Us</a>
+				<h1><img src="images/marker-icon-fixit.png" height="24"> FixCity</h1>
+				</div>		
+				<div data-role="content">		  
+					<div id="map" class="smallmap"></div>
+				</div>
+				<div data-role="footer" >
+					<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-geolocation ui-btn-icon-notext" onclick="autolocate();return false;">Locate</a>
+					<a href="mis_denuncias.php" id="misdenuncias_button" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Mis Denuncias</a>
+					<a href="#searchpage" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-search">Search</a>
+					<a href="#layerspage" data-transition="fade" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-bullets">Capas</a>
+					<a href="estadisticas_municipios.php" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Estadísticas</a>
+					<a href="#" id="iniciosesionFacebook" class="ui-btn  ui-btn-icon-right ui-icon-fb ui-btn-icon-notext ui-btn-inline " onclick="login(); return false;">Login</a>
+
+					<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
+					
+					<script>
+					$("#misdenuncias_button").hide();
+				//	$("#nuevadenuncia_loc_actual_button").hide();
+				//	$("#search_button").hide();
+					</script>
+				</div>
+			  <div id="navigation" data-role="controlgroup" data-type="vertical">
+				<a href="#" data-role="button" data-icon="plus" id="plus"
+				   data-iconpos="notext" onclick="map.zoomIn();return false;"></a>
+				<a href="#" data-role="button" data-icon="minus" id="minus"
+				   data-iconpos="notext" onclick="map.zoomOut();return false;"></a>
+			  </div>
+	
+</div> <!-- mappage -->
+
+		<!--
+		Página de busqueda.
+		-->		
+		<div data-role="page" id="searchpage" data-theme="b">
+          <div data-role="header">
+            <h1>Search</h1>
+          </div>
+		  <div data-role="content">
+		  <form action="http://www.openrouteservice.org/php/OpenLSLUS_Geocode.php" id="searchform" method="POST" >
+          <label for="query">Buscar lugares</label>
+		  <input type="search" name="query" id="query"
+                   value="" placeholder="Buscar lugares"
+                   autocomplete="off"/>
+          </form>
+          <ul data-role="listview" data-inset="true" id="search_results"></ul> 
+		  <script>
+		  $(document).on('submit', '#searchform', submitform);
+		  
+				function requestSuccess(response) {
+					var format = new OpenLayers.Format.XLS();
+					var output = format.read(response.responseXML);
+					if (output.responseLists[0]) {
+						var geometry = output.responseLists[0].features[0].geometry;
+						var foundPosition = new OpenLayers.LonLat(geometry.x, geometry.y).transform(
+								new OpenLayers.Projection("EPSG:4326"),
+								map.getProjectionObject()
+								);
+						map.setCenter(foundPosition, 16);
+					} else {
+						alert("Sorry, no address found");
+					}
+				}
+				function requestFailure(response) {
+					alert("An error occurred while communicating with the OpenLS service. Please try again.");
+				}
+				  function submitform(form) {
+					var queryString = this.query.value;
+					$.ajax({
+							type: "POST",
+							contentType: "application/x-www-form-urlencoded",
+							url: "http://www.openrouteservice.org/php/OpenLSLUS_Geocode.php",
+							data: "FreeFormAdress=" + encodeURIComponent(queryString) + "&MaxResponse=1",
+							success: requestSuccess,
+							error: requestFailure,
+							});
+			
+			
+				}
+				
+			</script>
+			<div>
+			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+			</div>
+			</div>
+		</div><!--Fin de página de busqueda.-->
+
+		<!--
+		Página de capas.
+		-->
+        <div data-role="page" id="layerspage" data-theme="b">
+          <div data-role="header">
+            <h1>Layers</h1>
+          </div>
+          <div data-role="content">
+            <ul data-role="listview" data-inset="true" data-theme="d" data-dividertheme="c" id="layerslist">
+            </ul>
+			 <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+          </div>		 			  		  
+        </div><!--Fin de página de capas.
+		-->
+		
+		<!--
+		Denuncias 
+		-->
+		<div data-role="page" id="nuevadenuncia_loc_actual" data-theme="b">
+			<div data-role="header" data-position="fixed">
+			<h1>Nueva Denuncia</h1>
+			</div>
+			<div data-role="content">			      
+				<!-- Formulario para la introducción de una denuncia -->
+				<form id="newReportForm" data-role="form" data-ajax="false" action="nueva_denuncia.php" method="post" enctype="multipart/form-data">
+					<div id="loc_actual"></div>
+					
+					<div id="email_ayto"></div>
+					
+					<div id="usuario_info_prueba"></div>
+					<p>Escriba aquí la descripción de su denuncia</p>
+					<textarea name="texto" rows="10" cols="80"></textarea>	
+					<label for="emailMunicipality">Introduzca el correo de contacto del municipio:</label>
+					<input type="email" name="emailMunicipality" id="emailMunicipality"></input>
+					<!--<label for="emailMunicipalitySelect">O seleccione un email ya registrado al que notificar.</label>-->
+					<select name="emailMunicipalitySelect" id="emailMunicipalitySelect" data-native-menu="false">
+					</select>
+					<input type="hidden" name="photo_urls" id="photo_urls">
+					<input type="hidden" name="id_facebook" id="id_facebook">
+					<input type="hidden" name="user_name" id="name_facebook">
+					<input type="hidden" name="email" id="email_facebook">
+					<input data-role="button" type="submit" value="Enviar" name="submit" data-inline="true">
+					<input data-role="button" type="reset" value="Borrar" data-inline="true">
+					
+			  </form>
+					<label for="filesinput">Seleccione hasta 3 imágenes que identifiquen la denuncia:</label>
+					<input type="file" id="filesinput" multiple></input>
+					<div id="images_uploaded"></div>
+					 <script>
+					var files = document.getElementById("filesinput");
+					var emailSelect = document.getElementById("filesinput");
+            //process files
+			files.addEventListener("change", function (e) {
+                var files = e.target.files;
+                for(i=0; i<files.length; i++) {
+                    var file = files[i];
+                    if(file.type.match(/image.*/))
+					{
+					$.mobile.loading( "show", {text: "Enviando imagen",	textVisible: true});
+                        upload(file, function (links)
+						{
+						$.mobile.loading( "hide");
+						$('filesinput').val('');
+						$('#images_uploaded').append($('<img></img>').attr('src',links.small_square));
+						$('#photo_urls').val($('#photo_urls').val()+','+ links.original);
+						});
+                    }
+                }
+		e.target.value='';
+            }, false);
+					 </script>
+			<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+
+			</div>
+			<div data-role="footer" data-position="fixed" >
+			</div>
+		</div><!--Fin de denuncias.-->
+	
+		<!--
+		Página Mis Denuncias.
+		-->
+		<div data-role="page" id="misdenuncias" data-theme="b">
+			<div data-role="header"><h1>Mis Denuncias</h1></div>
+			<div data-role="content" >
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+            </div>
+		</div><!--Fin de página Mis Denuncias.-->
+				
+		<!--
+		Zona de detalles.
+		-->		
+	   <div id="popup" data-role="dialog">
+            <div data-position="inline" data-theme="d" data-role="header">
+                <h1>Details</h1>
+            </div>
+            <div data-theme="c" data-role="content">
+                <ul id="details-list" data-role="listview">
+                </ul>
+            </div>
+        </div><!--Fin de zona de detalles.-->	
+		
+		<!--
+		Página de estadísticas.
+		-->	
+		<div data-role="page" id="estadisticas" data-theme="b">
+			<div data-role="header"><h1>Estadísticas</h1></div>
+			<div data-role="content" >
+				<input type="button" value="Estadísticas de municipios" onclick="location.href='estadisticas_municipios.php';" />
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+            </div>
+		</div><!--Fin de página de estadísticas.-->	
+		
+		
+		 <!-- Site footer -->
+ <!--   <div class="footer" style="margin-left: 100px ;margin-right: 100px;">
+    	<p>&copy; Infraestructura de Datos Espaciales. Universidad de Valladolid</p>
+    </div> -->
+    </body>
+</html>
