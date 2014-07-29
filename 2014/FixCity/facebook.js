@@ -2,7 +2,9 @@ var fb = {
   config :{
   // CONFIG VARS: 
 
-    app_id : '616622821758240', 
+ //JOSU APP    app_id : '616622821758240',
+    app_id : '288631441316558', // FixCity2 App
+	//app_id : '288632621316440', //FixCity2 TestApp
 
     use_xfbml : true,
 
@@ -112,3 +114,56 @@ window.onload = function() {
   document.getElementById('fb-root').appendChild(e);
   if (typeof oldload == 'function') oldload();
 };
+
+// Funcion para logarse con Facebook.
+function login() {
+  fb.login(function(){ 
+    if (fb.logged) {
+		// Cambiamos el link de identificarse por el nombre y la foto del usuario.
+		updateFacebookLoginInfo(fb);
+    } else {
+      toast("No se pudo identificar al usuario");
+    }
+  })
+};
+
+// Funcion para actualizar la información de facebook
+function updateFacebookLoginInfo(fb)
+{
+	id_facebook = fb.user.id;
+	name_facebook = fb.user.name;
+	var fb_user_label = '<img valign="center" height="30" src="'+fb.user.picture+'"/>' + fb.user.name;
+	var html = fb_user_label + '<a href="#" class="ui-btn  ui-btn-icon-left ui-icon-delete" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
+	$("#estadoLogin").html(html);
+	$("#iniciosesionFacebook").hide();
+	$("#misdenuncias_button").show();
+	$("#nuevadenuncia_loc_actual_button").show();
+	$("#search_button").show();
+	$("#mappage").trigger( "updatelayout" );
+	toast(fb_user_label);
+	
+	$("#id_facebook").val(fb.user.id);
+	$("#name_facebook").val(fb.user.name);
+	$("#misdenuncias_button").attr('href','mis_denuncias.php?id='+fb.user.id);
+	$("#email_facebook").val(fb.user.email);
+	
+	html = 'Usuario: ' + fb.user.name + ' correo es: ' + fb.user.email;
+	$("#usuario_info_prueba").html(html);
+	
+}
+
+// Funcion para publicar un mensaje en tu muro
+var publish = function () {
+    fb.publish({
+      message : "Estoy probando un script para que la gente publique desde mi/s web/s en Facebook",
+      picture : "http://blog.ikhuerta.com/wp-content/themes/ikhuerta3/images/ikhuerta.jpg",
+      link : "http://blog.ikhuerta.com/simple-facebook-graph-javascript-sdk",
+      name : "Simple Facebook Graph Javascript SDK",
+      description : "Facebook Graph es una nueva forma de conectar tu web Facebook. Con este script es muy fácil conseguirlo :)"
+    },function(published){ 
+      if (published)
+       alert("publicado!");
+      else
+       alert("No publicado :(, seguramente porque no estas identificado o no diste permisos");
+    });  
+}
