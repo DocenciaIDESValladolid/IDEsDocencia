@@ -1,8 +1,8 @@
 <?php
-	$db = pg_connect("host=postgres.idelab.uva.es user=testDev password=testIDELAB dbname=idelab");
+	$db = pg_connect("host=localhost user=postgres password=testIDELAB dbname=FixCity");
 	if (!$db)
 	{
-		echo 'Error: No se ha podido realizar la conexión con la Base de Datos. Por favor, inténtelo de nuevo más tarde.';		
+		echo 'Error: No se ha podido realizar la conexiï¿½n con la Base de Datos. Por favor, intï¿½ntelo de nuevo mï¿½s tarde.';		
 		echo "<input type='button' value='Back' onClick='history.go(-1);'>";		
 		exit;
 	}
