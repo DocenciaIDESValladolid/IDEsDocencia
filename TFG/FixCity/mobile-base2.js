@@ -7,7 +7,7 @@ var gg = new OpenLayers.Projection("EPSG:4326");
 //var sm = new OpenLayers.Projection("EPSG:900913");
 var sm = new OpenLayers.Projection("EPSG:3857");
 var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
-var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
+var urlWfsUA = '/ignUA';
 var urlWmsUA = 'http://www.ign.es/wms-inspire/unidades-administrativas';
 var administrativeUnitsFeatureType= 'unidades-administrativas:AU.AdministrativeUnit';
 var prov_name;
@@ -264,7 +264,7 @@ var init = function (onSelectFeatureFunction) {
 
 		if(respuesta)
 		{
-			window.location = 'http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/index.html#nuevadenuncia_loc_actual';
+			window.location = 'http://localhost/IDEs/TFG/FixCity/index.html#nuevadenuncia_loc_actual';
 			html = '<p>La localización actual es: ' + latitud + " N, " + longitud + " E" + '</p>'+
 			'<input type="hidden" name="latitud" value="'+ latitud +'">' + 
 			'<input type="hidden" name="longitud" value="'+ longitud +'">';

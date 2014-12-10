@@ -10,9 +10,9 @@ var gg = new OpenLayers.Projection("EPSG:4326");
 //var sm = new OpenLayers.Projection("EPSG:900913");
 var sm = new OpenLayers.Projection("EPSG:3857");
 var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
-var urlWfsUA = 'http://www.ign.es/wfs/unidades-administrativas';
+var urlWfsUA = '/ignUA'; //cambiar por url elegida en httpd.conf
 var urlWmsUA = 'http://www.ign.es/wms-inspire/unidades-administrativas';
-var url_base='http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/';// DEBUG Para depurar en local con servicios remotos
+var url_base='http://localhost/IDEs/TFG/FixCity/index.html';// Cambiar url para usar las locales (localhost.....) DEBUG Para depurar en local con servicios remotos
 var administrativeUnitsFeatureType= 'unidades-administrativas:AU.AdministrativeUnit';
 var prov_name;
 var muni_name;

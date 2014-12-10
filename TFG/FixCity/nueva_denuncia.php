@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>Introducción de una Nueva Denuncia en la Base de Datos</title>
+	<title>IntroducciÃ³n de una Nueva Denuncia en la Base de Datos</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	
@@ -17,7 +17,8 @@
 	<script src="reportingLayers.js"></script>
   
 	<script src="mobile-base.js"></script>
-	<script src="mobile-jq.js"></script>	
+	<script src="mobile-jq.js"></script>
+        <script src="facebook.js"></script>
 </head>
 <body>
 <div data-role="page" data-theme="b">
@@ -26,11 +27,11 @@
 <?php
 	
 	error_reporting(E_ALL);		// Sentencia para que se muestren los errores PHP por pantalla
-	require('db.php');			// Fichero de conexión a la base de datos
+	require('db.php');			// Fichero de conexiÃ³n a la base de datos
 	
 	// Variables de formulario
 	@ $texto = $_POST['texto'];				// Texto de la denuncia
-	@ $longitud = $_POST['longitud'];		// Gestión de municipios
+	@ $longitud = $_POST['longitud'];		// Gestiï¿½n de municipios
 	@ $latitud = $_POST['latitud'];
 	@ $codigoine = $_POST['codigoine'];
 	@ $municipio = $_POST['municipio'];
@@ -43,8 +44,8 @@
 	if(!$email_ayto){
 		@ $email_ayto = $_POST['emailMunicipalitySelect'];
 	}
-	@ $id_facebook = $_POST['id_facebook'];	// Gestión de usuarios
-	@ $user_name = $_POST['user_name'];	// Notificación de email
+	@ $id_facebook = $_POST['id_facebook'];	// Gestiï¿½n de usuarios
+	@ $user_name = $_POST['user_name'];	// Notificaciï¿½n de email
 	@ $email = $_POST['email'];
 	
 	// Formateamos textos para introducir en la base de datos.
@@ -65,7 +66,7 @@
 	$photo_urls = trim($photo_urls);
 	$id_denuncia=null;
 	
-	// Comprobamos que las variables que hemos pasado no están vacías.
+	// Comprobamos que las variables que hemos pasado no estï¿½n vacï¿½as.
 	if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio 
 		|| !$provincia || !$id_facebook || !$email || !$email_ayto || !$photo_urls)
 	{
@@ -108,7 +109,7 @@
 					  <td>$email_ayto</td>
 					</tr>
 					<tr>
-					  <td>URLs para las imágenes=</td>
+					  <td>URLs para las imÃ¡genes=</td>
 					  <td>$photo_urls</td>
 					</tr>
 					";
@@ -118,14 +119,17 @@ else
 {	
 
 	/* ------------------------------------ *
-	 * 			GESTIÓN DE USUARIOS			*
+	 * 			GESTIï¿½N DE USUARIOS			*
 	 * ------------------------------------ */
 	 
-	// Comprobamos que el usuario que introduce la denuncia se encuentra registrado en la aplicación
+	// Comprobamos que el usuario que introduce la denuncia se encuentra registrado en la aplicaciï¿½n
 	$query = 'SELECT * FROM usuarios WHERE id_facebook LIKE $1';
 	$result = pg_prepare($db, "Select user", $query );
+        $error = pg_last_error();
+        echo $error;
 	$result = pg_execute($db, "Select user", array($id_facebook));
-	
+        $error = pg_last_error();
+	echo $error;
 	$row = pg_fetch_array($result);
 	
 	if($row == false){
@@ -133,12 +137,15 @@ else
 		// Si el usuario no se encuentra registrado, insertamos una nueva fila en la BD.
 		$insert = 'INSERT INTO usuarios (id_facebook, email) VALUES ($1,$2);';
 		$result = pg_prepare($db, "insert user", $insert );
+                $error = pg_last_error();
 		$result = pg_execute($db, "insert user", array($id_facebook,$email));
+                $error = pg_last_error();
+                echo $error;
 	}
 	else{
 		// El usuario se encuentra registrado.
 		// Dado que el email del usuario puede haber cambiado desde el momento en el que se 
-		// almacenó el usuario por primera vez, actualizamos el email.
+		// almacenï¿½ el usuario por primera vez, actualizamos el email.
 		
 		echo "Bienvenido de nuevo.";
 		
@@ -149,9 +156,9 @@ else
 
 
 	/* ------------------------------------ *
-	 * 			GESTIÓN DE DENUNCIAS		*
+	 * 			GESTIï¿½N DE DENUNCIAS		*
 	 * ------------------------------------ */
-	// Inserción de la denuncia en la tabla de denuncias
+	// Inserciï¿½n de la denuncia en la tabla de denuncias
 	$query = 'INSERT INTO denuncias (texto, the_geom, fecha, codigoine, email, id_usuario) VALUES 
             ($1, ST_Transform(ST_SetSRID(ST_Point($2,$3),900913),4326),$4,$5,$6,$7) RETURNING id_denuncia';
 	$result = pg_prepare($db, "insert denuncias", $query );
@@ -159,6 +166,8 @@ else
 	
 	
     if($result==false){
+                $error = pg_last_error();
+                echo $error;
 		echo 'Error al introducir la denuncia en la base de datos.';
 		echo '<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>';
 		exit;
@@ -169,18 +178,18 @@ else
 		$id_denuncia = $row[0];
 	}
 	
-	// Inserción de la denuncia en la tabla de denunciantes.
+	// Inserciï¿½n de la denuncia en la tabla de denunciantes.
 	$insert = 'INSERT INTO denunciantes (id_denuncia, id_denunciante, fecha) VALUES ($1,$2,$3);';
 	$result = pg_prepare($db, "insert denunciantes",$insert );
 	$result = pg_execute($db, "insert denunciantes", array($id_denuncia,$id_facebook,date("Y-m-d")));
 	
-	// Inserción en estado_usuario
+	// Inserciï¿½n en estado_usuario
 	$estado_usuario = "INSERT INTO estado_usuario (id_denuncia, fecha, estado, id_usuario, codigoine) VALUES ($1,$2,$3,$4,$5);";
 	$result = pg_prepare($db, "insert estado",$estado_usuario );
 	$result = pg_execute($db, "insert estado", array($id_denuncia,date("Y-m-d"),0,$id_facebook,$codigoine));
 	
 	/* ------------------------------------ *
-	 * 			GESTIÓN DE MUNICIPIOS		*
+	 * 			GESTIï¿½N DE MUNICIPIOS		*
 	 * ------------------------------------ */
 	
 	$query_municipios = 'SELECT nombre FROM municipios WHERE nombre LIKE $1';
@@ -189,9 +198,9 @@ else
 	$row = pg_fetch_array($result);
 	if($row == false)
 	{
-		echo "<p>Aún no teníamos ningún informe de $municipio ($provincia). Gracias por colaborar.</p>";
+		echo "<p>Aï¿½n no tenï¿½amos ningï¿½n informe de $municipio ($provincia). Gracias por colaborar.</p>";
 		$nuevo_municipio = "INSERT INTO municipios VALUES ($1, 
-				(SELECT id_provincia FROM provincias WHERE nombre LIKE $2),$3)"; // TODO!! OJO no está garantizado que exista el registro en Provincias
+				(SELECT id_provincia FROM provincias WHERE nombre LIKE $2),$3)"; // TODO!! OJO no estï¿½ garantizado que exista el registro en Provincias
 		$result = pg_prepare($db, "insert municipio",$nuevo_municipio );
 		$result = pg_execute($db, "insert municipio", array($municipio,$provincia,$codigoine));
 	}
@@ -225,7 +234,7 @@ else
 	*/
 	
 	/* ------------------------------------ *
-	 * 			GESTIÓN DE IMÁGENES 		*
+	 * 			GESTIï¿½N DE IMï¿½GENES 		*
 	 * ------------------------------------ */	
 	$query_url = 'INSERT INTO imagenes (id_denuncia, ruta) VALUES ($1,$2);';
 	$result = pg_prepare($db, "insert image",$query_url );
@@ -234,14 +243,14 @@ else
 		$result = pg_execute($db, "insert image", array($id_denuncia,$array_url[$i]));
 	}
 	
-	/*Texto que mostrará la información de la nueva denuncia y las imagenes que acompañan la queja.*/
+	/*Texto que mostrarï¿½ la informaciï¿½n de la nueva denuncia y las imagenes que acompaï¿½an la queja.*/
 	
-	echo "<br>Acaba de añadir una nueva denuncia en $municipio, provincia de $provincia.<br>";
-	echo 'La localización geográfica de la denuncia añadida es: '.$latitud.' LAT y '.$longitud.'LON<br>';
+	echo "<br>Acaba de aï¿½adir una nueva denuncia en $municipio, provincia de $provincia.<br>";
+	echo 'La localizaciï¿½n geogrï¿½fica de la denuncia aï¿½adida es: '.$latitud.' LAT y '.$longitud.'LON<br>';
 	echo "El texto de la denuncia es:";
 	echo '<h1>'.$texto.'</h1><br>';
-	echo "Recibirá en su correo $email los distintos detalles sobre posibles modificaciones en su denuncia.<br>";
-	echo "Su denuncia irá acompañada de las siguientes imagenes.<br>"; 
+	echo "Recibirï¿½ en su correo $email los distintos detalles sobre posibles modificaciones en su denuncia.<br>";
+	echo "Su denuncia irï¿½ acompaï¿½ada de las siguientes imagenes.<br>"; 
 	//echo $html;
 	for($i=1;$i<count($array_url);$i++){
 		/*Funcion HTML que permite visualizar la galeria de imagenes que se envian.*/
@@ -265,10 +274,12 @@ else
 			</script>';
 			
 echo  '<a  href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-grid">Detalle</a>';
-$email_href='mailto:'.$email_ayto."?subject=Ciudadano informa de un problema en $municipio($provincia)&body=Estimado ayuntamiento,\n he encontrado un problema en la vía pública que supongo que le interesará por ser de su competencia. Se trata de: $texto \n\n He puesto más detalles, situación exacta y fotografías en http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/detalle.php?id=$id_denuncia&authtoken=kjh2342kj3h4234kj23h4jk2h4234kj24 \n\n Espero haber colaborado a tener entre todos un mejor municipio. Un saludo, atentamente\n\n $user_name";
+$email_href='mailto:'.$email_ayto."?subject=Ciudadano informa de un problema en $municipio ($provincia)&body=Estimado ayuntamiento,\n he encontrado un problema en la vï¿½a pï¿½blica que supongo que le interesarï¿½ por ser de su competencia. Se trata de: $texto \n\n He puesto mï¿½s detalles, situaciï¿½n exacta y fotografï¿½as en http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/detalle.php?id=$id_denuncia&authtoken=kjh2342kj3h4234kj23h4jk2h4234kj24 \n\n Espero haber colaborado a tener entre todos un mejor municipio. Un saludo, atentamente\n\n $user_name";
 echo '<!--'.$email_href.'-->';
 echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-mail" href="'.$email_href.'" > Avisar con un email</a>';
-}// HabÃ­a datos para la denuncia
+echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-mail" onclick="publicar()" > Publicar en tu muro de Facebook</a>';
+
+        }// HabÃ­a datos para la denuncia
 
 ?>
 
