@@ -2,9 +2,9 @@ var fb = {
   config :{
   // CONFIG VARS: 
 
- //JOSU APP    app_id : '616622821758240',
-    app_id : '288631441316558', // FixCity2 App
-	//app_id : '288632621316440', //FixCity2 TestApp
+    //JOSU APP    app_id : '616622821758240',
+    //app_id : '288631441316558', // FixCity2 App
+    app_id : '288632621316440', //FixCity2 TestApp
 
     use_xfbml : true,
 
