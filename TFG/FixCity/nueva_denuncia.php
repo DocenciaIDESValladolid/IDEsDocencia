@@ -19,6 +19,11 @@
 	<script src="mobile-base.js"></script>
 	<script src="mobile-jq.js"></script>
         <script src="facebook.js"></script>
+        <script>
+            function publicar(mensaje){
+                fb.publish1(mensaje);               
+            }            
+        </script>
 </head>
 <body>
 <div data-role="page" data-theme="b">
@@ -276,8 +281,9 @@ else
 echo  '<a  href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-grid">Detalle</a>';
 $email_href='mailto:'.$email_ayto."?subject=Ciudadano informa de un problema en $municipio ($provincia)&body=Estimado ayuntamiento,\n he encontrado un problema en la v�a p�blica que supongo que le interesar� por ser de su competencia. Se trata de: $texto \n\n He puesto m�s detalles, situaci�n exacta y fotograf�as en http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/detalle.php?id=$id_denuncia&authtoken=kjh2342kj3h4234kj23h4jk2h4234kj24 \n\n Espero haber colaborado a tener entre todos un mejor municipio. Un saludo, atentamente\n\n $user_name";
 echo '<!--'.$email_href.'-->';
+$mensaje = "Acabo de realizar una denuncia a traves de FixCity en $municipio ($provincia). Apoya esta denuncia en web. $photo_urls";
 echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-mail" href="'.$email_href.'" > Avisar con un email</a>';
-echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-mail" onclick="publicar()" > Publicar en tu muro de Facebook</a>';
+echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-fb" onclick="publicar(\'' .$mensaje. '\');"> Publicar en tu muro de Facebook</a>';
 
         }// Había datos para la denuncia
 

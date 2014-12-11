@@ -8,7 +8,7 @@ var fb = {
 
     use_xfbml : true,
 
-    extendPermissions : 'email',  //'publish_stream' , 
+    extendPermissions : 'email,publish_actions',  //'publish_stream' , 
     // info: http://developers.facebook.com/docs/reference/api/permissions/
 
     locale : 'es_ES' 
@@ -17,7 +17,14 @@ var fb = {
   // END CONFIG VARS
   },
   perms : [],
-  hasPerm : function (perm) { for(var i=0, l=fb.perms.length; i<l; i++) { if(fb.perms[i] == perm) {return true;}} return false; },
+  hasPerm : function (perm) { 
+      for(var i=0, l=fb.perms.length; i<l; i++) { 
+          if(fb.perms[i] == perm) {
+              return true;
+          }
+      } 
+      return false; 
+  },
   logged : false,
   user : false, // when login, is a user object: http://developers.facebook.com/docs/reference/api/user
   login : function (callback){
@@ -33,14 +40,14 @@ var fb = {
 				fb.perms.push(i);
 			}
 		  }
-        });	   
+        });
 		fb.getUser(callback);
       } else {
         fb.logged = false;
         fb.perms = [];
 		callback();
       }
-    },{scope:fb.config.extendPermissions});
+    },{scope:'email,publish_actions'});
     return false;
   },
   syncLogin : function (callback){
@@ -57,7 +64,7 @@ var fb = {
 				fb.perms.push(i);
 			}
 		  }
-        });	   
+        });
         fb.getUser(callback);
         return true;
       } else {
@@ -72,8 +79,18 @@ var fb = {
     FB.api('/me', function(r){
       var user = r;
       user.picture = "https://graph.facebook.com/"+user.id+"/picture";
-      fb.user=user; callback(user); 
+      fb.user=user;
+      callback(user); 
     }); 
+  },
+  publish1 : function(mensaje){                    
+                        FB.api('/me/feed', 'post', { message: mensaje }, function(response1) {
+                          if (!response1 || response1.error) {
+                            alert('Se ha producido un error y su actualización no ha sido publicada');
+                          } else {
+                            alert('Publicación publicada correctamente');
+                          }
+                        });          
   },
   publish : function (publishObj,callback,noReTry) {
   // publishObj: http://developers.facebook.com/docs/reference/api/post   
@@ -153,7 +170,7 @@ function updateFacebookLoginInfo(fb)
 }
 
 // Funcion para publicar un mensaje en tu muro
-var publish = function () {
+var publish = function publicar() {
     fb.publish({
       message : "Estoy probando un script para que la gente publique desde mi/s web/s en Facebook",
       picture : "http://blog.ikhuerta.com/wp-content/themes/ikhuerta3/images/ikhuerta.jpg",
