@@ -163,11 +163,20 @@ else
 	/* ------------------------------------ *
 	 * 			GESTI�N DE DENUNCIAS		*
 	 * ------------------------------------ */
+        //Codigo para generar codigo aleatorio
+        $an = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-)(.:,;";
+        $su = strlen($an) - 1;
+        $cod = substr($an, rand(0, $su), 1) .
+        substr($an, rand(0, $su), 1) .
+        substr($an, rand(0, $su), 1) .
+        substr($an, rand(0, $su), 1) .
+        substr($an, rand(0, $su), 1) .
+        substr($an, rand(0, $su), 1);
 	// Inserci�n de la denuncia en la tabla de denuncias
-	$query = 'INSERT INTO denuncias (texto, the_geom, fecha, codigoine, email, id_usuario) VALUES 
-            ($1, ST_Transform(ST_SetSRID(ST_Point($2,$3),900913),4326),$4,$5,$6,$7) RETURNING id_denuncia';
+	$query = 'INSERT INTO denuncias (texto, the_geom, fecha, codigoine, email, id_usuario, cod) VALUES 
+            ($1, ST_Transform(ST_SetSRID(ST_Point($2,$3),900913),4326),$4,$5,$6,$7, $8) RETURNING id_denuncia';
 	$result = pg_prepare($db, "insert denuncias", $query );
-	$result = pg_execute($db, "insert denuncias", array($texto,$longitud, $latitud,date("Y-m-d"),$codigoine, $email_ayto,$id_facebook ));		
+	$result = pg_execute($db, "insert denuncias", array($texto,$longitud, $latitud,date("Y-m-d"),$codigoine, $email_ayto,$id_facebook,$cod ));		
 	
 	
     if($result==false){
