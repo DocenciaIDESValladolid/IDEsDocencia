@@ -1,5 +1,6 @@
 <html>
 <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<title>Introducción de una Nueva Denuncia en la Base de Datos</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -49,6 +50,10 @@
 	if(!$email_ayto){
 		@ $email_ayto = $_POST['emailMunicipalitySelect'];
 	}
+        @ $facebook_ayto = $_POST['facebookMunicipality'];
+	if(!$facebook_ayto){
+		@ $facebook_ayto = $_POST['facebookMunicipalitySelect'];
+	}
 	@ $id_facebook = $_POST['id_facebook'];	// Gesti�n de usuarios
 	@ $user_name = $_POST['user_name'];	// Notificaci�n de email
 	@ $email = $_POST['email'];
@@ -62,6 +67,8 @@
 	$provincia = addslashes($provincia);
 	$email_ayto = trim($email_ayto);
 	$email_ayto = addslashes($email_ayto);
+        $facebook_ayto = trim($facebook_ayto);
+	$facebook_ayto = addslashes($facebook_ayto);
 	$id_facebook = trim($id_facebook);
 	$id_facebook = addslashes($id_facebook);
 	$user_name = trim($user_name);
@@ -73,7 +80,7 @@
 	
 	// Comprobamos que las variables que hemos pasado no est�n vac�as.
 	if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio 
-		|| !$provincia || !$id_facebook || !$email || !$email_ayto || !$photo_urls)
+		|| !$provincia || !$id_facebook || !$email || !$email_ayto || !$facebook_ayto || !$photo_urls)
 	{
 		echo "Faltan campos del formulario. Los valores que he recibido son:";
 		echo "	<table>
@@ -112,6 +119,10 @@
 					<tr>
 					  <td>Email Ayuntamiento=</td>
 					  <td>$email_ayto</td>
+					</tr>
+                                        <tr>
+					  <td>Facebook Ayuntamiento=</td>
+					  <td>$facebook_ayto</td>
 					</tr>
 					<tr>
 					  <td>URLs para las imágenes=</td>
@@ -164,17 +175,15 @@ else
 	 * 			GESTI�N DE DENUNCIAS		*
 	 * ------------------------------------ */
         //Codigo para generar codigo aleatorio
-        $an = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-)(.:,;";
+        $an = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-";
         $su = strlen($an) - 1;
-        $cod = substr($an, rand(0, $su), 1) .
-        substr($an, rand(0, $su), 1) .
-        substr($an, rand(0, $su), 1) .
-        substr($an, rand(0, $su), 1) .
-        substr($an, rand(0, $su), 1) .
-        substr($an, rand(0, $su), 1);
+        $cod = substr($an, rand(0, $su), 1);
+        for($num=1;$num<=40;$num++){
+            $cod = $cod . substr($an, rand(0, $su), 1);
+        }
 	// Inserci�n de la denuncia en la tabla de denuncias
 	$query = 'INSERT INTO denuncias (texto, the_geom, fecha, codigoine, email, id_usuario, cod) VALUES 
-            ($1, ST_Transform(ST_SetSRID(ST_Point($2,$3),900913),4326),$4,$5,$6,$7, $8) RETURNING id_denuncia';
+            ($1, ST_Transform(ST_SetSRID(ST_Point($2,$3),900913),4326),$4,$5,$6,$7,$8) RETURNING id_denuncia';
 	$result = pg_prepare($db, "insert denuncias", $query );
 	$result = pg_execute($db, "insert denuncias", array($texto,$longitud, $latitud,date("Y-m-d"),$codigoine, $email_ayto,$id_facebook,$cod ));		
 	
@@ -235,6 +244,23 @@ else
 		$result = pg_prepare($db, "increase email popularity",$popular_email );
 		$result = pg_execute($db, "increase email popularity", array($email_ayto,$codigoine));
 	}
+        
+        $query_email = 'SELECT facebook facebook email WHERE id_municipio LIKE $1 and facebook LIKE $2';
+	$result = pg_prepare($db, "check facebook",$query_facebook );
+	$result = pg_execute($db, "check facebook", array($codigoine,$facebook_ayto));
+	$row = pg_fetch_array($result);
+	
+	if($row == false){
+		$nuevo_facebook = 'INSERT INTO facebook VALUES ($1,$2,1)';
+		$result = pg_prepare($db, "insert facebook",$nuevo_facebook );
+		$result = pg_execute($db, "insert facebook", array($facebook_ayto,$codigoine));
+	}
+	else
+	{ // incrementa el contador de popularidad.
+		$popular_facebook = 'update facebook set popularity=popularity+1 where facebook like $1 and id_municipio=$2';
+		$result = pg_prepare($db, "increase facebook popularity",$popular_facebook );
+		$result = pg_execute($db, "increase facebook popularity", array($facebook_ayto,$codigoine));
+	}
 	
 	
 	/*
@@ -294,7 +320,7 @@ $photo_urls = str_replace(',', ' ', $photo_urls);
 $mensaje = "Acabo de realizar una denuncia a través de FixCity en $municipio ($provincia). Apoya esta denuncia en web. $photo_urls";
 echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-mail" href="'.$email_href.'" > Avisar con un email</a>';
 echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-fb" onclick="publicar(\'' .$mensaje. '\');"> Publicar en tu muro de Facebook</a>';
-
+        
         }// Había datos para la denuncia
 
 ?>

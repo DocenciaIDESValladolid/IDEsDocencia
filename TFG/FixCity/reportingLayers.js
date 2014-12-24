@@ -7,7 +7,7 @@ function createWFSLayer()
 		strategies: options.strategies,
         protocol: new OpenLayers.Protocol.WFS(
 			{
-            url: "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
+            url: "http://localhost/geoserver/IDEs/ows",
             featureType: "denuncias_image",
             featureNS: "http://www.idelab.uva.es/#IDES",
 			srsName: "EPSG:3857",

@@ -128,7 +128,7 @@ $.mobile.loading( "show", {
 	$.getJSON('emails.php',{codigoine:muni_code},
 		function (data)
 		{
-		var select = $('select');
+		var select = $('#emailMunicipalitySelect');
 		select.html('');
 		var first=true;
 		for (emailindex in data)
@@ -150,6 +150,33 @@ $.mobile.loading( "show", {
 	$('select').on('input propertychange', 
 		function(){
 			$('#emailMunicipality').val($('select').val());
+		});
+	
+	$.getJSON('facebook.php',{codigoine:muni_code},
+		function (data)
+		{
+		var select = $('#facebookMunicipalitySelect');
+		select.html('');
+		var first=true;
+		for (facebookindex in data)
+			{
+				var option=$("<option></option>")
+					.attr("value",data[facebookindex].facebook)
+					.text(data[facebookindex].facebook);
+				if (first)
+					{
+					option.attr("selected","true");
+					first=false;
+					}
+				select.append(option); 
+			}
+		select.selectmenu();
+                select.selectmenu('refresh', true);
+		}
+		);
+	$('select').on('input propertychange', 
+		function(){
+			$('#facebookMunicipality').val($('select').val());
 		});
 	
 	}
