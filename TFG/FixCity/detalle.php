@@ -13,6 +13,7 @@ $id=$_GET['id'];
 	header($_SERVER['SERVER_PROTOCOL'] . 'Bad Request', true, 400);
 	die;
 	}
+
 ?>
 <html>
     <head>
@@ -28,6 +29,10 @@ $id=$_GET['id'];
         <script src="jquery-1.9.0.js"></script>
         <script src="jquery.mobile-1.4.2.min.js"></script>
 	<script src="lib/OpenLayers.js"></script>
+        <script src="facebook.js"></script> 
+        <script>
+            var id_post = "<?php echo $id_post; ?>";
+        </script>
 	</head>
 	
 	<body>
@@ -91,13 +96,15 @@ mapmini.zoomToExtent(markersmini.getDataExtent());
 			  <div class="ui-body ui-body-a">
 			<p id="reportDescription">
 <?php
-	$query = 'SELECT COUNT(id_denuncia) FROM denunciantes WHERE id_denuncia = $1';
+	$query = 'SELECT likes FROM denuncias WHERE id_denuncia = $1';
 	$result = pg_prepare($db, "Denunciantes", $query );
 	$result = pg_execute($db, "Denunciantes", array($id));
 	while($num = pg_fetch_array($result)) {
 		echo 'Número de denunciantes: '.$num[0].'.';
 	}
-?></p>
+?>
+                        
+                        </p>
 			
 		</div>	
 		</div>	

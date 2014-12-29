@@ -12,7 +12,7 @@ var sm = new OpenLayers.Projection("EPSG:3857");
 var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
 var urlWfsUA = '/ignUA'; //cambiar por url elegida en httpd.conf
 var urlWmsUA = 'http://www.ign.es/wms-inspire/unidades-administrativas';
-var url_base='http://localhost/IDEs/TFG/FixCity/index.html';// Cambiar url para usar las locales (localhost.....) DEBUG Para depurar en local con servicios remotos
+var url_base='http://localhost/IDEs/TFG/FixCity/';// Cambiar url para usar las locales (localhost.....) DEBUG Para depurar en local con servicios remotos
 var administrativeUnitsFeatureType= 'unidades-administrativas:AU.AdministrativeUnit';
 var prov_name;
 var muni_name;
@@ -374,7 +374,15 @@ fb.ready(function(){
 				$("#reportImageList").append($('<img></img>').attr('src',data[i].thumbnail).attr('width',60));//.append($('<br/>'));
 				}
 			});
-			
+		$.get('id_post.php', {id_denuncia: feature.attributes.id_denuncia},
+                    function(datas){
+                        for (i in datas){
+                            var id_post = datas[i].id_post;
+                        }
+                        var likes = fb.likes(id_post);
+
+                    })
+                
 		var point=feature.geometry.getBounds().getCenterLonLat();
 		
 		var pointProj=new OpenLayers.LonLat(point.lon,point.lat);

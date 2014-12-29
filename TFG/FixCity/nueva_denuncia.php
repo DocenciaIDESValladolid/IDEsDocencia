@@ -75,7 +75,7 @@
 	
 	// Comprobamos que las variables que hemos pasado no est�n vac�as.
 	if (!$latitud || !$longitud || !$texto || !$codigoine || !$municipio 
-		|| !$provincia || !$id_facebook || !$email || !$email_ayto || !$facebook_ayto || !$photo_urls)
+		|| !$provincia || !$id_facebook || !$email || !$email_ayto || !$photo_urls)
 	{
 		echo "Faltan campos del formulario. Los valores que he recibido son:";
 		echo "	<table>
@@ -114,10 +114,6 @@
 					<tr>
 					  <td>Email Ayuntamiento=</td>
 					  <td>$email_ayto</td>
-					</tr>
-                                        <tr>
-					  <td>Facebook Ayuntamiento=</td>
-					  <td>$facebook_ayto</td>
 					</tr>
 					<tr>
 					  <td>URLs para las imágenes=</td>
@@ -239,25 +235,24 @@ else
 		$result = pg_prepare($db, "increase email popularity",$popular_email );
 		$result = pg_execute($db, "increase email popularity", array($email_ayto,$codigoine));
 	}
-        
-        $query_email = 'SELECT facebook facebook email WHERE id_municipio LIKE $1 and facebook LIKE $2';
-	$result = pg_prepare($db, "check facebook",$query_facebook );
-	$result = pg_execute($db, "check facebook", array($codigoine,$facebook_ayto));
-	$row = pg_fetch_array($result);
-	
-	if($row == false){
-		$nuevo_facebook = 'INSERT INTO facebook VALUES ($1,$2,1)';
-		$result = pg_prepare($db, "insert facebook",$nuevo_facebook );
-		$result = pg_execute($db, "insert facebook", array($facebook_ayto,$codigoine));
-	}
-	else
-	{ // incrementa el contador de popularidad.
-		$popular_facebook = 'update facebook set popularity=popularity+1 where facebook like $1 and id_municipio=$2';
-		$result = pg_prepare($db, "increase facebook popularity",$popular_facebook );
-		$result = pg_execute($db, "increase facebook popularity", array($facebook_ayto,$codigoine));
-	}
-	
-	
+        if($facebook_ayto){
+            $query_facebook = 'SELECT facebook FROM facebook WHERE id_municipio LIKE $1 and facebook LIKE $2';
+            $result = pg_prepare($db, "check facebook",$query_facebook );
+            $result = pg_execute($db, "check facebook", array($codigoine,$facebook_ayto));
+            $row = pg_fetch_array($result);
+
+            if($row == false){
+                    $nuevo_facebook = 'INSERT INTO facebook VALUES ($1,$2,1)';
+                    $result = pg_prepare($db, "insert facebook",$nuevo_facebook );
+                    $result = pg_execute($db, "insert facebook", array($facebook_ayto,$codigoine));
+            }
+            else
+            { // incrementa el contador de popularidad.
+                    $popular_facebook = 'update facebook set popularity=popularity+1 where facebook like $1 and id_municipio=$2';
+                    $result = pg_prepare($db, "increase facebook popularity",$popular_facebook );
+                    $result = pg_execute($db, "increase facebook popularity", array($facebook_ayto,$codigoine));
+            }	
+        }
 	/*
 	CREATE TABLE municipios
 	(
@@ -312,7 +307,7 @@ echo  '<a  href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-cor
 $email_href='mailto:'.$email_ayto."?subject=Ciudadano informa de un problema en $municipio ($provincia)&body=Estimado ayuntamiento,\n he encontrado un problema en la v�a p�blica que supongo que le interesar� por ser de su competencia. Se trata de: $texto \n\n He puesto m�s detalles, situaci�n exacta y fotograf�as en http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/detalle.php?id=$id_denuncia&authtoken=kjh2342kj3h4234kj23h4jk2h4234kj24 \n\n Espero haber colaborado a tener entre todos un mejor municipio. Un saludo, atentamente\n\n $user_name";
 echo '<!--'.$email_href.'-->';
 $photo_urls = str_replace(',', ' ', $photo_urls);
-$mensaje = "Acabo de realizar una denuncia a través de FixCity en $municipio ($provincia) con el texto: $texto. Apoya esta denuncia dando a Me Gusta. $photo_urls";
+$mensaje = "Acabo de realizar una denuncia a través de FixCity en $municipio ($provincia) con el texto: $texto. $facebook_ayto. Apoya esta denuncia dando a Me Gusta. $photo_urls";
 echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-mail" href="'.$email_href.'" > Avisar con un email</a>';
 echo '<script>
         window.fbAsyncInit = function() { 

@@ -87,8 +87,19 @@ var fb = {
       callback(user); 
     }); 
   },
-  publish1 : function(mensaje, id_denuncia){                    
-                        FB.api('/me/feed', 'post', { message: mensaje }, function(response1) {
+  likes : function(id_post){
+      FB.api(id_post +'/likes', function (response){
+          if (response && !response.error){
+              $.get("likes.php", {id_post:id_post, likes:response.data.length})
+          }
+          else{
+              alert ('error');
+          }
+      })
+  },
+  publish1 : function(mensaje, id_denuncia){ 
+                        var privacy = {"value":"EVERYONE"};
+                        FB.api('/me/feed', 'post', { message: mensaje, privacy: privacy }, function(response1) {
                           if (!response1 || response1.error) {
                             alert('Se ha producido un error y su actualización no ha sido publicada');
                           } else {
@@ -100,30 +111,6 @@ var fb = {
                             alert('Publicación publicada correctamente');
                           }
                         });          
-  },
-  publish : function (publishObj,callback,noReTry) {
-  // publishObj: http://developers.facebook.com/docs/reference/api/post   
-    if (fb.logged && fb.hasPerm('publish_stream'))
-    { 
-      FB.api('/me/feed', 'post', publishObj, function(response) {
-      if (!response || response.error) {
-        callback(false);
-      } else {
-        callback(true);
-      }
-      });
-      return true;
-    }
-    else
-    { 
-      if (!noReTry)
-      	return fb.login(function() { return fb.publish(publishObj,callback,1)});
-      else
-      {
-        callback(false);
-        return false;
-      }
-    }
   },
   readyFuncs : [],
   ready: function(func){fb.readyFuncs.push(func)},
@@ -180,18 +167,4 @@ function updateFacebookLoginInfo(fb)
 	
 }
 
-// Funcion para publicar un mensaje en tu muro
-var publish = function publicar() {
-    fb.publish({
-      message : "Estoy probando un script para que la gente publique desde mi/s web/s en Facebook",
-      picture : "http://blog.ikhuerta.com/wp-content/themes/ikhuerta3/images/ikhuerta.jpg",
-      link : "http://blog.ikhuerta.com/simple-facebook-graph-javascript-sdk",
-      name : "Simple Facebook Graph Javascript SDK",
-      description : "Facebook Graph es una nueva forma de conectar tu web Facebook. Con este script es muy fácil conseguirlo :)"
-    },function(published){ 
-      if (published)
-       alert("publicado!");
-      else
-       alert("No publicado :(, seguramente porque no estas identificado o no diste permisos");
-    });  
-}
+
