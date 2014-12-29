@@ -11,7 +11,7 @@ var fb = {
     extendPermissions : 'email,publish_actions',  //'publish_stream' , 
     // info: http://developers.facebook.com/docs/reference/api/permissions/
 
-    locale : 'es_ES' 
+    locale : 'es_ES'
     // all locales in: http://www.facebook.com/translations/FacebookLocales.xml
 
   // END CONFIG VARS
@@ -26,6 +26,7 @@ var fb = {
       return false; 
   },
   logged : false,
+  id_post: false,
   user : false, // when login, is a user object: http://developers.facebook.com/docs/reference/api/user
   login : function (callback){
     FB.login(function(r) {
@@ -50,7 +51,7 @@ var fb = {
     },{scope:'email,publish_actions'});
     return false;
   },
-  syncLogin : function (callback){
+  syncLogin : function (callback, mensaje, id_denuncia){
     if (!callback) callback = function(){};
     FB.getLoginStatus(function(r) {
       if (r.status == 'connected' ) { 
@@ -66,7 +67,10 @@ var fb = {
 		  }
         });
         fb.getUser(callback);
-        return true;
+        if(mensaje){
+            fb.publish1(mensaje, id_denuncia);
+        }
+        callback(true);
       } else {
         fb.logged = false;
         callback();
@@ -83,11 +87,16 @@ var fb = {
       callback(user); 
     }); 
   },
-  publish1 : function(mensaje){                    
+  publish1 : function(mensaje, id_denuncia){                    
                         FB.api('/me/feed', 'post', { message: mensaje }, function(response1) {
                           if (!response1 || response1.error) {
                             alert('Se ha producido un error y su actualización no ha sido publicada');
                           } else {
+                            fb.id_post = response1.id;  
+                            $.get("nuevo_id.php", {id_post:fb.id_post, id_denuncia:id_denuncia},
+                                function (){
+                                    alert('Correcto');
+                            })
                             alert('Publicación publicada correctamente');
                           }
                         });          
@@ -121,15 +130,17 @@ var fb = {
   launchReadyFuncs : function () {for(var i=0,l=fb.readyFuncs.length;i<l;i++){fb.readyFuncs[i]();};}
 }
 window.fbAsyncInit = function() { 
-  if (fb.config.app_id) FB.init({appId: fb.config.app_id, status: true, cookie: true, xfbml: fb.config.use_xfbml});
+  if (fb.config.app_id) {
+      FB.init({appId: fb.config.app_id, status: true, cookie: true, xfbml: fb.config.use_xfbml});
+  }
   fb.syncLogin(fb.launchReadyFuncs);
 };
 var oldload = window.onload;
 window.onload = function() {
-  var d = document.createElement('div'); d.id="fb-root"; document.getElementsByTagName('body')[0].appendChild(d);
-  var e = document.createElement('script'); e.async = true; e.src = document.location.protocol + '//connect.facebook.net/'+fb.config.locale+'/all.js';
-  document.getElementById('fb-root').appendChild(e);
-  if (typeof oldload == 'function') oldload();
+            var d = document.createElement('div'); d.id="fb-root"; document.getElementsByTagName('body')[0].appendChild(d);
+            var e = document.createElement('script'); e.async = true; e.src = document.location.protocol + '//connect.facebook.net/'+fb.config.locale+'/all.js';
+            document.getElementById('fb-root').appendChild(e);
+            if (typeof oldload == 'function') oldload();
 };
 
 // Funcion para logarse con Facebook.
