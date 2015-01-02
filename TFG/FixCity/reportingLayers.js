@@ -20,7 +20,7 @@ function createWFSLayer()
 function createHeatmapLayer()
 {
 var wms_concentracion = new OpenLayers.Layer.WMS("Concentración de denuncias",
-        "http://itastdevserver.tel.uva.es/geoserver/IDEs/wms",
+        "http://localhost/geoserver/IDEs/wms",
         {layers: 'IDEs:denuncias_image',transparent:true, styles:'heatmap'},
         {isBaseLayer: false, singleTile:true, visibility:false}
     );

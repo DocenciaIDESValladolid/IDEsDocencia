@@ -272,7 +272,14 @@ else
 	for($i=1;$i<count($array_url);$i++){
 		$result = pg_execute($db, "insert image", array($id_denuncia,$array_url[$i]));
 	}
-	
+        //código para el tratamiento de las url de las fotos
+        $enlace_foto = $array_url[1];
+        $photo_urls = "";
+	if (count($array_url) != 1){
+            for($i=2;$i<count($array_url);$i++){
+                $photo_urls = $photo_urls." ".$array_url[$i];
+            }
+        }
 	/*Texto que mostrar� la informaci�n de la nueva denuncia y las imagenes que acompa�an la queja.*/
 	
 	echo "<br>Acaba de a�adir una nueva denuncia en $municipio, provincia de $provincia.<br>";
@@ -304,9 +311,9 @@ else
 			</script>';
 			
 echo  '<a  href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-grid">Detalle</a>';
-$email_href='mailto:'.$email_ayto."?subject=Ciudadano informa de un problema en $municipio ($provincia)&body=Estimado ayuntamiento,\n he encontrado un problema en la v�a p�blica que supongo que le interesar� por ser de su competencia. Se trata de: $texto \n\n He puesto m�s detalles, situaci�n exacta y fotograf�as en http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/detalle.php?id=$id_denuncia&authtoken=kjh2342kj3h4234kj23h4jk2h4234kj24 \n\n Espero haber colaborado a tener entre todos un mejor municipio. Un saludo, atentamente\n\n $user_name";
+$email_href='mailto:'.$email_ayto."?subject=Ciudadano informa de un problema en $municipio ($provincia)&body=Estimado ayuntamiento,\n he encontrado un problema en la v�a p�blica que supongo que le interesar� por ser de su competencia. Se trata de: $texto \n\n He puesto m�s detalles, situaci�n exacta y fotograf�as en http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/detalle.php?id=$id_denuncia \n\n. Una vez solucionada la denuncia puede notificarlo en la siguiente página http://localhost/IDEs/TFG/FixCity/modificar.php?id=$id_denuncia&cod=$cod \n\n Espero haber colaborado a tener entre todos un mejor municipio. Un saludo, atentamente\n\n $user_name";
 echo '<!--'.$email_href.'-->';
-$photo_urls = str_replace(',', ' ', $photo_urls);
+//$photo_urls = str_replace(',', ' ', $photo_urls);
 $mensaje = "Acabo de realizar una denuncia a través de FixCity en $municipio ($provincia) con el texto: $texto. $facebook_ayto. Apoya esta denuncia dando a Me Gusta. $photo_urls";
 echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-mail" href="'.$email_href.'" > Avisar con un email</a>';
 echo '<script>
@@ -314,12 +321,9 @@ echo '<script>
             if (fb.config.app_id) {
                 FB.init({appId: fb.config.app_id, status: true, cookie: true, xfbml: fb.config.use_xfbml});
             }
-            fb.syncLogin(fb.launchReadyFuncs, \'' .$mensaje. '\', \'' .$id_denuncia. '\');            
+            fb.syncLogin(fb.launchReadyFuncs, \'' .$mensaje. '\', \'' .$id_denuncia. '\', \'' .$enlace_foto. '\');            
         };
-      </script>'; //Hacer que termine de ejcutarse del todo la funcion synclogin antes de ejecutar publicar! 
-
-      // Hacer función ajax para que se envien el id denuncia y se guarde en base de datos en otro archivo pero de forma transparente al usuario.
-
+      </script>'; 
         }// Había datos para la denuncia
 
 ?>

@@ -100,7 +100,13 @@ mapmini.zoomToExtent(markersmini.getDataExtent());
 	$result = pg_prepare($db, "Denunciantes", $query );
 	$result = pg_execute($db, "Denunciantes", array($id));
 	while($num = pg_fetch_array($result)) {
-		echo 'Número de denunciantes: '.$num[0].'.';
+                if ($num[0] == 0){
+                    echo 'Número de denunciantes: 1.';
+                }
+                else{
+                    echo 'Número de denunciantes: '.$num[0].'.';
+                }
+		
 	}
 ?>
                         

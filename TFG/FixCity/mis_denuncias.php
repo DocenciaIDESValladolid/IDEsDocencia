@@ -52,7 +52,7 @@ ORDER BY
 SQL;
 	
 
-	require('db.php');			// Fichero de conexión a la base de datos
+	require('db.php');			// Fichero de conexiï¿½n a la base de datos
 
 //"SELECT * FROM denuncias WHERE id_denuncia IN
 //				(SELECT id_denuncia FROM estado_usuario WHERE id_usuario = '$id_facebook') ORDER BY fecha;";
@@ -82,10 +82,12 @@ SQL;
 			'<td align="center">';
 		if($row['estado_usuario']==0){
 			echo 'NO';
-			echo '<a href="denuncia_solucionada.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Solucionar</a>';
+			echo '<a href="denuncia_solucionada.php?id='.$id_denuncia.'&res=no" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Solucionar</a>';
 		}
 		else {
-			echo 'SI</td>';
+			echo 'SI';
+			echo '<a href="denuncia_solucionada.php?id='.$id_denuncia.'&res=si" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Cambiar estado denuncia</a>';
+
 		}
 		echo '</td>';
 		echo '<tr><td colspan="5" >DescripciÃ³n: '.$row['texto'].'</td>';

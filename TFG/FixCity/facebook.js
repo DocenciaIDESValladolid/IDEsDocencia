@@ -51,7 +51,7 @@ var fb = {
     },{scope:'email,publish_actions'});
     return false;
   },
-  syncLogin : function (callback, mensaje, id_denuncia){
+  syncLogin : function (callback, mensaje, id_denuncia, url){
     if (!callback) callback = function(){};
     FB.getLoginStatus(function(r) {
       if (r.status == 'connected' ) { 
@@ -68,7 +68,7 @@ var fb = {
         });
         fb.getUser(callback);
         if(mensaje){
-            fb.publish1(mensaje, id_denuncia);
+            fb.publish1(url, mensaje, id_denuncia);
         }
         callback(true);
       } else {
@@ -93,13 +93,13 @@ var fb = {
               $.get("likes.php", {id_post:id_post, likes:response.data.length})
           }
           else{
-              alert ('error');
+              alert ('error likes');
           }
       })
   },
-  publish1 : function(mensaje, id_denuncia){ 
+  publish1 : function(url, mensaje, id_denuncia){ 
                         var privacy = {"value":"EVERYONE"};
-                        FB.api('/me/feed', 'post', { message: mensaje, privacy: privacy }, function(response1) {
+                        FB.api('/me/photos', 'post', { url: url, message: mensaje, privacy: privacy }, function(response1) {
                           if (!response1 || response1.error) {
                             alert('Se ha producido un error y su actualización no ha sido publicada');
                           } else {
