@@ -17,7 +17,7 @@
 		FROM estado_usuario GROUP BY codigoine
 		ORDER BY Percentage DESC LIMIT 10;";
 	}
-	else{
+	else if($cumpli==0){
 		// Los menos cumplidores
 		$municipios_mas_resuelven = 
 		"SELECT codigoine, 
@@ -27,6 +27,10 @@
 		FROM estado_usuario GROUP BY codigoine
 		ORDER BY Percentage ASC LIMIT 10;";
 	}
+        else if($cumpli==2){
+            $municipios_mas_resuelven = 
+                    "SELECT codigoine FROM denuncias GROUP BY codigoine, likes+apoyo ORDER BY likes+apoyo ASC LIMIT 10;";
+        }
 	$result = pg_exec($db, $municipios_mas_resuelven);
 	
 	header('Content-Type: application/json');

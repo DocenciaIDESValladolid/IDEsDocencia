@@ -49,8 +49,8 @@
 	if(!$facebook_ayto){
 		@ $facebook_ayto = $_POST['facebookMunicipalitySelect'];
 	}
-	@ $id_facebook = $_POST['id_facebook'];	// Gesti�n de usuarios
-	@ $user_name = $_POST['user_name'];	// Notificaci�n de email
+	@ $id_facebook = $_POST['id_facebook'];	// Gestión de usuarios
+	@ $user_name = $_POST['user_name'];	// Notificación de email
 	@ $email = $_POST['email'];
 	
 	// Formateamos textos para introducir en la base de datos.
@@ -126,7 +126,7 @@ else
 {	
 
 	/* ------------------------------------ *
-	 * 			GESTI�N DE USUARIOS			*
+	 * 			GESTIÓN DE USUARIOS			*
 	 * ------------------------------------ */
 	 
 	// Comprobamos que el usuario que introduce la denuncia se encuentra registrado en la aplicaci�n
@@ -163,7 +163,7 @@ else
 
 
 	/* ------------------------------------ *
-	 * 			GESTI�N DE DENUNCIAS		*
+	 * 			GESTIÓN DE DENUNCIAS		*
 	 * ------------------------------------ */
         //Codigo para generar codigo aleatorio
         $an = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-";
@@ -172,7 +172,7 @@ else
         for($num=1;$num<=40;$num++){
             $cod = $cod . substr($an, rand(0, $su), 1);
         }
-	// Inserci�n de la denuncia en la tabla de denuncias
+	// Inserción de la denuncia en la tabla de denuncias
 	$query = 'INSERT INTO denuncias (texto, the_geom, fecha, codigoine, email, id_usuario, cod) VALUES 
             ($1, ST_Transform(ST_SetSRID(ST_Point($2,$3),900913),4326),$4,$5,$6,$7,$8) RETURNING id_denuncia';
 	$result = pg_prepare($db, "insert denuncias", $query );
@@ -192,18 +192,18 @@ else
 		$id_denuncia = $row[0];
 	}
 	
-	// Inserci�n de la denuncia en la tabla de denunciantes.
+	// Inserción de la denuncia en la tabla de denunciantes.
 	$insert = 'INSERT INTO denunciantes (id_denuncia, id_denunciante, fecha) VALUES ($1,$2,$3);';
 	$result = pg_prepare($db, "insert denunciantes",$insert );
 	$result = pg_execute($db, "insert denunciantes", array($id_denuncia,$id_facebook,date("Y-m-d")));
 	
-	// Inserci�n en estado_usuario
+	// Inserción en estado_usuario
 	$estado_usuario = "INSERT INTO estado_usuario (id_denuncia, fecha, estado, id_usuario, codigoine) VALUES ($1,$2,$3,$4,$5);";
 	$result = pg_prepare($db, "insert estado",$estado_usuario );
 	$result = pg_execute($db, "insert estado", array($id_denuncia,date("Y-m-d"),0,$id_facebook,$codigoine));
 	
 	/* ------------------------------------ *
-	 * 			GESTI�N DE MUNICIPIOS		*
+	 * 			GESTIÓN DE MUNICIPIOS		*
 	 * ------------------------------------ */
 	
 	$query_municipios = 'SELECT nombre FROM municipios WHERE nombre LIKE $1';
@@ -212,7 +212,7 @@ else
 	$row = pg_fetch_array($result);
 	if($row == false)
 	{
-		echo "<p>A�n no ten�amos ning�n informe de $municipio ($provincia). Gracias por colaborar.</p>";
+		echo "<p>Aún no teníamos ningún informe de $municipio ($provincia). Gracias por colaborar.</p>";
 		$nuevo_municipio = "INSERT INTO municipios VALUES ($1, 
 				(SELECT id_provincia FROM provincias WHERE nombre LIKE $2),$3)"; // TODO!! OJO no est� garantizado que exista el registro en Provincias
 		$result = pg_prepare($db, "insert municipio",$nuevo_municipio );
@@ -264,7 +264,7 @@ else
 	*/
 	
 	/* ------------------------------------ *
-	 * 			GESTI�N DE IM�GENES 		*
+	 * 			GESTIÓN DE IMÁGENES 		*
 	 * ------------------------------------ */	
 	$query_url = 'INSERT INTO imagenes (id_denuncia, ruta) VALUES ($1,$2);';
 	$result = pg_prepare($db, "insert image",$query_url );
@@ -280,14 +280,15 @@ else
                 $photo_urls = $photo_urls." ".$array_url[$i];
             }
         }
-	/*Texto que mostrar� la informaci�n de la nueva denuncia y las imagenes que acompa�an la queja.*/
+	/*Texto que mostrará la información de la nueva denuncia y las imagenes que acompañan la queja.*/
 	
-	echo "<br>Acaba de a�adir una nueva denuncia en $municipio, provincia de $provincia.<br>";
-	echo 'La localizaci�n geogr�fica de la denuncia a�adida es: '.$latitud.' LAT y '.$longitud.'LON<br>';
+	echo "<br>Acaba de añadir una nueva denuncia en $municipio, provincia de $provincia.<br>";
+	echo 'La localización geográfica de la denuncia añadida es: '.$latitud.' LAT y '.$longitud.'LON<br>';
 	echo "El texto de la denuncia es:";
 	echo '<h1>'.$texto.'</h1><br>';
-	echo "Recibir� en su correo $email los distintos detalles sobre posibles modificaciones en su denuncia.<br>";
-	echo "Su denuncia ir� acompa�ada de las siguientes imagenes.<br>"; 
+	echo "Se han publicado en su Facebook las fotos y la información de la denuncia. Las modificaciones hechas a partir de ahora se publicarán en forma de respuesta a esa publicación<br>";
+	echo '<h2>Para que el ayuntamiento del municipio tenga conocimiento de la denuncia realizada es necesario que haga uso de nuestro servicio de envío de email. Para ello simplemente haga click en el botón "Avisar con un email". Gracias a esto el ayuntamiento tendrá constancia de su queja y estará colaborando a conseguir una ciudad mejor entre todos.</h2>';
+        echo "Su denuncia irá acompañada de las siguientes imágenes.<br>"; 
 	//echo $html;
 	for($i=1;$i<count($array_url);$i++){
 		/*Funcion HTML que permite visualizar la galeria de imagenes que se envian.*/
@@ -311,10 +312,10 @@ else
 			</script>';
 			
 echo  '<a  href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-grid">Detalle</a>';
-$email_href='mailto:'.$email_ayto."?subject=Ciudadano informa de un problema en $municipio ($provincia)&body=Estimado ayuntamiento,\n he encontrado un problema en la v�a p�blica que supongo que le interesar� por ser de su competencia. Se trata de: $texto \n\n He puesto m�s detalles, situaci�n exacta y fotograf�as en http://itastdevserver.tel.uva.es/docenciaIDEs/2014/FixCity/detalle.php?id=$id_denuncia \n\n. Una vez solucionada la denuncia puede notificarlo en la siguiente página http://localhost/IDEs/TFG/FixCity/modificar.php?id=$id_denuncia&cod=$cod \n\n Espero haber colaborado a tener entre todos un mejor municipio. Un saludo, atentamente\n\n $user_name";
+$email_href='mailto:'.$email_ayto."?subject=Ciudadano informa de un problema en $municipio ($provincia)&body=Estimado ayuntamiento,\n he encontrado un problema en la vía pública que supongo que le interesará por ser de su competencia. Se trata de: $texto \n\n He puesto más detalles, situación exacta y fotografías en http://fixcity.itastdevserver.tel.uva.es/IDEs/TFG/FixCity/detalle.php?id=$id_denuncia \n\n. Una vez solucionada la denuncia puede notificarlo en la siguiente página http://fixcity.itastdevserver.tel.uva.es/IDEs/TFG/FixCity/modificar.php?cod=$cod \n\n Espero haber colaborado a tener entre todos un mejor municipio. Un saludo, atentamente\n\n $user_name";
 echo '<!--'.$email_href.'-->';
 //$photo_urls = str_replace(',', ' ', $photo_urls);
-$mensaje = "Acabo de realizar una denuncia a través de FixCity en $municipio ($provincia) con el texto: $texto. $facebook_ayto. Apoya esta denuncia dando a Me Gusta. $photo_urls";
+$mensaje = "Acabo de realizar una denuncia a través de FixCity en $municipio ($provincia) con el texto: $texto. $facebook_ayto. Apoya esta denuncia dando a Me Gusta. Puede consultar los detalles en http://fixcity.itastdevserver.tel.uva.es/IDEs/TFG/FixCity/detalle.php?id=$id_denuncia $photo_urls";
 echo '<a class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-mail" href="'.$email_href.'" > Avisar con un email</a>';
 echo '<script>
         window.fbAsyncInit = function() { 

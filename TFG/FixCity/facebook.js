@@ -67,8 +67,11 @@ var fb = {
 		  }
         });
         fb.getUser(callback);
-        if(mensaje){
+        if(url){
             fb.publish1(url, mensaje, id_denuncia);
+        }
+        if (!url && mensaje){
+            fb.update(mensaje, id_denuncia);
         }
         callback(true);
       } else {
@@ -111,6 +114,15 @@ var fb = {
                             alert('Publicación publicada correctamente');
                           }
                         });          
+  },
+  update: function(mensaje, id_denuncia){
+      FB.api("/"+id_denuncia+"/comments", "post", {message: mensaje}, function(response) {
+          if (!response || response.error) {
+            alert('Se ha producido un error y su actualización no ha sido publicada');
+          } else {
+            alert('Publicación publicada correctamente');
+          }
+      });
   },
   readyFuncs : [],
   ready: function(func){fb.readyFuncs.push(func)},

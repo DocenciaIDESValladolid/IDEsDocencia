@@ -10,7 +10,7 @@ $id=$_GET['id'];
 	$row=pg_fetch_array($result);
 	if ($row==false)
 	{
-	header($_SERVER['SERVER_PROTOCOL'] . 'Bad Request', true, 400);
+	header('Location: error.html');
 	die;
 	}
 
@@ -96,15 +96,15 @@ mapmini.zoomToExtent(markersmini.getDataExtent());
 			  <div class="ui-body ui-body-a">
 			<p id="reportDescription">
 <?php
-	$query = 'SELECT likes FROM denuncias WHERE id_denuncia = $1';
+	$query = 'SELECT likes, apoyo, likes+apoyo as total FROM denuncias WHERE id_denuncia = $1';
 	$result = pg_prepare($db, "Denunciantes", $query );
 	$result = pg_execute($db, "Denunciantes", array($id));
 	while($num = pg_fetch_array($result)) {
-                if ($num[0] == 0){
+                if ($num['total'] == 0){
                     echo 'Número de denunciantes: 1.';
                 }
                 else{
-                    echo 'Número de denunciantes: '.$num[0].'.';
+                    echo 'Número de denunciantes: '.$num['total'].'.';
                 }
 		
 	}
@@ -125,7 +125,7 @@ mapmini.zoomToExtent(markersmini.getDataExtent());
 		$result = pg_prepare($db, "Fecha", $query );
 		$result = pg_execute($db, "Fecha", array($id));
 		while($fecha = pg_fetch_array($result)) {
-			echo "El día ".$fecha[0]." se ha informado del problema: <br>". $row['texto'];
+			echo "El día ".$fecha[0]." se ha informado del problema: <br>". $row['texto'] . "<br><a href='http://www.facebook.com/". $row['id_post'] ."'>Consulte la publicación en Facebook</a>";
 		}
 ?></p>
 

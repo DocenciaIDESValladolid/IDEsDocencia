@@ -13,9 +13,10 @@
         <script src="jquery-1.9.0.js"></script>
         <script src="jquery.mobile-1.4.2.min.js"></script>
 	<script src="lib/OpenLayers.js"></script>
+        <script src="facebook.js"></script>
 	</head>
 	
-	<body>
+        <body>
 	
 	<?php
 	require_once('db.php');
@@ -24,10 +25,16 @@
 	
 	$id_denuncia = $_GET['id'];
         $res = $_GET['res'];
-
+        $consulta = 'SELECT id_post FROM denuncias WHERE id_denuncia = $1';
+        $result = pg_prepare($db, "id post", $consulta);
+        $result = pg_execute($db, "id post", array($id_denuncia));
+        while ($row = pg_fetch_array($result)){
+            $id_post = $row['id_post'];
+        }
 	
-	$array_denuncia = pg_fetch_array($denuncia);
         if ($res == 'no'){
+            $mensaje = "Esta denuncia ha sido solucionada.";
+            
             $resuelta = 'update denuncias set "Resuelta"=TRUE where id_denuncia = $1';
             $result1 = pg_prepare($db, "denuncia resuelta",$resuelta );
             $result1 = pg_execute($db, "denuncia resuelta", array($id_denuncia));
@@ -37,6 +44,7 @@
             $result = pg_execute($db, "Insert Resuelto", array($id_denuncia));
         }
         else{
+            $mensaje = "Esta denuncia vuelve a estar activa.";
             $resuelta = 'update denuncias set "Resuelta"=FALSE where id_denuncia = $1';
             $result1 = pg_prepare($db, "denuncia resuelta",$resuelta );
             $result1 = pg_execute($db, "denuncia resuelta", array($id_denuncia));
@@ -47,6 +55,14 @@
         }
 	
 	?>
+        <script>
+            window.fbAsyncInit = function() { 
+                if (fb.config.app_id) {
+                    FB.init({appId: fb.config.app_id, status: true, cookie: true, xfbml: fb.config.use_xfbml});
+                }
+                fb.syncLogin(fb.launchReadyFuncs, "<?php echo $mensaje; ?>", "<?php echo $id_post; ?>");            
+            };
+        </script>
 	<div data-role="page" data-theme="b">
 	<div data-role="header"><h2>DENUNCIA SOLUCIONADA</h2></div>
 	<div data-role="content">

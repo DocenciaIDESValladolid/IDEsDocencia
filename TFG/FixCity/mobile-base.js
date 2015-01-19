@@ -12,10 +12,11 @@ var sm = new OpenLayers.Projection("EPSG:3857");
 var provlevel = 3; //provincia nivel 3 y municipio nivel 4, así que pedimos los valores mayores que 3				
 var urlWfsUA = '/ignUA'; //cambiar por url elegida en httpd.conf
 var urlWmsUA = 'http://www.ign.es/wms-inspire/unidades-administrativas';
-var url_base='http://localhost/IDEs/TFG/FixCity/';// Cambiar url para usar las locales (localhost.....) DEBUG Para depurar en local con servicios remotos
+var url_base='http://fixcity.itastdevserver.tel.uva.es/IDEs/TFG/FixCity/';// Cambiar url para usar las locales (localhost.....) DEBUG Para depurar en local con servicios remotos
 var administrativeUnitsFeatureType= 'unidades-administrativas:AU.AdministrativeUnit';
 var prov_name;
 var muni_name;
+var url_geoserver = 'http://fixcity.itastdevserver.tel.uva.es/geoserver/IDEs/ows';
 var muni_code;
 var geolocation_accuracy;
 var geolocation_msg='';
@@ -176,10 +177,23 @@ fb.ready(function(){
 	map.updateSize();
 	if (typeof addThematicUALayers == 'function')
 	{
-	var uaLayer= addThematicUALayers(munis,"thematicUAmenosCumplidoras","Menos cumplidores",'nationalcode',[],[]);
+	var uaLayer= addThematicUALayers([],"thematicUAmenosCumplidoras","Menos cumplidores",'nationalcode',[],[]);
 	map.addLayer(uaLayer);
 	uaLayer= addThematicUALayers([],"thematicUAmasCumplidoras","Más cumplidores",'nationalcode',[],[]);
 	map.addLayer(uaLayer);
+        uaLayer= addThematicUALayers([],"thematicUAmasApoyo","Más apoyadas",'nationalcode',[],[]);
+	map.addLayer(uaLayer);
+        
+        $.getJSON(url_base+'estadisticas_municipios.php?cumpli=2', function(data)
+			{
+				var munis=[];
+				for ( munind in data)	
+					{
+					if (data[munind].codigoine != null)
+						munis.push(data[munind].codigoine);
+					}
+				updateThematicUALayer("thematicUAmasApoyo",'nationalcode', munis, colorMenosCumplidores);
+			});
 	
 	$.getJSON(url_base+'estadisticas_municipios.php?cumpli=1', function(data)
 			{
@@ -207,8 +221,12 @@ fb.ready(function(){
 	
 	
 	}
-	var wms_concentracion=createHeatmapLayer();
+	var wms_concentracion=createHeatmapLayer();        
 	map.addLayer(wms_concentracion);
+        var wms_antig=createHeatmapLayerAntig();
+        map.addLayer(wms_antig);
+        var wms_apoyo=createHeatmapLayerApoyo();
+        map.addLayer(wms_apoyo);
 	// CAPA DE POSICIÓN ACTUAL
 	map.addLayer(vector);
 	//CAPA DE DENUNCIAS

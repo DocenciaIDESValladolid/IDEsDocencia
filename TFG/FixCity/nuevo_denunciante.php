@@ -40,6 +40,13 @@ echo '<h2>DENUNCIA YA APOYADA PREVIAMENTE</h2>
 				($id_denuncia, '$id_facebook','".date("Y-m-d")."')";
 		
 		$result = pg_exec($db, $query);
+                $update = 'UPDATE denuncias SET apoyo=apoyo+1 WHERE id_denuncia = $1;';
+                $result = pg_prepare($db, "update apoyo", $update );
+                        $error = pg_last_error();
+	echo $error;
+                $result = pg_execute($db, "update apoyo", array($id_denuncia));
+                        $error = pg_last_error();
+	echo $error;
 		echo '<h2>DENUNCIA APOYADA</h2>
 		Gracias por su colaboración.';
 	}

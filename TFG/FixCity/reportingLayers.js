@@ -7,7 +7,7 @@ function createWFSLayer()
 		strategies: options.strategies,
         protocol: new OpenLayers.Protocol.WFS(
 			{
-            url: "http://localhost/geoserver/IDEs/ows",
+            url: url_geoserver,
             featureType: "denuncias_image",
             featureNS: "http://www.idelab.uva.es/#IDES",
 			srsName: "EPSG:3857",
@@ -20,11 +20,29 @@ function createWFSLayer()
 function createHeatmapLayer()
 {
 var wms_concentracion = new OpenLayers.Layer.WMS("Concentración de denuncias",
-        "http://localhost/geoserver/IDEs/wms",
+        url_geoserver,
         {layers: 'IDEs:denuncias_image',transparent:true, styles:'heatmap'},
         {isBaseLayer: false, singleTile:true, visibility:false}
     );
 return wms_concentracion;
+}
+
+function createHeatmapLayerAntig(){
+    var wms_antig = new OpenLayers.Layer.WMS("Antiguedad de denuncias",
+        url_geoserver,
+        {layers: 'IDEs:denuncias_antig',transparent:true, styles:'heatmap'},
+        {isBaseLayer: false, singleTile:true, visibility:false}
+    );
+return wms_antig;
+}
+
+function createHeatmapLayerApoyo(){
+    var wms_apoyo = new OpenLayers.Layer.WMS("Denuncias con más apoyo",
+        url_geoserver,
+        {layers: 'IDEs:denuncias_apoyo',transparent:true, styles:'heatmap_likes'},
+        {isBaseLayer: false, singleTile:true, visibility:false}
+    );
+return wms_apoyo;
 }
 
 function getDenunciasConfig()
