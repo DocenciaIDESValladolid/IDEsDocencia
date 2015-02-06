@@ -22,7 +22,7 @@ colorMasCumplidores[7]= '#00ff99';
 colorMasCumplidores[8]= '#33ff66'; 
 colorMasCumplidores[9]= '#00ff33';
 
-function addThematicUALayers(arrayMun, layerId,layerTitle,property, values, colors)
+function addThematicUALayers(arrayMun, layerId,layerTitle,property, values, colors, descrip)
 {
 	var sld=generateCustomUASld(property,values,colors);
 	var wms_UA = new OpenLayers.Layer.WMS(layerTitle,
@@ -36,6 +36,7 @@ function addThematicUALayers(arrayMun, layerId,layerTitle,property, values, colo
         {isBaseLayer: false, singleTile:true, tileOptions: {maxGetUrlLength: 2048}, visibility:false}
     );
 	wms_UA.id=layerId;
+        wms_UA.descrip=descrip;
 	return wms_UA;
 }
 function updateThematicUALayer(layerId,property, values, colors)

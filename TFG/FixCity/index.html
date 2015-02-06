@@ -95,7 +95,7 @@
 					<a href="mis_denuncias.php" id="misdenuncias_button" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline">Mis Denuncias</a>
 					<a href="#searchpage" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-search">Search</a>
 					<a href="#layerspage" data-transition="fade" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-bullets">Capas</a>
-					<a href="estadisticas_municipios.php" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Estadísticas</a>
+					<a href="#estadisticas" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Estadísticas</a>
 					<a href="#" id="iniciosesionFacebook" class="ui-btn  ui-btn-icon-right ui-icon-fb ui-btn-icon-notext ui-btn-inline " onclick="login(); return false;">Login</a>
 
 					<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
@@ -280,11 +280,14 @@
 		Página de estadísticas.
 		-->	
 		<div data-role="page" id="estadisticas" data-theme="b">
-			<div data-role="header"><h1>Estadísticas</h1></div>
-			<div data-role="content" >
-				<input type="button" value="Estadísticas de municipios" onclick="location.href='estadisticas_municipios.php';" />
-				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
-            </div>
+			<div data-role="header">
+                            <h1>Estadísticas</h1>
+                          </div>
+                          <div data-role="content">
+                            <ul data-role="listview" data-inset="true" data-theme="d" data-dividertheme="c" id="layerslist1">
+                            </ul>
+                                         <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+                          </div>
 		</div><!--Fin de página de estadísticas.-->	
 		
 		

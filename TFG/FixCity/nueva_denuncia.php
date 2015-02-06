@@ -197,7 +197,7 @@ else
 	$result = pg_prepare($db, "insert denunciantes",$insert );
 	$result = pg_execute($db, "insert denunciantes", array($id_denuncia,$id_facebook,date("Y-m-d")));
 	
-	// Inserción en estado_usuario
+	/* Inserción en estado_usuario
 	$estado_usuario = "INSERT INTO estado_usuario (id_denuncia, fecha, estado, id_usuario, codigoine) VALUES ($1,$2,$3,$4,$5);";
 	$result = pg_prepare($db, "insert estado",$estado_usuario );
 	$result = pg_execute($db, "insert estado", array($id_denuncia,date("Y-m-d"),0,$id_facebook,$codigoine));

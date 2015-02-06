@@ -121,7 +121,8 @@ mapmini.zoomToExtent(markersmini.getDataExtent());
 			  <div class="ui-body ui-body-a">
 			<p id="reportDescription">
 <?php
-	$query = 'SELECT fecha FROM estado_usuario WHERE id_denuncia = $1';
+	//$query = 'SELECT fecha FROM estado_usuario WHERE id_denuncia = $1';
+          $query = 'SELECT fecha FROM denuncias WHERE id_denuncia = $1';
 		$result = pg_prepare($db, "Fecha", $query );
 		$result = pg_execute($db, "Fecha", array($id));
 		while($fecha = pg_fetch_array($result)) {

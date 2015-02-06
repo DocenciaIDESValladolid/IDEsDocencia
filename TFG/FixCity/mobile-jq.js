@@ -38,12 +38,14 @@ function fixContentHeight() {
             $.mobile.changePage("#popup", "pop"); 
         });
         initLayerList();
+        initEstadisticaList();
 			var control = map.getControlsBy("id", "locate-control")[0];
 			if (control.active) {
 				control.getCurrentLocation();
 			} else {
 				control.activate();
 			}
+                        
     }
 }
 
@@ -212,24 +214,66 @@ function initLayerList() {
     });
 }
 
-function addLayerToList(layer) {
-    var item = $('<li>', {
-            "data-icon": "check",
-            "class": layer.visibility ? "checked" : ""
+function initEstadisticaList(){
+    $('#estadisticas').page();
+    var est=1;
+    $('<li>', {
+            "data-role": "list-divider",
+            text: "Capas"
         })
-        .append($('<a />', {
-            text: layer.name
-        })
-            .click(function() {
-                $.mobile.changePage('#mappage');
-                if (layer.isBaseLayer) {
-                    layer.map.setBaseLayer(layer);
-                } else {
-                    layer.setVisibility(!layer.getVisibility());
-                }
+        .appendTo('#layerslist1');
+    var overlayLayers = map.getLayersBy("isBaseLayer", false);
+    
+    $.each(overlayLayers, function() {
+		if(this.name!='vector' && this.name!='Markers' && this.name.indexOf("OpenLayers_Control_SelectFeature")==-1)
+        addLayerToList(this, est);
+    });
+    $('#layerslist1').listview('refresh');
+    
+    map.events.register("addlayer", this, function(e) {
+        addLayerToList(e.layer, est);
+    });
+}
+
+function addLayerToList(layer, est) {
+    if(est==1){
+        var item = $('<li>', {
+                "data-icon": "check",
+                "class": layer.visibility ? "checked" : ""
             })
-        )
-        .appendTo('#layerslist');
+            .append($('<a />', {
+                text: layer.name + ': ' +layer.descrip
+            })
+                .click(function() {
+                    $.mobile.changePage('#mappage');
+                    if (layer.isBaseLayer) {
+                        layer.map.setBaseLayer(layer);
+                    } else {
+                        layer.setVisibility(!layer.getVisibility());
+                    }
+                })
+            )
+            .appendTo('#layerslist1');
+    }
+    else{
+        var item = $('<li>', {
+                "data-icon": "check",
+                "class": layer.visibility ? "checked" : ""
+            })
+            .append($('<a />', {
+                text: layer.name
+            })
+                .click(function() {
+                    $.mobile.changePage('#mappage');
+                    if (layer.isBaseLayer) {
+                        layer.map.setBaseLayer(layer);
+                    } else {
+                        layer.setVisibility(!layer.getVisibility());
+                    }
+                })
+            )
+            .appendTo('#layerslist');
+    }
     layer.events.on({
         'visibilitychanged': function() {
             $(item).toggleClass('checked');

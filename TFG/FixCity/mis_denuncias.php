@@ -21,7 +21,8 @@
 SELECT 
   denuncias.id_denuncia, 
   denuncias.texto, 
-  denuncias.fecha, 
+  denuncias.fecha,
+  denuncias.id_post,
   st_x(st_centroid(st_transform(denuncias.the_geom,3857))) as x, st_y(st_centroid(st_transform(denuncias.the_geom,3857))) as y , 
   denuncias.email, 
   denunciantes.fecha as fecha_denunciante, 
@@ -29,23 +30,17 @@ SELECT
   provincias.nombre as nombre_provincia, 
   municipios.nombre as nombre_municipio, 
   municipios.codigoine as id_municipio, 
-  estado_usuario.fecha as fecha_estado_usuario, 
-  estado_usuario.estado as estado_usuario
+  denuncias."Resuelta"
 FROM 
   public.denuncias, 
   public.denunciantes, 
   public.municipios, 
-  public.provincias, 
-  public.estado_usuario
+  public.provincias 
 WHERE 
 	denuncias.id_usuario = $1 AND
 	denuncias.codigoine = municipios.codigoine AND
 	denunciantes.id_denunciante = $1 AND
 	denunciantes.id_denuncia= denuncias.id_denuncia AND
-	estado_usuario.id_usuario = $1 AND
-	estado_usuario.id_denuncia = denuncias.id_denuncia AND
-	(estado_usuario.estado = 1 OR 
-	(estado_usuario.estado = 0 AND estado_usuario.id_denuncia NOT IN (SELECT id_denuncia FROM estado_usuario GROUP BY id_denuncia HAVING COUNT(id_denuncia)>1))) AND
 	municipios.provincia = provincias.id_provincia
 ORDER BY
   denunciantes.fecha DESC;
@@ -76,6 +71,7 @@ SQL;
             while($row = pg_fetch_array($result) ) 
             {
             $id_denuncia= $row['id_denuncia'];
+            $id_post=$row['id_post'];
                     echo '<tr>';
                     echo '<td>';
                             echo '<a href="detalle.php?id='.$id_denuncia.'" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Detalle</a>';
@@ -84,7 +80,7 @@ SQL;
                             '('. $row['nombre_provincia'].')</td>'.
                             '<td>'.$row['fecha'].'</td>'.
                             '<td align="center">';
-                    if($row['estado_usuario']==0){
+                    if($row["Resuelta"]=='f'){
                             echo 'NO';
                             echo '<a href="denuncia_solucionada.php?id='.$id_denuncia.'&res=no" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Solucionar</a>';
                     }

@@ -177,11 +177,11 @@ fb.ready(function(){
 	map.updateSize();
 	if (typeof addThematicUALayers == 'function')
 	{
-	var uaLayer= addThematicUALayers([],"thematicUAmenosCumplidoras","Menos cumplidores",'nationalcode',[],[]);
+	var uaLayer= addThematicUALayers([],"thematicUAmenosCumplidoras","Menos cumplidores",'nationalcode',[],[], "Los diez municipios con la proporción de denuncias activas más alta");
 	map.addLayer(uaLayer);
-	uaLayer= addThematicUALayers([],"thematicUAmasCumplidoras","Más cumplidores",'nationalcode',[],[]);
+	uaLayer= addThematicUALayers([],"thematicUAmasCumplidoras","Más cumplidores",'nationalcode',[],[], "Los diez municipios con la proporción de denuncias activas más baja");
 	map.addLayer(uaLayer);
-        uaLayer= addThematicUALayers([],"thematicUAmasApoyo","Más apoyadas",'nationalcode',[],[]);
+        uaLayer= addThematicUALayers([],"thematicUAmasApoyo","Más apoyadas",'nationalcode',[],[], "Los diez municipios con las denuncias más apoyadas");
 	map.addLayer(uaLayer);
         
         $.getJSON(url_base+'estadisticas_municipios.php?cumpli=2', function(data)

@@ -10,15 +10,16 @@
     
     $result = pg_prepare($db, "seleccionar denuncia", $query );
     $result = pg_execute($db, "seleccionar denuncia", array($cod));
-    if(!pg_fetch_array($result)){
+    $num_res = pg_affected_rows($result);    
+    if($num_res == 0){
         header('Location: error.html');
-    }
-    while ($row = pg_fetch_array($result)){
+    }  
+    while ($row = pg_fetch_array($result)){        
         $municipio = $row['nombre_municipio'];
         $provincia = $row['nombre_provincia'];
         $fecha = $row['fecha'];
         $texto = $row['texto'];
-        $resuelta = $row['"Resuelta"'];
+        $resuelta = $row["Resuelta"];
         $id_denuncia = $row['id_denuncia'];
     }
     $query_imagenes = 'SELECT * FROM imagenes WHERE id_denuncia = $1';
@@ -41,9 +42,11 @@
         <script src="jquery-1.9.0.js"></script>
         <script src="jquery.mobile-1.4.2.min.js"></script>
 	<script src="lib/OpenLayers.js"></script>
+        <script src="facebook.js"></script>
     </head>
 	
     <body>
+        
         <div data-role="page" data-theme="b">
         <div data-role="header" >
                 <h1><img src="images/marker-icon-fixit.png" height="24">Cambiar estado denuncia</h1>
@@ -68,12 +71,12 @@
                             <?php echo $fecha;?>
                         </td>
                         <td align="center">
-                            <?php if ($resuelta == FALSE){
+                            <?php if ($resuelta == 'f'){
                                 echo 'NO';
                                 echo '<a href="denuncia_solucionada.php?id='.$id_denuncia.'&res=no" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Solucionar</a>';
                             }
                             else{
-                                echo 'SI</td>';
+                                echo 'SI';
                                 echo '<a href="denuncia_solucionada.php?id='.$id_denuncia.'&res=si" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-grid">Cambiar estado denuncia</a>';
                             }?>
                         </td>
@@ -95,6 +98,14 @@
                     
             
         </div>
+            <script>
+        window.fbAsyncInit = function() { 
+            if (fb.config.app_id) {
+                FB.init({appId: fb.config.app_id, status: true, cookie: true, xfbml: fb.config.use_xfbml});
+            }
+            fb.syncLogin(fb.launchReadyFuncs);            
+        };
+      </script>
     </body>
 </html>
 

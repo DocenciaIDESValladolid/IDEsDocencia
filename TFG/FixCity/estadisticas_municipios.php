@@ -10,22 +10,22 @@
 	if($cumpli==1){
 		// Los más cumplidores
 		$municipios_mas_resuelven = 
-		"SELECT codigoine, 
-		SUM(CASE WHEN estado=1 THEN 1 ELSE 0 END)*100/SUM(CASE WHEN estado=0 THEN 1 ELSE 0 END) AS Percentage,
-		SUM(CASE WHEN estado=1 THEN 1 ELSE 0 END) AS Resolved,
-		SUM(CASE WHEN estado=0 THEN 1 ELSE 0 END) AS Total
-		FROM estado_usuario GROUP BY codigoine
-		ORDER BY Percentage DESC LIMIT 10;";
+		'SELECT codigoine, 
+		SUM(CASE WHEN "Resuelta"=TRUE THEN 1 ELSE 0 END)*100/SUM(CASE WHEN "Resuelta"=FALSE THEN 1 ELSE 1 END) AS Percentage,
+		SUM(CASE WHEN "Resuelta"=TRUE THEN 1 ELSE 0 END) AS Resolved,
+		SUM(CASE WHEN "Resuelta"=FALSE THEN 1 ELSE 0 END) AS Total
+		FROM denuncias GROUP BY codigoine
+		ORDER BY Percentage DESC LIMIT 10;';
 	}
 	else if($cumpli==0){
 		// Los menos cumplidores
 		$municipios_mas_resuelven = 
-		"SELECT codigoine, 
-		SUM(CASE WHEN estado=1 THEN 1 ELSE 0 END)*100/SUM(CASE WHEN estado=0 THEN 1 ELSE 0 END) AS Percentage,
-		SUM(CASE WHEN estado=1 THEN 1 ELSE 0 END) AS Resolved,
-		SUM(CASE WHEN estado=0 THEN 1 ELSE 0 END) AS Total
-		FROM estado_usuario GROUP BY codigoine
-		ORDER BY Percentage ASC LIMIT 10;";
+		'SELECT codigoine, 
+		SUM(CASE WHEN "Resuelta"=TRUE THEN 1 ELSE 0 END)*100/SUM(CASE WHEN "Resuelta"=FALSE THEN 1 ELSE 1 END) AS Percentage,
+		SUM(CASE WHEN "Resuelta"=TRUE THEN 1 ELSE 0 END) AS Resolved,
+		SUM(CASE WHEN "Resuelta"=FALSE THEN 1 ELSE 0 END) AS Total
+		FROM denuncias GROUP BY codigoine
+		ORDER BY Percentage ASC LIMIT 10;';
 	}
         else if($cumpli==2){
             $municipios_mas_resuelven = 

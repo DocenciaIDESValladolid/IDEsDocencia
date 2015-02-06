@@ -15,6 +15,7 @@ function createWFSLayer()
 			}),
 		styleMap: options.styleMap,
 		});
+                wfs.descrip="Denuncias recibidas";
 	return wfs;
 }
 function createHeatmapLayer()
@@ -24,6 +25,7 @@ var wms_concentracion = new OpenLayers.Layer.WMS("Concentración de denuncias",
         {layers: 'IDEs:denuncias_image',transparent:true, styles:'heatmap'},
         {isBaseLayer: false, singleTile:true, visibility:false}
     );
+    wms_concentracion.descrip = "Mapa de calor que muestra la concentración de denuncias totales.";
 return wms_concentracion;
 }
 
@@ -33,6 +35,8 @@ function createHeatmapLayerAntig(){
         {layers: 'IDEs:denuncias_antig',transparent:true, styles:'heatmap'},
         {isBaseLayer: false, singleTile:true, visibility:false}
     );
+    wms_antig.descrip = "Mapa de calor que muestra la concentración de denuncias en función de su antiguedad.";
+    
 return wms_antig;
 }
 
@@ -42,6 +46,8 @@ function createHeatmapLayerApoyo(){
         {layers: 'IDEs:denuncias_apoyo',transparent:true, styles:'heatmap_likes'},
         {isBaseLayer: false, singleTile:true, visibility:false}
     );
+    wms_apoyo.descrip = "Mapa de calor que muestra la concentración de denuncias en función de los votos recibidos.";
+
 return wms_apoyo;
 }
 

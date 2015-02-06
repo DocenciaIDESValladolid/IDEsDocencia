@@ -70,9 +70,6 @@ var fb = {
         if(url){
             fb.publish1(url, mensaje, id_denuncia);
         }
-        if (!url && mensaje){
-            fb.update(mensaje, id_denuncia);
-        }
         callback(true);
       } else {
         fb.logged = false;
