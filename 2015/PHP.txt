@@ -1,0 +1,18 @@
+PHP de base de datos
+
+
+Consulta para conseguir los grados para la siguiente pista 
+
+SELECT degrees( ST_Azimuth(ST_Point(25,45), ST_Point(75,100)) ) as degA_B,
+	degrees( ST_Azimuth(ST_Point(75,100), ST_Point(25,45)) ) As degB_A;
+
+Consulta para saber si la posición del usuario corresponde con la pista
+
+SELECT ST_Intersects(
+		ST_GeographyFromText('SRID=4326;LINESTRING(-43.23456 72.4567,-43.23456 72.4568)'),
+		ST_GeographyFromText('SRID=4326;POINT(-43.23456 72.4567772)')
+		);
+
+
+
+
