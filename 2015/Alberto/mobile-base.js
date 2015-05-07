@@ -290,7 +290,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 		geolocation_msg= "<p>Localizado con "+ geolocation_accuracy+" metros de precisión.</p>";
 		queryUA(e,successGeolocationUA);
     });
-   
+    initTesoro();
 	};// End of init
 
 	
