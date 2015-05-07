@@ -63,8 +63,6 @@ $("#locate").on('click',autolocate);
 //fix the content height AFTER jQuery Mobile has rendered the map page
 $('#mappage').on('pageshow',function (event){
     fixContentHeight();
-        //Call to updateUI
-    updateUI();
 });
     
 $(window).bind("orientationchange resize pageshow", fixContentHeight);
