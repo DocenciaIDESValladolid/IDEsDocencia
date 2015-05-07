@@ -302,7 +302,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 	* Selección de una marca de nueva denuncia en el mapa.
 	*/
 	function onMarkFeatureSelect(evt) {
-		$("#infopanel").panel("open");
+		marca_pulsada(evt);
 		selectCtrl.unselectAll();
 	}
 	
@@ -416,7 +416,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 	function eventLocationChanged(e){
 		moveMark(e.point);
 		geolocation_msg="";
-		queryUA(e,successUA,failureUA);
+		//queryUA(e,successUA,failureUA);
 	}
 	function successUA(jsonResponse){
 	if (jsonResponse.features.length==2)

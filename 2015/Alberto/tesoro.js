@@ -1,4 +1,7 @@
 var state='welcoming';// createScenario,running, 
+var scenario_under_creation=null;
+var scenario_running='';
+
 
 function setState(newstate)
 {
@@ -24,4 +27,14 @@ function initTesoro(){
         setState('createScenario');
         $("#infopanel").panel('close');
     });
+}
+
+function marca_pulsada(event){
+    if (state==="welcoming" || state==="createScenario"){
+        setState("createScenario");
+        $("#scenario_iduser").val(fb.user.id);
+//        $("#scenario_iduser").attr('value','XXX')
+        $("#create_scenario_panel").panel("open");
+    }
+    
 }

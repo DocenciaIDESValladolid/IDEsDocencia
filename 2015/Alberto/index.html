@@ -40,7 +40,7 @@
 	Panel de información de la marca
 	-->
 	<!-- <div data-role="panel" data-position="left" data-swipe-close="true" data-display="overlay" id="infopanel"> -->
-	<div data-role="panel" data-position="left" data-position-fixed="true" id="infopanel">
+	<div data-role="panel" data-position="left" data-position-fixed="true" data-display="overlay" id="infopanel">
 	<div id="estadoLogin">
 	<a href="#" id="iniciosesionFacebookEstado" class="ui-btn  ui-btn-icon-left ui-icon-fb ui-btn-inline" onclick="login(); return false;">Identificarse</a>
 					<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
@@ -60,6 +60,15 @@
 		
 
 	</div>
+        <div data-role="panel" data-position="left" data-position-fixed="true" data-display="overlay" id="create_scenario_panel">
+            formulario con los campos a rellenar.
+            <form action="createScenario.php">
+            <input id="scenario_lat" name="lat"/>
+            <input id="scenario_lon" name="lon"/>
+            <input id="scenario_iduser" name="iduser"/>
+            <input name="description" />
+            </form>
+        </div>
 	<!----
 	Panel de información de la denuncia seleccionada
 	-->
