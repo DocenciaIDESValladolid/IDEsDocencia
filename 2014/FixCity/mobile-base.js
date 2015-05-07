@@ -526,12 +526,21 @@ fb.ready(function(){
 						+'   </wfs:Query>\n'
 						+' </wfs:GetFeature>\n';
 		var urlProxy = 'http://itastdevserver.tel.uva.es/urlnoexiste';			
-
+// See: http://api.jquery.com/jQuery.ajaxPrefilter/
+$.ajaxPrefilter( function( options ) {
+  if ( options.crossDomain ) {
+    // Set the proxy URL
+    options.url = "http://itastdevserver.tel.uva.es/proxyINSPIRE.php?mode=native&url=" + encodeURIComponent(options.url);
+    options.crossDomain = false;
+	
+  }
+});
 		$.ajax({
 			type: "POST",
 			contentType: "text/plain", // server can forbid other types for cross-server scripting
 			url: urlWfsUA,
 			data: postDataUA,
+			crossDomain:true,
 			success: successCallback,
 			error: failureCallBack,
 			});
