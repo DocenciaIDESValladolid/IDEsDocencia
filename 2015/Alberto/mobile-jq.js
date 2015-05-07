@@ -155,10 +155,6 @@ $.mobile.loading( "show", {
 	}
 });
 
-$(document).on('pageshow','#mappage',function(event){
-        //Call to updateUI
-    updateUI();
-});
 function initLayerList() {
     $('#layerspage').page();
     $('<li>', {

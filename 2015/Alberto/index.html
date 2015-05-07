@@ -17,7 +17,7 @@
 		<script src="AnimatedCluster.js"></script>
 		<script src="thematicLayers.js"></script>
 		<script src="reportingLayers.js"></script>
-                <script src="tesoro.js"></script>
+        <script src="tesoro.js"></script>
       
         <script src="mobile-base.js"></script>
         <script src="mobile-jq.js"></script>
@@ -61,12 +61,21 @@
 
 	</div>
         <div data-role="panel" data-position="left" data-position-fixed="true" data-display="overlay" id="create_scenario_panel">
-            formulario con los campos a rellenar.
+            <legend>Rellena los siguientes campos sobre tu escenario.<legend>
             <form action="createScenario.php">
-            <input id="scenario_lat" value="" name="lat"/>
-            <input id="scenario_lon" value="" name="lon"/>
-            <input id="scenario_iduser" value="" name="iduser"/>
-            <input name="description" />
+			<!-- id, name, id_creator, description, date, uri -->
+				<label for="text-basic">Lat</label>
+				<input id="scenario_lat" value="" name="lat"/>
+				<label for="text-basic">Lon</label>
+				<input id="scenario_lon" value="" name="lon"/>
+				<label for="text-basic">ID User</label>
+				<input id="scenario_iduser" value="" name="iduser"/>
+				<label for="text-basic">Nombre</label>
+				<input id="scenarioname" value="" name="name" data-theme="a"/>
+				<label for="text-basic">Descripción</label>
+				<!-- <textarea cols="40" rows="8" name="description" id="description" data-theme="a"/> -->
+				<input id="scenariodescription" value="" name="description" data-theme="a"/>
+				<button class="ui-shadow ui-btn ui-corner-all" type="submit" id="submitForm">Enviar</button>
             </form>
         </div>
 	<!----

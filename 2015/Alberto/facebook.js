@@ -134,7 +134,7 @@ function updateFacebookLoginInfo(fb)
 	id_facebook = fb.user.id;
 	name_facebook = fb.user.name;
 	var fb_user_label = '<img valign="center" height="30" src="'+fb.user.picture+'"/>' + fb.user.name;
-	var html = fb_user_label + '<a href="#" class="ui-btn  ui-btn-icon-left ui-icon-delete" onclick="fb.logout(function(response) {window.location.href = \'index.html\';});return false;">Salir</a></p>';
+	var html = fb_user_label + '<a href="#" class="ui-btn  ui-btn-icon-left ui-icon-delete" onclick="fb.logout(facebook_logout);return false;">Salir</a></p>';
 	$("#estadoLogin").html(html);
 	$("#iniciosesionFacebook").hide();
 	$("#validarUbicacion").show();
@@ -153,6 +153,7 @@ function updateFacebookLoginInfo(fb)
 	html = 'Usuario: ' + fb.user.name + ' correo es: ' + fb.user.email;
 	$("#usuario_info_prueba").html(html);
 	
+	setState('authenticated');
 }
 
 // Funcion para publicar un mensaje en tu muro
