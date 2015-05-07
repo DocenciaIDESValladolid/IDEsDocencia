@@ -20,7 +20,7 @@ $.mobile.loading("hide");
 function fixContentHeight() {
     var footer = $("div[data-role='footer']:visible"),
         content = $("div[data-role='content']:visible:visible"),
-		header = $("div[data-role='header']:visible:visible"),
+	header = $("div[data-role='header']:visible:visible"),
         viewHeight = $(window).height(),
         contentHeight = viewHeight - footer.outerHeight()- header.outerHeight();
 
@@ -61,8 +61,10 @@ $("#locate").on('click',autolocate);
 
 
 //fix the content height AFTER jQuery Mobile has rendered the map page
-$('#mappage').on('pageshow',function (){
+$('#mappage').on('pageshow',function (event){
     fixContentHeight();
+        //Call to updateUI
+    updateUI();
 });
     
 $(window).bind("orientationchange resize pageshow", fixContentHeight);
@@ -155,7 +157,10 @@ $.mobile.loading( "show", {
 	}
 });
 
-
+$(document).on('pageshow','#mappage',function(event){
+        //Call to updateUI
+    updateUI();
+});
 function initLayerList() {
     $('#layerspage').page();
     $('<li>', {

@@ -47,12 +47,7 @@ fb.ready(function(){
    updateFacebookLoginInfo(fb)
   }
 });
-
-
-
-
-
-    var vector = new OpenLayers.Layer.Vector("vector", {});
+var vector = new OpenLayers.Layer.Vector("vector", {});
 	/////Capa marcador
 	var styleMarkDefault = new OpenLayers.StyleMap({
 						externalGraphic: "images/marker-icon-fixit.png",
@@ -295,7 +290,7 @@ fb.ready(function(){
 		geolocation_msg= "<p>Localizado con "+ geolocation_accuracy+" metros de precisión.</p>";
 		queryUA(e,successGeolocationUA);
     });
-
+   
 	};// End of init
 
 	
