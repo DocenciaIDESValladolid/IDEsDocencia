@@ -26,6 +26,13 @@ function updateUI()
 }
 function initTesoro(){
     $("#nuevoescenario_button").bind("click",nuevoescenario_button_action);
+    enableForm('#createScenarioForm', 
+        function(result){
+             toast('Éxito en el envío. La respuesta es:'+JSON.stringify(result));
+        },
+        function(error){
+             toast('Network error has occurred please try again!'+error);
+        });
 }
 
 function nuevoescenario_button_action(event,ui){
@@ -45,6 +52,54 @@ function marca_pulsada(event){
 }
 
 function facebook_logout(response){
-	window.location.href = \'index.html\';
+	window.location.href = 'index.html';
 	// setState('welcoming');
+}
+
+function enableForm(id_form, onsuccess, onfailure){ 
+    $(id_form).submit(function (submitevent){ // catch the form's submit event
+        submitevent.preventDefault();
+        var $form = $(this);
+        var terms = {};
+        var $inputs =$form.find("input");
+        $inputs.each(function(){
+            terms[this.name]=$(this).val();
+        });
+            url = $form.attr("action");
+      
+            // Send data to server through the Ajax call
+            // action is functionality we want to call and outputJSON is our data
+             $.ajax({url: url,
+                        data: terms,
+                        type: 'post',                   
+                        async: 'true',
+                        dataType: 'json',
+                        beforeSend: function() {
+                            // This callback function will trigger before data is sent
+                            $.mobile.loading('show'); // This will show ajax spinner
+                        },
+                        complete: function() {
+                            // This callback function will trigger on data sent/received complete
+                            $.mobile.loading('hide'); // This will hide ajax spinner
+                        },
+                        success: function (result) {
+                           
+                                if (typeof(onsuccess) === "function")
+                                {
+                                    onsuccess(result);
+                                }                         
+                        },
+                        error: function (request,error) {
+                            // This callback function will trigger on unsuccessful action   
+                            if (typeof(onfailure) === "function")
+                                {
+                                    onfailure(error);
+                                }  
+                           
+                        }
+                    });                   
+                    
+            return false; // cancel original event to prevent form submitting
+        });    
+    
 }
