@@ -15,11 +15,38 @@
 	$description = addslashes($description);
 	$name = trim($name);
 	$name = addslashes($name);
+	$longitud = trim($longitud);
+	$latitud = trim($latitud)
+	$iduser = trim($iduser);
+	
+	//comprobar longitud
+	
+	if (strlen ($descripcion >= 300))
+	{
+?>
+		<script type="txt/javascrip">
+		window.alert("descripcion demasiado larga");
+		</script>
+<?PHP
+		exit;
+	}	
+	if (strlen ($nombre >= 30))
+	{
+?>
+		<script type="txt/javascrip">
+		window.alert("nombre demasiado larga");
+		</script>
+<?PHP
+		exit;
+	}	
 	
         $result=new stdClass();
         $result->newId=23;
         $result->name = $name;
         $result->description = $description;
         
+		$peticion = ""; //peticion a la base de datos para introducir en la tabla correspondiente
+		$resultado=mysql_query($peticion);
+
         echo json_encode($result);
         
