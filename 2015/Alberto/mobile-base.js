@@ -380,8 +380,8 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 		$("#reportLocationLabel").html('('+latlonString+')');
 		$("#reportDetailsLink").attr("href","detalle.php?id="+feature.attributes.id_denuncia);
 		$("#nuevadenuncia_loc_actual_button").show();
-		$("#infoDenunciaPanel").trigger( "updatelayout" );
-		$("#infoDenunciaPanel").panel("open");
+		$("#infoScenarioPanel").trigger( "updatelayout" );
+		$("#infoScenarioPanel").panel("open");
 		
 		
 		/*var html =  '¿Quiere Apoyar la denuncia?'+ 

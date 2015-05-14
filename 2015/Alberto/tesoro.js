@@ -1,4 +1,4 @@
-var state='welcoming';// authenticated,createScenario,createRiddle,running
+var state='welcoming';// authenticated,createScenario,creatingScenario,createRiddle,running
 var scenario_under_creation=null;
 var scenario_running='';
 
@@ -13,14 +13,26 @@ function updateUI()
     if (state==='welcoming'){
         $("#validarUbicacion").hide();
         $("#infopanel").panel('open');
+	}else if (state=='authenticated'){
+        $("#validarUbicacion").hide();
+        $("#nuevoescenario_button").show();
         $("#nuevoescenario_button").button('enable');
+    }else if (state=='createScenario'){
+		$("#validarUbicacion").hide();
+        $("#nuevoescenario_button").show();
+        $("#nuevoescenario_button").button('enable');
+	}else if (state=='creatingScenario'){
+        $("#validarUbicacion").hide();
+        $("#nuevoescenario_button").hide();
+    }else if (state=='createRiddle'){
+        $("#validarUbicacion").hide();
+        $("#nuevoescenario_button").hide();
     }else if (state =='running'){
         $("#validarUbicacion").show();
         $("#validarUbicacion").button('enable');
-    }else if (state=='createScenario')
-    {
         $("#nuevoescenario_button").hide();
     }
+	
 	$("#mappage").trigger( "updatelayout" );
 
 }
