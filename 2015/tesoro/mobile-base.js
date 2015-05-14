@@ -357,7 +357,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 			return;
 			}
 		}
-		$("#reportDescription").html("A las "+feature.attributes.fecha+" he informado del problema: \""+feature.attributes.texto+"\"");
+		$("#reportDescription").html("Bienvenido a "+feature.attributes.name+" Descripción: \""+feature.attributes.description+"\"");
 		if (typeof feature.attributes.img != 'undefined')
 		{
 		$("#reportImageList").append($('<img></img>').attr('src',feature.attributes.img).attr('width',200));

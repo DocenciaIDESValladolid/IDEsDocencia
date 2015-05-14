@@ -2,16 +2,16 @@ function createWFSLayer()
 {
 	//var options= getDenunciasConfig();
 	var options= getDenunciasConfigAnimCluster();		
-	var wfs = new OpenLayers.Layer.Vector("Escenarios posibles", 
+	var wfs = new OpenLayers.Layer.Vector("Denuncias", 
 		{
 		strategies: options.strategies,
         protocol: new OpenLayers.Protocol.WFS(
 			{
-            url: "http://itastdevserver.tel.uva.es/geoserver/IDEs/ows",
-            featureType: "denuncias_image",
-            featureNS: "http://www.idelab.uva.es/#IDES",
-			srsName: "EPSG:3857",
-			version: "1.1.0"
+            url: "http://localhost/geoserver/En_busca_del_tesoro/wfs",
+            featureType: "puntos_iniciales",
+            featureNS: "http://localhost:8080/geoserver/busqueda_tesoro",
+            srsName: "EPSG:900913",
+            version: "1.1.0"
 			}),
 		styleMap: options.styleMap,
 		});
@@ -19,9 +19,9 @@ function createWFSLayer()
 }
 function createHeatmapLayer()
 {
-var wms_concentracion = new OpenLayers.Layer.WMS("Juego iniciado en Valladolid (Esp) - 25/04/15",
-        "http://itastdevserver.tel.uva.es/geoserver/IDEs/wms",
-        {layers: 'IDEs:denuncias_image',transparent:true, styles:'heatmap'},
+var wms_concentracion = new OpenLayers.Layer.WMS("Concentración de usuarios",
+        "http://localhost:8080/geoserver/En_busca_del_tesoro/wms",
+        {layers: 'En_busca_del_tesoro:mapa_calor_usuarios',transparent:true},
         {isBaseLayer: false, singleTile:true, visibility:false}
     );
 return wms_concentracion;
@@ -31,7 +31,7 @@ function getDenunciasConfig()
 	{
 	  var denunciasStyleCluster = new OpenLayers.Style({
                    
-                    externalGraphic: "images/caza-tesoro-icon.png",
+                    externalGraphic: "images/cono.png",
 					graphicOpacity: 1.0,
 					graphicWidth: "${radius}",
 					graphicHeight: "${radius}",
@@ -44,7 +44,7 @@ function getDenunciasConfig()
                     }
                 });
 	var denunciasStyle = new OpenLayers.Style({
-                    externalGraphic: "images/caza-tesoro-icon.png",
+                    externalGraphic: "images/cono.png",
 					graphicOpacity: 1.0,
 					graphicWidth: 48,
 					graphicHeight: 48,
@@ -55,7 +55,7 @@ function getDenunciasConfig()
 			];
 	var	styleMap= new OpenLayers.StyleMap({
 			"default": denunciasStyle,
-            /*externalGraphic: "images/caza-tesoro-icon.png",
+            /*externalGraphic: "images/cono.png",
             graphicOpacity: 1.0,
             graphicWidth: 48,
             graphicHeight: 48,
@@ -91,7 +91,7 @@ function getDenunciasConfig()
 									property: "img"})
 								]})	,
 				symbolizer: {
-					externalGraphic:"${img}",//"images/caza-tesoro-icon.png",
+					externalGraphic: "images/pergamino.png",//"images/cono.png",
 					graphicWidth: 48,
 					graphicHeight: 48,
 					graphicOpacity: 1.0,
@@ -120,7 +120,7 @@ function getDenunciasConfig()
                     value: 2
                 }),
                 symbolizer: {
-					externalGraphic:"${img}",//"images/caza-tesoro-icon.png",
+					externalGraphic:"${img}",//"images/cono.png",
 					graphicWidth: 48,
 					graphicHeight: 48,
 					graphicOpacity: 1.0,
@@ -183,7 +183,7 @@ function getDenunciasConfig()
 			var	styleMap= new OpenLayers.StyleMap({
 			"default": style,
 			"temporary": { graphicWidth:120, graphicHeight:120, fontSize: "80px" },
-            /*externalGraphic: "images/caza-tesoro-icon.png",
+            /*externalGraphic: "images/cono.png",
             graphicOpacity: 1.0,
             graphicWidth: 48,
             graphicHeight: 48,
