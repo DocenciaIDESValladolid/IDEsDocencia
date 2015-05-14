@@ -1,0 +1,20 @@
+<layer>
+  <name>riddles</name>
+  <id>LayerInfoImpl--25bf7c48:14cc295c52d:-7f15</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--25bf7c48:14cc295c52d:-7f10</id>
+  </defaultStyle>
+  <styles class="linked-hash-set">
+    <style>
+      <id>StyleInfoImpl--570ae188:124761b8d78:-7fdf</id>
+    </style>
+  </styles>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--25bf7c48:14cc295c52d:-7f16</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

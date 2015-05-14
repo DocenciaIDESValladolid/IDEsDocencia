@@ -1,0 +1,38 @@
+<dataStore>
+  <id>DataStoreInfoImpl--252bde08:14cb479451b:-7ff9</id>
+  <name>Database</name>
+  <description>Base de datos que almacena toda la información del juego &quot;En Busca del Tesoro&quot;</description>
+  <type>PostGIS</type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl--252bde08:14cb479451b:-8000</id>
+  </workspace>
+  <connectionParameters>
+    <entry key="Connection timeout">20</entry>
+    <entry key="port">5432</entry>
+    <entry key="passwd">crypt1:7J66jtlBzISgXtO4Q9+CrjxxqLfVgS7T</entry>
+    <entry key="dbtype">postgis</entry>
+    <entry key="encode functions">false</entry>
+    <entry key="Evictor run periodicity">300</entry>
+    <entry key="namespace">http://localhost:8080/geoserver/busqueda_tesoro</entry>
+    <entry key="schema">public</entry>
+    <entry key="create database">false</entry>
+    <entry key="fetch size">1000</entry>
+    <entry key="preparedStatements">false</entry>
+    <entry key="min connections">1</entry>
+    <entry key="Evictor tests per run">3</entry>
+    <entry key="host">localhost</entry>
+    <entry key="validate connections">true</entry>
+    <entry key="max connections">50</entry>
+    <entry key="database">Postgre</entry>
+    <entry key="Support on the fly geometry simplification">true</entry>
+    <entry key="Max connection idle time">300</entry>
+    <entry key="Test while idle">true</entry>
+    <entry key="Loose bbox">true</entry>
+    <entry key="Expose primary keys">false</entry>
+    <entry key="Max open prepared statements">50</entry>
+    <entry key="Estimated extends">true</entry>
+    <entry key="user">postgres</entry>
+  </connectionParameters>
+  <__default>false</__default>
+</dataStore>

@@ -1,0 +1,15 @@
+<layer>
+  <name>mapa_calor_usuarios</name>
+  <id>LayerInfoImpl--70969c13:14d43ff8df0:-7fc1</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--70969c13:14d43ff8df0:-7fc0</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--70969c13:14d43ff8df0:-7fc2</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

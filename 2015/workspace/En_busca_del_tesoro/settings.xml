@@ -1,0 +1,35 @@
+<settings>
+  <id>SettingsInfoImpl--252bde08:14cb479451b:-7ffa</id>
+  <workspace>
+    <id>WorkspaceInfoImpl--252bde08:14cb479451b:-8000</id>
+    <name>En_busca_del_tesoro</name>
+  </workspace>
+  <contact>
+    <id>contact</id>
+    <address>Paseo Belén 15</address>
+    <addressCity>Valladolid</addressCity>
+    <addressCountry>Spain</addressCountry>
+    <addressPostalCode>47011</addressPostalCode>
+    <addressState>Castilla y León</addressState>
+    <addressType>Dirección de trabajo</addressType>
+    <contactEmail>adrian.rodriguez@alumnos.uva.es</contactEmail>
+    <contactOrganization>Universidad de Valladolid</contactOrganization>
+    <contactPerson>Adrián Rodríguez</contactPerson>
+    <contactPosition>Encargado de Soporte</contactPosition>
+    <onlineResource>http://boundlessgeo.com/about/contact-us/customer-support/</onlineResource>
+  </contact>
+  <charset>UTF-8</charset>
+  <numDecimals>8</numDecimals>
+  <onlineResource>http://boundlessgeo.com/solutions/solutions-software/geoserver/</onlineResource>
+  <verbose>false</verbose>
+  <verboseExceptions>false</verboseExceptions>
+  <metadata>
+    <map>
+      <entry>
+        <string>quietOnNotFound</string>
+        <boolean>false</boolean>
+      </entry>
+    </map>
+  </metadata>
+  <localWorkspaceIncludesPrefix>false</localWorkspaceIncludesPrefix>
+</settings>

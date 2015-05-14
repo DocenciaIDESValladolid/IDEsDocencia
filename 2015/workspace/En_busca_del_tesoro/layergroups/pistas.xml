@@ -1,0 +1,29 @@
+<layerGroup>
+  <id>LayerGroupInfoImpl-41e3bdce:14d01dcfd48:-7ea0</id>
+  <name>pistas</name>
+  <mode>SINGLE</mode>
+  <title>Pistas_iniciales</title>
+  <abstractTxt>Se pueden ver las pistas iniciales de cada escenario en forma de polígono o de punto dependiendo del nivel de zoom</abstractTxt>
+  <workspace>
+    <id>WorkspaceInfoImpl--252bde08:14cb479451b:-8000</id>
+  </workspace>
+  <publishables>
+    <published type="layer">
+      <id>LayerInfoImpl--25bf7c48:14cc295c52d:-7fd4</id>
+    </published>
+    <published type="layer">
+      <id>LayerInfoImpl-41e3bdce:14d01dcfd48:-7ec6</id>
+    </published>
+  </publishables>
+  <styles>
+    <style/>
+    <style/>
+  </styles>
+  <bounds>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
+    <crs>EPSG:4326</crs>
+  </bounds>
+</layerGroup>

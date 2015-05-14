@@ -1,0 +1,51 @@
+<featureType>
+  <id>FeatureTypeInfoImpl--70969c13:14d43ff8df0:-7fc2</id>
+  <name>mapa_calor_usuarios</name>
+  <nativeName>mapa_calor_usuarios</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl--252bde08:14cb479451b:-7fff</id>
+  </namespace>
+  <title>mapa_calor_usuarios</title>
+  <keywords>
+    <string>mapa_calor_usuarios</string>
+    <string>features</string>
+  </keywords>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="JDBC_VIRTUAL_TABLE">
+      <virtualTable>
+        <name>mapa_calor_usuarios</name>
+        <sql>select locations from current_stages where date in (select max(date) from current_stages group by id_user)
+</sql>
+        <escapeSql>false</escapeSql>
+        <geometry>
+          <name>locations</name>
+          <type>Geometry</type>
+          <srid>-1</srid>
+        </geometry>
+      </virtualTable>
+    </entry>
+    <entry key="cachingEnabled">false</entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl--252bde08:14cb479451b:-7ff9</id>
+  </store>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

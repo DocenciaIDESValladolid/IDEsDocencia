@@ -1,0 +1,58 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-41e3bdce:14d01dcfd48:-7ec7</id>
+  <name>puntos_iniciales</name>
+  <nativeName>puntos iniciales</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl--252bde08:14cb479451b:-7fff</id>
+  </namespace>
+  <title>puntos iniciales</title>
+  <keywords>
+    <string>features</string>
+    <string>puntos iniciales</string>
+  </keywords>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
+    <crs>GEOGCS[&quot;WGS84(DD)&quot;, &#xd;
+  DATUM[&quot;WGS84&quot;, &#xd;
+    SPHEROID[&quot;WGS84&quot;, 6378137.0, 298.257223563]], &#xd;
+  PRIMEM[&quot;Greenwich&quot;, 0.0], &#xd;
+  UNIT[&quot;degree&quot;, 0.017453292519943295], &#xd;
+  AXIS[&quot;Geodetic longitude&quot;, EAST], &#xd;
+  AXIS[&quot;Geodetic latitude&quot;, NORTH]]</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="cachingEnabled">false</entry>
+    <entry key="JDBC_VIRTUAL_TABLE">
+      <virtualTable>
+        <name>puntos iniciales</name>
+        <sql>select r.id,id_path,s.description as general_description,r.description,s.date,answers, (select ST_Centroid(r.geom)) as point, name from riddles r,stages s where r.num_riddle = 0
+</sql>
+        <escapeSql>false</escapeSql>
+        <geometry>
+          <name>point</name>
+          <type>Geometry</type>
+          <srid>-1</srid>
+        </geometry>
+      </virtualTable>
+    </entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl--252bde08:14cb479451b:-7ff9</id>
+  </store>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>
