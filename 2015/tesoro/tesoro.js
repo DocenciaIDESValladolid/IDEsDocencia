@@ -1,26 +1,26 @@
 var state='welcoming';// authenticated,createScenario,creatingScenario,createRiddle,running
+updateUI();
 var scenario_under_creation=null;
 var scenario_running='';
-
 
 function setState(newstate)
 {
     state=newstate;
     updateUI();
 }
+
 function updateUI()
 {
     if (state==='welcoming'){
         $("#validarUbicacion").hide();
         $("#infopanel").panel('open');
+		$("#nuevoescenario_button").hide();
 	}else if (state=='authenticated'){
         $("#validarUbicacion").hide();
         $("#nuevoescenario_button").show();
-        $("#nuevoescenario_button").button('enable');
     }else if (state=='createScenario'){
 		$("#validarUbicacion").hide();
         $("#nuevoescenario_button").show();
-        $("#nuevoescenario_button").button('enable');
 	}else if (state=='creatingScenario'){
         $("#validarUbicacion").hide();
         $("#nuevoescenario_button").hide();
@@ -29,7 +29,7 @@ function updateUI()
         $("#nuevoescenario_button").hide();
     }else if (state =='running'){
         $("#validarUbicacion").show();
-        $("#validarUbicacion").button('enable');
+        // $("#validarUbicacion").button('enable');
         $("#nuevoescenario_button").hide();
     }
 	
