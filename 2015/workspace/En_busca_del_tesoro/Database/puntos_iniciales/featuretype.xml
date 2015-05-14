@@ -37,7 +37,7 @@
     <entry key="JDBC_VIRTUAL_TABLE">
       <virtualTable>
         <name>puntos iniciales</name>
-        <sql>select r.id,id_path,s.description as general_description,r.description,s.date,answers, (select ST_Centroid(r.geom)) as point, name from riddles r,stages s where r.num_riddle = 0
+        <sql>select id_path,s.description,s.date, (select ST_Centroid(geom)) as point, name from riddles r, stages s, paths p where r.num_riddle = 0 and s.id=p.id_stage and p.id=r.id_path
 </sql>
         <escapeSql>false</escapeSql>
         <geometry>
