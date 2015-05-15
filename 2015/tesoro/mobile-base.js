@@ -357,7 +357,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 			return;
 			}
 		}
-		$("#reportDescription").html("Bienvenido a "+feature.attributes.name+" Descripción: \""+feature.attributes.description+"\"");
+		$("#reportDescription").html("Bienvenido a "+feature.attributes.name+" Descripción: \""+feature.attributes.desc+"\"");
 		if (typeof feature.attributes.img != 'undefined')
 		{
 		$("#reportImageList").append($('<img></img>').attr('src',feature.attributes.img).attr('width',200));
