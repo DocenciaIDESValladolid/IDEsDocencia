@@ -1,8 +1,8 @@
 function createWFSLayer()
 {
 	//var options= getDenunciasConfig();
-	var options= getDenunciasConfigAnimCluster();		
-	var wfs = new OpenLayers.Layer.Vector("Denuncias", 
+	var options= getEscenariosConfigAnimCluster();		
+	var wfs = new OpenLayers.Layer.Vector("Escenarios Iniciales", 
 		{
 		strategies: options.strategies,
         protocol: new OpenLayers.Protocol.WFS(
@@ -13,14 +13,42 @@ function createWFSLayer()
             srsName: "EPSG:900913",
             version: "1.1.0"
 			}),
-		styleMap: options.styleMap,
+		styleMap: options.styleMap
 		});
 	return wfs;
+}
+function createWFSviewparamsLayer(nombre,parametros)
+{
+    //var options= getDenunciasConfig();
+    var options= getEscenariosConfigAnimCluster();
+    var wfs_options = {
+        url: 'http://localhost/geoserver/En_busca_del_tesoro/wfs?',
+        params: {
+        request: "GetFeature",
+        service: "wfs",
+        version: "1.1.0",
+        srsName: "EPSG:900913",
+        typeName: "En_busca_del_tesoro:Progreso_usuario",
+        viewparams: parametros
+    },
+    format: new OpenLayers.Format.GML({
+        featureNS: "http://localhost:8080/geoserver/busqueda_tesoro",
+        geometryName: "locations"
+    })
+    };       
+    var wfs = new OpenLayers.Layer.Vector(nombre, 
+        {
+        strategies: options.strategies,
+        visibility: true,
+        protocol: new OpenLayers.Protocol.HTTP(wfs_options), 
+        styleMap: options.styleMap
+        });
+    return wfs;
 }
 function createHeatmapLayer()
 {
 var wms_concentracion = new OpenLayers.Layer.WMS("Concentración de usuarios",
-        "http://localhost:8080/geoserver/En_busca_del_tesoro/wms",
+        "http://localhost/geoserver/En_busca_del_tesoro/wms",
         {layers: 'En_busca_del_tesoro:mapa_calor_usuarios',transparent:true},
         {isBaseLayer: false, singleTile:true, visibility:false}
     );
@@ -63,7 +91,7 @@ function getDenunciasConfig()
 			});
 		return { 'styleMap':styleMap, 'strategies':strategies };	
 	}
-	function getDenunciasConfigAnimCluster()
+	function getEscenariosConfigAnimCluster()
 	{
 /*	var animCluster= new OpenLayers.Strategy.AnimatedCluster({
             distance: 20,

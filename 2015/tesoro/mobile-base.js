@@ -19,7 +19,7 @@ var muni_name;
 var muni_code;
 var geolocation_accuracy;
 var geolocation_msg='';
-
+var paths;
 var munis = new Array(10);
 
 munis[0]='34074747075'; //Íscar
@@ -44,9 +44,31 @@ var init = function (onSelectFeatureFunction) {
 fb.ready(function(){ 
   if (fb.logged)
   {
-   updateFacebookLoginInfo(fb)
+   updateFacebookLoginInfo(fb);
   }
 });
+    //prueba de conseguir todas las capas del usuario en uso
+ function stages(handleData){
+
+ 	var id = "123456789";
+ 	var url = "escenarios_usuarios.php"; // El script a dónde se realizará la petición.
+ 	var params = {'id' : id};
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: params, // Adjuntar los campos del formulario enviado.
+           success: function(data)
+           {
+           		handleData(data);
+           },
+           dataType: "json"
+         });
+ } 
+
+
+
+
+
 var vector = new OpenLayers.Layer.Vector("vector", {});
 	/////Capa marcador
 	var styleMarkDefault = new OpenLayers.StyleMap({
@@ -176,10 +198,22 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 	var wfs=createWFSLayer();
 	map.addLayer(wfs);
 	
+	stages(function(output){
+		for(i=0;i<output.length;i++)
+    	{
+    	var id = "123456789";
+        var viewparams='param_user:'+id+';param_path:'+output[i]['id_path'];
+        var nombre = "wfs "+i;
+		var wfs2=createWFSviewparamsLayer(nombre,viewparams);
+		map.addLayer(wfs2);
+    	}
+    });
+
+	
 	var uaLayer= addThematicUALayers(munis,"thematicUAmenosCumplidoras","Menos cumplidores",'nationalcode',[],[]);
-	// map.addLayer(uaLayer);
+//	map.addLayer(uaLayer);
 	uaLayer= addThematicUALayers([],"thematicUAmasCumplidoras","Más cumplidores",'nationalcode',[],[]);
-	// map.addLayer(uaLayer);
+//	map.addLayer(uaLayer);
 	
 	$.getJSON(url_base+'estadisticas_municipios.php?cumpli=1', function(data)
 			{
@@ -291,6 +325,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 		queryUA(e,successGeolocationUA);
     });
     initTesoro();
+
 	};// End of init
 
 	
@@ -357,7 +392,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 			return;
 			}
 		}
-		$("#reportDescription").html("Bienvenido a "+feature.attributes.name+" Descripción: \""+feature.attributes.desc+"\"");
+		$("#reportDescription").html("Nombre del escenario: \""+feature.attributes.name+"\"<br>Descripción: \""+feature.attributes.descripcion+"\"");
 		if (typeof feature.attributes.img != 'undefined')
 		{
 		$("#reportImageList").append($('<img></img>').attr('src',feature.attributes.img).attr('width',200));
