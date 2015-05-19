@@ -22,14 +22,14 @@ function createWFSviewparamsLayer(nombre,parametros)
     //var options= getDenunciasConfig();
     var options= getEscenariosConfigAnimCluster();
     var wfs_options = {
-        url: 'http://localhost/geoserver/En_busca_del_tesoro/wfs?',
+        url: 'http://localhost/geoserver/En_busca_del_tesoro/wfs?viewparams='+parametros,
         params: {
         request: "GetFeature",
         service: "wfs",
         version: "1.1.0",
         srsName: "EPSG:900913",
         typeName: "En_busca_del_tesoro:Progreso_usuario",
-        viewparams: parametros
+        //viewparams: parametros
     },
     format: new OpenLayers.Format.GML({
         featureNS: "http://localhost:8080/geoserver/busqueda_tesoro",
@@ -40,7 +40,7 @@ function createWFSviewparamsLayer(nombre,parametros)
         {
         strategies: options.strategies,
         visibility: true,
-        protocol: new OpenLayers.Protocol.HTTP(wfs_options), 
+        protocol: new OpenLayers.Protocol.WFS(wfs_options), 
         styleMap: options.styleMap
         });
     return wfs;
