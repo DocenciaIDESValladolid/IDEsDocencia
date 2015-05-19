@@ -41,9 +41,11 @@ function addThematicUALayers(arrayMun, layerId,layerTitle,property, values, colo
 function updateThematicUALayer(layerId,property, values, colors)
 {
 var layer= map.getLayer(layerId);
+if (layer!=null){
 var sld=generateCustomUASld(property,values,colors);
 layer.params.SLD_BODY = sld;
 layer.redraw();
+}
 }
 function generateCustomUASld(attribute,codes,colors)
 	{

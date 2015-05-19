@@ -21,26 +21,32 @@ function createWFSviewparamsLayer(nombre,parametros)
 {
     //var options= getDenunciasConfig();
     var options= getEscenariosConfigAnimCluster();
-    var wfs_options = {
-        url: 'http://localhost/geoserver/En_busca_del_tesoro/wfs?viewparams='+parametros,
-        params: {
-        request: "GetFeature",
-        service: "wfs",
-        version: "1.1.0",
-        srsName: "EPSG:900913",
-        typeName: "En_busca_del_tesoro:Progreso_usuario",
-        //viewparams: parametros
-    },
-    format: new OpenLayers.Format.GML({
-        featureNS: "http://localhost:8080/geoserver/busqueda_tesoro",
-        geometryName: "locations"
-    })
-    };       
+//    var wfs_options = {
+//        url: 'http://localhost/geoserver/En_busca_del_tesoro/wfs?viewparams='+parametros,
+//        params: {
+//        request: "GetFeature",
+//        service: "wfs",
+//        version: "1.1.0",
+//        srsName: "EPSG:900913",
+//        typeName: "En_busca_del_tesoro:Progreso_usuario",
+//        //viewparams: parametros
+//    },
+//    format: new OpenLayers.Format.GML({
+//        featureNS: "http://localhost:8080/geoserver/busqueda_tesoro",
+//        geometryName: "locations"
+//    })
+//    };       
     var wfs = new OpenLayers.Layer.Vector(nombre, 
         {
         strategies: options.strategies,
         visibility: true,
-        protocol: new OpenLayers.Protocol.WFS(wfs_options), 
+        protocol: new OpenLayers.Protocol.WFS({
+            url: 'http://localhost/geoserver/En_busca_del_tesoro/wfs?viewparams='+parametros,
+            featureType: "Progreso_usuario",
+            featureNS: "http://localhost:8080/geoserver/busqueda_tesoro",
+            srsName: "EPSG:900913",
+            version: "1.1.0"
+        }), 
         styleMap: options.styleMap
         });
     return wfs;

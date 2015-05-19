@@ -61,7 +61,7 @@ fb.ready(function(){
            {
            		handleData(data);
            },
-           dataType: "json"
+           dataType: "json",
          });
  } 
 
@@ -190,11 +190,9 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
         center: new OpenLayers.LonLat(0, 0),	
         zoom: 1
     });
-	map.updateSize();
-	if (typeof addThematicUALayers == 'function')
-	{
-		
-	//CAPA DE ESCENARIOS POSIBLES
+    
+    
+    //CAPA DE ESCENARIOS POSIBLES
 	var wfs=createWFSLayer();
 	map.addLayer(wfs);
 	
@@ -204,11 +202,13 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
     	var id = "123456789";
         var viewparams='param_user:'+id+';param_path:'+output[i]['id_path'];
         var nombre = "wfs "+i;
-		var wfs2=createWFSviewparamsLayer(nombre,viewparams);
-		map.addLayer(wfs2);
+	var wfs2=createWFSviewparamsLayer(nombre,viewparams);
+	map.addLayer(wfs2);   
     	}
     });
-
+	map.updateSize();
+	if (typeof addThematicUALayers == 'function')
+	{
 	
 	var uaLayer= addThematicUALayers(munis,"thematicUAmenosCumplidoras","Menos cumplidores",'nationalcode',[],[]);
 //	map.addLayer(uaLayer);
@@ -278,7 +278,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 	 OpenLayers.Console.log(e.type, e.feature.id);
 	 }
 	 map.addControl(highlightCtrl);
-     map.addControl(selectCtrl);
+         map.addControl(selectCtrl);
 	 map.addControl(clickControl);
 	 clickControl.activate();
 	 highlightCtrl.activate();

@@ -174,13 +174,16 @@ function initLayerList() {
         .appendTo('#layerslist');
     var overlayLayers = map.getLayersBy("isBaseLayer", false);
     $.each(overlayLayers, function() {
-		if(this.name!='vector' && this.name!='Markers' && this.name.indexOf("OpenLayers_Control_SelectFeature")==-1)
+		if(
+//                        this.name!='vector' && 
+                        this.name!='Markers' && this.name.indexOf("OpenLayers_Control_SelectFeature")==-1)
         addLayerToList(this);
     });
     $('#layerslist').listview('refresh');
     
     map.events.register("addlayer", this, function(e) {
         addLayerToList(e.layer);
+        $("#layerslist").listview("refresh");
     });
 }
 
