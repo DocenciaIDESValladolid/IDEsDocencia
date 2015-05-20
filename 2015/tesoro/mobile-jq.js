@@ -38,12 +38,12 @@ function fixContentHeight() {
             $.mobile.changePage("#popup", "pop"); 
         });
         initLayerList();
-			var control = map.getControlsBy("id", "locate-control")[0];
-			if (control.active) {
-				control.getCurrentLocation();
-			} else {
-				control.activate();
-			}
+        var control = map.getControlsBy("id", "locate-control")[0];
+        if (control.active) {
+                control.getCurrentLocation();
+        } else {
+                control.activate();
+        }
     }
 }
 
@@ -60,11 +60,7 @@ $("#minus").on('click',function(){
 $("#locate").on('click',autolocate);
 
 
-//fix the content height AFTER jQuery Mobile has rendered the map page
-$('#mappage').on('pageshow',function (event){
-    fixContentHeight();
-});
-    
+
 $(window).bind("orientationchange resize pageshow", fixContentHeight);
 
 
@@ -77,9 +73,14 @@ $('#popup').on('pageshow',function(event, ui){
     $("ul#details-list").empty().append(li).listview("refresh");
 });
 
+$(document).on('pageload',function(event){
+     setState("welcoming"); //INITIALIZE state
+});
 $(document).on('pagecontainershow',function(event, ui){
-	var pageId = $('body').pagecontainer('getActivePage').prop('id');
-	if (pageId=='searchpage')
+    var pageId = $('body').pagecontainer('getActivePage').prop('id');
+    if (pageId==='mappage'){//fix the content height AFTER jQuery Mobile has rendered the map page
+        fixContentHeight();
+    }else if (pageId==='searchpage')
     {
 	$('#query').on('input propertychange paste', function(e){
         $('#search_results').empty();
@@ -87,7 +88,7 @@ $(document).on('pagecontainershow',function(event, ui){
             return;
         }
        // $.mobile.showPageLoadingMsg();
-$.mobile.loading( "show", {
+        $.mobile.loading( "show", {
 					text: "Buscando",
 					textVisible: true});
         // Prevent form send
@@ -122,8 +123,7 @@ $.mobile.loading( "show", {
     // only listen to the first event triggered
  //   $('#searchpage').die('pageshow', arguments.callee);
 	}
-	else
-	if (pageId=='nuevadenuncia_loc_actual')
+	else if (pageId==='nuevadenuncia_loc_actual')
 	{
 	$.getJSON('emails.php',{codigoine:muni_code},
 		function (data)

@@ -190,8 +190,10 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
         center: new OpenLayers.LonLat(0, 0),	
         zoom: 1
     });
-    
-    
+     var vlayer = new OpenLayers.Layer.Vector( "Tesoro:Editable");
+     polygonDraw= new OpenLayers.Control.DrawFeature(vlayer, OpenLayers.Handler.Polygon);
+     map.addControl(polygonDraw);
+      map.addLayer(vlayer);
     //CAPA DE ESCENARIOS POSIBLES
 	var wfs=createWFSLayer();
 	map.addLayer(wfs);
@@ -282,7 +284,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 	 map.addControl(clickControl);
 	 clickControl.activate();
 	 highlightCtrl.activate();
-     selectCtrl.activate();
+         selectCtrl.activate();
 	 
 	//OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 	
@@ -464,7 +466,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 		}
 	}
 	function successGeolocationUA(jsonResponse){
-	if (jsonResponse.features.length==2)
+	if (jsonResponse.features && jsonResponse.features.length==2)
 	{
 		var prov_name= jsonResponse.features[0].properties.nameunit;
 		var muni_name= jsonResponse.features[1].properties.nameunit;

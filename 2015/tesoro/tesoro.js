@@ -1,5 +1,4 @@
 var state='welcoming';// authenticated,createScenario,creatingScenario,createRiddle,running
-updateUI();
 var scenario_under_creation=null;
 var scenario_running='';
 
@@ -11,15 +10,23 @@ function setState(newstate)
 
 function updateUI()
 {
-    if (state==='welcoming'){
+    if (state==='authenticated'){
+         // Puesto aquí para probar el funcionamiento
+         enable_edit_polygons(function(event){
+            alert("feature creada");
+            disable_edit_polygons();
+        });
+        
+    }else if (state==='welcoming'){
+     
         $("#validarUbicacion").hide();
         $("#infopanel").panel('open');
-		$("#nuevoescenario_button").hide();
+	$("#nuevoescenario_button").hide();
 	}else if (state=='authenticated'){
         $("#validarUbicacion").hide();
         $("#nuevoescenario_button").show();
     /*}else if (state=='createScenario'){
-		$("#validarUbicacion").hide();
+	$("#validarUbicacion").hide();
         $("#nuevoescenario_button").show();*/
 	}else if (state=='creatingScenario'){
         $("#validarUbicacion").hide();
@@ -120,4 +127,30 @@ function enableForm(id_form, onsuccess, onfailure){
             return false; // cancel original event to prevent form submitting
         });    
     
+}
+
+function enable_edit_polygons(callback)
+{
+     var vlayers = map.getLayersByName( "Tesoro:Editable" );
+     if (vlayers.length>0)
+     {
+        var vlayer = vlayers[0];
+        vlayer.events.remove('featureadded');
+        vlayer.events.on({'featureadded':callback});
+        var controls= map.getControlsBy('CLASS_NAME','OpenLayers.Control.DrawFeature')
+        controls[0].activate();
+     }  
+          
+}
+function disable_edit_polygons()
+{
+    var vlayers = map.getLayersByName( "Tesoro:Editable" );
+     if (vlayers.length>0)
+     {
+    var vlayer=vlayers[0];
+    vlayer.removeAllFeatures();
+    vlayer.events.remove('featureadded');
+    var controls= map.getControlsBy('CLASS_NAME','OpenLayers.Control.DrawFeature')
+     controls[0].deactivate();
+    }
 }
