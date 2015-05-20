@@ -1,7 +1,7 @@
 <?php
 	
 	error_reporting(E_ALL);		// Sentencia para que se muestren los errores PHP por pantalla
-//	require('db.php');			// Fichero de conexi�n a la base de datos
+//	include('db.php');			// Fichero de conexi�n a la base de datos
 	
 	// Variables de formulario
 	@ $pregunta = filter_var($_POST['textarea'],FILTER_SANITIZE_STRING);	// Texto de la denuncia
