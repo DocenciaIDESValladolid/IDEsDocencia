@@ -222,15 +222,17 @@ OpenLayers.Format.WFST.v1 = OpenLayers.Class(OpenLayers.Format.XML, {
     writers: {
         "wfs": {
             "GetFeature": function(options) {
-                var node = this.createElementNSPlus("wfs:GetFeature", {
-                    attributes: {
+                var opts={
                         service: "WFS",
                         version: this.version,
+                        viewParams: options.viewparams,
                         handle: options && options.handle,
                         outputFormat: options && options.outputFormat,
                         maxFeatures: options && options.maxFeatures,
-                        "xsi:schemaLocation": this.schemaLocationAttr(options)
-                    }
+                        "xsi:schemaLocation": this.schemaLocationAttr(options),
+                    };
+                var node = this.createElementNSPlus("wfs:GetFeature", {
+                    attributes: opts
                 });
                 if (typeof this.featureType == "string") {
                     this.writeNode("Query", options, node);
