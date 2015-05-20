@@ -18,16 +18,16 @@ function updateUI()
 	}else if (state=='authenticated'){
         $("#validarUbicacion").hide();
         $("#nuevoescenario_button").show();
-    }else if (state=='createScenario'){
+    /*}else if (state=='createScenario'){
 		$("#validarUbicacion").hide();
-        $("#nuevoescenario_button").show();
+        $("#nuevoescenario_button").show();*/
 	}else if (state=='creatingScenario'){
         $("#validarUbicacion").hide();
         $("#nuevoescenario_button").hide();
-    }else if (state=='createRiddle'){
+    /*}else if (state=='createRiddle'){
         $("#validarUbicacion").hide();
         $("#nuevoescenario_button").hide();
-    }else if (state =='running'){
+    }else if (state =='running'){*/
         $("#validarUbicacion").show();
         // $("#validarUbicacion").button('enable');
         $("#nuevoescenario_button").hide();
@@ -38,6 +38,7 @@ function updateUI()
 }
 function initTesoro(){
     $("#nuevoescenario_button").bind("click",nuevoescenario_button_action);
+	$("#infopanel").panel('open');
     enableForm('#createScenarioForm', 
         function(result){
              toast('Éxito en el envío. La respuesta es:'+JSON.stringify(result));
@@ -48,15 +49,20 @@ function initTesoro(){
 }
 
 function nuevoescenario_button_action(event,ui){
-        setState('createScenario');
-        $("#infopanel").panel('close');
+        /*setState('createScenario');*/
+		
+		//Si el usuario ha marcado un punto sobre el mapa...
+		if (state==="authenticated")
+		{
+			$("#create_scenario_panel").panel('open');
+		}
     }
 function marca_pulsada(event){
 	if (state==="welcoming"){
 		$("#infopanel").panel("open");
 	}		
-    else if (state==="authenticated" || state==="createScenario"){
-        setState("createScenario");
+    else if (state==="authenticated"){
+        /*setState("createScenario");*/
         $("#scenario_iduser").val(fb.user.id);
 //        $("#scenario_iduser").attr('value','XXX')
         $("#create_scenario_panel").panel("open");
