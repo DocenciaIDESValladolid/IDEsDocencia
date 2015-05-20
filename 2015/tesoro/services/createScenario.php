@@ -1,7 +1,7 @@
 <?php
 	
 	error_reporting(E_ALL);		// Sentencia para que se muestren los errores PHP por pantalla
-//	include('db.php');			// Fichero de conexi�n a la base de datos
+	include('db.php');			// Fichero de conexi�n a la base de datos
 	
 	// Variables de formulario
 	@ $description = filter_var($_POST['description'],FILTER_SANITIZE_STRING);	// Texto de la denuncia
@@ -9,9 +9,7 @@
 	@ $longitud = filter_var($_POST['lon'],FILTER_SANITIZE_NUMBER_FLOAT);
 	@ $latitud = filter_var($_POST['lat'],FILTER_SANITIZE_NUMBER_FLOAT); //necesaria esta linea y la anterior?
 	@ $iduser = filter_var($_POST['iduser'],FILTER_SANITIZE_NUMBER_FLOAT);
-	$fecha= getdate();
 	
-		echo "l nombre es $nombre";
 	
 	// Formateamos textos para introducir en la base de datos.
 	$description = trim($description);		
@@ -24,7 +22,7 @@
 	
 	//comprobar longitud
 	
-	echo "l nombre es $nombre";
+	echo "el nombre es $nombre";
 /*
 	if (strlen ($descripcion >= 120))
 	{

@@ -64,7 +64,7 @@
         <div data-role="panel" data-position="left" data-position-fixed="true" data-display="overlay" id="create_scenario_panel">
             <h3>Inicia un nuevo escenario en esta posición</h3>
 			<legend>Rellena los siguientes campos sobre tu escenario.<legend>
-            <form id="createScenarioForm" action="services/createScenario.php">
+            <form method="post" id="createScenarioForm" action="services/createScenario.php">
 			<!-- id, name, id_creator, description, date, uri -->
 				<label for="text-basic">Lat</label>
 				<input id="scenario_lat" value="" name="lat"/>
@@ -247,18 +247,18 @@
           </div>
 		  <div data-role="content">
 		  <p>Escribe a continuación la pregunta que deseas incluir para resolver la siguiente pista.</p>
-			<form id="createQuestionForm" action="services/createQuestion.php">
+			<form method="post" id="createQuestionForm" action="services/createQuestion.php">
 		        <label for="text-basic">Pregunta</label>
 				<textarea cols="40" rows="8" name="textarea" id="textarea" data-theme="a"></textarea>
 			    <div class="ui-body ui-body-d ui-corner-all">
 					<fieldset data-role="controlgroupQuestion">
 				        <legend>Respuestas... (selecciona la correcta)</legend>
 				        <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2a" value="on" checked="checked">
-				        <input type="text" name="text-basic" id="text-basic" value="" data-theme="a">
+				        <input type="text" name="text-basic1" id="text-basic" value="" data-theme="a">
 				        <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2b" value="off">
-				        <input type="text" name="text-basic" id="text-basic" value="" data-theme="a">
+				        <input type="text" name="text-basic2" id="text-basic" value="" data-theme="a">
 				        <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2c" value="off">
-						<input type="text" name="text-basic" id="text-basic" value="" data-theme="a">
+						<input type="text" name="text-basic3" id="text-basic" value="" data-theme="a">
 					</fieldset>
 				</div>
 			</form>
