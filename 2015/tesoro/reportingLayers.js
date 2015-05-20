@@ -41,11 +41,12 @@ function createWFSviewparamsLayer(nombre,parametros)
         strategies: options.strategies,
         visibility: true,
         protocol: new OpenLayers.Protocol.WFS({
-            url: 'http://localhost/geoserver/En_busca_del_tesoro/wfs?viewparams='+parametros,
+            url: 'http://localhost/geoserver/En_busca_del_tesoro/wfs',
             featureType: "Progreso_usuario",
             featureNS: "http://localhost:8080/geoserver/busqueda_tesoro",
             srsName: "EPSG:900913",
-            version: "1.1.0"
+            version: "1.1.0",
+            viewparams: parametros
         }), 
         styleMap: options.styleMap
         });
