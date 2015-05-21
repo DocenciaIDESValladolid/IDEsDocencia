@@ -11,10 +11,13 @@ function setState(newstate)
 function updateUI()
 {
     if (state==='authenticated'){
+       
          // Puesto aquí para probar el funcionamiento
          enable_edit_polygons(function(event){
             alert("feature creada");
+             imprimirgeometria();
             disable_edit_polygons();
+            
         });
         
     }else if (state==='welcoming'){
@@ -120,7 +123,7 @@ function enable_edit_polygons(callback)
         var vlayer = vlayers[0];
         vlayer.events.remove('featureadded');
         vlayer.events.on({'featureadded':callback});
-        var controls= map.getControlsBy('CLASS_NAME','OpenLayers.Control.DrawFeature')
+        var controls= map.getControlsBy('CLASS_NAME','OpenLayers.Control.DrawFeature');
         controls[0].activate();
      }  
           
@@ -133,7 +136,33 @@ function disable_edit_polygons()
     var vlayer=vlayers[0];
     vlayer.removeAllFeatures();
     vlayer.events.remove('featureadded');
-    var controls= map.getControlsBy('CLASS_NAME','OpenLayers.Control.DrawFeature')
+    var controls= map.getControlsBy('CLASS_NAME','OpenLayers.Control.DrawFeature');
      controls[0].deactivate();
     }
+}
+function imprimirgeometria()
+{
+    var vlayers = map.getLayersByName( "Tesoro:Editable" );
+     if (vlayers.length>0)
+     {
+        var vlayer=vlayers[0];
+        var point=vlayer.features[0].geometry.toString();
+       /* var pointProj=new OpenLayers.LonLat(point.lon,point.lat);
+        pointProj.transform(map.getProjectionObject(), gg);
+        var latlonString = formatDegrees(pointProj.lat, pointProj.lon);*/
+        $("#scenario_lat").val(point);
+    }
+}
+function pistascreadas(user,path)
+{
+    var viewparams='param_user:'+user+';param_path:'+path;
+    var capa= createriddle_editLayer(viewparams);
+    map.addLayer(capa);
+    map.updateSize();
+}
+function eliminarcapa(nombre){
+    var layer=map.getLayersByName(nombre);
+    map.removeLayer(layer);
+    map.updateSize();
+    layer.destroy();
 }

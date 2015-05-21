@@ -19,23 +19,7 @@ function createWFSLayer()
 }
 function createWFSviewparamsLayer(nombre,parametros)
 {
-    //var options= getDenunciasConfig();
-    var options= getEscenariosConfigAnimCluster();
-//    var wfs_options = {
-//        url: 'http://localhost/geoserver/En_busca_del_tesoro/wfs?viewparams='+parametros,
-//        params: {
-//        request: "GetFeature",
-//        service: "wfs",
-//        version: "1.1.0",
-//        srsName: "EPSG:900913",
-//        typeName: "En_busca_del_tesoro:Progreso_usuario",
-//        //viewparams: parametros
-//    },
-//    format: new OpenLayers.Format.GML({
-//        featureNS: "http://localhost:8080/geoserver/busqueda_tesoro",
-//        geometryName: "locations"
-//    })
-//    };       
+    var options= getEscenariosConfigAnimCluster();  
     var wfs = new OpenLayers.Layer.Vector(nombre, 
         {
         strategies: options.strategies,
@@ -61,6 +45,16 @@ var wms_concentracion = new OpenLayers.Layer.WMS("Concentración de usuarios",
     );
 return wms_concentracion;
 }
+function createriddle_editLayer(parametros)
+{
+var wms_concentracion = new OpenLayers.Layer.WMS("Pistas nuevo escenario",
+        "http://localhost/geoserver/En_busca_del_tesoro/wms",
+        {layers: 'En_busca_del_tesoro:pistas_edicion',transparent:true,viewparams: parametros},
+        {isBaseLayer: false, singleTile:true, visibility:true}
+    );
+return wms_concentracion;
+}
+
 
 function getDenunciasConfig()
 	{
