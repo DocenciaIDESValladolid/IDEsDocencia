@@ -44,8 +44,6 @@ function updateUI()
 
 }
 function initTesoro(){
-    $("#nuevoescenario_button").bind("click",nuevoescenario_button_action);
-	$("#infopanel").panel('open');
     enableForm('#createScenarioForm', 
         function(result){
              toast('Éxito en el envío. La respuesta es:'+JSON.stringify(result));
@@ -55,15 +53,6 @@ function initTesoro(){
         });
 }
 
-function nuevoescenario_button_action(event,ui){
-        /*setState('createScenario');*/
-		
-		//Si el usuario ha marcado un punto sobre el mapa...
-		if (state==="authenticated")
-		{
-			$("#create_scenario_panel").panel('open');
-		}
-    }
 function marca_pulsada(event){
 	if (state==="welcoming"){
 		$("#infopanel").panel("open");
