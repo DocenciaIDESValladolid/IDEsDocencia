@@ -37,22 +37,38 @@
 <div data-role="page" id="mappage"  data-quicklinks="true" data-theme="b">
 
 	<!----
-	Panel de información de la marca
+	Panel principal de información
 	-->
 	<div data-role="panel" data-position="left" data-position-fixed="true" data-display="overlay" id="infopanel">
-	<div id="estadoLogin">
-	<a href="#" id="iniciosesionFacebookEstado" class="ui-btn  ui-btn-icon-left ui-icon-fb ui-btn-inline" onclick="login(); return false;">Identificarse</a>
-					<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
+		<div id="estadoLogin">
+		<a href="#" id="iniciosesionFacebookEstado" class="ui-btn  ui-btn-icon-left ui-icon-fb ui-btn-inline" onclick="login(); return false;">Identificarse</a>
+						<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
+		</div>
+		<div id="welcomingInfo">
+			<h3>La Caza del Tesoro.</h3>
+			Elige uno de los escenarios propuestos para comenzar el juego.</br>
+			<a href="#buscarjuego" id="buscarjuego_button" class="ui-btn ui-btn-a ui-shadow ui-corner-all ui-btn-inline ui_mini">Buscar juego</a>
+			<p>O también puedes crear un nuevo escenario, eligiendo en el mapa en el inicio de tu aventura y pulsando sobre el icono (requiere iniciar sesión).
+			</p>
+		</div>
+		<a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a>
 	</div>
-	<div id="welcomingInfo">
-		<h3>La Caza del Tesoro.</h3>
-		Elige uno de los escenarios propuestos para comenzar el juego.</br>
-		<a href="#buscarjuego" id="buscarjuego_button" class="ui-btn ui-btn-a ui-shadow ui-corner-all ui-btn-inline ui_mini">Buscar juego</a>
-		<p>O también puedes crear un nuevo escenario, eligiendo en el mapa en el inicio de tu aventura y pulsando sobre el icono (requiere iniciar sesión).
-		</p>
+	
+	<!----
+	Panel de información en modo de edición
+	-->
+	<div data-role="panel" data-position="left" data-position-fixed="true" data-display="overlay" id="infoCreatingScenarioPanel">
+		<div id="estadoLogin">
+		<a href="#" id="iniciosesionFacebookEstado" class="ui-btn  ui-btn-icon-left ui-icon-fb ui-btn-inline" onclick="login(); return false;">Identificarse</a>
+						<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
+		</div>
+		<div id="welcomingInfo">
+			<h3>La Caza del Tesoro.</h3>
+			<p>Para añadir una nueva pista, elige su ubicación en el mapa y pulsa sobre el icono que aparece.
+			</p>
+		</div>
+		<a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a>
 	</div>
-	<a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a>
-</div>
 
 	<!--
 	Panel con formulario de creación escenario

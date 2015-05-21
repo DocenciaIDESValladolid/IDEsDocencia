@@ -18,26 +18,20 @@ function updateUI()
         });
         
     }else if (state==='welcoming'){
-     
         $("#validarUbicacion").hide();
         $("#infopanel").panel('open');
-	$("#nuevoescenario_button").hide();
-	}else if (state=='authenticated'){
+	}else if (state==='authenticated'){
         $("#validarUbicacion").hide();
-        $("#nuevoescenario_button").show();
-    /*}else if (state=='createScenario'){
-	$("#validarUbicacion").hide();
-        $("#nuevoescenario_button").show();*/
-	}else if (state=='creatingScenario'){
+    }else if (state==='createScenario'){
+		$("#validarUbicacion").hide();
+	}else if (state==='creatingScenario'){
         $("#validarUbicacion").hide();
-        $("#nuevoescenario_button").hide();
-    /*}else if (state=='createRiddle'){
+        $("#infoCreatingScenarioPanel").panel('open');
+    }else if (state==='createRiddle'){
         $("#validarUbicacion").hide();
-        $("#nuevoescenario_button").hide();
-    }else if (state =='running'){*/
+    }else if (state==='running'){
         $("#validarUbicacion").show();
         // $("#validarUbicacion").button('enable');
-        $("#nuevoescenario_button").hide();
     }
 	
 	$("#mappage").trigger( "updatelayout" );
