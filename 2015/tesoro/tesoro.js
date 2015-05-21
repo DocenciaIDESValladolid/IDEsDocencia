@@ -10,27 +10,34 @@ function setState(newstate)
 
 function updateUI()
 {
-    if (state==='authenticated'){
-       
-         // Puesto aquí para probar el funcionamiento
-         enable_edit_polygons(function(event){
-            alert("feature creada");
-             imprimirgeometria();
-            disable_edit_polygons();
-            
-        });
-        
-    }else if (state==='welcoming'){
+//    if (state==='authenticated'){
+//         // Puesto aquí para probar el funcionamiento
+//         enable_edit_polygons(function(event){
+//            alert("feature creada");
+//            disable_edit_polygons();
+//        });
+//        
+//    }else
+    if (state==='welcoming'){
         $("#validarUbicacion").hide();
         $("#infopanel").panel('open');
-	}else if (state==='authenticated'){
+    }else if (state==='authenticated'){
         $("#validarUbicacion").hide();
     }else if (state==='createScenario'){
 		$("#validarUbicacion").hide();
-	}else if (state==='creatingScenario'){
+    }else if (state==='creatingScenario'){
         $("#validarUbicacion").hide();
         $("#infoCreatingScenarioPanel").panel('open');
     }else if (state==='createRiddle'){
+        $("#infoCreatingScenarioPanel").panel('close');
+        enable_edit_polygons(function(event)
+        {
+            var geom= event.feature.geometry;
+            $("#riddle_geom").val(geom.toString());
+            
+            $.mobile.changePage("#addRiddlePage");
+            emptyPolygonLayer();
+        });
         $("#validarUbicacion").hide();
     }else if (state==='running'){
         $("#validarUbicacion").show();
@@ -41,14 +48,32 @@ function updateUI()
 
 }
 function initTesoro(){
+
+    $("#nuevoescenario_button").bind("click",nuevoescenario_button_action);
+
     enableForm('#createScenarioForm', 
         function(result){
-             toast('Éxito en el envío. La respuesta es:'+JSON.stringify(result));
+             scenario_under_creation=result.idStage;
+             toast('Escenario creado');
+             $("#createScenarioForm")[0].reset();
+             setState('createRiddle');
         },
         function(error){
              toast('Network error has occurred please try again!'+error);
         });
 }
+
+
+function nuevoescenario_button_action(event,ui){
+        /*setState('createScenario');*/
+		
+        //Si el usuario ha marcado un punto sobre el mapa...
+        if (state==="authenticated")
+        {
+            $("#scenario_iduser").val(fb.user.id);
+            $("#create_scenario_panel").panel('open');
+        }
+    }
 
 function marca_pulsada(event){
 	if (state==="welcoming"){
@@ -56,7 +81,7 @@ function marca_pulsada(event){
 	}		
     else if (state==="authenticated"){
         /*setState("createScenario");*/
-        $("#scenario_iduser").val(fb.user.id);
+        
 //        $("#scenario_iduser").attr('value','XXX')
         $("#create_scenario_panel").panel("open");
     }
@@ -76,6 +101,7 @@ function enableForm(id_form, onsuccess, onfailure){
         $inputs.each(function(){
             terms[this.name]=$(this).val();
         });
+        terms = $form.serialize();
             url = $form.attr("action");
       
             // Send data to server through the Ajax call
@@ -140,18 +166,14 @@ function disable_edit_polygons()
      controls[0].deactivate();
     }
 }
-function imprimirgeometria()
+function emptyPolygonLayer()
 {
     var vlayers = map.getLayersByName( "Tesoro:Editable" );
      if (vlayers.length>0)
      {
-        var vlayer=vlayers[0];
-        var point=vlayer.features[0].geometry.toString();
-       /* var pointProj=new OpenLayers.LonLat(point.lon,point.lat);
-        pointProj.transform(map.getProjectionObject(), gg);
-        var latlonString = formatDegrees(pointProj.lat, pointProj.lon);*/
-        $("#scenario_lat").val(point);
-    }
+    var vlayer=vlayers[0];
+    vlayer.removeAllFeatures();
+     }
 }
 function pistascreadas(user,path)
 {

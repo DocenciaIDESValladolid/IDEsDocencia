@@ -206,8 +206,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 	map.addLayer(wfs2);   
     	}
     });
-    pistascreadas('123456789',1);
-    eliminarcapa("Pistas nuevo escenario");
+   
 	map.updateSize();
 	if (typeof addThematicUALayers == 'function')
 	{

@@ -1,7 +1,7 @@
 <?php
 	
 	error_reporting(E_ALL);		// Sentencia para que se muestren los errores PHP por pantalla
-	include('db.php');			// Fichero de conexi�n a la base de datos
+//	include('db.php');			// Fichero de conexi�n a la base de datos
 	
 	// Variables de formulario
 	@ $description = filter_var($_POST['description'],FILTER_SANITIZE_STRING);	// Texto de la denuncia
@@ -17,12 +17,12 @@
 	$name = trim($name);
 	$name = addslashes($name);
 	$longitud = trim($longitud);
-	$latitud = trim($latitud)
+	$latitud = trim($latitud);
 	$iduser = trim($iduser);
 	
 	//comprobar longitud
 	
-	echo "el nombre es $nombre";
+	
 /*
 	if (strlen ($descripcion >= 120))
 	{
@@ -56,3 +56,5 @@
 
         echo json_encode($result);
         */
+        
+        echo json_encode(array("idStage"=>1));
