@@ -77,7 +77,7 @@ return wms_concentracion;
             };
              var photoRule = new OpenLayers.Rule({
 				symbolizer: {
-					externalGraphic: "images/pergamino.png",//"images/cono.png",
+					externalGraphic: "images/cofre.png",
 					graphicWidth: 48,
 					graphicHeight: 48,
 					graphicOpacity: 1.0,
