@@ -264,19 +264,30 @@
 		  <p>Escribe a continuación la pregunta que deseas incluir para resolver la siguiente pista.</p>
 			<form method="post" id="createQuestionForm" action="services/createQuestion.php">
                             <input type="hidden" name="geometry" id="riddle_geom" value=""/>
+                            <input type="hidden" name="iduser" id="riddle_iduser" value=""/>
+                            <input type="hidden" name="idstage" id="riddle_stage" value=""/>
 		        <label for="text-basic">Pregunta</label>
 			<textarea  rows="8" name="textarea" id="textarea" data-theme="a"></textarea>
 			    <div class="ui-body ui-body-d ui-corner-all">
-					<fieldset data-role="controlgroupQuestion">
-				        <legend>Respuestas... (selecciona la correcta)</legend>
-				        <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2a" value="on" checked="checked">lkjlñkj</input>
-                                        <input type="text" name="text-basic1" id="text-basic" value="" data-theme="a"/>
-				        <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2b" value="off">
-				        <input type="text" name="text-basic2" id="text-basic" value="" data-theme="a"/></input>
-				        <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2c" value="off">
-					<input type="text" name="text-basic3" id="text-basic" value="" data-theme="a"/></input>
-					</fieldset>
+					
+                            <legend>Respuestas... (selecciona la correcta)</legend>
+                            <input type="text" name="text-basic1" id="text-basic1" value="" data-theme="a"/>
+                            <input type="text" name="text-basic2" id="text-basic2" value="" data-theme="a"/>
+                            <input type="text" name="text-basic3" id="text-basic3" value="" data-theme="a"/>
+					
+                            <fieldset data-role="controlgroup" data-type="horizontal">
+                                <legend>Respuesta correcta:</legend>
+                                <input type="radio" name="checkbox-correct" id="checkbox-h-2a">
+                                <label for="checkbox-h-2a">A</label>
+                                <input type="radio" name="checkbox-correct" id="checkbox-h-2b">
+                                <label for="checkbox-h-2b">B</label>
+                                <input type="radio" name="checkbox-correct" id="checkbox-h-2c">
+                                <label for="checkbox-h-2c">C</label>
+                            </fieldset>
+                            
 				</div>
+                         <label for="text-basic">Texto a mostrar tras conseguir esta pista</label>
+			<textarea  rows="8" name="showText" id="textarea" data-theme="a"></textarea>
 			</form>
 			<div class="ui-grid-a">
 				<div class="ui-block-a"><a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Atrás</a></div>
