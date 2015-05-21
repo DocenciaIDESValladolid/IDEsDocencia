@@ -20,16 +20,24 @@ function updateUI()
 //    }else
     if (state==='welcoming'){
         $("#validarUbicacion").hide();
+        $("#nuevoescenario_button").hide();
+        $("#welcomingInfo").show();
+        $("#createRiddleInfo").hide();
         $("#infopanel").panel('open');
     }else if (state==='authenticated'){
         $("#validarUbicacion").hide();
+        $("#welcomingInfo").show();
+        $("#createRiddleInfo").hide();
+		$("#nuevoescenario_button").show();
     }else if (state==='createScenario'){
 		$("#validarUbicacion").hide();
     }else if (state==='creatingScenario'){
         $("#validarUbicacion").hide();
         $("#infoCreatingScenarioPanel").panel('open');
     }else if (state==='createRiddle'){
-        $("#infoCreatingScenarioPanel").panel('close');
+		$("#welcomingInfo").hide();
+		$("#createRiddleInfo").show();
+        $("#infoCreatingScenarioPanel").panel('open');
         enable_edit_polygons(function(event)
         {
             var geom= event.feature.geometry;

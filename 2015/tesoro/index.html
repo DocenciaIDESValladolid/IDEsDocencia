@@ -44,14 +44,15 @@
 		<a href="#" id="iniciosesionFacebookEstado" class="ui-btn  ui-btn-icon-left ui-icon-fb ui-btn-inline" onclick="login(); return false;">Identificarse</a>
 						<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
 		</div>
+		<h3>La Caza del Tesoro.</h3>
 		<div id="welcomingInfo">
-			<h3>La Caza del Tesoro.</h3>
-			Elige uno de los escenarios propuestos para comenzar el juego.</br>
+			<p>Elige uno de los escenarios propuestos sobre el mapa para comenzar el juego.</p>
 			<a href="#buscarjuego" id="buscarjuego_button" class="ui-btn ui-btn-a ui-shadow ui-corner-all ui-btn-inline ui_mini">Buscar juego</a>
-			<p>O también puedes crear un nuevo escenario, eligiendo en el mapa en el inicio de tu aventura y pulsando sobre el icono (requiere iniciar sesión).
-			</p>
-                     <a href="#nuevoescenario" id="nuevoescenario_button" class="ui-btn ui-btn-a ui-shadow ui-corner-all ui-btn-inline ui_mini">Crear un nuevo escenario</a>
-
+			<p>O también puedes iniciar la creación de un nuevo escenario (requiere iniciar sesión).</p>
+             <a href="#nuevoescenario" id="nuevoescenario_button" class="ui-btn ui-btn-a ui-shadow ui-corner-all ui-btn-inline ui_mini">Crear un nuevo escenario</a>
+		</div>
+		<div id="createRiddleInfo">
+			<p>Para añadir una nueva pista, elige su ubicación en el mapa.
 		</div>
 		<a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a>
 	</div>
@@ -80,10 +81,6 @@
 		<legend>Rellena los siguientes campos sobre tu escenario.</legend>
 		<form method="post" id="createScenarioForm" action="services/createScenario.php">
 		<!-- id, name, id_creator, description, date, uri -->
-			<label for="text-basic">Lat</label>
-			<input id="scenario_lat" value="" name="lat"/>
-			<label for="text-basic">Lon</label>
-			<input id="scenario_lon" value="" name="lon"/>
 			<label for="text-basic">ID User</label>
 			<input id="scenario_iduser" value="" name="iduser"/>
 			<label for="text-basic">Nombre</label>
@@ -290,8 +287,8 @@
 			<textarea  rows="8" name="showText" id="textarea" data-theme="a"></textarea>
 			</form>
 			<div class="ui-grid-a">
-				<div class="ui-block-a"><a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Atrás</a></div>
-				<div class="ui-block-b"><a href="#" data-role="button">Continuar</a></div>
+				<div class="ui-block-a"><a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Cancelar</a></div>
+				<div class="ui-block-b"><a href="#" data-role="button">Enviar</a></div>
 			</div>
 		  </div>
 		<!--Fin de página de añadir pregunta.-->
