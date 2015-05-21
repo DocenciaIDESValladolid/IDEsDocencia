@@ -52,23 +52,7 @@
              <a href="#nuevoescenario" id="nuevoescenario_button" class="ui-btn ui-btn-a ui-shadow ui-corner-all ui-btn-inline ui_mini">Crear un nuevo escenario</a>
 		</div>
 		<div id="createRiddleInfo">
-			<p>Para añadir una nueva pista, elige su ubicación en el mapa.
-		</div>
-		<a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a>
-	</div>
-	
-	<!----
-	Panel de información en modo de edición
-	-->
-	<div data-role="panel" data-position="left" data-position-fixed="true" data-display="overlay" id="infoCreatingScenarioPanel">
-		<div id="estadoLogin">
-		<a href="#" id="iniciosesionFacebookEstado" class="ui-btn  ui-btn-icon-left ui-icon-fb ui-btn-inline" onclick="login(); return false;">Identificarse</a>
-						<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
-		</div>
-		<div id="welcomingInfo">
-			<h3>La Caza del Tesoro.</h3>
-			<p>Para añadir una nueva pista, elige su ubicación en el mapa y pulsa sobre el icono que aparece.
-			</p>
+			<p>Para añadir una nueva pista, elige su ubicación en el mapa (doble clic para cerrar).
 		</div>
 		<a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a>
 	</div>
@@ -260,35 +244,35 @@
 		  <div data-role="content">
 		  <p>Escribe a continuación la pregunta que deseas incluir para resolver la siguiente pista.</p>
 			<form method="post" id="createQuestionForm" action="services/createQuestion.php">
-                            <input type="hidden" name="geometry" id="riddle_geom" value=""/>
-                            <input type="hidden" name="iduser" id="riddle_iduser" value=""/>
-                            <input type="hidden" name="idstage" id="riddle_stage" value=""/>
-		        <label for="text-basic">Pregunta</label>
-			<textarea  rows="8" name="textarea" id="textarea" data-theme="a"></textarea>
+				<input type="hidden" name="geometry" id="riddle_geom" value=""/>
+				<input type="hidden" name="iduser" id="riddle_iduser" value=""/>
+				<input type="hidden" name="idstage" id="riddle_stage" value=""/>
+		        <label for="text-basic">Pista para llegar al siguiente punto</label>
+				<textarea  rows="8" name="riddle" id="riddle_riddle" data-theme="a"></textarea>
+				<label for="text-basic">Pregunta a resolver (relacionada con dicho punto)</label>
+				<textarea  rows="8" name="question" id="riddle_question" data-theme="a"></textarea>
 			    <div class="ui-body ui-body-d ui-corner-all">
+			        <legend>Respuestas...</legend>
+			        <input type="text" name="text-basic1" id="text-basic1" value="" data-theme="a"/>
+			        <input type="text" name="text-basic2" id="text-basic2" value="" data-theme="a"/>
+                    <input type="text" name="text-basic3" id="text-basic3" value="" data-theme="a"/>
 					
-                            <legend>Respuestas... (selecciona la correcta)</legend>
-                            <input type="text" name="text-basic1" id="text-basic1" value="" data-theme="a"/>
-                            <input type="text" name="text-basic2" id="text-basic2" value="" data-theme="a"/>
-                            <input type="text" name="text-basic3" id="text-basic3" value="" data-theme="a"/>
-					
-                            <fieldset data-role="controlgroup" data-type="horizontal">
-                                <legend>Respuesta correcta:</legend>
-                                <input type="radio" name="checkbox-correct" id="checkbox-h-2a">
-                                <label for="checkbox-h-2a">A</label>
-                                <input type="radio" name="checkbox-correct" id="checkbox-h-2b">
-                                <label for="checkbox-h-2b">B</label>
-                                <input type="radio" name="checkbox-correct" id="checkbox-h-2c">
-                                <label for="checkbox-h-2c">C</label>
-                            </fieldset>
+					<fieldset data-role="controlgroup" data-type="horizontal">
+					    <legend>Respuesta correcta:</legend>
+					    <input type="radio" name="checkbox-correct" id="checkbox-h-2a">
+					    <label for="checkbox-h-2a">A</label>
+					    <input type="radio" name="checkbox-correct" id="checkbox-h-2b">
+					    <label for="checkbox-h-2b">B</label>
+					    <input type="radio" name="checkbox-correct" id="checkbox-h-2c">
+					    <label for="checkbox-h-2c">C</label>
+					</fieldset>
                             
 				</div>
-                         <label for="text-basic">Texto a mostrar tras conseguir esta pista</label>
-			<textarea  rows="8" name="showText" id="textarea" data-theme="a"></textarea>
 			</form>
 			<div class="ui-grid-a">
 				<div class="ui-block-a"><a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Cancelar</a></div>
-				<div class="ui-block-b"><a href="#" data-role="button">Enviar</a></div>
+				<!-- <div class="ui-block-b"><a data-role="button" type="submit" id="submitForm">Enviar</a></div> -->
+				<div class="ui-block-b"><button class="ui-shadow ui-btn ui-corner-all" type="submit" id="submitForm">Aceptar</button></div>
 			</div>
 		  </div>
 		<!--Fin de página de añadir pregunta.-->

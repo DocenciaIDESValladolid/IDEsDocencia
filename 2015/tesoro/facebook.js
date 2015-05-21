@@ -138,20 +138,13 @@ function updateFacebookLoginInfo(fb)
 	$("#estadoLogin").html(html);
 	$("#iniciosesionFacebook").hide();
 	$("#validarUbicacion").show();
-	$("#misdenuncias_button").show();
-	$("#nuevoescenario").show();
-	$("#nuevadenuncia_loc_actual_button").show();
+
 	$("#search_button").show();
 	$("#mappage").trigger( "updatelayout" );
 	toast(fb_user_label);
 	
 	$("#id_facebook").val(fb.user.id);
 	$("#name_facebook").val(fb.user.name);
-	$("#misdenuncias_button").attr('href','mis_denuncias.php?id='+fb.user.id);
-	$("#email_facebook").val(fb.user.email);
-	
-	html = 'Usuario: ' + fb.user.name + ' correo es: ' + fb.user.email;
-	$("#usuario_info_prueba").html(html);
 	
 	setState('authenticated');
 }

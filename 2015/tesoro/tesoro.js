@@ -37,7 +37,9 @@ function updateUI()
     }else if (state==='createRiddle'){
 		$("#welcomingInfo").hide();
 		$("#createRiddleInfo").show();
-        $("#infoCreatingScenarioPanel").panel('open');
+        $("#infopanel").panel('open');
+        $("#riddle_iduser").val(fb.user.id);
+        $("#riddle_stage").val(scenario_under_creation);
         enable_edit_polygons(function(event)
         {
             var geom= event.feature.geometry;
@@ -69,13 +71,23 @@ function initTesoro(){
         function(error){
              toast('Network error has occurred please try again!'+error);
         });
+		
+	enableForm('#createQuestionForm', 
+        function(result){
+             // scenario_under_creation=result.idStage;
+             toast('Pregunta creada');
+             $("#createQuestionForm")[0].reset();
+             setState('createRiddle');
+        },
+        function(error){
+             toast('Network error has occurred please try again!'+error);
+        });
 }
 
 
 function nuevoescenario_button_action(event,ui){
         /*setState('createScenario');*/
 		
-        //Si el usuario ha marcado un punto sobre el mapa...
         if (state==="authenticated")
         {
             $("#scenario_iduser").val(fb.user.id);
@@ -83,17 +95,15 @@ function nuevoescenario_button_action(event,ui){
         }
     }
 
-function marca_pulsada(event){
+/*function marca_pulsada(event){
 	if (state==="welcoming"){
 		$("#infopanel").panel("open");
 	}		
-    else if (state==="authenticated"){
-        /*setState("createScenario");*/
-        
+    else if (state==="authenticated"){        
 //        $("#scenario_iduser").attr('value','XXX')
         $("#create_scenario_panel").panel("open");
     }
-}
+}*/
 
 function facebook_logout(response){
 	window.location.href = 'index.html';
