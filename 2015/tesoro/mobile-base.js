@@ -202,11 +202,10 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
     	var id = "123456789";
         var viewparams='param_user:'+id+';param_path:'+output[i]['id_path'];
         var nombre = "wfs "+i;
-	var wfs2=createWFSviewparamsLayer(nombre,viewparams);
-	map.addLayer(wfs2);   
+		var wfs2=createWFSviewparamsLayer(nombre,viewparams);
+		map.addLayer(wfs2);   
     	}
     });
-   
 	map.updateSize();
 	if (typeof addThematicUALayers == 'function')
 	{
