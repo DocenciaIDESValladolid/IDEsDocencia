@@ -1,45 +1,69 @@
+/**
+ * @type String|newstate
+ */
 var state='welcoming';// authenticated,createScenario,creatingScenario,createRiddle,running
 var scenario_under_creation=null;
 var scenario_running='';
-
+var last_created_riddle=null;
+/**
+ * States of the application:
+ * welcoming a guest user is visiting the app
+ * authenticated  a user has been autenticated by facebook
+ * creatingScenario  the user is entering the data for a new scenario
+ * startCreatingRiddle  the user is entering the edition process
+ * createRiddle   the iterative process of digitizing a riddle after riddle
+ * running  the user is playing an scenario
+ * 
+ * @param {String} newstate
+ * @returns {undefined}
+ */
 function setState(newstate)
-{
+{  
     state=newstate;
     updateUI();
 }
 
 function updateUI()
 {
-//    if (state==='authenticated'){
-//         // Puesto aquí para probar el funcionamiento
-//         enable_edit_polygons(function(event){
-//            alert("feature creada");
-//            disable_edit_polygons();
-//        });
-//        
-//    }else
-    if (state==='welcoming'){
+switch (state)
+{
+    case 'welcoming':
+        disable_edit_polygons();
         $("#validarUbicacion").hide();
         $("#nuevoescenario_button").hide();
         $("#welcomingInfo").show();
         $("#createRiddleInfo").hide();
         $("#infopanel").panel('open');
-    }else if (state==='authenticated'){
-        $("#validarUbicacion").hide();
+        break;
+    case 'authenticated':
+        disable_edit_polygons();
         $("#welcomingInfo").show();
         $("#createRiddleInfo").hide();
-		$("#nuevoescenario_button").show();
-    }else if (state==='createScenario'){
-		$("#validarUbicacion").hide();
-    }else if (state==='creatingScenario'){
+        $("#validarUbicacion").hide();
+        $("#nuevoescenario_button").show();
+        break;
+    case 'createScenario':
+        $("#welcomingInfo").show();
+        $("#createRiddleInfo").hide();
+        $("#nuevoescenario_button").show();
+        $("#validarUbicacion").hide();
+        break;
+    case 'creatingScenario':
         $("#validarUbicacion").hide();
         $("#infoCreatingScenarioPanel").panel('open');
-    }else if (state==='createRiddle'){
-		$("#welcomingInfo").hide();
-		$("#createRiddleInfo").show();
-        $("#infopanel").panel('open');
+        break;
+    case 'startCreatingRiddle':
+        addEditingRiddlesWMS(fb.getUser(),scenario_under_creation);
+        state = 'createRiddle';//continue to next actions common to createRiddle
+    case 'createRiddle':
+        // refresh WMS layer
+        refresh_WMS_layer("Tesoro:Editable");//"EditingRiddlesWMS"); // nombre ficticio
+        $.mobile.back();
+        $("#welcomingInfo").hide();
+        $("#createRiddleInfo").show();
         $("#riddle_iduser").val(fb.user.id);
         $("#riddle_stage").val(scenario_under_creation);
+        setTimeout(function(){$("#infopanel").panel('open');},1500);
         enable_edit_polygons(function(event)
         {
             var geom= event.feature.geometry;
@@ -49,24 +73,27 @@ function updateUI()
             emptyPolygonLayer();
         });
         $("#validarUbicacion").hide();
-    }else if (state==='running'){
+        break;
+    case 'running':
+            disable_edit_polygons();
         $("#validarUbicacion").show();
         // $("#validarUbicacion").button('enable');
+        break;
     }
 	
-	$("#mappage").trigger( "updatelayout" );
-
+    $("#mappage").trigger( "updatelayout" );
 }
 function initTesoro(){
 
     $("#nuevoescenario_button").bind("click",nuevoescenario_button_action);
+    $("#endScenarioButton").bind("click",end_scenario_button_action);
 
     enableForm('#createScenarioForm', 
         function(result){
              scenario_under_creation=result.idStage;
              toast('Escenario creado');
              $("#createScenarioForm")[0].reset();
-             setState('createRiddle');
+             setState('startCreatingRiddle');
         },
         function(error){
              toast('Network error has occurred please try again!'+error);
@@ -74,7 +101,7 @@ function initTesoro(){
 		
 	enableForm('#createQuestionForm', 
         function(result){
-             // scenario_under_creation=result.idStage;
+             last_created_riddle=result.idRiddle;
              toast('Pregunta creada');
              $("#createQuestionForm")[0].reset();
              setState('createRiddle');
@@ -84,6 +111,32 @@ function initTesoro(){
         });
 }
 
+function end_scenario_button_action(event,ui){
+   		
+        if (state==="createRiddle")
+        {
+           if  (last_created_riddle==null){
+               if (confirm("¿Deseas cancelar este escenario? No tiene ninguna pista."))
+               {
+                   $.ajax("services/deleteScenario.php?id="+scenario_under_creation)
+                           .done(function(data){
+                               toast("Escenario cancelado.");
+                               scenario_under_creation=null;
+                           })
+                           .fail(function(data){
+                               toast("No se ha podido cancelar el escenario. Inténtelo de nuevo más tarde");
+                           });
+               }else{
+               toast("Escenario creado sin ninguna pista");
+                }
+           }else{
+           setState("authenticated");
+           toast("Escenario listo para jugar.");
+            }
+        }else{
+            toast("Inicia antes la creación de un escenario y añade algunas pistas");
+        }
+    }
 
 function nuevoescenario_button_action(event,ui){
         /*setState('createScenario');*/
@@ -193,7 +246,7 @@ function emptyPolygonLayer()
     vlayer.removeAllFeatures();
      }
 }
-function pistascreadas(user,path)
+function addEditingRiddlesWMS(user,path)
 {
     var viewparams='param_user:'+user+';param_path:'+path;
     var capa= createriddle_editLayer(viewparams);
@@ -205,4 +258,18 @@ function eliminarcapa(nombre){
     map.removeLayer(layer);
     map.updateSize();
     layer.destroy();
+}
+function refresh_WMS_layer(name){
+    var layers=map.getLayersByName(name);
+    layers.forEach(function (layer){
+        if (layer instanceof OpenLayers.Layer.Vector)
+        {
+            
+        }else
+        if (layer instanceof OpenLayers.Layer.WMS){
+            layer.refresh();
+        }
+    });
+        
+   
 }

@@ -6,18 +6,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
         <meta name="apple-mobile-web-app-capable" content="yes">
 		
-        <link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
-		<link rel="stylesheet" href="theme/default/style.mobile.css" type="text/css">
+        <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="theme/default/style.mobile.css" type="text/css">
         <link rel="stylesheet" href="style.mobile-jq.css" type="text/css">
-		<script src="lib/OpenLayers.js"></script>
-
-		<script src="jquery-1.9.0.js"></script>
-        <script src="jquery.mobile-1.4.2.min.js"></script>
-		<script src="upload_photo.js"></script>
-		<script src="AnimatedCluster.js"></script>
-		<script src="thematicLayers.js"></script>
-		<script src="reportingLayers.js"></script>
+	<script src="lib/OpenLayers.js"></script>
         <script src="tesoro.js"></script>
+	<script src="jquery-1.9.0.js"></script>
+        <script src="jquery.mobile-1.4.5.min.js"></script>
+        <script src="upload_photo.js"></script>
+        <script src="AnimatedCluster.js"></script>
+        <script src="thematicLayers.js"></script>
+        <script src="reportingLayers.js"></script>
+       
       
         <script src="mobile-base.js"></script>
         <script src="mobile-jq.js"></script>
@@ -52,7 +52,8 @@
              <a href="#nuevoescenario" id="nuevoescenario_button" class="ui-btn ui-btn-a ui-shadow ui-corner-all ui-btn-inline ui_mini">Crear un nuevo escenario</a>
 		</div>
 		<div id="createRiddleInfo">
-			<p>Para añadir una nueva pista, elige su ubicación en el mapa (doble clic para cerrar).
+                    <p>Para añadir una nueva pista, elige su ubicación en el mapa (doble clic para cerrar). Cuando introduzcas la última pista no olvides de poner un mensaje de enhorabuena y pulsa el botón "Terminar escenario".</p>
+                    <a href="#" id="endScenarioButton" data-role="button">Terminar escenario</a>
 		</div>
 		<a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a>
 	</div>
@@ -147,12 +148,11 @@
 	  </div>
 	
 </div>
- <!-- mappage -->
+ <!-- end mappage -->
 
-		<!--
-		Página de busqueda.
-		-->		
-		<div data-role="page" id="searchpage" data-theme="b">
+
+<!--		Página de busqueda.		-->		
+<div data-role="page" id="searchpage" data-theme="b">
           <div data-role="header">
             <h1>Search</h1>
           </div>
@@ -247,7 +247,7 @@
 				<input type="hidden" name="geometry" id="riddle_geom" value=""/>
 				<input type="hidden" name="iduser" id="riddle_iduser" value=""/>
 				<input type="hidden" name="idstage" id="riddle_stage" value=""/>
-		        <label for="text-basic">Pista para llegar al siguiente punto</label>
+		            <label for="text-basic">Pista para llegar al siguiente punto</label>
 				<textarea  rows="8" name="riddle" id="riddle_riddle" data-theme="a"></textarea>
 				<label for="text-basic">Pregunta a resolver (relacionada con dicho punto)</label>
 				<textarea  rows="8" name="question" id="riddle_question" data-theme="a"></textarea>
@@ -255,25 +255,24 @@
 			        <legend>Respuestas...</legend>
 			        <input type="text" name="text-basic1" id="text-basic1" value="" data-theme="a"/>
 			        <input type="text" name="text-basic2" id="text-basic2" value="" data-theme="a"/>
-                    <input type="text" name="text-basic3" id="text-basic3" value="" data-theme="a"/>
-					
-					<fieldset data-role="controlgroup" data-type="horizontal">
-					    <legend>Respuesta correcta:</legend>
-					    <input type="radio" name="checkbox-correct" id="checkbox-h-2a">
-					    <label for="checkbox-h-2a">A</label>
-					    <input type="radio" name="checkbox-correct" id="checkbox-h-2b">
-					    <label for="checkbox-h-2b">B</label>
-					    <input type="radio" name="checkbox-correct" id="checkbox-h-2c">
-					    <label for="checkbox-h-2c">C</label>
-					</fieldset>
+                                <input type="text" name="text-basic3" id="text-basic3" value="" data-theme="a"/>	
+                                <fieldset data-role="controlgroup" data-type="horizontal">
+                                    <legend>Respuesta correcta:</legend>
+                                    <input type="radio" name="checkbox-correct" id="checkbox-h-2a">
+                                    <label for="checkbox-h-2a">A</label>
+                                    <input type="radio" name="checkbox-correct" id="checkbox-h-2b">
+                                    <label for="checkbox-h-2b">B</label>
+                                    <input type="radio" name="checkbox-correct" id="checkbox-h-2c">
+                                    <label for="checkbox-h-2c">C</label>
+                                </fieldset>
                             
-				</div>
-			</form>
+                            </div>
+			
 			<div class="ui-grid-a">
 				<div class="ui-block-a"><a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Cancelar</a></div>
 				<!-- <div class="ui-block-b"><a data-role="button" type="submit" id="submitForm">Enviar</a></div> -->
-				<div class="ui-block-b"><button class="ui-shadow ui-btn ui-corner-all" type="submit" id="submitForm">Aceptar</button></div>
-			</div>
+				<div class="ui-block-b"><button class="ui-shadow ui-btn ui-corner-all" type="submit" id="submitForm">Crear Pista</button></div>
+			</div></form>
 		  </div>
 		<!--Fin de página de añadir pregunta.-->
          </div>

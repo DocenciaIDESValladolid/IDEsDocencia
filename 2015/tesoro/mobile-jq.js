@@ -174,10 +174,17 @@ function initLayerList() {
         .appendTo('#layerslist');
     var overlayLayers = map.getLayersBy("isBaseLayer", false);
     $.each(overlayLayers, function() {
-		if(
-//                        this.name!='vector' && 
-                        this.name!='Markers' && this.name.indexOf("OpenLayers_Control_SelectFeature")==-1)
-        addLayerToList(this);
+        switch(this.name){
+            case 'Markers':
+            case 'vector':
+            case 'OpenLayers.Handler.Polygon':
+            case 'Tesoro:Editable':
+                break;
+            default:
+                if (this.name.indexOf('OpenLayers_Control')==-1){
+                   addLayerToList(this);
+                }
+        }
     });
     $('#layerslist').listview('refresh');
     
