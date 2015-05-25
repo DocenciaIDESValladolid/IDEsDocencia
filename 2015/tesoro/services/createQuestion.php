@@ -9,7 +9,9 @@
 	@ $respuesta1 = filter_var($_POST['text-basic1'],FILTER_SANITIZE_STRING); 
 	@ $respuesta2 = filter_var($_POST['text-basic2'],FILTER_SANITIZE_STRING); 
 	@ $respuesta3 = filter_var($_POST['text-basic3'],FILTER_SANITIZE_STRING);  
-	
+	@ $riddle_geom = filter_var($_POST['riddle_geom'],FILTER_SANITIZE_NUMBER_FLOAT);
+	@ $riddle_iduser = filter_var($_POST['riddle_iduser'],FILTER_SANITIZE_NUMBER_FLOAT);
+	@ $riddle_stage = filter_var($_POST['riddle_stage'],FILTER_SANITIZE_NUMBER_FLOAT);
 	
 	// Formateamos textos para introducir en la base de datos.
 	$pregunta = trim($pregunta);		

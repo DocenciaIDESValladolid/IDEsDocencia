@@ -111,6 +111,40 @@ function initTesoro(){
         });
 }
 
+function(){
+ $("#submitScenario").click(function(){
+ var url = "/services/createScenario.php"; // El script a dónde se realizará la petición.
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: $("#createScenarioForm").serialize(), // Adjuntar los campos del formulario enviado.
+           /*success: function(data)
+           {
+               $("#respuesta").html(data); // Mostrar la respuestas del script PHP
+           }*/
+         });
+    return false; // Evitar ejecutar el submit del formulario.
+
+ });
+};
+
+function(){
+ $("#submitRiddle").click(function(){
+ var url = "/services/createQuestion.php"; // El script a dónde se realizará la petición.
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: $("#createQuestionForm").serialize(), // Adjuntar los campos del formulario enviado.
+           /*success: function(data)
+           {
+               $("#respuesta").html(data); // Mostrar la respuestas del script PHP
+           }*/
+         });
+    return false; // Evitar ejecutar el submit del formulario.
+
+ });
+};
+
 function end_scenario_button_action(event,ui){
    		
         if (state==="createRiddle")

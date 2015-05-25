@@ -65,6 +65,24 @@ fb.ready(function(){
          });
  } 
 
+function createQuestion(){   //funcion ajax que va al php de crear pregunta
+	
+	$("#btn_enviar").click(function(){
+	var url = "services/createQuestion.php"; // El script a dónde se realizará la petición.
+	var id_user = fb.user.id; 
+	
+	$.ajax({
+	type: "POST",
+	url: url,
+	data: $("#createQuestionForm").serialize(), // Adjuntar los campos del formulario enviado.
+	success: function(data)
+		{
+			$("#respuesta").html(data); // Mostrar la respuestas del script PHP.
+		}
+	});
+		return false; // Evitar ejecutar el submit del formulario.
+ });
+});
 
 
 var vector = new OpenLayers.Layer.Vector("vector", {});
