@@ -90,7 +90,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 /********************
 * Controles de mapa
 **********************/
-		/* Función para clickar y añadir marcador*/
+		/* Función para clickar */
 	OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
 		defaultHandlerOptions: {
 			'single': true,
@@ -113,13 +113,6 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 				}, this.handlerOptions
 			);
 		}, 
-
-		trigger: function(e) {
-			var lonlat = map.getLonLatFromPixel(e.xy);
-			var e= {point:{y:lonlat.lat,x:lonlat.lon}};
-			eventLocationChanged(e);		
-		}
-
 	}); //fin OpenLayers.Control.Click
 
 
@@ -248,13 +241,13 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 	/********
 	* Controles 
 	**********/
-	var highlightCtrl = new OpenLayers.Control.SelectFeature([wfs,markers], {
+	var highlightCtrl = new OpenLayers.Control.SelectFeature([wfs], {
                 hover: true,
                 highlightOnly: true,
                 renderIntent: "temporary",
             });
 
-    selectCtrl = new OpenLayers.Control.SelectFeature([wfs,markers],
+    selectCtrl = new OpenLayers.Control.SelectFeature([wfs],
                 {
 				clickout: true
 				}
@@ -370,6 +363,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 	/**
 	* Selección de una denuncia ya existente
 	*/
+
 	function onWFSFeatureSelect(evt) {
 		feature = evt.feature;
 		selectCtrl.unselectAll();
@@ -485,28 +479,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 		$(this).remove();
 	});
 	}
-	
-	function fillForm(){
-		$("#locationlabel").html(muni_name+" provincia de "+prov_name);
-		var markers = map.getLayer('Markers');
-		//var feature = markers.features;
-		var point = markers.features[0].geometry.bounds.getCenterLonLat();
-		var pointProj = new OpenLayers.LonLat(point.lon,point.lat);
-		pointProj.transform(map.getProjectionObject(), gg);
-		var latlonString = formatDegrees(pointProj.lat, pointProj.lon);
 		
-		html = 'Está a punto de introducir una denuncia en: ' + muni_name + ', provincia de ' + 
-			prov_name + '.<br>La localización exacta del problema es: ' + latlonString + '. <br>' + 
-			'<input type="hidden" name="longitud" value="' + point.lon + '">' + 
-			'<input type="hidden" name="latitud" value="' + point.lat + '">'+
-			'<input type="hidden" name="codigoine" value="' + muni_code + '">'+
-			'<input type="hidden" name="municipio" value="' + muni_name + '">'+
-			'<input type="hidden" name="provincia" value="' + prov_name + '">';
-		$("#loc_actual").html(html);
-		$("#infopanel").trigger( "updatelayout" );
-	}
-	
-	
 	function failureUA(request){
 		alert('Fallo de conexión con servicio INSPIRE Administrative Units');	
 	}
