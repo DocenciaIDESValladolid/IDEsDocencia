@@ -259,7 +259,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 	//	'featureunselected': onFeatureUnselect
 	});
 	markers.events.on({
-		'featureselected': onMarkFeatureSelect,
+	//	'featureselected': onMarkFeatureSelect,
 	//	'featureunselected': onFeatureUnselect
 	});
 	
@@ -327,10 +327,10 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 	/**
 	* Selección de una marca de nueva denuncia en el mapa.
 	*/
-	function onMarkFeatureSelect(evt) {
+	/*function onMarkFeatureSelect(evt) {
 		marca_pulsada(evt);
 		selectCtrl.unselectAll();
-	}
+	}*/
 	
 	function formatDegrees(lonDecimal, latDecimal){
 		var signlat=1;

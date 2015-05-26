@@ -84,7 +84,7 @@ switch (state)
     $("#mappage").trigger( "updatelayout" );
 }
 function initTesoro(){
-
+	checkCookie();
     $("#nuevoescenario_button").bind("click",nuevoescenario_button_action);
     $("#endScenarioButton").bind("click",end_scenario_button_action);
 
@@ -181,7 +181,7 @@ function enableForm(id_form, onsuccess, onfailure){
                         data: terms,
                         type: 'post',                   
                         async: 'true',
-                        dataType: 'json',
+                        //dataType: 'json',
                         beforeSend: function() {
                             // This callback function will trigger before data is sent
                             $.mobile.loading('show'); // This will show ajax spinner
@@ -270,23 +270,34 @@ function refresh_WMS_layer(name){
             layer.refresh();
         }
     });
-        
-   
 }
 
-function setCookie(cname, cvalue, exdays) {
+function setCookie(cdemo,cvalue,exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires;
+    var expires = "expires=" + d.toGMTString();
+    document.cookie = cdemo+"="+cvalue+"; "+expires;
 }
-function getCookie(cname) {
-    var name = cname + "=";
+function getCookie(cdemo) {
+    var demo = cdemo + "=";
     var ca = document.cookie.split(';');
     for(var i=0; i<ca.length; i++) {
         var c = ca[i];
         while (c.charAt(0)==' ') c = c.substring(1);
-        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+        if (c.indexOf(demo) == 0) {
+            return c.substring(demo.length, c.length);
+        }
     }
     return "";
+}
+function checkCookie() {
+    var demo=getCookie("displayDemo");
+    // if (demo === "false" && demo!= "") {
+        // alert("Demo DESACTIVATED");
+    // } else {
+	if (demo != "false") {
+		setCookie("displayDemo", false, 1);
+		// $.mobile.changePage("swipe.html");
+		alert("Demo ACTIVATED");
+	}
 }
