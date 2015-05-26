@@ -223,7 +223,15 @@ return wms_concentracion;
                     graphicWidth: 48,
                     graphicHeight: 48,
                     graphicOpacity: 1.0,
-                    label: "${num_riddle}"
+                    label: "${num_riddle}",                               
+                    fillOpacity: 1, 
+                    strokeOpacity: 1,
+                    strokeWidth: 12,
+                    pointRadius: 15,
+                    labelOutlineWidth: 1,
+                    fontColor: "#000000",
+                    fontOpacity: 1,
+                    fontSize: "28px"
                 }
             });
             
@@ -235,7 +243,7 @@ return wms_concentracion;
                     value: 2
                 }),
                 symbolizer: {
-                    externalGraphic:"${img}",//"images/cono.png",
+                    externalGraphic:"images/cono.png",
                     graphicWidth: 48,
                     graphicHeight: 48,
                     graphicOpacity: 1.0,

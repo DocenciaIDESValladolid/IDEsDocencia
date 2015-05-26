@@ -6,6 +6,7 @@ var map;
 var id_facebook;
 var name_facebook;
 var selectCtrl;
+var highlightCtrl;
 var gg = new OpenLayers.Projection("EPSG:4326");
 //var sm = new OpenLayers.Projection("EPSG:900913");
 var sm = new OpenLayers.Projection("EPSG:3857");
@@ -21,6 +22,7 @@ var geolocation_accuracy;
 var geolocation_msg='';
 var paths;
 var munis = new Array(10);
+var wfs = [];
 
 munis[0]='34074747075'; //Íscar
 munis[1]='34074747186'; //Valladolid
@@ -66,27 +68,8 @@ fb.ready(function(){
  } 
 
 var vector = new OpenLayers.Layer.Vector("vector", {});
-	/////Capa marcador
-	var styleMarkDefault = new OpenLayers.StyleMap({
-						externalGraphic: "images/marker-icon-fixit.png",
-						pointRadius: 20,
-						graphicOpacity: 1.0,
-						graphicWidth: 56,
-						graphicHeight: 56,
-						graphicYOffset: -56});
-	var styleMarkSelect = new OpenLayers.StyleMap({
-						externalGraphic: "images/marker-icon-fixit.png",
-						pointRadius: 20,
-						graphicOpacity: 1.0,
-						graphicWidth: 64,
-						graphicHeight: 64,
-						graphicYOffset: -64});
-	var styleMark = new OpenLayers.StyleMap({
-						'default': styleMarkDefault,
-						'temporary':styleMarkSelect
-						});
-	var markers = new OpenLayers.Layer.Vector( "Markers", { styleMap: styleMarkDefault } );
-	markers.id="Markers";
+	
+	
 /********************
 * Controles de mapa
 **********************/
@@ -136,19 +119,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
         {layers: 'FondoUrbano',transparent:false},
         {isBaseLayer: true, transitionEffect: 'resize', singleTile:false}
     );
-/*	var googleStreets= new OpenLayers.Layer.Google(
-                "Google Streets", // the default
-                {numZoomLevels: 20}
-            );
-    var googleHybrid = new OpenLayers.Layer.Google(
-                "Google Hybrid",
-                {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20}
-            );
-	var googleSat= new OpenLayers.Layer.Google(
-                "Google Satellite",
-                {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}
-            );
-*/    // create map
+
 	
     map = new OpenLayers.Map({
         div: "map",
@@ -172,108 +143,66 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
                 transitionEffect: 'resize'
             }),
 			wms_cartociudad,
-		//	googleStreets,
-		//	googleHybrid,
-		//	googleSat,
             ],
         center: new OpenLayers.LonLat(0, 0),	
         zoom: 1
     });
+    //Capa para añadir polígonos para las pistas iniciales
      var vlayer = new OpenLayers.Layer.Vector( "Tesoro:Editable");
      polygonDraw= new OpenLayers.Control.DrawFeature(vlayer, OpenLayers.Handler.Polygon);
      map.addControl(polygonDraw);
-      map.addLayer(vlayer);
+     map.addLayer(vlayer);
     //CAPA DE ESCENARIOS POSIBLES
-	var wfs=createWFSLayer();
-	map.addLayer(wfs);
-	
+	wfs[0]=createWFSLayer();
+	map.addLayer(wfs[0]);
+	//Añado todos los escenarios del jugador junto con sus controles
 	stages(function(output){
 		for(i=0;i<output.length;i++)
     	{
-    	var id = "123456789";
-        var viewparams='param_user:'+id+';param_path:'+output[i]['id_path'];
-        var nombre = "wfs "+i;
-		var wfs2=createWFSviewparamsLayer(nombre,viewparams);
-		map.addLayer(wfs2);   
+	    	var id = "123456789";
+	        var viewparams='param_user:'+id+';param_path:'+output[i]['id_path'];
+	        var nombre = "wfs "+i;
+			var wfs2=createWFSviewparamsLayer(nombre,viewparams);
+			map.addLayer(wfs2);
+			wfs.push(wfs2);
+			/*FUNCION PARA EL POP-UP DE PISTAS*/
+			wfs2.events.on({
+				'featureselected': onWFSFeatureSelect
+			});
     	}
+    		highlightCtrl = new OpenLayers.Control.SelectFeature(wfs, {
+                hover: true,
+                highlightOnly: true,
+                renderIntent: "temporary",
+                callbacks: onWFSFeatureSelect
+            });
+    		selectCtrl = new OpenLayers.Control.SelectFeature(wfs,
+                {
+					clickout: true,
+				}
+            );
+			map.addControl(highlightCtrl);
+	 		map.addControl(selectCtrl);
+			highlightCtrl.activate();
+     		selectCtrl.activate();
+     		/*FUNCION PARA EL POP-UP DE ESCENARIOS*/
+			wfs[0].events.on({
+				'featureselected': onWFSFeatureSelect
+			});
+
     });
 	map.updateSize();
-	if (typeof addThematicUALayers == 'function')
-	{
-	
-	var uaLayer= addThematicUALayers(munis,"thematicUAmenosCumplidoras","Menos cumplidores",'nationalcode',[],[]);
-//	map.addLayer(uaLayer);
-	uaLayer= addThematicUALayers([],"thematicUAmasCumplidoras","Más cumplidores",'nationalcode',[],[]);
-//	map.addLayer(uaLayer);
-	
-	$.getJSON(url_base+'estadisticas_municipios.php?cumpli=1', function(data)
-			{
-				var munis=[];
-				for ( munind in data)	
-					{
-					if (data[munind].codigoine != null)
-						munis.push(data[munind].codigoine);
-					}
-				updateThematicUALayer("thematicUAmasCumplidoras",'nationalcode', munis, colorMasCumplidores);
-			});
-			
-	//actualizar la capa de menosCumplidores
-	$.getJSON(url_base+'estadisticas_municipios.php?cumpli=0', function(data)
-			{
-				var munis=[];
-				for ( munind in data)	
-					{
-					if (data[munind].codigoine != null)
-						munis.push(data[munind].codigoine);
-					}
-				updateThematicUALayer("thematicUAmenosCumplidoras",'nationalcode', munis, colorMenosCumplidores);
-			});
-	
-	
-	
-	}
+
 	var wms_concentracion=createHeatmapLayer();
 	map.addLayer(wms_concentracion);
 	// CAPA DE POSICIÓN ACTUAL
 	map.addLayer(vector);
-	// CAPA DE MARCAS
-	map.addLayer(markers);
-	/********
-	* Controles 
-	**********/
-	var highlightCtrl = new OpenLayers.Control.SelectFeature([wfs], {
-                hover: true,
-                highlightOnly: true,
-                renderIntent: "temporary",
-            });
 
-    selectCtrl = new OpenLayers.Control.SelectFeature([wfs],
-                {
-				clickout: true
-				}
-            );
-	/*FUNCION PARA EL POP-UP*/
-	
-	wfs.events.on({
-		'featureselected': onWFSFeatureSelect,
-	//	'featureunselected': onFeatureUnselect
-	});
-	markers.events.on({
-	//	'featureselected': onMarkFeatureSelect,
-	//	'featureunselected': onFeatureUnselect
-	});
-	
+    //Añadimos el control de clicks y desplazamiento
 	var clickControl = new OpenLayers.Control.Click();
-	 function report(e)
-	 {
-	 OpenLayers.Console.log(e.type, e.feature.id);
-	 }
-	 map.addControl(highlightCtrl);
-         map.addControl(selectCtrl);
-	 map.addControl(clickControl);
-	 clickControl.activate();
-	 highlightCtrl.activate();
-         selectCtrl.activate();
+	map.addControl(clickControl);
+	clickControl.activate();
+
 	 
 	//OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 	
@@ -384,7 +313,8 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 			return;
 			}
 		}
-		$("#reportDescription").html("Nombre del escenario: \""+feature.attributes.name+"\"<br>Descripción: \""+feature.attributes.descripcion+"\"");
+		$("#reportNameLabel").html(feature.attributes.name);
+		$("#reportDescription").html(feature.attributes.descripcion);
 		if (typeof feature.attributes.img != 'undefined')
 		{
 		$("#reportImageList").append($('<img></img>').attr('src',feature.attributes.img).attr('width',200));
@@ -482,16 +412,6 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 		
 	function failureUA(request){
 		alert('Fallo de conexión con servicio INSPIRE Administrative Units');	
-	}
-	function moveMark(point)
-	{
-		var size = new OpenLayers.Size(21,25);
-		var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-		var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png',size,offset);
-		var markers = map.getLayer('Markers');
-		markers.removeAllFeatures();
-		var newMarker = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(point.x,point.y),null);
-		markers.addFeatures(newMarker);         
 	}
 	function queryUA(e,successCallback,failureCallBack)
 	{

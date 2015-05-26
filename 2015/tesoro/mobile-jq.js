@@ -188,8 +188,13 @@ function initLayerList() {
     });
     $('#layerslist').listview('refresh');
     
-    map.events.register("addlayer", this, function(e) {
-        addLayerToList(e.layer);
+   map.events.register("addlayer", this, function(e) {
+        switch(e.layer.name){
+            default:
+                if (e.layer.name.indexOf('OpenLayers_Control')==-1){
+                   addLayerToList(e.layer);
+                }
+            }
         $("#layerslist").listview("refresh");
     });
 }
