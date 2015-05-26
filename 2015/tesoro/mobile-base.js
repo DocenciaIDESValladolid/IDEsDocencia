@@ -82,7 +82,7 @@ function createQuestion(){   //funcion ajax que va al php de crear pregunta
 	});
 		return false; // Evitar ejecutar el submit del formulario.
  });
-});
+}
 
 
 var vector = new OpenLayers.Layer.Vector("vector", {});
