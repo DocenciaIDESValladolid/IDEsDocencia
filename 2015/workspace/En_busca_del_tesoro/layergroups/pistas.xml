@@ -9,14 +9,10 @@
   </workspace>
   <publishables>
     <published type="layer">
-      <id>LayerInfoImpl--25bf7c48:14cc295c52d:-7fd4</id>
-    </published>
-    <published type="layer">
       <id>LayerInfoImpl-41e3bdce:14d01dcfd48:-7ec6</id>
     </published>
   </publishables>
   <styles>
-    <style/>
     <style/>
   </styles>
   <bounds>

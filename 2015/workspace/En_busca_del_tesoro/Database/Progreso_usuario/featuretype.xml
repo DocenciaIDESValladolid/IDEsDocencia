@@ -32,20 +32,20 @@
         <defaultValue/>
       </dimensionInfo>
     </entry>
+    <entry key="cachingEnabled">false</entry>
     <entry key="elevation">
       <dimensionInfo>
         <enabled>false</enabled>
       </dimensionInfo>
     </entry>
-    <entry key="cachingEnabled">false</entry>
     <entry key="JDBC_VIRTUAL_TABLE">
       <virtualTable>
         <name>Progreso_usuario</name>
-        <sql>select id,id_path,accum_time,accum_distance,last_riddle,date,id_riddle,locations,  (select count(*) &#xd;
-from stages_performed where current_stages.id_path=stages_performed.id_path) as finished from current_stages where id_user = &apos;%param_user%&apos; and id_path = %param_path%
+        <sql>select *,  (select count(*) &#xd;
+from stages_performed where current_stages.id_path=stages_performed.id_path) as finished, (select num_riddle &#xd;
+from riddles where current_stages.id_riddle=riddles.id) from current_stages where id_user = &apos;%param_user%&apos; and id_path = %param_path%
 </sql>
         <escapeSql>false</escapeSql>
-        <keyColumn>id</keyColumn>
         <geometry>
           <name>locations</name>
           <type>Geometry</type>
