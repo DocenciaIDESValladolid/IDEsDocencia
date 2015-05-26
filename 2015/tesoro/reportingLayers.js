@@ -223,7 +223,7 @@ return wms_concentracion;
                     graphicWidth: 48,
                     graphicHeight: 48,
                     graphicOpacity: 1.0,
-                    label: "${id_riddle}"
+                    label: "${num_riddle}"
                 }
             });
             
