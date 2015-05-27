@@ -313,10 +313,12 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 			return;
 			}
 		}
-		$("#reportNameLabel").html(feature.attributes.name);
-		$("#reportDescription").html(feature.attributes.descripcion);
-		$("#infoScenarioPanel").trigger( "updatelayout" );
-		$("#infoScenarioPanel").panel("open");
+		$("#scenarioNameLabel").html(feature.attributes.name);
+		$("#scenarioDescription").html(feature.attributes.descripcion);
+		$("#infoFeaturePanel").trigger( "updatelayout" );
+		$("#infoRiddle").hide();
+		$("#infoScenario").show();
+		$("#infoFeaturePanel").panel("open");
 	}
 
 	function onWFSFeatureSelectProgress(evt) {
@@ -339,16 +341,21 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 			return;
 			}
 		}
+		//Si se trata de una pista acertada
 		if(feature.attributes.descripcion!= null)
 		{
+			$("#nameScenario").html(feature.attributes.name);
 			$("#nextRiddle").html(feature.attributes.descripcion);
+			$("#timeLabel").html("Pista descubierta en la fecha " + feature.attributes.date);
 			$("#validarUbicacion").hide();
 			if(feature.attributes.num_riddle=feature.attributes.max_riddle)
 			{
 				$("#validarUbicacion").show();
 			}
-			$("#infoRiddlePanel").trigger( "updatelayout");
-			$("#infoRiddlePanel").panel("open");
+			$("#infoFeaturePanel").trigger( "updatelayout");
+			$("#infoRiddle").show();
+			$("#infoScenario").hide();
+			$("#infoFeaturePanel").panel("open");
 		}
 		else
 		{
