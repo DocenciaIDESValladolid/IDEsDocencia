@@ -111,9 +111,19 @@
 			<div class="ui-body ui-body-a">
 				<p id="nextRiddle"></p>
 			</div>
-			<a href="#popupDialog" id="validarUbicacion" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-state-disabled ui-shadow ui-corner-all ui-btn-icon-right ui-btn-inline ui-icon-carat-r">VALIDAR UBICACIÓN</a>
 		</div>
+		<a href="#popupDialog" id="validarUbicacion" data-rel="popup"  data-position-to="window" data-transition="pop" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-btn-inline ui-icon-carat-r">VALIDAR UBICACIÓN</a>
 	</div>
+	<!--Popup de aviso de envío-->
+		
+			<div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;">
+			    <div role="main" class="ui-content">
+			        <h3 class="ui-title">¿Estás seguro de que deseas enviar esta ubicación?</h3>
+			    	<p>Esta acción no se puede deshacer.</p>
+			        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Cancelar</a>
+			        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow">Enviar</a>
+			    </div>
+			</div><!--Fin de Popup de aviso de envío.-->
 	<!--
 	Cabecera y barra de herramientas.
 	-->
@@ -127,19 +137,8 @@
 		</div>
 		<div id="main_footer" data-role="footer" >
 			<!-- <a href="#popupDialog" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-btn-inline ui-icon-check">VALIDAR UBICACIÓN</a> 
-			<a href="#popupDialog" id="validarUbicacion" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-state-disabled ui-shadow ui-corner-all ui-btn-icon-right ui-btn-inline ui-icon-carat-r" style="visibility: hidden">VALIDAR UBICACIÓN</a>
+			<a href="#popupDialog" id="validarUbicacion" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-state-disabled ui-shadow ui-corner-all ui-btn-icon-right ui-btn-inline ui-icon-carat-r" style="visibility: hidden">VALIDAR UBICACIÓN</a>-->
 		
-			<!--
-			Popup de aviso de envío
-		
-			<div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;">
-			    <div role="main" class="ui-content">
-			        <h3 class="ui-title">¿Estás seguro de que deseas enviar esta ubicación?</h3>
-			    	<p>Esta acción no se puede deshacer.</p>
-			        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Cancelar</a>
-			        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow">Enviar</a>
-			    </div>
-			</div><!--Fin de Popup de aviso de envío.-->
 			<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-geolocation ui-btn-icon-notext" onclick="autolocate();return false;">Locate</a>
 			<a href="#addRiddlePage" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-search">Search</a>
 			<a href="#layerspage" data-transition="fade" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-bullets">Capas</a>

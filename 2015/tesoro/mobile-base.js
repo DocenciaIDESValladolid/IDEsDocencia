@@ -167,7 +167,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 			wfs.push(wfs2);
 			/*FUNCION PARA EL POP-UP DE PISTAS*/
 			wfs2.events.on({
-				'featureselected': onWFSFeatureSelect
+				'featureselected': onWFSFeatureSelectProgress
 			});
     	}
     		highlightCtrl = new OpenLayers.Control.SelectFeature(wfs, {
@@ -315,41 +315,45 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 		}
 		$("#reportNameLabel").html(feature.attributes.name);
 		$("#reportDescription").html(feature.attributes.descripcion);
-		if (typeof feature.attributes.img != 'undefined')
-		{
-		$("#reportImageList").append($('<img></img>').attr('src',feature.attributes.img).attr('width',200));
-		}
-		$.get(url_base+'photos.php',{id: feature.attributes.id_denuncia}, 
-			function(data)
-			{
-			$("#reportImageList").html('');
-			for (i in data)
-				{
-				$("#reportImageList").append($('<img></img>').attr('src',data[i].thumbnail).attr('width',60));//.append($('<br/>'));
-				}
-			});
-			
-		var point=feature.geometry.getBounds().getCenterLonLat();
-		
-		var pointProj=new OpenLayers.LonLat(point.lon,point.lat);
-		pointProj.transform(map.getProjectionObject(), gg);
-		var latlonString = formatDegrees(pointProj.lat, pointProj.lon);
-		$("#reportLocationLabel").html('('+latlonString+')');
-		$("#reportDetailsLink").attr("href","detalle.php?id="+feature.attributes.id_denuncia);
-		$("#nuevadenuncia_loc_actual_button").show();
 		$("#infoScenarioPanel").trigger( "updatelayout" );
 		$("#infoScenarioPanel").panel("open");
-		
-		
-		/*var html =  '¿Quiere Apoyar la denuncia?'+ 
-					'<form id="nuevo_denunciante_form" data-role="form" data-ajax="false"' + 
-					'action="nuevo_denunciante.php?id_denuncia=' + feature.attributes.id_denuncia +'"' +
-					'method="post" enctype="multipart/form-data">'+
-					'<input type="hidden" name="id_facebook" id="id_facebook" value="'+ id_facebook +'">'+
-					'<input type="submit" value="Apoyar denuncia" name="submit" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-b ui-mini">'+
-					'</form>';*/
-		var html= '<a href="nuevo_denunciante.php?id_denuncia=' + feature.attributes.id_denuncia +'&id_facebook='+id_facebook +'" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-b ui-mini"  data-transition="flip">Apoyar denuncia</a>';
-		$("#nuevo_denunciante").html(html);
+	}
+
+	function onWFSFeatureSelectProgress(evt) {
+		feature = evt.feature;
+		selectCtrl.unselectAll();
+
+		//Si es un cluster ignorar
+		if (typeof feature.cluster != 'undefined')
+		{
+		if (feature.attributes.count==1)
+			feature=feature.cluster[0];
+			else
+			{
+			var bounds = new OpenLayers.Bounds();
+			for (i=0;i<feature.attributes.count;i++)
+			{
+				bounds.extend(feature.cluster[i].geometry.getBounds());
+			}
+			map.zoomToExtent(bounds);
+			return;
+			}
+		}
+		if(feature.attributes.descripcion!= null)
+		{
+			$("#nextRiddle").html(feature.attributes.descripcion);
+			$("#validarUbicacion").hide();
+			if(feature.attributes.num_riddle=feature.attributes.max_riddle)
+			{
+				$("#validarUbicacion").show();
+			}
+			$("#infoRiddlePanel").trigger( "updatelayout");
+			$("#infoRiddlePanel").panel("open");
+		}
+		else
+		{
+
+		}
 	}
 	function onPopupClose(evt) {
 		// 'this' is the popup.
