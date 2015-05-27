@@ -4,14 +4,42 @@
 	    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <title>Caza del tesoro</title>
 
-		<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
+		<link rel="stylesheet" href="jquery.mobile-1.4.5.min.css">
 		<link rel="stylesheet" href="swipe-page.css">
 		<script src="jquery-1.9.0.js"></script>
-		<script src="jquery.mobile-1.4.2.min.js"></script>
+		<script src="jquery.mobile-1.4.5.min.js"></script>
 		<script src="swipe-page.js"></script>
 
 	</head>
 	<body>
+	<script>
+	function setCookie(cdemo,cvalue,exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires=" + d.toGMTString();
+    document.cookie = cdemo+"="+cvalue+"; "+expires;
+	}
+	function getCookie(cdemo) {
+		var demo = cdemo + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0; i<ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1);
+			if (c.indexOf(demo) == 0) {
+				return c.substring(demo.length, c.length);
+			}
+		}
+		return "";
+	}
+	function checkCookie() {
+		var demo=getCookie("displayDemo");
+		if (demo == "false") {
+			document.location.href="index.html";
+		}
+		setCookie("displayDemo", false, 1000);
+	}
+	checkCookie();
+	</script>
 	<div id="header" data-role="header" data-id="header" data-position="fixed" data-fullscreen="true" data-tap-toggle="false">
 		<a href="./" data-ajax="false" data-direction="reverse" data-icon="delete" data-iconpos="notext" data-shadow="false" data-icon-shadow="false">Back</a>
 	</div><!-- /header -->

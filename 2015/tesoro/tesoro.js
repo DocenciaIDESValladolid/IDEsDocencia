@@ -84,7 +84,6 @@ switch (state)
     $("#mappage").trigger( "updatelayout" );
 }
 function initTesoro(){
-	checkCookie();
     $("#nuevoescenario_button").bind("click",nuevoescenario_button_action);
     $("#endScenarioButton").bind("click",end_scenario_button_action);
 
@@ -181,7 +180,7 @@ function enableForm(id_form, onsuccess, onfailure){
                         data: terms,
                         type: 'post',                   
                         async: 'true',
-                        //dataType: 'json',
+                        dataType: 'json',
                         beforeSend: function() {
                             // This callback function will trigger before data is sent
                             $.mobile.loading('show'); // This will show ajax spinner
@@ -279,25 +278,21 @@ function setCookie(cdemo,cvalue,exdays) {
     document.cookie = cdemo+"="+cvalue+"; "+expires;
 }
 function getCookie(cdemo) {
-    var demo = cdemo + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1);
-        if (c.indexOf(demo) == 0) {
-            return c.substring(demo.length, c.length);
-        }
-    }
-    return "";
+	var demo = cdemo + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0; i<ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1);
+		if (c.indexOf(demo) == 0) {
+			return c.substring(demo.length, c.length);
+		}
+	}
+	return "";
 }
 function checkCookie() {
-    var demo=getCookie("displayDemo");
-    // if (demo === "false" && demo!= "") {
-        // alert("Demo DESACTIVATED");
-    // } else {
-	if (demo != "false") {
-		setCookie("displayDemo", false, 1);
-		// $.mobile.changePage("swipe.html");
-		alert("Demo ACTIVATED");
+	var demo=getCookie("displayDemo");
+	if (demo == "false") {
+		document.location.href="index.html";
 	}
+	setCookie("displayDemo", false, 1000);
 }
