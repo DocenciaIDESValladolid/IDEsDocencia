@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.4.1
 -- Dumped by pg_dump version 9.4.1
--- Started on 2015-05-28 14:23:21
+-- Started on 2015-05-28 16:15:20
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -267,13 +267,11 @@ ALTER TABLE ONLY stages_performed ALTER COLUMN id SET DEFAULT nextval('stage_per
 -- Data for Name: current_stages; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY current_stages (id, id_path, id_user, accum_time, accum_distance, last_riddle, date, locations, id_riddle) FROM stdin;
-2	1	123456789                     	1234	1234	0	2015-04-15 18:23:00	0101000020E6100000C7A607492CD612C03D3203EE58D44440	\N
-3	1	123456789                     	345345	234243	1	2015-04-15 18:23:00	0101000020E610000015A83207FED912C0B3CACC5F8DD44440	2
-4	2	123456789                     	0	0	0	2015-04-15 18:23:00	0101000020E6100000CFE10B96A4DF12C067BC024C85D44440	\N
-1	1	123456789                     	0	0	0	2015-04-29 17:25:51.431	0101000020E610000025F52C66F0D412C0D194D0C70ED34440	\N
-5	2	987654321                     	1234	1234	0	2015-04-15 19:25:00	0101000020E6100000C6AF8A6043DD12C0B79B774AD4D34440	\N
-\.
+INSERT INTO current_stages (id, id_path, id_user, accum_time, accum_distance, last_riddle, date, locations, id_riddle) VALUES (2, 1, '123456789                     ', 1234, 1234, 0, '2015-04-15 18:23:00', '0101000020E6100000C7A607492CD612C03D3203EE58D44440', NULL);
+INSERT INTO current_stages (id, id_path, id_user, accum_time, accum_distance, last_riddle, date, locations, id_riddle) VALUES (3, 1, '123456789                     ', 345345, 234243, 1, '2015-04-15 18:23:00', '0101000020E610000015A83207FED912C0B3CACC5F8DD44440', 2);
+INSERT INTO current_stages (id, id_path, id_user, accum_time, accum_distance, last_riddle, date, locations, id_riddle) VALUES (4, 2, '123456789                     ', 0, 0, 0, '2015-04-15 18:23:00', '0101000020E6100000CFE10B96A4DF12C067BC024C85D44440', NULL);
+INSERT INTO current_stages (id, id_path, id_user, accum_time, accum_distance, last_riddle, date, locations, id_riddle) VALUES (1, 1, '123456789                     ', 0, 0, 0, '2015-04-29 17:25:51.431', '0101000020E610000025F52C66F0D412C0D194D0C70ED34440', NULL);
+INSERT INTO current_stages (id, id_path, id_user, accum_time, accum_distance, last_riddle, date, locations, id_riddle) VALUES (5, 2, '987654321                     ', 1234, 1234, 0, '2015-04-15 19:25:00', '0101000020E6100000C6AF8A6043DD12C0B79B774AD4D34440', NULL);
 
 
 --
@@ -291,10 +289,8 @@ SELECT pg_catalog.setval('current_stages_id_seq', 5, true);
 -- Data for Name: paths; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY paths (id, id_stage) FROM stdin;
-1	1
-2	2
-\.
+INSERT INTO paths (id, id_stage) VALUES (1, 1);
+INSERT INTO paths (id, id_stage) VALUES (2, 2);
 
 
 --
@@ -312,15 +308,13 @@ SELECT pg_catalog.setval('paths_id_seq', 1, true);
 -- Data for Name: riddles; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY riddles (id, id_path, num_riddle, description, date, geom, answer1, answer2, answer3, question) FROM stdin;
-1	1	0	prueba                                                                                                                                                                                                                                                                                                                                                        	2015-04-15 00:33:00	0103000020E61000000100000005000000013D2A1622D312C04ED91A75CDD4444096FEBD369DD212C010733350BBD44440D1A5E1B83BD112C061853821D4D44440D4139B5EC9D112C068D96FFCE4D44440013D2A1622D312C04ED91A75CDD44440	\N	\N	\N	\N
-2	1	1	prueba                                                                                                                                                                                                                                                                                                                                                        	2015-04-15 00:34:00	0103000020E61000000100000005000000ED38CB349CDA12C0972A2D019BD44440557B523A1EDA12C0F174588784D44440D5817FD591D912C076C8693D8FD444400C5812181BDA12C03938FEE7A2D44440ED38CB349CDA12C0972A2D019BD44440	\N	\N	\N	\N
-3	1	2	prueba                                                                                                                                                                                                                                                                                                                                                        	2015-04-15 00:35:00	0103000020E6100000010000000A000000100F1ABC9CE112C0A341A294F7D3444002212950ADE012C01526AB02D0D344400C69B2453ADF12C0835B0082E2D344403B9F9B337ADF12C02BEE69B1ECD34440CDF275AE67DE12C0E10B010AFAD344405ABEE216F9DE12C0EEEEC14512D444403D0D55D907E012C0A8A1926207D44440D613F1003FE012C0E84AB2C70AD44440B7100186AAE112C0666810CEF9D34440100F1ABC9CE112C0A341A294F7D34440	\N	\N	\N	\N
-4	1	3	prueba                                                                                                                                                                                                                                                                                                                                                        	2015-04-15 00:36:00	0103000020E61000000100000007000000B2BF072F64E412C0881CCFE6B6D44440CF633B366EE412C06C671AD9B5D44440A3ED6D2B5FE412C0627B61DAB4D4444086493A2455E412C0D43816E8B5D44440F402BADF4EE412C01FC15DB2B6D44440DD3E144A5DE412C0B3E59C9AB7D44440B2BF072F64E412C0881CCFE6B6D44440	\N	\N	\N	\N
-5	2	0	prueba 2                                                                                                                                                                                                                                                                                                                                                      	2015-04-15 00:33:00	0103000020E610000001000000050000007688C08B7FDD12C00E31D9206CD4444000F8F16E57DD12C0022EBE1A65D444408D74EC14DADC12C0D6FF3CFA66D44440F432212EFDDC12C00E31D9206CD444407688C08B7FDD12C00E31D9206CD44440	\N	\N	\N	\N
-6	2	1	fdghd                                                                                                                                                                                                                                                                                                                                                         	2015-04-15 00:33:00	0103000020E6100000010000000400000005DF1B1B10E112C07FF5834F53D444403B7C446E1FE012C0BDBD03B14DD44440DB7517D3ABE012C0787242BD5BD4444005DF1B1B10E112C07FF5834F53D44440	\N	\N	\N	\N
-8	2	2	Encuentra la iglesia más cercana                                                                                                                                                                                                                                                                                                                              	2015-04-15 00:33:00	0103000020E61000000100000006000000A687409DB1DD12C0ED431EB7E4D34440E387403556DD12C087ED26D8D7D34440A88840FD16DC12C0D220FFF7E9D344403E88403D7CDC12C04FC72627F8D344405588407D87DC12C0CA010B7FF7D34440A687409DB1DD12C0ED431EB7E4D34440	\N	\N	\N	\N
-\.
+INSERT INTO riddles (id, id_path, num_riddle, description, date, geom, answer1, answer2, answer3, question) VALUES (1, 1, 0, 'prueba                                                                                                                                                                                                                                                                                                                                                        ', '2015-04-15 00:33:00', '0103000020E61000000100000005000000013D2A1622D312C04ED91A75CDD4444096FEBD369DD212C010733350BBD44440D1A5E1B83BD112C061853821D4D44440D4139B5EC9D112C068D96FFCE4D44440013D2A1622D312C04ED91A75CDD44440', NULL, NULL, NULL, NULL);
+INSERT INTO riddles (id, id_path, num_riddle, description, date, geom, answer1, answer2, answer3, question) VALUES (2, 1, 1, 'prueba                                                                                                                                                                                                                                                                                                                                                        ', '2015-04-15 00:34:00', '0103000020E61000000100000005000000ED38CB349CDA12C0972A2D019BD44440557B523A1EDA12C0F174588784D44440D5817FD591D912C076C8693D8FD444400C5812181BDA12C03938FEE7A2D44440ED38CB349CDA12C0972A2D019BD44440', NULL, NULL, NULL, NULL);
+INSERT INTO riddles (id, id_path, num_riddle, description, date, geom, answer1, answer2, answer3, question) VALUES (3, 1, 2, 'prueba                                                                                                                                                                                                                                                                                                                                                        ', '2015-04-15 00:35:00', '0103000020E6100000010000000A000000100F1ABC9CE112C0A341A294F7D3444002212950ADE012C01526AB02D0D344400C69B2453ADF12C0835B0082E2D344403B9F9B337ADF12C02BEE69B1ECD34440CDF275AE67DE12C0E10B010AFAD344405ABEE216F9DE12C0EEEEC14512D444403D0D55D907E012C0A8A1926207D44440D613F1003FE012C0E84AB2C70AD44440B7100186AAE112C0666810CEF9D34440100F1ABC9CE112C0A341A294F7D34440', NULL, NULL, NULL, NULL);
+INSERT INTO riddles (id, id_path, num_riddle, description, date, geom, answer1, answer2, answer3, question) VALUES (4, 1, 3, 'prueba                                                                                                                                                                                                                                                                                                                                                        ', '2015-04-15 00:36:00', '0103000020E61000000100000007000000B2BF072F64E412C0881CCFE6B6D44440CF633B366EE412C06C671AD9B5D44440A3ED6D2B5FE412C0627B61DAB4D4444086493A2455E412C0D43816E8B5D44440F402BADF4EE412C01FC15DB2B6D44440DD3E144A5DE412C0B3E59C9AB7D44440B2BF072F64E412C0881CCFE6B6D44440', NULL, NULL, NULL, NULL);
+INSERT INTO riddles (id, id_path, num_riddle, description, date, geom, answer1, answer2, answer3, question) VALUES (5, 2, 0, 'prueba 2                                                                                                                                                                                                                                                                                                                                                      ', '2015-04-15 00:33:00', '0103000020E610000001000000050000007688C08B7FDD12C00E31D9206CD4444000F8F16E57DD12C0022EBE1A65D444408D74EC14DADC12C0D6FF3CFA66D44440F432212EFDDC12C00E31D9206CD444407688C08B7FDD12C00E31D9206CD44440', NULL, NULL, NULL, NULL);
+INSERT INTO riddles (id, id_path, num_riddle, description, date, geom, answer1, answer2, answer3, question) VALUES (6, 2, 1, 'fdghd                                                                                                                                                                                                                                                                                                                                                         ', '2015-04-15 00:33:00', '0103000020E6100000010000000400000005DF1B1B10E112C07FF5834F53D444403B7C446E1FE012C0BDBD03B14DD44440DB7517D3ABE012C0787242BD5BD4444005DF1B1B10E112C07FF5834F53D44440', NULL, NULL, NULL, NULL);
+INSERT INTO riddles (id, id_path, num_riddle, description, date, geom, answer1, answer2, answer3, question) VALUES (8, 2, 2, 'Encuentra la iglesia más cercana                                                                                                                                                                                                                                                                                                                              ', '2015-04-15 00:33:00', '0103000020E61000000100000006000000A687409DB1DD12C0ED431EB7E4D34440E387403556DD12C087ED26D8D7D34440A88840FD16DC12C0D220FFF7E9D344403E88403D7CDC12C04FC72627F8D344405588407D87DC12C0CA010B7FF7D34440A687409DB1DD12C0ED431EB7E4D34440', NULL, NULL, NULL, NULL);
 
 
 --
@@ -356,10 +350,8 @@ SELECT pg_catalog.setval('stage_performed_id_seq', 1, false);
 -- Data for Name: stages; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY stages (id, name, id_creator, description, date, uri) FROM stdin;
-1	prueba 1            	123456789                     	blablabla                                                                                                                                                                                                                                                                                                                                                     	2015-04-15 18:23:00	URI                                     
-2	prueba 2            	987654321                     	blablabla                                                                                                                                                                                                                                                                                                                                                     	2015-04-15 18:23:00	URI                                     
-\.
+INSERT INTO stages (id, name, id_creator, description, date, uri) VALUES (1, 'prueba 1            ', '123456789                     ', 'blablabla                                                                                                                                                                                                                                                                                                                                                     ', '2015-04-15 18:23:00', 'URI                                     ');
+INSERT INTO stages (id, name, id_creator, description, date, uri) VALUES (2, 'prueba 2            ', '987654321                     ', 'blablabla                                                                                                                                                                                                                                                                                                                                                     ', '2015-04-15 18:23:00', 'URI                                     ');
 
 
 --
@@ -368,9 +360,7 @@ COPY stages (id, name, id_creator, description, date, uri) FROM stdin;
 -- Data for Name: stages_performed; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY stages_performed (id, id_path, id_user, "time", distance, date) FROM stdin;
-1	1	123456789                     	45232	4235	2015-04-15 18:23:00
-\.
+INSERT INTO stages_performed (id, id_path, id_user, "time", distance, date) VALUES (1, 1, '123456789                     ', 45232, 4235, '2015-04-15 18:23:00');
 
 
 --
@@ -379,10 +369,8 @@ COPY stages_performed (id, id_path, id_user, "time", distance, date) FROM stdin;
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY users (id, name, surname, email, photo) FROM stdin;
-123456789                     	\N	\N	\N	\N
-987654321                     	\N	\N	\N	\N
-\.
+INSERT INTO users (id, name, surname, email, photo) VALUES ('123456789                     ', NULL, NULL, NULL, NULL);
+INSERT INTO users (id, name, surname, email, photo) VALUES ('987654321                     ', NULL, NULL, NULL, NULL);
 
 
 --
@@ -439,7 +427,7 @@ ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
--- Completed on 2015-05-28 14:23:22
+-- Completed on 2015-05-28 16:15:21
 
 --
 -- PostgreSQL database dump complete
