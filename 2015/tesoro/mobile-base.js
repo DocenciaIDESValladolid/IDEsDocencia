@@ -347,7 +347,8 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 		{
 			$("#nameScenario").html(feature.attributes.name);
 			$("#nextRiddle").html(feature.attributes.descripcion);
-			$("#timeLabel").html("Pista descubierta en la fecha " + feature.attributes.date);
+			date= new Date(feature.attributes.date);
+			$("#timeLabel").html("Pista descubierta en la fecha " + date.toLocaleString());
 			$("#validarUbicacion").hide();
 			if(feature.attributes.num_riddle=feature.attributes.max_riddle)
 			{
@@ -362,7 +363,8 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 		else
 		{
 			$("#nameScenario2").html(feature.attributes.name);
-			$("#timeLabelFailed").html("Ubicación enviada en la fecha " + feature.attributes.date);
+			date= new Date(feature.attributes.date);
+			$("#timeLabelFailed").html("Ubicación enviada en la fecha " + date.toLocaleString());
 			$("#infoFeaturePanel").trigger( "updatelayout");
 			$("#infoRiddle").hide();
 			$("#infoScenario").hide();

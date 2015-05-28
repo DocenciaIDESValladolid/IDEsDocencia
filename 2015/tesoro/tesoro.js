@@ -121,16 +121,21 @@ function end_scenario_button_action(event,ui){
                            .done(function(data){
                                toast("Escenario cancelado.");
                                scenario_under_creation=null;
+							   setState("authenticated");
                            })
                            .fail(function(data){
                                toast("No se ha podido cancelar el escenario. Inténtelo de nuevo más tarde");
                            });
                }else{
+               scenario_under_creation=null;
                toast("Escenario creado sin ninguna pista");
+			   setState("authenticated");
                 }
            }else{
-           setState("authenticated");
+           scenario_under_creation=null;
+		   last_created_riddle=null;
            toast("Escenario listo para jugar.");
+		   setState("authenticated");
             }
         }else{
             toast("Inicia antes la creación de un escenario y añade algunas pistas");
@@ -180,7 +185,7 @@ function enableForm(id_form, onsuccess, onfailure){
                         data: terms,
                         type: 'post',                   
                         async: 'true',
-                        dataType: 'json',
+                        //dataType: 'json',
                         beforeSend: function() {
                             // This callback function will trigger before data is sent
                             $.mobile.loading('show'); // This will show ajax spinner
