@@ -208,7 +208,7 @@ function addLayerToList(layer) {
             text: layer.name
         })
             .click(function() {
-                $.mobile.changePage('#mappage');
+                //$.mobile.changePage('#mappage');
                 if (layer.isBaseLayer) {
                     layer.map.setBaseLayer(layer);
                 } else {
