@@ -22,8 +22,6 @@
 	
 	//comprobar longitud
 	
-	$respuesta_final = "$respuesta1." "$" ".$respuesta2." "$" ".$respuesta3.";
-	
 	/*if (strlen ($pregunta >= 120))
 	{
 ?>
@@ -44,12 +42,12 @@
 	}	*/
 	
         $result=new stdClass();
-        $result->newId=23;
-        $result->name = $name;
-        $result->description = $description;
-        
-		$peticion = ""; //peticion a la base de datos para introducir en la tabla correspondiente
-		$resultado=mysql_query($peticion);
+        $result->idRiddle=23;
+//        $result->name = $name;
+//        $result->description = $description;
+//        
+//		$peticion = ""; //peticion a la base de datos para introducir en la tabla correspondiente
+//		$resultado=mysql_query($peticion);
 
         echo json_encode($result);
         

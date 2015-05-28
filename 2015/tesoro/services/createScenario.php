@@ -50,4 +50,5 @@
 	$peticion2 = "insert into paths (id_stage) values (".$peticion.")";
 	$resultado2 = mysql_query($peticion2);
         
-        echo json_encode(array("idStage"=>1));
+        $return= array("idStage"=>$resultado2->id,"numRiddles"=>$count);
+        echo json_encode($return);

@@ -55,10 +55,11 @@ switch (state)
     case 'startCreatingRiddle':
         addEditingRiddlesWMS(fb.getUser(),scenario_under_creation);
         state = 'createRiddle';//continue to next actions common to createRiddle
+        
     case 'createRiddle':
         // refresh WMS layer
         refresh_WMS_layer("Tesoro:Editable");//"EditingRiddlesWMS"); // nombre ficticio
-        $.mobile.back();
+//        $.mobile.back();
         $("#welcomingInfo").hide();
         $("#createRiddleInfo").show();
         $("#riddle_iduser").val(fb.user.id);
@@ -300,4 +301,66 @@ function checkCookie() {
 		document.location.href="index.html";
 	}
 	setCookie("displayDemo", false, 1000);
+}
+
+    //prueba de conseguir todas las capas del usuario en uso
+ function stages(handleData){
+
+ 	var id = "123456789";
+ 	var url = "services/escenarios_usuarios.php"; // El script a dónde se realizará la petición.
+ 	var params = {'id' : id};
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: params, // Adjuntar los campos del formulario enviado.
+           success: function(data)
+           {
+           		handleData(data);
+           },
+           dataType: "json",
+         });
+ } 
+ /**
+  * Add a new layer to the map registering with the Selected Control for hovering effect and 
+  * feature selected event.
+  * @param {OpenLayers.Layer.Vector} layer
+  * @param {fuction} callback
+  * @returns {undefined}
+  */
+function addInteractiveWFSLayer(layer, callback) {
+    map.addLayer(layer);
+    /*FUNCION PARA EL POP-UP DE ESCENARIOS*/
+    layer.events.on({
+        'featureselected': callback
+    });
+    var controls = map.getControlsBy('CLASS_NAME', 'OpenLayers.Control.SelectFeature');
+    // If the controls are not registered create and initialize them
+    if (controls.length == 0) {
+        highlightCtrl = new OpenLayers.Control.SelectFeature(layer, {
+            hover: true,
+            highlightOnly: true,
+            renderIntent: "temporary",
+            callbacks: onWFSFeatureSelect
+        });
+        selectCtrl = new OpenLayers.Control.SelectFeature(layer,
+                {
+                    clickout: true,
+                }
+        );
+        map.addControl(highlightCtrl);
+        map.addControl(selectCtrl);
+    } else {
+        // if the controls exists reconfigure them to use the new layer
+        controls.forEach(function (control) {
+            var layers = control.layers;
+            if (layers != null) {
+                layers.push(layer);
+            } else {
+                layers = [control.layer, layer];
+            }
+            control.setLayer(layers);
+            control.activate();
+        });
+    }
+
 }

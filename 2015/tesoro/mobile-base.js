@@ -49,23 +49,6 @@ fb.ready(function(){
    updateFacebookLoginInfo(fb);
   }
 });
-    //prueba de conseguir todas las capas del usuario en uso
- function stages(handleData){
-
- 	var id = "123456789";
- 	var url = "escenarios_usuarios.php"; // El script a dónde se realizará la petición.
- 	var params = {'id' : id};
-    $.ajax({
-           type: "POST",
-           url: url,
-           data: params, // Adjuntar los campos del formulario enviado.
-           success: function(data)
-           {
-           		handleData(data);
-           },
-           dataType: "json",
-         });
- } 
 
 var vector = new OpenLayers.Layer.Vector("vector", {});
 	
@@ -153,9 +136,11 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
      map.addControl(polygonDraw);
      map.addLayer(vlayer);
     //CAPA DE ESCENARIOS POSIBLES
-	wfs[0]=createWFSLayer();
-	map.addLayer(wfs[0]);
-	//Añado todos los escenarios del jugador junto con sus controles
+//	wfs[0]=createWFSLayer();
+//	map.addLayer(wfs[0]);
+
+    
+//Añado todos los escenarios del jugador junto con sus controles
 	stages(function(output){
 		for(i=0;i<output.length;i++)
     	{
@@ -163,34 +148,13 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 	        var viewparams='param_user:'+id+';param_path:'+output[i]['id_path'];
 	        var nombre = output[i]['name'];
 			var wfs2=createWFSviewparamsLayer(nombre,viewparams);
-			map.addLayer(wfs2);
-			wfs.push(wfs2);
-			/*FUNCION PARA EL POP-UP DE PISTAS*/
-			wfs2.events.on({
-				'featureselected': onWFSFeatureSelectProgress
-			});
+                        addInteractiveWFSLayer(wfs2,onWFSFeatureSelect);
     	}
-    		highlightCtrl = new OpenLayers.Control.SelectFeature(wfs, {
-                hover: true,
-                highlightOnly: true,
-                renderIntent: "temporary",
-                callbacks: onWFSFeatureSelect
-            });
-    		selectCtrl = new OpenLayers.Control.SelectFeature(wfs,
-                {
-					clickout: true,
-				}
-            );
-			map.addControl(highlightCtrl);
-	 		map.addControl(selectCtrl);
-			highlightCtrl.activate();
-     		selectCtrl.activate();
-     		/*FUNCION PARA EL POP-UP DE ESCENARIOS*/
-			wfs[0].events.on({
-				'featureselected': onWFSFeatureSelect
-			});
-
+        
+    availableStages=createWFSLayer();
+    addInteractiveWFSLayer(availableStages,onWFSFeatureSelect);
     });
+
 	map.updateSize();
 
 	var wms_concentracion=createHeatmapLayer();
