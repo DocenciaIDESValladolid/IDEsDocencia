@@ -317,6 +317,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 		$("#scenarioDescription").html(feature.attributes.descripcion);
 		$("#infoFeaturePanel").trigger( "updatelayout" );
 		$("#infoRiddle").hide();
+		$("#infoFailedLocation").hide();
 		$("#infoScenario").show();
 		$("#infoFeaturePanel").panel("open");
 	}
@@ -355,11 +356,18 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 			$("#infoFeaturePanel").trigger( "updatelayout");
 			$("#infoRiddle").show();
 			$("#infoScenario").hide();
+			$("#infoFailedLocation").hide();
 			$("#infoFeaturePanel").panel("open");
 		}
 		else
 		{
-
+			$("#nameScenario2").html(feature.attributes.name);
+			$("#timeLabelFailed").html("Ubicación enviada en la fecha " + feature.attributes.date);
+			$("#infoFeaturePanel").trigger( "updatelayout");
+			$("#infoRiddle").hide();
+			$("#infoScenario").hide();
+			$("#infoFailedLocation").show();
+			$("#infoFeaturePanel").panel("open");
 		}
 	}
 	function onPopupClose(evt) {
