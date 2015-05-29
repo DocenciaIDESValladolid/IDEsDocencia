@@ -12,7 +12,7 @@
 	@ $riddle_geom = filter_var($_POST['riddle_geom'],FILTER_SANITIZE_NUMBER_FLOAT);
 	@ $riddle_iduser = filter_var($_POST['riddle_iduser'],FILTER_SANITIZE_NUMBER_FLOAT);
 	@ $riddle_stage = filter_var($_POST['riddle_stage'],FILTER_SANITIZE_NUMBER_FLOAT);
-	
+	@ $riddle_path = filter_var($_POST['riddle_path'],FILTER_SANITIZE_NUMBER_FLOAT);
 	// Formateamos textos para introducir en la base de datos.
 	$pregunta = trim($pregunta);		
 	$tipo_respuesta = trim ($tipo_respuesta);
@@ -20,8 +20,26 @@
 	$respuesta2 = trim($respuesta2);
 	$respuesta3 = trim($respuesta3);
 	
+	
+	$id_creator = "select id_creator from stages where id ='".$riddle_stage."'";
+	
+	if ($id_creator == $riddle_iduser)
+	{
+		
+		
+		$peticion = "insert into riddles (id_path, num_riddle, description, answers, date, geom) values ('".$riddle_path."' , select count (num_riddle) from riddles where id_path ='".$riddle_path."','".$pregunta."','".$respuesta_final."', (select now()), '".$riddle_geom."')"; //peticion a la base de datos para introducir en la tabla correspondiente
+		$id_riddle=pg_query($peticion);
+		
+		$result = array ("idRiddle"=> $id_riddle);
+		
+		
+	}else{
+		$result= array("status"=>"Error","Cause"=>"User is not creator");
+	}	
+	
 	//comprobar longitud
 	
+	echo json_encode($result);
 	/*if (strlen ($pregunta >= 120))
 	{
 ?>
@@ -40,14 +58,12 @@
 <?PHP
 		exit;
 	}	*/
-	
+/*	
         $result=new stdClass();
         $result->idRiddle=23;
 //        $result->name = $name;
-//        $result->description = $description;
-//        
-//		$peticion = ""; //peticion a la base de datos para introducir en la tabla correspondiente
-//		$resultado=mysql_query($peticion);
-
-        echo json_encode($result);
+        $result->description = $description;
+        
+		
+        echo json_encode($result);*/
         

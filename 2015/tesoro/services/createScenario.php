@@ -46,9 +46,9 @@
         
 		$peticion = "insert into stages (id_creator,name,description, date, uri) values ('".$iduser."', '".$name."', '".$description."',(select now()) ,'uri') returning id"; 
 		//peticion a la base de datos para introducir en la tabla correspondiente
-	$resultado=mysql_query($peticion);
-	$peticion2 = "insert into paths (id_stage) values (".$peticion.")";
-	$resultado2 = mysql_query($peticion2);
+		$resultado_id_stage=pg_query($peticion);
+		$peticion2 = "insert into paths (id_stage) values (".$peticion.") returning id";
+		$resultado_id_path = pg_query($peticion2);
         
-        $return= array("idStage"=>$resultado2->id,"numRiddles"=>$count);
+        $return= array("idStage"=>$resultado2->id,"numRiddles"=>$count,"idPath"=>$resultado_id_path);
         echo json_encode($return);
