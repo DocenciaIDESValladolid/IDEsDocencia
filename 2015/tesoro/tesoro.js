@@ -377,8 +377,8 @@ function sentLocation (){
     }
     else{
          var params = {
-        'id_user' : fb.user.id, 
-        'id_path' : fb.user.id,
+        'id_user' : '123456789', //fb.user.id
+        'id_path' : 1,
         'lat' : geolocation_position.latitude,
         'long' : geolocation_position.longitude
          };
@@ -388,11 +388,12 @@ function sentLocation (){
            data: params, // Adjuntar los campos del formulario enviado.
            success: function(data)
            {
-            toast(data['msg']);
             //Recargo la capa
                 var vlayers = map.getLayersByName("prueba 1" );
                 vlayers[0].redraw();
+                toast(data['msg']);
             //Si necesito realizar las preguntas llamo a la función
+
             if(data['state']=='challenge')
             {
                 challengeState(data);

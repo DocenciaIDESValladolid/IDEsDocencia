@@ -4,41 +4,37 @@
 	
 
 	//recojo las variables que necesito
-	$lat = $_POST['lat'];
-	$long = $_POST['long'];
-	/*$id_user = $_POST['id_user'];
-	$id_path = $_POST['id_path'];
-	
-	$respuesta= $_POST['resp'];*/
-	$id_user = '123456789';
-	$id_path = 1;
-	$respuesta;
+	@$lat = $_POST['lat'];
+	@$long = $_POST['long'];
+	@$id_user = $_POST['id_user'];
+	@$id_path = $_POST['id_path'];
+	@$respuesta= $_POST['resp'];
 
 	//Recupero la última pista descubierta por el usuario para ese escenario
 	$query ="SELECT max(num_riddle) from riddles r, current_stages c where c.id_riddle=r.id and id_user=$1 and c.id_path=r.id_path and c.id_path=$2" ;
-	$num_riddle=pg_query_params($query,array($id_user,$id_path));
-	$num_riddle= pg_fetch_array($num_riddle,0,PGSQL_NUM);
-	$num_riddle= $num_riddle[0]+1;
+	$pista_actual=pg_query_params($query,array($id_user,$id_path));
+	$pista_actual= pg_fetch_array($pista_actual,0,PGSQL_NUM);
+	$pista_siguiente= $pista_actual[0]+1;
 	//Compruebo si la geometría está dentro
 	$query ="SELECT *,ST_Intersects(geom,ST_SetSRID(ST_MakePoint($1,$2),4326)) as insite from riddles where num_riddle=$3 and id_path=$4" ;
-	$acierto=pg_query_params($query,array($lat,$long,$num_riddle,$id_path));
+	$acierto=pg_query_params($query,array($lat,$long,$pista_siguiente,$id_path));
 	$acierto= pg_fetch_array($acierto,NULL,PGSQL_ASSOC);
 	//si es cierto consulto si hay preguntas
 	if($acierto['insite']=='t')
 	{
+		$query ="SELECT * from riddles where num_riddle=$1 and id_path=$2" ;
+		$pregunta=pg_query_params($query,array($pista_actual[0],$id_path));
+		$pregunta= pg_fetch_array($pregunta,NULL,PGSQL_ASSOC);
 		//si hay preguntas devuelvo las preguntas y las respuestas
-		if ($acierto['question']){
+		if ($pregunta['question']){
 			$resultado= array("status"=>'challenge',
-				"question"=>$acierto['question'],
-				"answer1"=>$acierto['answer1'],
-				"answer2"=>$acierto['answer2'],
-				"answer3"=>$acierto['answer3'],"msg"=>'Conteste a la siguiente pregunta');
+				"question"=>$pregunta['question'],
+				"answer1"=>$pregunta['answer1'],
+				"answer2"=>$pregunta['answer2'],
+				"answer3"=>$pregunta['answer3'],"msg"=>'Conteste a la siguiente pregunta');
 			if($respuesta)
 			{
-				$query ="SELECT correct_answer from riddles where num_riddle=$1 and id_path=$2";
-				$comp_resp=pg_query_params($query,array($num_riddle,$id_path));
-				$comp_resp= pg_fetch_array($comp_resp,NULL,PGSQL_ASSOC);
-				if($comp_resp['correct_answer']==$respuesta)
+				if($pregunta['correct_answer']==$respuesta)
 				{
 					guardarPunto($id_path,$id_user,$lat,$long,$acierto);
 					$resultado= array("status"=>'success',"msg"=>'¡¡¡Has acertado, a por la siguiente pista!!!');
@@ -61,7 +57,7 @@
 			$query ="SELECT max(num_riddle) as num_riddle from riddles, current_stages where id_path=$1" ;
 			$ultimo=pg_query_params($query,array($id_path));
 			$ultimo= pg_fetch_array($ultimo,NULL,PGSQL_ASSOC);
-			if($ultimo['num_riddle']==$num_riddle)
+			if($ultimo['num_riddle']==$pista_siguiente)
 			{
 				$query ="INSERT INTO stages_performed (id_path, id_user, time, distance, date)
 				VALUES ($1,$2,0,0,now());" ;
