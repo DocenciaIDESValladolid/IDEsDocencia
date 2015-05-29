@@ -365,29 +365,42 @@ function addInteractiveWFSLayer(layer, callback) {
 
 }
 function sentLocation (){
-    var params = {
-        'id_user' : fb.user.id, 
-        'id_path' : fb.user.id,
-        'lat' : geolocation_position.latitude,
-        'long' : geolocation_position.longitude,
-    };
+   
     if (geolocation_position==null)
     {
         toast('Pulse el botón de geolocalización');
         return;
     }
     else{
+         var params = {
+        'id_user' : fb.user.id, 
+        'id_path' : fb.user.id,
+        'lat' : geolocation_position.latitude,
+        'long' : geolocation_position.longitude
+         };
         $.ajax({
            type: "POST",
            url: "services/checkRiddle.php",
            data: params, // Adjuntar los campos del formulario enviado.
            success: function(data)
            {
+            toast(data['msg']);
+            //Recargo la capa
+                var vlayers = map.getLayersByName("prueba 1" );
+                vlayers[0].redraw();
+            //Si necesito realizar las preguntas llamo a la función
+            if(data['state']=='challenge')
+            {
+                challengeState(data);
+            }
 
            },
            dataType: "json",
          });
     }
-    
-
 }     
+
+function challengeState (data){
+
+solveRiddlePage;
+}

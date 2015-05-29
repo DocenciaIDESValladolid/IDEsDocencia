@@ -135,9 +135,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
      polygonDraw= new OpenLayers.Control.DrawFeature(vlayer, OpenLayers.Handler.Polygon);
      map.addControl(polygonDraw);
      map.addLayer(vlayer);
-    //CAPA DE ESCENARIOS POSIBLES
-//	wfs[0]=createWFSLayer();
-//	map.addLayer(wfs[0]);
+
 
     
 //Añado todos los escenarios del jugador junto con sus controles
@@ -151,7 +149,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 	    	var id = "123456789";
 	        var viewparams='param_user:'+id+';param_path:'+output[i]['id_path'];
 	        var nombre = output[i]['name'];
-			var wfs2=createWFSviewparamsLayer(nombre,viewparams);
+			var wfs2=createWFSviewparamsLayer($.trim(nombre),viewparams);
             addInteractiveWFSLayer(wfs2,onWFSFeatureSelectProgress);
     	}
     });
@@ -206,6 +204,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
         ]);
         map.zoomToExtent(vector.getDataExtent());
 		geolocation_accuracy=e.position.coords.accuracy;
+		geolocation_position=e.position.coords;
 		geolocation_msg= "<p>Localizado con "+ geolocation_accuracy+" metros de precisión.</p>";
 		queryUA(e,successGeolocationUA);
     });
@@ -315,7 +314,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 			date= new Date(feature.attributes.date);
 			$("#timeLabel").html("Pista descubierta en la fecha " + date.toLocaleString());
 			$("#validarUbicacion").hide();
-			if(feature.attributes.num_riddle=feature.attributes.max_riddle)
+			if(feature.attributes.num_riddle==feature.attributes.max_riddle)
 			{
 				$("#validarUbicacion").show();
 			}
