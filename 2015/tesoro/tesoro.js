@@ -3,8 +3,10 @@
  */
 var state='welcoming';// authenticated,createScenario,creatingScenario,createRiddle,running
 var scenario_under_creation=null;
+var path_under_creation=null;
 var scenario_running='';
 var last_created_riddle=null;
+
 /**
  * States of the application:
  * welcoming a guest user is visiting the app
@@ -64,6 +66,7 @@ switch (state)
         $("#createRiddleInfo").show();
         $("#riddle_iduser").val(fb.user.id);
         $("#riddle_stage").val(scenario_under_creation);
+		$("#riddle_path").val(path_under_creation);
         setTimeout(function(){$("#infopanel").panel('open');},1500);
         enable_edit_polygons(function(event)
         {
@@ -91,6 +94,7 @@ function initTesoro(){
     enableForm('#createScenarioForm', 
         function(result){
              scenario_under_creation=result.idStage;
+			 path_under_creation=result.idPath;
              toast('Escenario creado');
              $("#createScenarioForm")[0].reset();
              setState('startCreatingRiddle');
