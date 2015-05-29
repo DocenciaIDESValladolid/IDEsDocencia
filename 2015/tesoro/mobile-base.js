@@ -142,17 +142,18 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
     
 //Añado todos los escenarios del jugador junto con sus controles
 	stages(function(output){
+		//Añado la capa de escenarios 
+		availableStages=createWFSLayer();
+    	addInteractiveWFSLayer(availableStages,onWFSFeatureSelect);
+    	//Añado las capas de juegos en curso y terminados
 		for(i=0;i<output.length;i++)
     	{
 	    	var id = "123456789";
 	        var viewparams='param_user:'+id+';param_path:'+output[i]['id_path'];
 	        var nombre = output[i]['name'];
 			var wfs2=createWFSviewparamsLayer(nombre,viewparams);
-                        addInteractiveWFSLayer(wfs2,onWFSFeatureSelect);
+            addInteractiveWFSLayer(wfs2,onWFSFeatureSelectProgress);
     	}
-        
-    availableStages=createWFSLayer();
-    addInteractiveWFSLayer(availableStages,onWFSFeatureSelect);
     });
 
 	map.updateSize();

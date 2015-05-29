@@ -364,3 +364,30 @@ function addInteractiveWFSLayer(layer, callback) {
     }
 
 }
+function sentLocation (){
+    var params = {
+        'id_user' : fb.user.id, 
+        'id_path' : fb.user.id,
+        'lat' : geolocation_position.latitude,
+        'long' : geolocation_position.longitude,
+    };
+    if (geolocation_position==null)
+    {
+        toast('Pulse el botón de geolocalización');
+        return;
+    }
+    else{
+        $.ajax({
+           type: "POST",
+           url: "services/checkRiddle.php",
+           data: params, // Adjuntar los campos del formulario enviado.
+           success: function(data)
+           {
+
+           },
+           dataType: "json",
+         });
+    }
+    
+
+}     
