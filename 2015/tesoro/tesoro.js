@@ -368,7 +368,8 @@ function addInteractiveWFSLayer(layer, callback) {
     }
 
 }
-function sentLocation (){
+//función para enviar la localización y las respuestas escogidas por el usuario
+function sentLocation (respuesta){
    
     if (geolocation_position==null)
     {
@@ -378,9 +379,10 @@ function sentLocation (){
     else{
          var params = {
         'id_user' : '123456789', //fb.user.id
-        'id_path' : 1,
+        'id_path' : id_path,
         'lat' : geolocation_position.latitude,
-        'long' : geolocation_position.longitude
+        'long' : geolocation_position.longitude,
+        'resp' : respuesta
          };
         $.ajax({
            type: "POST",
@@ -393,19 +395,23 @@ function sentLocation (){
                 vlayers[0].redraw();
                 toast(data['msg']);
             //Si necesito realizar las preguntas llamo a la función
-
             if(data['state']=='challenge')
             {
-                challengeState(data);
+                $("#question_riddle").text('Pregunta: '+data[question]);
+                $("label[for = radio-choice-v-2a]").text(data[answer1]);
+                $("label[for = radio-choice-v-2b]").text(data[answer2]);
+                $("label[for = radio-choice-v-2c]").text(data[answer3]);
+                location.href='#solveRiddlePage';
             }
-
            },
            dataType: "json",
          });
     }
 }     
-
-function challengeState (data){
-
-solveRiddlePage;
+//función para determinar la respuesta escogida por el usuario
+function answer_question()
+{
+    //selecciono la respuesta
+    var selected = $("#form_answer input[type='radio']:checked");
+    sentLocation (selected.val()); //la envío
 }

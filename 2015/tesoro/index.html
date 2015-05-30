@@ -243,20 +243,20 @@
           </div>
 		  <div data-role="content">
 		  <p>¡¡Enhorabuena, has llegado al punto correcto!!</p>
-			<form>  
+			<form id='form_answer'>  
 		        <fieldset data-role="controlgroup">
-			        <legend>Pregunta: ¿.....?</legend>
-			        <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2a" value="on" checked="checked">
+			        <legend id="question_riddle">Pregunta: ¿.....?</legend>
+			        <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2a" value="1" checked="checked">
 			        <label for="radio-choice-v-2a">A</label>
-			        <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2b" value="off">
+			        <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2b" value="2">
 			        <label for="radio-choice-v-2b">B</label>
-			        <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2c" value="other">
+			        <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2c" value="3">
 			        <label for="radio-choice-v-2c">C</label>
 				</fieldset>
 			</form>
 			<div class="ui-grid-a">
 				<div class="ui-block-a"><a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a></div>
-				<div class="ui-block-b"><a href="#" data-role="button">Continuar</a></div>
+				<div class="ui-block-b"><a href="#" data-role="button" onclick="answer_question();">Continuar</a></div>
 			</div>
 			</div>
 		</div>

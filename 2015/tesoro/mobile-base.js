@@ -22,7 +22,7 @@ var geolocation_accuracy;
 var geolocation_msg='';
 var paths;
 var munis = new Array(10);
-var wfs = [];
+var id_path;
 
 munis[0]='34074747075'; //Íscar
 munis[1]='34074747186'; //Valladolid
@@ -316,6 +316,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 			$("#validarUbicacion").hide();
 			if(feature.attributes.num_riddle==feature.attributes.max_riddle)
 			{
+				id_path = feature.attributes.id_path;
 				$("#validarUbicacion").show();
 			}
 			$("#infoFeaturePanel").trigger( "updatelayout");
