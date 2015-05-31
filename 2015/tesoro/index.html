@@ -62,7 +62,7 @@
 	Panel con formulario de creación escenario
 	-->
 	<div data-role="panel" data-position="left" data-position-fixed="true" data-display="overlay" id="create_scenario_panel">
-		<h3>Inicia un nuevo escenario en esta posición</h3>
+		<h3>Inicia un nuevo escenario</h3>
 		<legend>Rellena los siguientes campos sobre tu escenario.</legend>
 		<form method="post" id="createScenarioForm" action="services/createScenario.php">
 		<!-- id, name, id_creator, description, date, uri -->
@@ -99,7 +99,7 @@
 				</div>
 				
 			</div>
-			<a id="reportDetailsLink" href="detalle.php" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-btn-inline ui-icon-carat-r">Comenzar juego</a>
+			<a id="reportDetailsLink" href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-btn-inline ui-icon-carat-r" onclick="startGame();">Comenzar juego</a>
 		</div>
 		<div id="infoRiddle">
 			<h3>Pista descubierta</h3>
@@ -267,34 +267,37 @@
 		-->		
 		<div data-role="page" id="addRiddlePage" data-theme="b">
           <div data-role="header">
-            <h1>Añadir pregunta</h1>
+            <h1>Añadir pista</h1>
           </div>
 		  <div data-role="content">
-		  <p>Escribe a continuación la pregunta que deseas incluir para resolver la siguiente pista.</p>
+		  <p>Escribe a continuación la pista que deseas incluir, y opcionalmente una pregunta asociada.</p>
 			<form method="post" id="createQuestionForm" action="services/createQuestion.php">
 				<input type="hidden" name="geometry" id="riddle_geom" value=""/>
 				<input type="hidden" name="iduser" id="riddle_iduser" value=""/>
 				<input type="hidden" name="idstage" id="riddle_stage" value=""/>
-		        <label for="text-basic">Pista para llegar al siguiente punto</label>
+				<input type="hidden" name="idpath" id="riddle_path" value=""/>
+				<label for="riddle_riddle">Pista para llegar al siguiente punto</label>
 				<textarea  rows="8" name="riddle" id="riddle_riddle" data-theme="a"></textarea>
-				<label for="text-basic">Pregunta a resolver (relacionada con dicho punto)</label>
-				<textarea  rows="8" name="question" id="riddle_question" data-theme="a"></textarea>
-			    <div class="ui-body ui-body-d ui-corner-all">
-			        <legend>Respuestas...</legend>
-			        <input type="text" name="text-basic1" id="text-basic1" value="" data-theme="a"/>
-			        <input type="text" name="text-basic2" id="text-basic2" value="" data-theme="a"/>
-					<input type="text" name="text-basic3" id="text-basic3" value="" data-theme="a"/>	
-					<fieldset data-role="controlgroup" data-type="horizontal">
-					    <legend>Respuesta correcta:</legend>
-					    <input type="radio" name="checkbox-correct" id="checkbox-h-2a">
-					    <label for="checkbox-h-2a">A</label>
-					    <input type="radio" name="checkbox-correct" id="checkbox-h-2b">
-					    <label for="checkbox-h-2b">B</label>
-					    <input type="radio" name="checkbox-correct" id="checkbox-h-2c">
-					    <label for="checkbox-h-2c">C</label>
-					</fieldset>
+				<div data-role="collapsible">
+					<h3>Pregunta opcional</h3>
+					<label for="riddle_question">Pregunta a resolver (relacionada con dicho punto)</label>
+					<textarea  rows="8" name="question" id="riddle_question" data-theme="a"></textarea>
+					<div class="ui-body ui-body-d ui-corner-all">	
+						<legend>Respuestas...</legend>
+						<input type="text" name="text-basic1" id="text-basic1" value="" data-theme="a" placeholder="Respuesta A"/>
+						<input type="text" name="text-basic2" id="text-basic2" value="" data-theme="a" placeholder="Respuesta B"/>
+						<input type="text" name="text-basic3" id="text-basic3" value="" data-theme="a" placeholder="Respuesta C"/>
+						<fieldset data-role="controlgroup" data-type="horizontal">
+							<legend>Respuesta correcta:</legend>
+							<input type="radio" name="checkbox-correct" id="checkbox-h-2a" value="1">
+							<label for="checkbox-h-2a">A</label>
+							<input type="radio" name="checkbox-correct" id="checkbox-h-2b" value="2">
+							<label for="checkbox-h-2b">B</label>
+							<input type="radio" name="checkbox-correct" id="checkbox-h-2c" value="3">
+							<label for="checkbox-h-2c">C</label>
+						</fieldset>
+					</div>
 				</div>
-			
 			<div class="ui-grid-a">
 
 				<div class="ui-block-a"><a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Cancelar</a></div>

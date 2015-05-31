@@ -55,24 +55,23 @@ switch (state)
         $("#infoCreatingScenarioPanel").panel('open');
         break;
     case 'startCreatingRiddle':
-        addEditingRiddlesWMS(fb.getUser(),scenario_under_creation);
+        addEditingRiddlesWMS(fb.user.id,path_under_creation);
+        $("#welcomingInfo").hide();
+        $("#createRiddleInfo").show();
+        $("#riddle_iduser").val(fb.user.id);
+        $("#riddle_stage").val(scenario_under_creation);
+        $("#riddle_path").val(path_under_creation);
+        setTimeout(function(){$("#infopanel").panel('open');},1500);
         state = 'createRiddle';//continue to next actions common to createRiddle
         
     case 'createRiddle':
         // refresh WMS layer
         refresh_WMS_layer("Tesoro:Editable");//"EditingRiddlesWMS"); // nombre ficticio
 //        $.mobile.back();
-        $("#welcomingInfo").hide();
-        $("#createRiddleInfo").show();
-        $("#riddle_iduser").val(fb.user.id);
-        $("#riddle_stage").val(scenario_under_creation);
-		$("#riddle_path").val(path_under_creation);
-        setTimeout(function(){$("#infopanel").panel('open');},1500);
         enable_edit_polygons(function(event)
         {
             var geom= event.feature.geometry;
             $("#riddle_geom").val(geom.toString());
-            
             $.mobile.changePage("#addRiddlePage");
             emptyPolygonLayer();
         });
@@ -93,32 +92,47 @@ function initTesoro(){
 
     enableForm('#createScenarioForm', 
         function(result){
-             scenario_under_creation=result.idStage;
-			 path_under_creation=result.idPath;
-             toast('Escenario creado');
-             $("#createScenarioForm")[0].reset();
-             setState('startCreatingRiddle');
+            if(result.status!="success")
+            {
+                toast(result.msg);
+            }
+            else{
+                toast(result.msg);
+                scenario_under_creation=result.idStage;
+                path_under_creation=result.idPath;
+                $("#createScenarioForm")[0].reset();
+                setState('startCreatingRiddle');
+            }
         },
         function(error){
-             toast('Network error has occurred please try again!'+error);
+             toast('Network error has occurred please try again! Error: '+error);
         });
 		
 	enableForm('#createQuestionForm', 
         function(result){
-             last_created_riddle=result.idRiddle;
-             toast('Pregunta creada');
-             $("#createQuestionForm")[0].reset();
-             setState('createRiddle');
+            if(result.status!="success")
+            {
+                toast(result.msg);
+            }
+            else{
+                last_created_riddle=result.numRiddle;
+                toast(result.msg);
+                 $.mobile.back();
+                $("#createQuestionForm")[0].reset();
+                refresh_WMS_layer("Pistas nuevo escenario");
+                setState('createRiddle');
+            }
         },
         function(error){
-             toast('Network error has occurred please try again!'+error);
+             toast('Network error has occurred please try again! Error: '+error);
         });
 }
 
 function end_scenario_button_action(event,ui){
    		
         if (state==="createRiddle")
-        {
+        { 
+           eliminarcapa('Pistas nuevo escenario');
            if  (last_created_riddle==null){
                if (confirm("¿Deseas cancelar este escenario? No tiene ninguna pista."))
                {
@@ -157,16 +171,6 @@ function nuevoescenario_button_action(event,ui){
         }
     }
 
-/*function marca_pulsada(event){
-	if (state==="welcoming"){
-		$("#infopanel").panel("open");
-	}		
-    else if (state==="authenticated"){        
-//        $("#scenario_iduser").attr('value','XXX')
-        $("#create_scenario_panel").panel("open");
-    }
-}*/
-
 function facebook_logout(response){
 	window.location.href = 'index.html';
 	// setState('welcoming');
@@ -190,7 +194,7 @@ function enableForm(id_form, onsuccess, onfailure){
                         data: terms,
                         type: 'post',                   
                         async: 'true',
-                        //dataType: 'json',
+                        dataType: 'json',
                         beforeSend: function() {
                             // This callback function will trigger before data is sent
                             $.mobile.loading('show'); // This will show ajax spinner
@@ -239,11 +243,11 @@ function disable_edit_polygons()
     var vlayers = map.getLayersByName( "Tesoro:Editable" );
      if (vlayers.length>0)
      {
-    var vlayer=vlayers[0];
-    vlayer.removeAllFeatures();
-    vlayer.events.remove('featureadded');
-    var controls= map.getControlsBy('CLASS_NAME','OpenLayers.Control.DrawFeature');
-     controls[0].deactivate();
+        var vlayer=vlayers[0];
+        vlayer.removeAllFeatures();
+        vlayer.events.remove('featureadded');
+        var controls= map.getControlsBy('CLASS_NAME','OpenLayers.Control.DrawFeature');
+        controls[0].deactivate();
     }
 }
 function emptyPolygonLayer()
@@ -251,8 +255,8 @@ function emptyPolygonLayer()
     var vlayers = map.getLayersByName( "Tesoro:Editable" );
      if (vlayers.length>0)
      {
-    var vlayer=vlayers[0];
-    vlayer.removeAllFeatures();
+        var vlayer=vlayers[0];
+        vlayer.removeAllFeatures();
      }
 }
 function addEditingRiddlesWMS(user,path)
@@ -264,9 +268,9 @@ function addEditingRiddlesWMS(user,path)
 }
 function eliminarcapa(nombre){
     var layer=map.getLayersByName(nombre);
-    map.removeLayer(layer);
+    map.removeLayer(layer[0]);
     map.updateSize();
-    layer.destroy();
+    layer[0].destroy();
 }
 function refresh_WMS_layer(name){
     var layers=map.getLayersByName(name);
@@ -310,13 +314,21 @@ function checkCookie() {
     //prueba de conseguir todas las capas del usuario en uso
  function stages(handleData){
 
- 	var id = "123456789";
+ 	var id = "987654321";
  	var url = "services/escenarios_usuarios.php"; // El script a dónde se realizará la petición.
  	var params = {'id' : id};
     $.ajax({
            type: "POST",
            url: url,
            data: params, // Adjuntar los campos del formulario enviado.
+           beforeSend: function() {
+                // This callback function will trigger before data is sent
+                $.mobile.loading('show'); // This will show ajax spinner
+            },
+            complete: function() {
+                // This callback function will trigger on data sent/received complete
+                $.mobile.loading('hide'); // This will hide ajax spinner
+                        },
            success: function(data)
            {
            		handleData(data);
@@ -353,6 +365,8 @@ function addInteractiveWFSLayer(layer, callback) {
         );
         map.addControl(highlightCtrl);
         map.addControl(selectCtrl);
+        highlightCtrl.activate();
+        selectCtrl.activate();
     } else {
         // if the controls exists reconfigure them to use the new layer
         controls.forEach(function (control) {
@@ -378,7 +392,7 @@ function sentLocation (respuesta){
     }
     else{
          var params = {
-        'id_user' : '123456789', //fb.user.id
+        'id_user' : '987654321', //fb.user.id
         'id_path' : id_path,
         'lat' : geolocation_position.latitude,
         'long' : geolocation_position.longitude,
@@ -388,20 +402,28 @@ function sentLocation (respuesta){
            type: "POST",
            url: "services/checkRiddle.php",
            data: params, // Adjuntar los campos del formulario enviado.
+            beforeSend: function() {
+                // This callback function will trigger before data is sent
+                $.mobile.loading('show'); // This will show ajax spinner
+            },
+            complete: function() {
+                // This callback function will trigger on data sent/received complete
+                $.mobile.loading('hide'); // This will hide ajax spinner
+                        },
            success: function(data)
            {
             //Recargo la capa
-                var vlayers = map.getLayersByName("prueba 1" );
+                var vlayers = map.getLayersByName(name_stage);
                 vlayers[0].redraw();
                 toast(data['msg']);
             //Si necesito realizar las preguntas llamo a la función
-            if(data['state']=='challenge')
+            if(data['status']=='challenge')
             {
                 $("#question_riddle").text('Pregunta: '+data[question]);
                 $("label[for = radio-choice-v-2a]").text(data[answer1]);
                 $("label[for = radio-choice-v-2b]").text(data[answer2]);
                 $("label[for = radio-choice-v-2c]").text(data[answer3]);
-                location.href='#solveRiddlePage';
+                $.mobile.changePage('#solveRiddlePage');
             }
            },
            dataType: "json",
@@ -415,3 +437,50 @@ function answer_question()
     var selected = $("#form_answer input[type='radio']:checked");
     sentLocation (selected.val()); //la envío
 }
+//función para comenzar juego
+function startGame (){
+   //tengo que comprobar si existe el juego, si ya existe
+    if (geolocation_position==null)
+    {
+        toast('Pulse el botón de geolocalización');
+        return;
+    }
+    else{
+         var params = {
+        'id_user' : '987654321', //fb.user.id
+        'id_path' : id_path,
+        'lat' : geolocation_position.latitude,
+        'long' : geolocation_position.longitude,
+         };
+        $.ajax({
+           type: "POST",
+           url: "services/startScenario.php",
+           data: params, // Adjuntar los campos del formulario enviado.
+            beforeSend: function() {
+                // This callback function will trigger before data is sent
+                $.mobile.loading('show'); // This will show ajax spinner
+            },
+            complete: function() {
+                // This callback function will trigger on data sent/received complete
+                $.mobile.loading('hide'); // This will hide ajax spinner
+                        },
+           success: function(data)
+           {
+                //Muestro el mensaje por pantalla
+                toast(data['msg']);
+                //Si está en la localización de inicio creo la nueva capa y recargo la de escenarios iniciales
+                if(data['status']=='success')
+                {
+                    $("#infoFeaturePanel").panel("close");
+                    var viewparams='param_user:987654321;param_path:'+id_path;
+                    var wfs=createWFSviewparamsLayer(name_stage,viewparams);
+                    addInteractiveWFSLayer(wfs,onWFSFeatureSelectProgress);
+                    map.updateSize();
+                    var vlayers = map.getLayersByName("Escenarios Iniciales");
+                    vlayers[0].redraw();
+                }  
+           },
+           dataType: "json",
+         });
+    }
+}    

@@ -1,4 +1,4 @@
-function createWFSLayer()
+function createWFSLayer(parametros)
 {
 	//var options= getDenunciasConfig();
 	var options= getEscenariosConfigAnimCluster();		
@@ -11,7 +11,8 @@ function createWFSLayer()
             featureType: "puntos_iniciales",
             featureNS: "http://localhost:8080/geoserver/busqueda_tesoro",
             srsName: "EPSG:900913",
-            version: "1.1.0"
+            version: "1.1.0",
+            viewparams: parametros
 			}),
 		styleMap: options.styleMap
 		});
@@ -47,12 +48,12 @@ return wms_concentracion;
 }
 function createriddle_editLayer(parametros)
 {
-var wms_concentracion = new OpenLayers.Layer.WMS("Pistas nuevo escenario",
+var wms_edit = new OpenLayers.Layer.WMS("Pistas nuevo escenario",
         "http://localhost/geoserver/En_busca_del_tesoro/wms",
         {layers: 'En_busca_del_tesoro:pistas_edicion',transparent:true,viewparams: parametros},
         {isBaseLayer: false, singleTile:true, visibility:true}
     );
-return wms_concentracion;
+return wms_edit;
 }
 
 
@@ -197,11 +198,11 @@ return wms_concentracion;
             var falloRule = new OpenLayers.Rule({
                 filter: filtro2,
                 symbolizer: {
-                    externalGraphic:"images/fallo.png",
+                    externalGraphic: "images/fallo.png",
                     graphicWidth: 30,
                     graphicHeight: 30,
                     graphicOpacity: 1.0,
-                    label: ""
+                    label: "",
                 }
             });
             

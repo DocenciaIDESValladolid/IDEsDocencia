@@ -23,6 +23,8 @@ var geolocation_msg='';
 var paths;
 var munis = new Array(10);
 var id_path;
+var name_stage;
+
 
 munis[0]='34074747075'; //Íscar
 munis[1]='34074747186'; //Valladolid
@@ -141,19 +143,19 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 //Añado todos los escenarios del jugador junto con sus controles
 	stages(function(output){
 		//Añado la capa de escenarios 
-		availableStages=createWFSLayer();
+		var viewparams='param_user:987654321';
+		availableStages=createWFSLayer(viewparams);
     	addInteractiveWFSLayer(availableStages,onWFSFeatureSelect);
     	//Añado las capas de juegos en curso y terminados
 		for(i=0;i<output.length;i++)
     	{
-	    	var id = "123456789";
-	        var viewparams='param_user:'+id+';param_path:'+output[i]['id_path'];
+	    	var id = "987654321";
+	        viewparams='param_user:'+id+';param_path:'+output[i]['id_path'];
 	        var nombre = output[i]['name'];
 			var wfs2=createWFSviewparamsLayer($.trim(nombre),viewparams);
             addInteractiveWFSLayer(wfs2,onWFSFeatureSelectProgress);
     	}
     });
-
 	map.updateSize();
 
 	var wms_concentracion=createHeatmapLayer();
@@ -165,11 +167,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 	var clickControl = new OpenLayers.Control.Click();
 	map.addControl(clickControl);
 	clickControl.activate();
-
-	 
-	//OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
-	
-	
+		
     var style = {
         fillOpacity: 0.1,
         fillColor: '#000',
@@ -277,6 +275,8 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 			return;
 			}
 		}
+		name_stage=$.trim(feature.attributes.name);
+		id_path = feature.attributes.id_path;
 		$("#scenarioNameLabel").html(feature.attributes.name);
 		$("#scenarioDescription").html(feature.attributes.descripcion);
 		$("#infoFeaturePanel").trigger( "updatelayout" );
@@ -316,6 +316,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 			$("#validarUbicacion").hide();
 			if(feature.attributes.num_riddle==feature.attributes.max_riddle)
 			{
+				name_stage=$.trim(feature.attributes.name);
 				id_path = feature.attributes.id_path;
 				$("#validarUbicacion").show();
 			}

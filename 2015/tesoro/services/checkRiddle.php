@@ -16,7 +16,7 @@
 	$pista_actual= pg_fetch_array($pista_actual,0,PGSQL_NUM);
 	$pista_siguiente= $pista_actual[0]+1;
 	//Compruebo si la geometría está dentro
-	$query ="SELECT *,ST_Intersects(geom,ST_SetSRID(ST_MakePoint($1,$2),4326)) as insite from riddles where num_riddle=$3 and id_path=$4" ;
+	$query ="SELECT *,ST_Intersects(geom,ST_SetSRID(ST_MakePoint($2,$1),4326)) as insite from riddles where num_riddle=$3 and id_path=$4" ;
 	$acierto=pg_query_params($query,array($lat,$long,$pista_siguiente,$id_path));
 	$acierto= pg_fetch_array($acierto,NULL,PGSQL_ASSOC);
 	//si es cierto consulto si hay preguntas
