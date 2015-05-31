@@ -32,19 +32,19 @@
         <defaultValue/>
       </dimensionInfo>
     </entry>
-    <entry key="cachingEnabled">false</entry>
     <entry key="elevation">
       <dimensionInfo>
         <enabled>false</enabled>
       </dimensionInfo>
     </entry>
+    <entry key="cachingEnabled">false</entry>
     <entry key="JDBC_VIRTUAL_TABLE">
       <virtualTable>
         <name>Progreso_usuario</name>
         <sql>select c.*, name,  (select count(*) &#xd;
 from stages_performed where c.id_path=stages_performed.id_path) as finished, (select num_riddle &#xd;
 from riddles where c.id_riddle=riddles.id), (select description &#xd;
-from riddles where c.id_riddle=riddles.id) as descripcion, (select max(num_riddle) from riddles where c.id_riddle=riddles.id) as max_riddle from current_stages c, stages s, paths p where id_user = &apos;%param_user%&apos; and id_path = %param_path% and s.id=p.id_stage and p.id=c.id_path
+from riddles where c.id_riddle=riddles.id) as descripcion, (select max(num_riddle) from riddles r, current_stages c where c.id_path=r.id_path and c.id_path=1 and c.id_riddle=r.id) as max_riddle from current_stages c, stages s, paths p where id_user = &apos;%param_user%&apos; and id_path = %param_path% and s.id=p.id_stage and p.id=c.id_path
 </sql>
         <escapeSql>false</escapeSql>
         <geometry>
