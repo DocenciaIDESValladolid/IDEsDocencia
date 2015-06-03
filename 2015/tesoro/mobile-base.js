@@ -301,11 +301,13 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 			date= new Date(feature.attributes.date);
 			$("#timeLabel").html("Pista descubierta en la fecha " + date.toLocaleString());
 			$("#validarUbicacion").hide();
+			$("#infoValidar").hide();
 			if(feature.attributes.finished==0)
 			{
 				name_stage=$.trim(feature.attributes.name);
 				id_path = feature.attributes.id_path;
 				$("#validarUbicacion").show();
+				$("#infoValidar").show();
 			}
 			$("#infoFeaturePanel").trigger( "updatelayout");
 			$("#infoRiddle").show();

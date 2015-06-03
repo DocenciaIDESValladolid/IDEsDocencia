@@ -137,7 +137,6 @@ function updateFacebookLoginInfo(fb)
 	var html = fb_user_label + '<a href="#" class="ui-btn  ui-btn-icon-left ui-icon-delete" onclick="fb.logout(facebook_logout);return false;">Salir</a></p>';
 	$("#estadoLogin").html(html);
 	$("#iniciosesionFacebook").hide();
-	$("#validarUbicacion").show();
 
 	$("#search_button").show();
 	$("#mappage").trigger( "updatelayout" );

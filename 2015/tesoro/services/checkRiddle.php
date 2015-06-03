@@ -53,7 +53,7 @@
 			guardarPunto($id_path,$id_user,$lat,$long,$acierto);
 			$resultado= array("status"=>'success',"msg"=>'¡¡¡Enhorabuena, a por la siguiente pista!!!');
 		}
-		if($resultado['status']=='success'){
+		if($resultado['status']=='success' || $resultado['status']=='success_answer'){
 			//Compruebo si era el último punto, si lo es guardo todo lo referente a ese camino en stages_performed
 			$query ="SELECT max(num_riddle) as num_riddle from riddles where id_path=$1" ;
 			$ultimo=pg_query_params($query,array($id_path));

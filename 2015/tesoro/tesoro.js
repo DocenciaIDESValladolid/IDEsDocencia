@@ -32,6 +32,7 @@ switch (state)
     case 'welcoming':
         disable_edit_polygons();
         $("#validarUbicacion").hide();
+        $("#infoValidar").hide();
         $("#nuevoescenario_button").hide();
         $("#welcomingInfo").show();
         $("#createRiddleInfo").hide();
@@ -41,14 +42,17 @@ switch (state)
         disable_edit_polygons();
         $("#welcomingInfo").show();
         $("#createRiddleInfo").hide();
+        $("#infoValidar").hide();
         $("#validarUbicacion").hide();
         $("#nuevoescenario_button").show();
         break;
     case 'createScenario':
         $("#welcomingInfo").show();
         $("#createRiddleInfo").hide();
+        $("#infoValidar").hide();
         $("#nuevoescenario_button").show();
         $("#validarUbicacion").hide();
+        $("#infoValidar").hide();
         break;
     case 'creatingScenario':
         $("#validarUbicacion").hide();
@@ -77,10 +81,12 @@ switch (state)
             emptyPolygonLayer();
         });
         $("#validarUbicacion").hide();
+        $("#infoValidar").hide();
         break;
     case 'running':
-            disable_edit_polygons();
+        disable_edit_polygons();
         $("#validarUbicacion").show();
+        $("#infoValidar").show();
         // $("#validarUbicacion").button('enable');
         break;
     }
@@ -324,7 +330,7 @@ function getCookie(cdemo) {
 function checkCookie() {
 	var demo=getCookie("displayDemo");
 	if (demo == "false") {
-		document.location.href="index.html";
+		document.location.href="tesoro.html";
 	}
 	setCookie("displayDemo", false, 1000);
 }
@@ -424,7 +430,7 @@ function addInteractiveWFSLayer(layer, callback) {
 
 }
 //función para enviar la localización y las respuestas escogidas por el usuario
-function sentLocation (respuesta){
+function sendLocation (respuesta){
    
     if (!geolocation_position)
     {
@@ -436,6 +442,8 @@ function sentLocation (respuesta){
         'id_path' : id_path,
         'lat' : geolocation_position.latitude,
         'long' : geolocation_position.longitude,
+        //'lat' : 41.6581924, //41.6581924 41.65790924 41.6584924 41.6570124
+        //'long' : -4.7158957, //-4.7138957 -4.7148957 -4.7158957
         'resp' : respuesta
          };
         $.ajax({
@@ -465,7 +473,7 @@ function sentLocation (respuesta){
                 $("label[for = radio-choice-v-2c]").text(data['answer3']);
                 setTimeout(function(){$.mobile.changePage('#solveRiddlePage');},500);
             }
-            if(data['status']=='success_answer')
+            if(data['status']=='success_answer' || data['status']=='success')
             {
                 $.mobile.back();
             }
@@ -483,7 +491,7 @@ function answer_question()
 {
     //selecciono la respuesta
     var selected = $("#form_answer input[type='radio']:checked");
-    sentLocation (selected.val()); //la envío
+    sendLocation (selected.val()); //la envío
 }
 //función para comenzar juego
 function startGame (){
