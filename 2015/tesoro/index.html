@@ -66,8 +66,7 @@
 		<legend>Rellena los siguientes campos sobre tu escenario.</legend>
 		<form method="post" id="createScenarioForm" action="services/createScenario.php">
 		<!-- id, name, id_creator, description, date, uri -->
-			<label for="text-basic">ID User</label>
-			<input id="scenario_iduser" value="" name="iduser"/>
+			<input type="hidden" id="scenario_iduser" value="" name="iduser"/>
 			<label for="text-basic">Nombre</label>
 			<input id="scenarioname" value="" name="name" data-theme="a"/>
 			<label for="text-basic">Descripción</label>

@@ -65,8 +65,9 @@ switch (state)
         state = 'createRiddle';//continue to next actions common to createRiddle
         
     case 'createRiddle':
-        // refresh WMS layer
+        // refresh WMS layers
         refresh_WMS_layer("Tesoro:Editable");//"EditingRiddlesWMS"); // nombre ficticio
+        refresh_WMS_layer("Pistas nuevo escenario");
 //        $.mobile.back();
         enable_edit_polygons(function(event)
         {
@@ -101,6 +102,7 @@ function initTesoro(){
                 scenario_under_creation=result.idStage;
                 path_under_creation=result.idPath;
                 $("#createScenarioForm")[0].reset();
+                $("#create_scenario_panel").panel('close');
                 setState('startCreatingRiddle');
             }
         },
@@ -117,7 +119,7 @@ function initTesoro(){
             else{
                 last_created_riddle=result.numRiddle;
                 toast(result.msg);
-                 $.mobile.back();
+                $.mobile.back();
                 $("#createQuestionForm")[0].reset();
                 refresh_WMS_layer("Pistas nuevo escenario");
                 setState('createRiddle');
@@ -268,9 +270,25 @@ function addEditingRiddlesWMS(user,path)
 }
 function eliminarcapa(nombre){
     var layer=map.getLayersByName(nombre);
-    map.removeLayer(layer[0]);
-    map.updateSize();
-    layer[0].destroy();
+    if(layer.length >0)
+    {
+        removeLayerToList(layer[0],nombre);
+        map.removeLayer(layer[0]);
+        map.updateSize();
+        layer[0].destroy();
+    }
+
+}
+function eliminarfeaturecontrol(){
+    var controls = map.getControlsBy('CLASS_NAME', 'OpenLayers.Control.SelectFeature');
+    if (controls.length > 0)
+    {
+        controls.forEach(function (control) {
+            control.deactivate();
+            control.destroy();
+        });
+    }
+   
 }
 function refresh_WMS_layer(name){
     var layers=map.getLayersByName(name);
@@ -280,7 +298,7 @@ function refresh_WMS_layer(name){
             
         }else
         if (layer instanceof OpenLayers.Layer.WMS){
-            layer.refresh();
+            layer.redraw(true);
         }
     });
 }
@@ -311,12 +329,10 @@ function checkCookie() {
 	setCookie("displayDemo", false, 1000);
 }
 
-    //prueba de conseguir todas las capas del usuario en uso
- function stages(handleData){
-
- 	var id = "987654321";
+//prueba de conseguir todas las capas del usuario en uso
+ function stages(){
  	var url = "services/escenarios_usuarios.php"; // El script a dónde se realizará la petición.
- 	var params = {'id' : id};
+ 	var params = {'id' : fb.user.id};
     $.ajax({
            type: "POST",
            url: url,
@@ -331,8 +347,34 @@ function checkCookie() {
                         },
            success: function(data)
            {
-           		handleData(data);
+                //Elimino tanto los controles como la capa de escenarios iniciales
+                eliminarfeaturecontrol();
+                eliminarcapa('Escenarios Iniciales');
+                //Los creo pero con los escenarios iniciales no jugados por el usuario
+           		var viewparams='param_user:'+fb.user.id; 
+                availableStages=createWFSLayer(viewparams);
+                addInteractiveWFSLayer(availableStages,onWFSFeatureSelect);
+                if (data['status']=='success')
+                {  
+                    for(i=0;i<Object.keys(data).length-1;i++)
+                    {
+                        var viewparams='param_user:'+fb.user.id+';param_path:'+data[i]['id_path'];
+                        var nombre = data[i]['name'];
+                        var wfs2=createWFSviewparamsLayer($.trim(nombre),viewparams);
+                        addInteractiveWFSLayer(wfs2,onWFSFeatureSelectProgress);
+                    }
+
+                }
+                else
+                {
+
+                }
+                map.updateSize();
            },
+           error: function(error)
+           {
+             toast('Network error has occurred please try again! Error: '+error);
+           }, 
            dataType: "json",
          });
  } 
@@ -356,7 +398,6 @@ function addInteractiveWFSLayer(layer, callback) {
             hover: true,
             highlightOnly: true,
             renderIntent: "temporary",
-            callbacks: onWFSFeatureSelect
         });
         selectCtrl = new OpenLayers.Control.SelectFeature(layer,
                 {
@@ -385,14 +426,13 @@ function addInteractiveWFSLayer(layer, callback) {
 //función para enviar la localización y las respuestas escogidas por el usuario
 function sentLocation (respuesta){
    
-    if (geolocation_position==null)
+    if (!geolocation_position)
     {
         toast('Pulse el botón de geolocalización');
-        return;
     }
     else{
          var params = {
-        'id_user' : '987654321', //fb.user.id
+        'id_user' : fb.user.id, 
         'id_path' : id_path,
         'lat' : geolocation_position.latitude,
         'long' : geolocation_position.longitude,
@@ -414,18 +454,26 @@ function sentLocation (respuesta){
            {
             //Recargo la capa
                 var vlayers = map.getLayersByName(name_stage);
-                vlayers[0].redraw();
+                vlayers[0].redraw(true);
                 toast(data['msg']);
             //Si necesito realizar las preguntas llamo a la función
             if(data['status']=='challenge')
             {
-                $("#question_riddle").text('Pregunta: '+data[question]);
-                $("label[for = radio-choice-v-2a]").text(data[answer1]);
-                $("label[for = radio-choice-v-2b]").text(data[answer2]);
-                $("label[for = radio-choice-v-2c]").text(data[answer3]);
-                $.mobile.changePage('#solveRiddlePage');
+                $("#question_riddle").text('Pregunta: '+data['question']);
+                $("label[for = radio-choice-v-2a]").text(data['answer1']);
+                $("label[for = radio-choice-v-2b]").text(data['answer2']);
+                $("label[for = radio-choice-v-2c]").text(data['answer3']);
+                setTimeout(function(){$.mobile.changePage('#solveRiddlePage');},500);
+            }
+            if(data['status']=='success')
+            {
+                $.mobile.back();
             }
            },
+           error: function(error)
+           {
+             toast('Network error has occurred please try again! Error: '+error);
+           }, 
            dataType: "json",
          });
     }
@@ -440,14 +488,17 @@ function answer_question()
 //función para comenzar juego
 function startGame (){
    //tengo que comprobar si existe el juego, si ya existe
-    if (geolocation_position==null)
+    if (!geolocation_position)
     {
         toast('Pulse el botón de geolocalización');
-        return;
+    }
+    else if(state !="authenticated")
+    {
+        toast('Debe estar logueado para iniciar un escenario');
     }
     else{
          var params = {
-        'id_user' : '987654321', //fb.user.id
+        'id_user' : fb.user.id, 
         'id_path' : id_path,
         'lat' : geolocation_position.latitude,
         'long' : geolocation_position.longitude,
@@ -466,20 +517,24 @@ function startGame (){
                         },
            success: function(data)
            {
-                //Muestro el mensaje por pantalla
+                //Muestro el mensaje de éxito o error por pantalla
                 toast(data['msg']);
                 //Si está en la localización de inicio creo la nueva capa y recargo la de escenarios iniciales
                 if(data['status']=='success')
                 {
                     $("#infoFeaturePanel").panel("close");
-                    var viewparams='param_user:987654321;param_path:'+id_path;
+                    var viewparams='param_user:'+fb.user.id+';param_path:'+id_path;
                     var wfs=createWFSviewparamsLayer(name_stage,viewparams);
                     addInteractiveWFSLayer(wfs,onWFSFeatureSelectProgress);
                     map.updateSize();
                     var vlayers = map.getLayersByName("Escenarios Iniciales");
-                    vlayers[0].redraw();
+                    vlayers[0].redraw(true);
                 }  
            },
+            error: function(error)
+           {
+             toast('Network error has occurred please try again! Error: '+error);
+           }, 
            dataType: "json",
          });
     }

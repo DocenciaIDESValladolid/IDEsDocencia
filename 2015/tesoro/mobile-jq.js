@@ -175,9 +175,7 @@ function initLayerList() {
     var overlayLayers = map.getLayersBy("isBaseLayer", false);
     $.each(overlayLayers, function() {
         switch(this.name){
-            case 'Markers':
             case 'vector':
-            case 'OpenLayers.Handler.Polygon':
             case 'Tesoro:Editable':
                 break;
             default:
@@ -190,6 +188,9 @@ function initLayerList() {
     
    map.events.register("addlayer", this, function(e) {
         switch(e.layer.name){
+            case 'OpenLayers.Handler.Polygon':
+            case 'Pistas nuevo escenario':
+                break;
             default:
                 if (e.layer.name.indexOf('OpenLayers_Control')==-1){
                    addLayerToList(e.layer);
@@ -222,4 +223,7 @@ function addLayerToList(layer) {
             $(item).toggleClass('checked');
         }
     });
+}
+function removeLayerToList(layer,name) {
+    $("li").remove(":contains("+name+")");
 }

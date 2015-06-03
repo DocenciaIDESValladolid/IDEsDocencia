@@ -5,7 +5,7 @@
 
 	//recojo las variables que necesito
 	@$lat = $_POST['lat'];
-	@$long = $_POST['long'];
+	@$long = $_POST['long']; 
 	@$id_user = $_POST['id_user'];
 	@$id_path = $_POST['id_path'];
 	@$respuesta= $_POST['resp'];
@@ -15,8 +15,9 @@
 	$pista_actual=pg_query_params($query,array($id_user,$id_path));
 	$pista_actual= pg_fetch_array($pista_actual,0,PGSQL_NUM);
 	$pista_siguiente= $pista_actual[0]+1;
+
 	//Compruebo si la geometría está dentro
-	$query ="SELECT *,ST_Intersects(geom,ST_SetSRID(ST_MakePoint($2,$1),4326)) as insite from riddles where num_riddle=$3 and id_path=$4" ;
+	$query ="SELECT *,ST_Intersects(geom,st_transform(ST_SetSRID(ST_MakePoint($2,$1),900913),4326)) as insite from riddles where num_riddle=$3 and id_path=$4" ;
 	$acierto=pg_query_params($query,array($lat,$long,$pista_siguiente,$id_path));
 	$acierto= pg_fetch_array($acierto,NULL,PGSQL_ASSOC);
 	//si es cierto consulto si hay preguntas
@@ -54,7 +55,7 @@
 		}
 		if($resultado['status']=='success'){
 			//Compruebo si era el último punto, si lo es guardo todo lo referente a ese camino en stages_performed
-			$query ="SELECT max(num_riddle) as num_riddle from riddles, current_stages where id_path=$1" ;
+			$query ="SELECT max(num_riddle) as num_riddle from riddles where id_path=$1" ;
 			$ultimo=pg_query_params($query,array($id_path));
 			$ultimo= pg_fetch_array($ultimo,NULL,PGSQL_ASSOC);
 			if($ultimo['num_riddle']==$pista_siguiente)
@@ -78,7 +79,7 @@
 	function guardarPunto($id_path,$id_user,$lat,$long,$acierto=null)
 	{
 			$query ="INSERT INTO current_stages (id_path, id_user, accum_time, accum_distance,date, locations, id_riddle) 
-			VALUES ($1,$2,0,0,now(),ST_SetSRID(ST_MakePoint($4,$3),4326), $5);" ;
+			VALUES ($1,$2,0,0,now(),st_transform(ST_SetSRID(ST_MakePoint($4,$3),900913),4326), $5);" ;
 			pg_query_params($query,array($id_path,$id_user,$lat,$long,$acierto['id']));
 	}
 ?>

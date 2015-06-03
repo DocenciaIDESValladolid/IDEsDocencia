@@ -140,22 +140,9 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 
 
     
-//Añado todos los escenarios del jugador junto con sus controles
-	stages(function(output){
-		//Añado la capa de escenarios 
-		var viewparams='param_user:987654321';
-		availableStages=createWFSLayer(viewparams);
-    	addInteractiveWFSLayer(availableStages,onWFSFeatureSelect);
-    	//Añado las capas de juegos en curso y terminados
-		for(i=0;i<output.length;i++)
-    	{
-	    	var id = "987654321";
-	        viewparams='param_user:'+id+';param_path:'+output[i]['id_path'];
-	        var nombre = output[i]['name'];
-			var wfs2=createWFSviewparamsLayer($.trim(nombre),viewparams);
-            addInteractiveWFSLayer(wfs2,onWFSFeatureSelectProgress);
-    	}
-    });
+//Añado los escenarios iniciales junto con sus controles
+	availableStages=createWFSLayer();
+	addInteractiveWFSLayer(availableStages,onWFSFeatureSelect);
 	map.updateSize();
 
 	var wms_concentracion=createHeatmapLayer();
@@ -314,7 +301,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 			date= new Date(feature.attributes.date);
 			$("#timeLabel").html("Pista descubierta en la fecha " + date.toLocaleString());
 			$("#validarUbicacion").hide();
-			if(feature.attributes.num_riddle==feature.attributes.max_riddle)
+			if(feature.attributes.finished==0)
 			{
 				name_stage=$.trim(feature.attributes.name);
 				id_path = feature.attributes.id_path;

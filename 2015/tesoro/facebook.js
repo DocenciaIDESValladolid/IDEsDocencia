@@ -147,6 +147,7 @@ function updateFacebookLoginInfo(fb)
 	$("#name_facebook").val(fb.user.name);
 	
 	setState('authenticated');
+  stages();
 }
 
 // Funcion para publicar un mensaje en tu muro
