@@ -465,7 +465,7 @@ function sentLocation (respuesta){
                 $("label[for = radio-choice-v-2c]").text(data['answer3']);
                 setTimeout(function(){$.mobile.changePage('#solveRiddlePage');},500);
             }
-            if(data['status']=='success')
+            if(data['status']=='success_answer')
             {
                 $.mobile.back();
             }

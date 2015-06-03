@@ -6,6 +6,8 @@
 	//recojo las variables que necesito
 	@$lat = $_POST['lat'];
 	@$long = $_POST['long']; 
+	$lat=  41.6587890663268;
+	$long= -4.71930902896067;
 	@$id_user = $_POST['id_user'];
 	@$id_path = $_POST['id_path'];
 	@$respuesta= $_POST['resp'];
@@ -17,7 +19,7 @@
 	$pista_siguiente= $pista_actual[0]+1;
 
 	//Compruebo si la geometría está dentro
-	$query ="SELECT *,ST_Intersects(geom,st_transform(ST_SetSRID(ST_MakePoint($2,$1),900913),4326)) as insite from riddles where num_riddle=$3 and id_path=$4" ;
+	$query ="SELECT *,ST_Intersects(geom,ST_SetSRID(ST_MakePoint($2,$1),4326)) as insite from riddles where num_riddle=$3 and id_path=$4" ;
 	$acierto=pg_query_params($query,array($lat,$long,$pista_siguiente,$id_path));
 	$acierto= pg_fetch_array($acierto,NULL,PGSQL_ASSOC);
 	//si es cierto consulto si hay preguntas
@@ -38,7 +40,7 @@
 				if($pregunta['correct_answer']==$respuesta)
 				{
 					guardarPunto($id_path,$id_user,$lat,$long,$acierto);
-					$resultado= array("status"=>'success',"msg"=>'¡¡¡Has acertado, a por la siguiente pista!!!');
+					$resultado= array("status"=>'success_answer',"msg"=>'¡¡¡Has acertado, a por la siguiente pista!!!');
 				}
 				else
 				{
@@ -79,7 +81,7 @@
 	function guardarPunto($id_path,$id_user,$lat,$long,$acierto=null)
 	{
 			$query ="INSERT INTO current_stages (id_path, id_user, accum_time, accum_distance,date, locations, id_riddle) 
-			VALUES ($1,$2,0,0,now(),st_transform(ST_SetSRID(ST_MakePoint($4,$3),900913),4326), $5);" ;
+			VALUES ($1,$2,0,0,now(),ST_SetSRID(ST_MakePoint($4,$3),4326), $5);" ;
 			pg_query_params($query,array($id_path,$id_user,$lat,$long,$acierto['id']));
 	}
 ?>
