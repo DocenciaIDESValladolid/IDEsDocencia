@@ -6,8 +6,6 @@
 	//recojo las variables que necesito
 	@$lat = $_POST['lat'];
 	@$long = $_POST['long'];
-	$lat=  41.6594475177284;
-	$long= -4.71600622908816;
 	@$id_user = $_POST['id_user'];
 	@$id_path = $_POST['id_path'];
 
