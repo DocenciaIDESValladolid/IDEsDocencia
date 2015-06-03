@@ -1,0 +1,15 @@
+<layer>
+  <name>pistas_edicion</name>
+  <id>LayerInfoImpl--6afcc8dc:14d764289d0:-7f8d</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--25bf7c48:14cc295c52d:-7f10</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--6afcc8dc:14d764289d0:-7f8e</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>
