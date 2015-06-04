@@ -63,7 +63,14 @@
 				$query ="INSERT INTO stages_performed (id_path, id_user, time, distance, date)
 				VALUES ($1,$2,0,0,now());" ;
 				pg_query_params($query,array($id_path,$id_user));
-				$resultado= array("status"=>'success',"msg"=>'¡¡¡Enhorabuena, has completado el escenario!!!');
+				if($resultado['status']=='success')
+				{
+					$resultado= array("status"=>'success',"msg"=>'¡¡¡Enhorabuena, has completado el escenario!!!');
+				}
+				else
+				{
+					$resultado= array("status"=>'success_answer',"msg"=>'¡¡¡Enhorabuena, has completado el escenario!!!');
+				}
 			}
 		}
 		
