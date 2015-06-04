@@ -2,16 +2,13 @@ var fb = {
   config :{
   // CONFIG VARS: 
 
- //JOSU APP    app_id : '616622821758240',
-    app_id : '408450839360647', // CazaDelTesoro App
-   // app_id : '288631441316558', // FixCity2 App
-	//app_id : '288632621316440', //FixCity2 TestApp
-
+  // Copy this file as facebook.js and fill-in the Facebook App Id
+    app_id : '408450839360647', // CazaDelTesoro Test App
+ 
     use_xfbml : true,
 
     extendPermissions : 'email',  //'publish_stream' , 
     // info: http://developers.facebook.com/docs/reference/api/permissions/
-
     locale : 'es_ES' 
     // all locales in: http://www.facebook.com/translations/FacebookLocales.xml
 
