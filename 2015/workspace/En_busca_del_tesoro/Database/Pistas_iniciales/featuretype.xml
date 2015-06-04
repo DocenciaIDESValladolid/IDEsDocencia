@@ -41,7 +41,7 @@
     <entry key="JDBC_VIRTUAL_TABLE">
       <virtualTable>
         <name>Pistas iniciales</name>
-        <sql>select id,id_path,description,answers,date,geom from riddles where num_riddle = 0
+        <sql>select id,id_path,description,answer1,answer2,answer3,date,geom from riddles where num_riddle = 0
 </sql>
         <escapeSql>false</escapeSql>
         <geometry>

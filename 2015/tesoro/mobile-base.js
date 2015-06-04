@@ -20,6 +20,7 @@ var muni_name;
 var muni_code;
 var geolocation_accuracy;
 var geolocation_msg='';
+var geolocation_position;
 var paths;
 var munis = new Array(10);
 var id_path;

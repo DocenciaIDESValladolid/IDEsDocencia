@@ -1,8 +1,8 @@
 <?php
-	$db = pg_connect("host=localhost user=postgres password=veloces13 dbname=Postgre");
+	$db = pg_connect("host=localhost user=tesoro password=tesoro dbname=tesoro");
 	if (!$db)
 	{
-		echo 'Error: No se ha podido realizar la conexión con la Base de Datos. Por favor, inténtelo de nuevo más tarde.';		
+		echo 'Error: No se ha podido realizar la conexiï¿½n con la Base de Datos. Por favor, intï¿½ntelo de nuevo mï¿½s tarde.';		
 		echo "<input type='button' value='Back' onClick='history.go(-1);'>";		
 		exit;
 	}

@@ -170,7 +170,7 @@ return wms_edit;
     var animCluster=new OpenLayers.Strategy.Cluster({
             distance: 40,threshold:2,
         });
-    var strategies = [ new OpenLayers.Strategy.BBOX({resFactor: 1}),animCluster];
+    var strategies = [ new OpenLayers.Strategy.BBOX({resFactor: 1})];
     // Define three colors that will be used to style the cluster features
             // depending on the number of features they contain.
             var colors = {
