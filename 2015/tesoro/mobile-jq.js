@@ -72,10 +72,11 @@ $('#popup').on('pageshow',function(event, ui){
     }
     $("ul#details-list").empty().append(li).listview("refresh");
 });
-
-$(document).on('pageload',function(event){
+    
+$(document).on('pagecontainerload',function(event){
      setState("welcoming"); //INITIALIZE state
 });
+
 $(document).on('pagecontainershow',function(event, ui){
     var pageId = $('body').pagecontainer('getActivePage').prop('id');
     if (pageId==='mappage'){//fix the content height AFTER jQuery Mobile has rendered the map page

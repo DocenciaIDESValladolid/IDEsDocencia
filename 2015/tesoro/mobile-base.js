@@ -153,8 +153,9 @@ markers.id="Markers";
      polygonDraw= new OpenLayers.Control.DrawFeature(vlayer, OpenLayers.Handler.Polygon);
      map.addControl(polygonDraw);
      map.addLayer(vlayer);
-     // CAPA DE MARCAS
-	map.addLayer(markers);
+     // Añado la capa de marcas y la oculto
+	 map.addLayer(markers);
+	 map.getLayer('Markers').setVisibility(false);
 
     
 //Añado los escenarios iniciales junto con sus controles
