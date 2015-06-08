@@ -177,6 +177,7 @@ function initLayerList() {
         switch(this.name){
             case 'vector':
             case 'Tesoro:Editable':
+            case 'Markers':
                 break;
             default:
                 if (this.name.indexOf('OpenLayers_Control')==-1){

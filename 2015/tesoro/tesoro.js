@@ -6,7 +6,7 @@ var scenario_under_creation=null;
 var path_under_creation=null;
 var scenario_running='';
 var last_created_riddle=null;
-
+var modo_depuracion;
 /**
  * States of the application:
  * welcoming a guest user is visiting the app
@@ -45,6 +45,9 @@ switch (state)
         $("#infoValidar").hide();
         $("#validarUbicacion").hide();
         $("#nuevoescenario_button").show();
+        $('#flip-2').on('change', function() {
+        depuracion($('#flip-2').val());
+         });
         break;
     case 'createScenario':
         $("#welcomingInfo").show();
@@ -434,17 +437,34 @@ function sendLocation (respuesta){
    
     if (!geolocation_position)
     {
-        toast('Pulse el botón de geolocalización');
+        if(modo_depuracion==1)
+        {
+            toast('Pinche con la chincheta en el lugar a depurar');
+        }
+
+        else
+        {
+             toast('Pulse el botón de geolocalización');
+        }
     }
     else{
+        if(modo_depuracion==1)
+        {
+            var lat=geolocation_position.lat;
+            var lon=geolocation_position.lon;
+        }
+        else{
+            var lat=geolocation_position.latitude;
+            var lon=geolocation_position.longitude;
+        }
+
          var params = {
         'id_user' : fb.user.id, 
         'id_path' : id_path,
-        'lat' : geolocation_position.latitude,
-        'long' : geolocation_position.longitude,
-        //'lat' : 41.6581924, //41.6581924 41.65790924 41.6584924 41.6570124
-        //'long' : -4.7158957, //-4.7138957 -4.7148957 -4.7158957
-        'resp' : respuesta
+        'lat' : lat,
+        'long' : lon,
+        'resp' : respuesta,
+        'dep'  : modo_depuracion,
          };
         $.ajax({
            type: "POST",
@@ -498,18 +518,37 @@ function startGame (){
    //tengo que comprobar si existe el juego, si ya existe
     if (!geolocation_position)
     {
-        toast('Pulse el botón de geolocalización');
+        if(modo_depuracion==1)
+        {
+            toast('Pinche con la chincheta en el lugar a depurar');
+        }
+
+        else
+        {
+             toast('Pulse el botón de geolocalización');
+        }
     }
     else if(state !="authenticated")
     {
         toast('Debe estar logueado para iniciar un escenario');
     }
     else{
+         if(modo_depuracion==1)
+        {
+            var lat=geolocation_position.lat;
+            var lon=geolocation_position.lon;
+        }
+        else{
+            var lat=geolocation_position.latitude;
+            var lon=geolocation_position.longitude;
+        }
+
          var params = {
         'id_user' : fb.user.id, 
         'id_path' : id_path,
-        'lat' : geolocation_position.latitude,
-        'long' : geolocation_position.longitude,
+        'lat' : lat,
+        'long' : lon,
+        'dep'  : modo_depuracion,
          };
         $.ajax({
            type: "POST",
@@ -547,3 +586,21 @@ function startGame (){
          });
     }
 }    
+function depuracion(val)
+{
+    //Cambio el modo cada vez que le doy al botón
+    //Cada vez que cambio el modo reinicio la geolocalización
+    geolocation_position = null;
+    var layer = map.getLayer('Markers');
+    //Si estoy en modo depuración dejo que se vea la chincheta
+    if(val == 'on')
+    {
+        modo_depuracion= 1;
+        layer.setVisibility(true);
+    }
+    //Si no, no permito que se vea
+    else{
+        modo_depuracion= 0;
+        layer.setVisibility(false);
+    }
+}

@@ -55,7 +55,16 @@ fb.ready(function(){
 
 var vector = new OpenLayers.Layer.Vector("vector", {});
 	
-	
+//Capa marcador
+var styleMarkDefault = new OpenLayers.StyleMap({
+						externalGraphic: "images/marker-icon-fixit.png",
+						pointRadius: 20,
+						graphicOpacity: 1.0,
+						graphicWidth: 56,
+						graphicHeight: 56,
+						graphicYOffset: -56});
+var markers = new OpenLayers.Layer.Vector( "Markers", { styleMap: styleMarkDefault } );
+markers.id="Markers";	
 /********************
 * Controles de mapa
 **********************/
@@ -82,6 +91,12 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 				}, this.handlerOptions
 			);
 		}, 
+		trigger: function(e) {
+			var lonlat = map.getLonLatFromPixel(e.xy);
+			var e= {point:{y:lonlat.lat,x:lonlat.lon}};
+			eventLocationChanged(e);		
+		}
+
 	}); //fin OpenLayers.Control.Click
 
 
@@ -138,7 +153,8 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
      polygonDraw= new OpenLayers.Control.DrawFeature(vlayer, OpenLayers.Handler.Polygon);
      map.addControl(polygonDraw);
      map.addLayer(vlayer);
-
+     // CAPA DE MARCAS
+	map.addLayer(markers);
 
     
 //Añado los escenarios iniciales junto con sus controles
@@ -189,10 +205,7 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
             )
         ]);
         map.zoomToExtent(vector.getDataExtent());
-		geolocation_accuracy=e.position.coords.accuracy;
 		geolocation_position=e.position.coords;
-		geolocation_msg= "<p>Localizado con "+ geolocation_accuracy+" metros de precisión.</p>";
-		queryUA(e,successGeolocationUA);
     });
     initTesoro();
 
@@ -352,25 +365,6 @@ var vector = new OpenLayers.Layer.Vector("vector", {});
 		geolocation_msg="";
 		//queryUA(e,successUA,failureUA);
 	}
-	function successUA(jsonResponse){
-	if (jsonResponse.features.length==2)
-	{
-		prov_name= jsonResponse.features[0].properties.nameunit;
-		muni_name= jsonResponse.features[1].properties.nameunit;
-		muni_code= jsonResponse.features[1].properties.nationalcode;
-		toast("<p>"+muni_name+"("+prov_name+")</p>"+ geolocation_msg);
-		fillForm();
-		}
-	}
-	function successGeolocationUA(jsonResponse){
-	if (jsonResponse.features && jsonResponse.features.length==2)
-	{
-		var prov_name= jsonResponse.features[0].properties.nameunit;
-		var muni_name= jsonResponse.features[1].properties.nameunit;
-		var muni_code= jsonResponse.features[1].properties.nationalcode;
-		toast("<p>"+muni_name+"("+prov_name+")</p>"+ geolocation_msg);
-		}
-	}
 	function toast(msg){
 	$("<div class='ui-loader ui-overlay-shadow  ui-corner-all' style='background-color:black;'><p>"+msg+"</p></div>")
 	.css({ display: "block", 
@@ -445,4 +439,21 @@ $.ajaxPrefilter( function( options ) {
 			error: failureCallBack,
 			});
 	}
-	
+	//Función para mover el punto
+	function moveMark(point)
+	{
+		var size = new OpenLayers.Size(21,25);
+		var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+		var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png',size,offset);
+		var markers = map.getLayer('Markers');
+		markers.removeAllFeatures();
+		var newMarker = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(point.x,point.y),null);
+		markers.addFeatures(newMarker);         
+	}
+	//Recoger evento de marker
+	function eventLocationChanged(e){
+		moveMark(e.point);
+		var markers = map.getLayer('Markers');
+		//var feature = markers.features;
+		geolocation_position = markers.features[0].geometry.bounds.getCenterLonLat();
+	}

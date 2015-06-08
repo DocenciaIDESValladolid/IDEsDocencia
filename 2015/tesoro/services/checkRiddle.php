@@ -9,6 +9,7 @@
 	@$id_user = $_POST['id_user'];
 	@$id_path = $_POST['id_path'];
 	@$respuesta= $_POST['resp'];
+	@$depuracion= $_POST['dep'];
 
 	//Recupero la última pista descubierta por el usuario para ese escenario
 	$query ="SELECT max(num_riddle) from riddles r, current_stages c where c.id_riddle=r.id and id_user=$1 and c.id_path=r.id_path and c.id_path=$2" ;
@@ -17,7 +18,13 @@
 	$pista_siguiente= $pista_actual[0]+1;
 
 	//Compruebo si la geometría está dentro
-	$query ="SELECT *,ST_Intersects(geom,ST_SetSRID(ST_MakePoint($2,$1),4326)) as insite from riddles where num_riddle=$3 and id_path=$4" ;
+	if($depuracion==1)
+	{
+		$query ="SELECT *,ST_Intersects(geom,st_transform(ST_SetSRID(ST_MakePoint($2,$1),900913),4326)) as insite from riddles where num_riddle=$3 and id_path=$4" ;
+	}
+	else{
+		$query ="SELECT *,ST_Intersects(geom,ST_SetSRID(ST_MakePoint($2,$1),4326)) as insite from riddles where num_riddle=$3 and id_path=$4" ;
+	}
 	$acierto=pg_query_params($query,array($lat,$long,$pista_siguiente,$id_path));
 	$acierto= pg_fetch_array($acierto,NULL,PGSQL_ASSOC);
 	//si es cierto consulto si hay preguntas
@@ -50,7 +57,7 @@
 		//si no hay preguntas devuelvo que todo bien y guardo el punto en current_stages
 		else
 		{
-			guardarPunto($id_path,$id_user,$lat,$long,$acierto);
+			guardarPunto($id_path,$id_user,$lat,$long,$acierto,$depuracion);
 			$resultado= array("status"=>'success',"msg"=>'¡¡¡Enhorabuena, a por la siguiente pista!!!');
 		}
 		if($resultado['status']=='success' || $resultado['status']=='success_answer'){
@@ -78,15 +85,22 @@
 	//Si no lo es, devuelvo que no es el lugar correcto y lo registro como fallo
 	else
 	{
-		guardarPunto($id_path,$id_user,$lat,$long);
+		guardarPunto($id_path,$id_user,$lat,$long,null,$depuracion);
 		$resultado= array("status"=>'miss',"msg"=>'No es el lugar correcto');
 	}
 	echo json_encode($resultado);
 
-	function guardarPunto($id_path,$id_user,$lat,$long,$acierto=null)
+	function guardarPunto($id_path,$id_user,$lat,$long,$acierto=null,$depuracion)
 	{
+		if($depuracion==1)
+		{
+			$query ="INSERT INTO current_stages (id_path, id_user, accum_time, accum_distance,date, locations, id_riddle) 
+			VALUES ($1,$2,0,0,now(),st_transform(ST_SetSRID(ST_MakePoint($4,$3),900913),4326), $5);" ;
+		}
+		else{
 			$query ="INSERT INTO current_stages (id_path, id_user, accum_time, accum_distance,date, locations, id_riddle) 
 			VALUES ($1,$2,0,0,now(),ST_SetSRID(ST_MakePoint($4,$3),4326), $5);" ;
+		}
 			pg_query_params($query,array($id_path,$id_user,$lat,$long,$acierto['id']));
 	}
 ?>
