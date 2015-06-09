@@ -250,7 +250,7 @@ markers.id="Markers";
 }
 	
 	/**
-	* Selección de una denuncia ya existente
+	* Selección de un escenario
 	*/
 
 	function onWFSFeatureSelect(evt) {
@@ -283,7 +283,9 @@ markers.id="Markers";
 		$("#infoScenario").show();
 		$("#infoFeaturePanel").panel("open");
 	}
-
+	/**
+	* Selección de una pista acertada o no
+	*/
 	function onWFSFeatureSelectProgress(evt) {
 		feature = evt.feature;
 		selectCtrl.unselectAll();
@@ -356,11 +358,6 @@ markers.id="Markers";
 			feature.popup.destroy();
 			feature.popup = null;
 		}
-	}
-	function eventLocationChanged(e){
-		moveMark(e.point);
-		geolocation_msg="";
-		//queryUA(e,successUA,failureUA);
 	}
 	function toast(msg){
 	$("<div class='ui-loader ui-overlay-shadow  ui-corner-all' style='background-color:black;'><p>"+msg+"</p></div>")

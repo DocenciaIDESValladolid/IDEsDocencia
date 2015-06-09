@@ -517,7 +517,7 @@ function answer_question()
 }
 //función para comenzar juego
 function startGame (){
-   //tengo que comprobar si existe el juego, si ya existe
+   //tengo que comprobar si tengo una localización
     if (!geolocation_position)
     {
         if(modo_depuracion==1)
@@ -530,6 +530,7 @@ function startGame (){
              toast('Pulse el botón de geolocalización');
         }
     }
+    //Comprobar si el usuario está autenticado
     else if(state !="authenticated")
     {
         toast('Debe estar logueado para iniciar un escenario');
