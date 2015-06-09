@@ -10,7 +10,7 @@
   <connectionParameters>
     <entry key="Connection timeout">20</entry>
     <entry key="port">5432</entry>
-    <entry key="passwd">crypt1:7J66jtlBzISgXtO4Q9+CrjxxqLfVgS7T</entry>
+    <entry key="passwd">YourPassword</entry>
     <entry key="dbtype">postgis</entry>
     <entry key="encode functions">false</entry>
     <entry key="Evictor run periodicity">300</entry>
