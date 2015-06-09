@@ -44,7 +44,7 @@
 			{
 				if($pregunta['correct_answer']==$respuesta)
 				{
-					guardarPunto($id_path,$id_user,$lat,$long,$acierto);
+					guardarPunto($id_path,$id_user,$lat,$long,$acierto,$depuracion);
 					$resultado= array("status"=>'success_answer',"msg"=>'¡¡¡Has acertado, a por la siguiente pista!!!');
 				}
 				else

@@ -147,7 +147,7 @@ function end_scenario_button_action(event,ui){
         { 
            eliminarcapa('Pistas nuevo escenario');
            if  (last_created_riddle==null){
-               if (confirm("¿Deseas cancelar este escenario? No tiene ninguna pista."))
+               if (confirm("¿Deseas borrar este escenario? No tiene ninguna pista."))
                {
                    $.ajax("services/deleteScenario.php?id="+scenario_under_creation)
                            .done(function(data){
@@ -156,7 +156,7 @@ function end_scenario_button_action(event,ui){
 							   setState("authenticated");
                            })
                            .fail(function(data){
-                               toast("No se ha podido cancelar el escenario. Inténtelo de nuevo más tarde");
+                               toast("No se ha podido borrar el escenario. Inténtelo de nuevo más tarde");
                            });
                }else{
                scenario_under_creation=null;
