@@ -72,9 +72,12 @@ $('#popup').on('pageshow',function(event, ui){
     }
     $("ul#details-list").empty().append(li).listview("refresh");
 });
-    
-$(document).on("pagecontainerload",function(event){
+var initialized=false;  
+$(document).on("pageshow", function(event){
+    if (event.target.id=='mappage' && initialized==false){
      setState("welcoming"); //INITIALIZE state
+     initialized=true;
+    }
 });
 
 $(document).on('pagecontainershow',function(event, ui){
