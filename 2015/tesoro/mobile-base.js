@@ -212,11 +212,7 @@ markers.id="Markers";
 
 	};// End of init
 
-	
-	function addReport(evt)
-	{
-		$.mobile.changePage("#nuevadenuncia");
-	}
+
 	/**
 	* Selección de una marca de nueva denuncia en el mapa.
 	*/

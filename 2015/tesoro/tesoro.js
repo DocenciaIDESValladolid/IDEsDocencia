@@ -37,6 +37,7 @@ switch (state)
         $("#welcomingInfo").show();
         $("#createRiddleInfo").hide();
         $("#infopanel").panel('open');
+        $('#flip-2').parent().hide();
         break;
     case 'authenticated':
         disable_edit_polygons();
@@ -48,6 +49,7 @@ switch (state)
         $('#flip-2').on('change', function() {
         depuracion($('#flip-2').val());
          });
+        $('#flip-2').parent().show();
         break;
     case 'createScenario':
         $("#welcomingInfo").show();

@@ -73,7 +73,7 @@ $('#popup').on('pageshow',function(event, ui){
     $("ul#details-list").empty().append(li).listview("refresh");
 });
     
-$(document).on('pagecontainerload',function(event){
+$(document).on("pagecontainerload",function(event){
      setState("welcoming"); //INITIALIZE state
 });
 
@@ -124,36 +124,7 @@ $(document).on('pagecontainershow',function(event, ui){
     // only listen to the first event triggered
  //   $('#searchpage').die('pageshow', arguments.callee);
 	}
-	else if (pageId==='nuevadenuncia_loc_actual')
-	{
-	$.getJSON('emails.php',{codigoine:muni_code},
-		function (data)
-		{
-		var select = $('select');
-		select.html('');
-		var first=true;
-		for (emailindex in data)
-			{
-				var option=$("<option></option>")
-					.attr("value",data[emailindex].email)
-					.text(data[emailindex].email);
-				if (first)
-					{
-					option.attr("selected","true");
-					first=false;
-					}
-				select.append(option); 
-			}
-		select.selectmenu();
-        select.selectmenu('refresh', true);
-		}
-		);
-	$('select').on('input propertychange', 
-		function(){
-			$('#emailMunicipality').val($('select').val());
-		});
 	
-	}
 });
 
 function initLayerList() {
