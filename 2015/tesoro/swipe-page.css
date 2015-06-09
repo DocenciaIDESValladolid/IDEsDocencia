@@ -1,6 +1,7 @@
 /* Set the background image sources */
 #cazatesoro { background-image: url("images/cazatesoro.jpg"); }
 #mapa { background-image: url("images/mapa.jpg"); }
+#vista_ejemplo { background-image: url("images/vista-inicial.png"); }
 #cofre { background-image: url("images/cofre.jpg"); }
 
 /* Background settings */
