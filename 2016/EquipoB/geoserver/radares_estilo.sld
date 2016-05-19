@@ -13,7 +13,7 @@
                 <se:OnlineResource xlink:type="simple" xlink:href="./55389.svg"/>
                 <se:Format>image/svg+xml</se:Format>
               </se:ExternalGraphic>
-              <se:Size>5</se:Size>
+              <se:Size>4</se:Size>
             </se:Graphic>
           </se:PointSymbolizer>
         </se:Rule>
