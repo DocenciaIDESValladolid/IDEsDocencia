@@ -105,8 +105,27 @@ ScriptAlias /php-cgi/ "C:/xampp/php/"
         Require local
         ErrorDocument 403 /error/XAMPP_FORBIDDEN.html.var
     </Directory>
- Alias /radares "C:\Users\nylon\Documents\UNI_IDE\proyecto\IDEsDocencia\2016\EquipoB\server\radares\public_html"
-    <Directory "C:\Users\nylon\Documents\UNI_IDE\proyecto\IDEsDocencia\2016\EquipoB\server\radares\public_html">
+
+Alias /phpmyadmin "C:/xampp/phpMyAdmin/"
+    <Directory "C:/xampp/phpMyAdmin">
+        AllowOverride AuthConfig
+        Require local
+        ErrorDocument 403 /error/XAMPP_FORBIDDEN.html.var
+    </Directory>
+
+    Alias /webalizer "C:/xampp/webalizer/"
+    <Directory "C:/xampp/webalizer">
+        <IfModule php5_module>
+    		<Files "webalizer.php">
+    			php_admin_flag safe_mode off
+    		</Files>
+        </IfModule>
+        AllowOverride AuthConfig
+        Require local
+        ErrorDocument 403 /error/XAMPP_FORBIDDEN.html.var
+    </Directory>
+ Alias /radares "C:\Users\Mario\Desktop\UNIVERSIDAD\4\IDE\IDEsDocencia\2016\EquipoB\server\radares\public_html"
+    <Directory "C:\Users\Mario\Desktop\UNIVERSIDAD\4\IDE\IDEsDocencia\2016\EquipoB\server\radares\public_html">
         AllowOverride None
 	Options Indexes FollowSymLinks
 	Order allow,deny
@@ -118,10 +137,8 @@ ScriptAlias /php-cgi/ "C:/xampp/php/"
 </IfModule>
 
 
-ProxyPass /wps/ http://www.cartociudad.es/wps/
+ProxyPass /wps http://www.cartociudad.es/wps/WebProcessingService
 ProxyPass /geoserver http://localhost:8080/geoserver
 ProxyPass /tel http://www.tel.uva.es
 ProxyPassReverse /geoserver http://localhost:8080/geoserver
 ProxyPassReverse /wps http://www.cartociudad.es/wps/WebProcessingService
-
- 

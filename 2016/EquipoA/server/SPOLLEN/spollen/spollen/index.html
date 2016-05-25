@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,28 +11,8 @@
  	<link rel="stylesheet" href="estilo.css">
  	<link rel="stylesheet" href="estilo_f.css">
     <script src="../OpenLayers.js"></script>
-    <script src="../examples/geolocation.js"></script>
-    <script type="text/javascript">
-        var lon = -4;
-        var lat = 41;
-        var zoom = 5;
-        var map, layer;
-
-        function init(){
-            map = new OpenLayers.Map( 'map' );
-            layer = new OpenLayers.Layer.WMS( "OpenLayers WMS",
-                    "http://vmap0.tiles.osgeo.org/wms/vmap0", {layers: 'basic'} );
-			var pnoa_layer = new OpenLayers.Layer.WMS( "Ortofotos España",
-                    "http://www.ign.es/wms-inspire/pnoa-ma?", {layers: 'PNOA'} );
-            map.addLayers([pnoa_layer,layer]);
-	
-			var avisos_layer = new OpenLayers.Layer.WMS( "Usos del suelo",
-                    "http://localhost:8080/geoserver/wms?", {layers: 'Proyecto:Avisos',transparent: true}, {isBaseLayer: false, opacity: 1} );
-					map.addLayer(avisos_layer);
-            map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
-            map.addControl( new OpenLayers.Control.LayerSwitcher() );
-        }
-    </script>
+    <script src="geoloc.js"></script>
+    
   </head>
   <body onload="init()" background="images/RS%20Reflejos.jpg">
 	  	<div class="header-v3">
@@ -40,7 +21,8 @@
 					<div class="alignleft">
 						<div class="header-info" id="Noticias"><strong> SPOLLEN<span class="sep">|</span>
 						<a href="mailto:spollen@gmail.com">equipoA@gmail.com</a></strong>
-						<a href="twitter.com/spollen"><img id="separacion" width="4%" title="Twitter de sPollen" src="images/twitter.png"></a><a href="facebook.com/sPollen"><img width="3.8%" title="Facebook de sPollen" src="images/facebook.png"></a>
+
+<!-- 						<a href="twitter.com/spollen"><img id="separacion" width="4%" title="Twitter de sPollen" src="images/twitter.png"></a><a href="facebook.com/sPollen"><img width="3.8%" title="Facebook de sPollen" src="images/facebook.png"></a> -->
 						</div>		
 					</div>
 				</div>
@@ -51,8 +33,6 @@
 	<center>
 		<div id="map" class="bigmap" align="center"></div>
         	<button id="botonazo" type="submit">Localízame</button>
-			<a id="botonazo"><input type="checkbox" name="track" id="track">
-			<label for="track" >Sigue mi posición</label></a>
     </center>       
  </div>
  
@@ -100,6 +80,7 @@
 <form action="index.html" method="post" accept-charset="utf-8">
 	<input type="button" value="Recargar" onClick="window.location.reload();">
 </form>
+
 </body><!-- Fin Body-->
   
 </html>
