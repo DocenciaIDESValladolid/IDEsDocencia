@@ -85,8 +85,9 @@
                 strategies: [new OpenLayers.Strategy.BBOX()],
                 protocol: new OpenLayers.Protocol.WFS({
                     url:  "http://localhost/geoserver/wfs",
-                    featureType: "interseccion_radares",
-                    featureNS: "http://localhost:8080/geoserver/info_radar"
+                    featureType: "radares",
+                    featureNS: "http://localhost:8080/geoserver/info_radar",
+                    geometryName: "geom"
                 }),
                 styleMap: radarStyle,
 //                filter: new OpenLayers.Filter.Logical({
