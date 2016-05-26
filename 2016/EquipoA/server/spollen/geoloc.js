@@ -1,3 +1,5 @@
+/* global geoloc */
+
 var lon = -4;
 var lat = 41;
 var zoom = 5;
@@ -29,7 +31,7 @@ function init(){
 	maximumAge: 0,
 	timeout: 7000
 	}
-});
+});//fin geolocate
 			
 	map.addControl(geolocate);
 			
@@ -69,12 +71,11 @@ function init(){
     OpenLayers.Console.log('Location detection failed');
 });
 	
-	geoloc.removeAllFeatures();
+    geoloc.removeAllFeatures();
     geolocate.deactivate();
     firstGeolocation = true;
     geolocate.watch = false;
     geolocate.activate();
-    }
         
     var pulsate = function(feature) {
     var point = feature.geometry.getCentroid(),
@@ -102,7 +103,8 @@ function init(){
         feature.geometry.resize(1+ratio, point);
         geoloc.drawFeature(feature);
         count++;
-    };
+    };//fin resize
     
     window.resizeInterval = window.setInterval(resize, 50, point, radius);
-};
+};//fin pulsate
+}//fin funcion init
