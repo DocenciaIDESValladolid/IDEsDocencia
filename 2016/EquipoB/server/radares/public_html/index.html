@@ -40,7 +40,7 @@
                      //creamos los waypoints y llamamos a la funcion calcularRuta
                     var inicio='-3.86769495662188 40.3282382910204';
                     var fin ='-3.86769495662188 40.3282382910204'; //Aqui igualaremos a la variable lonlat
-                      
+                    //var fin = lonlat.lon+" "+lonlat.lat;  
 //                    var inicio = new OpenLayers.Geometry.Point(-3.8741284950823998, 40.3296855748486);
 //            
 //                    var fin = new OpenLayers.Geometry.Point(-3.86769495662188, 40.3282382910204);
@@ -48,7 +48,7 @@
 //                    var waypoints = new OpenLayers.Layer.Vector("Puntos");
 //            
 //                    waypoints.addFeatures([inicio, fin]);
-                    var ruta= calcularRuta(inicio,fin);//obtenemos el LineString
+                    var ruta= calcularRuta(inicio,fin);//calcula la ruta y llama al wps de geoserver para crear un buffer
                     //para poner el punto seleccionado bonito utilizamos el ejemplo markers de openlayers
                     //con el LineString obtenido creamos el buffer con nuestro geoserver
                     //utilizamos el ejemplo wpsclient de openlayers
@@ -176,31 +176,42 @@
                         
                     }
                     var geomRuta=features[0].geometry;
+                    //peticion a nuestro geoserver para obtener el buffer
                     
-                    
-   var client = new OpenLayers.WPSClient({
-        servers: {
-            radaresServer: 'http://localhost/geoserver/wps'
-        }
-    });                  
-   var buffer = client.getProcess('radaresServer', 'geo:buffer');    
-   buffer.execute({
-        inputs: {
-            distance: 0.005,
-            geom: geomRuta
-        },
-        success: function(outputs) {
-            // outputs.result is a feature or an array of features for spatial
-            // processes.
-            //
-            //TODO buffer hecho. Tenemos que hacer un intersects con buffer y simplify para 
-            //reducir el numero de puntos del poligono. SE encuentra en el wps-client.js -->intersects
-            //
-            map.baseLayer.addFeatures(outputs.result);
-        } 
-    });
-    
-    
+                        var client = new OpenLayers.WPSClient({
+                             servers: {
+                                 radaresServer: 'http://localhost/geoserver/wps'
+                             }
+                         });                  
+                        var buffer = client.getProcess('radaresServer', 'JTS:buffer');    
+                        //buffer.execute({
+                         buffer.configure({
+                              inputs: {
+                                 distance: 0.005,
+                                 geom: geomRuta
+                             }//,
+                            //success: function(outputs) {
+                                 // outputs.result is a feature or an array of features for spatial
+                                 // processes.
+                                 //
+                                 //TODO buffer hecho. Tenemos que hacer un intersects con buffer y simplify para 
+                                 //reducir el numero de puntos del poligono. SE encuentra en el wps-client.js -->intersects
+                                 //
+                                
+                             //} 
+                         });
+                         //creacion del proceso Simplify para reducir el nº de puntos del buffer
+                        var simplify = client.getProcess('radaresServer','JTS:simplify');
+                         simplify.execute({
+                             inputs:{
+                                 geom:buffer.output(),
+                                 distance:0.005
+                             },
+                             success: function (outputs){                                 
+                                  map.baseLayer.addFeatures(outputs.result);
+                             }
+                         });
+
                 },
                 failure: function (response) {
                     alert("Something went wrong in the request");
