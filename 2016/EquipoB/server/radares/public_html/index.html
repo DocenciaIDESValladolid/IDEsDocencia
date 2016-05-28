@@ -183,32 +183,31 @@
                                  radaresServer: 'http://localhost/geoserver/wps'
                              }
                          });                  
-                        var buffer = client.getProcess('radaresServer', 'JTS:buffer');    
-                        //buffer.execute({
-                         buffer.configure({
-                              inputs: {
+                        var buffer = client.getProcess('radaresServer', 'geo:buffer');    
+                        buffer.execute({
+                             inputs: {
                                  distance: 0.005,
                                  geom: geomRuta
-                             }//,
-                            //success: function(outputs) {
+                             },
+                             success: function(outputs) {
                                  // outputs.result is a feature or an array of features for spatial
                                  // processes.
                                  //
                                  //TODO buffer hecho. Tenemos que hacer un intersects con buffer y simplify para 
                                  //reducir el numero de puntos del poligono. SE encuentra en el wps-client.js -->intersects
                                  //
-                                
-                             //} 
+                                 //map.baseLayer.addFeatures(outputs.result);
+                             } 
                          });
                          //creacion del proceso Simplify para reducir el nº de puntos del buffer
-                        var simplify = client.getProcess('radaresServer','JTS:simplify');
+                        var simplify = client.getProcess('radaresServer','geo:simplify');
                          simplify.execute({
                              inputs:{
                                  geom:buffer.output(),
                                  distance:0.005
                              },
                              success: function (outputs){                                 
-                                  map.baseLayer.addFeatures(outputs.result);
+                                  //map.baseLayer.addFeatures(outputs.result);
                              }
                          });
 
