@@ -232,7 +232,8 @@
                                  geom:buffer.output(),
                                  distance:0.005
                              },
-                             success: function (outputs){        
+                             success: function (outputs){
+                                 
                                  var radarStyle=  new OpenLayers.StyleMap({
                                     "default": new OpenLayers.Style({
                                         pointRadius: 5, // sized according to type attribute
@@ -259,7 +260,9 @@
                                     
                                     filter: new OpenLayers.Filter.Spatial({
                                         type: OpenLayers.Filter.Spatial.INTERSECTS,
-                                       value:outputs
+                                        property:"geom",
+                                       value:outputs.result
+                                       
                                       
                                     })
                                 })
