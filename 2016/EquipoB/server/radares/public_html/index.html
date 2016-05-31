@@ -248,6 +248,8 @@
                                         graphicZIndex: 2
                                     })
                                 });
+                                var geometria = outputs.result[0].geometry;
+                                alert(geometria);
                                   //creacion de la peticion WFS  a geoserver para obtener los radares de la ruta
                                   var radaresFiltro = new OpenLayers.Layer.Vector("WFS", {
                                     strategies: [new OpenLayers.Strategy.BBOX], 
@@ -261,8 +263,7 @@
                                     filter: new OpenLayers.Filter.Spatial({
                                         type: OpenLayers.Filter.Spatial.INTERSECTS,
                                         property:"geom",
-                                       value:outputs.result
-                                       
+                                        value:geometria                                      
                                       
                                     })
                                 })
