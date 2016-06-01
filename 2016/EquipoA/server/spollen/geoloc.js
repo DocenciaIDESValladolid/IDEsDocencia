@@ -128,9 +128,10 @@ function getGML3FormatInspire(){
 	return gmlFormat;
 }
 
-var gmlLandcoverFormat= getGML3FormatInspire();
 
 function addCoverFromPoint(punto,distancia){
+	var gmlLandcoverFormat= getGML3FormatInspire();
+
 	var punto2 = new OpenLayers.Geometry.Point(-4.3,40);
 		coverwfs = new OpenLayers.Layer.Vector("WFS", {
 		strategies: [new OpenLayers.Strategy.Fixed()],
@@ -140,7 +141,7 @@ function addCoverFromPoint(punto,distancia){
 			url:  "http://localhost/wfs",
 			featureType: "LandCoverUnit",
 			featureNS: "http://inspire.ec.europa.eu/schemas/lcv/4.0",
-			outputFormat: gmlLandcoverFormat,
+			outputFormat: "application/gml+xml; version=3.2",
 			readFormat: gmlLandcoverFormat
 		}),
 		filter: new OpenLayers.Filter.Spatial({
