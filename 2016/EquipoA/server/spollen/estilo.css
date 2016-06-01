@@ -11,7 +11,7 @@ body {
 
 .pagina_entera {
 	height: auto;
-	width: 93,75%;
+	width: 93.75%;
 	/*background-color: #FFF*/;
 	margin-left: auto ; /* el valor automático de los lados, unido a la anchura, centra el diseño  */
 	margin-right: auto;
@@ -219,11 +219,14 @@ aside {
 #piepag{
 	color: white;
 }
+
+
 /*Compatibilidad con HTML5 */
 header, section, footer, aside, article, figure {
 	display: block;
 }
--->
-</style><!--[if lt IE 9]>
+
+</style>
+
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]--></head>

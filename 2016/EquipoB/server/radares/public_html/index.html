@@ -10,6 +10,8 @@
         <link rel="stylesheet" href="OpenLayers-2.13.1/examples/style.css" type="text/css">
         <script src="OpenLayers-2.13.1/OpenLayers.js"></script>
         <script type="text/javascript">
+            var contador = 0;
+            var inicio;
             OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
                 defaultHandlerOptions: {
                     'single': true,
@@ -34,30 +36,52 @@
                 }, 
 
                 trigger: function(e) {
-                    var lonlat = map.getLonLatFromPixel(e.xy);
-                    alert("You clicked near " + lonlat.lat + " N, " +
-                                              + lonlat.lon + " E");
-                     //creamos los waypoints y llamamos a la funcion calcularRuta
-                    var inicio='-3.86769495662188 40.3282382910204';
-                    var fin ='-3.86769495662188 40.3282382910204'; //Aqui igualaremos a la variable lonlat
-                    //var fin = lonlat.lon+" "+lonlat.lat;  
-//                    var inicio = new OpenLayers.Geometry.Point(-3.8741284950823998, 40.3296855748486);
-//            
-//                    var fin = new OpenLayers.Geometry.Point(-3.86769495662188, 40.3282382910204);
-//
-//                    var waypoints = new OpenLayers.Layer.Vector("Puntos");
-//            
-//                    waypoints.addFeatures([inicio, fin]);
-                    var ruta= calcularRuta(inicio,fin);//calcula la ruta y llama al wps de geoserver para crear un buffer
-                    //para poner el punto seleccionado bonito utilizamos el ejemplo markers de openlayers
-                    //con el LineString obtenido creamos el buffer con nuestro geoserver
-                    //utilizamos el ejemplo wpsclient de openlayers
-                    //con el buffer->realizamos la interseccion y obtenemos los radares en la ruta
-                    alert (ruta);
+                    contador++;
+                    //punto de inicio
+                    if (contador == 1){
+                        var lonlat = map.getLonLatFromPixel(e.xy);                  
+                       
+                         //creamos los waypoints y llamamos a la funcion calcularRuta
+                        //var inicio='-3.86769495662188 40.3282382910204';
+                        inicio = lonlat.lon+" "+lonlat.lat;
+                        //inicio = "-3.8741284950823998 40.3296855748486";
+                        alert ("Punto de inicio"+inicio);
+                        var markers = new OpenLayers.Layer.Markers( "Markers" );
+                        var size = new OpenLayers.Size(21,25);
+                        var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+                        var icon = new OpenLayers.Icon('https://image.freepik.com/iconos-gratis/banderas-marcador_318-28447.png',size,offset);
+                        markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lonlat.lon,lonlat.lat),icon));
+                        map.addLayer(markers);
+
+                    }
+                    //ya tenemos los puntos inicio y final para poder calcular la ruta
+                    if (contador==2){
+                        var lonlat = map.getLonLatFromPixel(e.xy);
+                        //creamos los waypoints y llamamos a la funcion calcularRuta                        
+                        //var fin ='-3.86769495662188 40.3282382910204'; //Aqui igualaremos a la variable lonlat
+                        
+                        var fin = lonlat.lon+" "+lonlat.lat;
+                        var markers = new OpenLayers.Layer.Markers( "Markers" );
+                        var size = new OpenLayers.Size(21,25);
+                        var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+                        var icon = new OpenLayers.Icon('https://image.freepik.com/iconos-gratis/banderas-marcador_318-28447.png',size,offset);
+                        markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lonlat.lon,lonlat.lat),icon));
+                        map.addLayer(markers);
+                        alert ("Punto final"+fin);
+   
+                        calcularRuta(inicio,fin);//calcula la ruta y llama al wps de geoserver para crear un buffer
+                        //para poner el punto seleccionado bonito utilizamos el ejemplo markers de openlayers
+                        //con el LineString obtenido creamos el buffer con nuestro geoserver
+                        //utilizamos el ejemplo wpsclient de openlayers
+                        //con el buffer->realizamos la interseccion y obtenemos los radares en la ruta
+                        
+                    }
                 }
 
             });
-            var map;
+                        
+                       
+            var map, radares;
             function init(){
                 map = new OpenLayers.Map('map',{displayProjection: new OpenLayers.Projection("EPSG: 4326"), Projection: new OpenLayers.Projection("EPSG: 4326")});
                 
@@ -98,56 +122,7 @@
                 })
             });
             
-                var radares = new OpenLayers.Layer.Vector("WFS", {
-                strategies: [new OpenLayers.Strategy.BBOX()],
-                protocol: new OpenLayers.Protocol.WFS({
-                    url:  "http://localhost/geoserver/wfs",
-                    featureType: "radares",
-                    featureNS: "http://localhost:8080/geoserver/info_radar",
-                    geometryName: "geom"
-                }),
-                styleMap: radarStyle,
-//                filter: new OpenLayers.Filter.Logical({
-//                    type: OpenLayers.Filter.Logical.OR,
-//                    filters: [
-//                        new OpenLayers.Filter.Comparison({
-//                            type: OpenLayers.Filter.Comparison.EQUAL_TO,
-//                            property: "TYPE",
-//                            value: "highway"
-//                        }),
-//                        new OpenLayers.Filter.Comparison({
-//                            type: OpenLayers.Filter.Comparison.EQUAL_TO,
-//                            property: "TYPE",
-//                            value: "road"
-//                        })
-//                    ]
-//                })
-            })
-            map.addLayers([radares, gasolineras]);
-            client = new OpenLayers.WPSClient({
-                servers: {
-                     cartociudad: 'http://localhost/wps'//'http://www.cartociudad.es/wps/WebProcessingService'
-                }
-            });
 
-            
-            
-            
-//NO ES NECESARIO
-//            // Create a process and configure it
-//            var ruta = client.getProcess('cartociudad', 'org.cnig.cartociudad.wps.RouteFinder');    
-//            ruta.execute({
-//                // spatial input can be a feature or a geometry or an array of
-//                // features or geometries
-//                inputs: {
-//                    a: waypoints
-//                },
-//                success: function(outputs) {
-//                 // outputs.result is a feature or an array of features for spatial
-//                // processes.
-//                    alert(outputs);
-//                }
-//            });
     }
     function calcularRuta (inicio,fin){
         var response ='<?xml version="1.0" encoding="UTF-8"?>\n\
@@ -157,6 +132,8 @@
         var aux1='</gml:pos></gml:Point></wp:geom></wp:waypoint><wp:waypoint gml:id="2"><wp:geom><gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258"><gml:pos>';
         var aux2='</gml:pos></gml:Point></wp:geom></wp:waypoint></gml:featureMembers></wfs:FeatureCollection></wps:ComplexData></wps:Data></wps:Input></wps:DataInputs><wps:ResponseForm><wps:ResponseDocument><wps:Output schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" mimeType="text/xml" encoding="UTF-8"><ows:Identifier>routeResult</ows:Identifier></wps:Output></wps:ResponseDocument></wps:ResponseForm></wps:Execute>';
         var wpsRequestData=aux+inicio+aux1+fin+aux2;
+        
+        var geometria;
         
         var request = new OpenLayers.Request.POST({
                 url: 'http://localhost/wps',
@@ -184,11 +161,12 @@
                              }
                          });                  
                         var buffer = client.getProcess('radaresServer', 'geo:buffer');    
-                        buffer.execute({
+                        //buffer.execute({
+                        buffer.configure({
                              inputs: {
                                  distance: 0.005,
                                  geom: geomRuta
-                             },
+                             }/*,
                              success: function(outputs) {
                                  // outputs.result is a feature or an array of features for spatial
                                  // processes.
@@ -197,25 +175,89 @@
                                  //reducir el numero de puntos del poligono. SE encuentra en el wps-client.js -->intersects
                                  //
                                  //map.baseLayer.addFeatures(outputs.result);
-                             } 
+                             } */
                          });
                          //creacion del proceso Simplify para reducir el nº de puntos del buffer
                         var simplify = client.getProcess('radaresServer','geo:simplify');
+                         //simplify.execute({
                          simplify.execute({
                              inputs:{
                                  geom:buffer.output(),
                                  distance:0.005
                              },
-                             success: function (outputs){                                 
-                                  //map.baseLayer.addFeatures(outputs.result);
-                             }
-                         });
+                             success: function (outputs){
+                                 
+                                 var radarStyle=  new OpenLayers.StyleMap({
+                                    "default": new OpenLayers.Style({
+                                        pointRadius: 5, // sized according to type attribute
+                                        fillColor: "#ffcc66",
+                                        strokeColor: "#ff9933",
+                                        strokeWidth: 2,
+                                        graphicZIndex: 1
+                                    }),
+                                    "select": new OpenLayers.Style({
+                                        fillColor: "#66ccff",
+                                        strokeColor: "#3399ff",
+                                        graphicZIndex: 2
+                                    })
+                                });
+                                geometria = outputs.result[0].geometry;
+                                  //creacion de la peticion WFS  a geoserver para obtener los radares de la ruta
+                                  var radaresFiltro = new OpenLayers.Layer.Vector("WFS", {
+                                    strategies: [new OpenLayers.Strategy.BBOX], 
+                                    protocol: new OpenLayers.Protocol.WFS({
+                                        url:  "http://localhost/geoserver/wfs",
+                                        featureType: "radares",
+                                        featureNS: "http://localhost:8080/geoserver/info_radar",
+                                        geometryName: "geom"
+                                    }),styleMap: radarStyle,
+                                    
+                                    filter: new OpenLayers.Filter.Spatial({
+                                        type: OpenLayers.Filter.Spatial.INTERSECTS,
+                                        property:"geom",
+                                        value:geometria                                      
+                                      
+                                    })
+                                })
+                                var gasolinerasStyle=  new OpenLayers.StyleMap({
+                                    "default": new OpenLayers.Style({
+                                        pointRadius: 8, // sized according to type attribute
+                                        externalGraphic: "https://pixabay.com/static/uploads/photo/2013/07/12/18/42/service-station-153720_960_720.png",
+                                        strokeWidth: 2,
+                                        graphicZIndex: 1
+                                    }),
+                                    "select": new OpenLayers.Style({
+                                        fillColor: "red",
+                                        strokeColor: "red",
+                                        graphicZIndex: 2
+                                    })
+                                });
+                                var gasolinerasfiltro = new OpenLayers.Layer.Vector("WFS", {
+                                        strategies: [new OpenLayers.Strategy.BBOX], 
+                                        protocol: new OpenLayers.Protocol.WFS({
+                                        url:  "http://localhost/gasolineras",
+                                        featureType: "estaciones_servicio",
+                                        geometryName: "posicionEspacial"
+                                    }),styleMap: gasolinerasStyle,
 
+                                    filter: new OpenLayers.Filter.Spatial({
+                                        type: OpenLayers.Filter.Spatial.INTERSECTS,
+                                        property:"posicionEspacial",
+                                        value: geometria                                      
+
+                                    })
+                                })
+                                map.addLayers([radaresFiltro, gasolinerasfiltro]);
+                             }
+                             
+                         });
+                         
                 },
                 failure: function (response) {
                     alert("Something went wrong in the request");
                 }
             });
+
     }
     //respuesta del wps de cartociudad
     function readFeaturesFromWPSResponse(response,featureNSUri,featureName){
@@ -248,26 +290,15 @@
     </script>
     </head>
     <body onload="init()">
-        <h1 id="title">Click Event Example</h1>
+        <h1 id="title">Click Event Example (Raul deja de borrar lo que no debes)</h1>
 
         <div id="tags">
             click control, double, doubleclick, double-click, event, events, 
             propagation, light
         </div>
-
-        <p id="shortdesc">
-            This example shows the use of the click handler and 
-            getLonLatFromPixel functions to trigger events on mouse click. 
-        </p>
-
-        <div id="map" class="smallmap"></div>
-    
-        <div id="docs">
-            <p>Using the Click handler allows you to (for example) catch clicks 
-            without catching double clicks, something that standard browser 
-            events don't do for you. (Try double clicking: you'll zoom in, 
-            whereas using the browser click event, you would just get two 
-            alerts.) This example click control shows you how to use it.</p> 
+       
+        <div id="map" class="smallmap">
+              
         </div>
     </body>
 </html>
