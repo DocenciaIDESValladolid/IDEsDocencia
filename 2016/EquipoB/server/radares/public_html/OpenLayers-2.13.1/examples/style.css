@@ -42,7 +42,7 @@ h1, h2, h3, h4, h5, h6 {
     padding-top: 0.5em;
 }
 h1 {
-    font-size: 130%;
+    font-size: 200%;
     margin-bottom: 0.5em;
     border-bottom: 1px solid #fcb100;
 }
@@ -77,9 +77,14 @@ h6 {
  * Map Examples Specific
  */
 .smallmap {
-    width: 1024px;
-    height: 512px;
+    width: 1324px;
+    height: 562px;
+    margin-top: 10px;
     border: 1px solid #ccc;
+}
+.Funcionamiento{
+    font-size:130%;
+    font-style: italic;
 }
 #tags {
     display: none;
@@ -120,6 +125,7 @@ h6 {
         font-size  : 0.8em;
         padding    : 1em;
         text-align : right;
+        margin-bottom: 20px;
     }
     #tags {
         display : none;
