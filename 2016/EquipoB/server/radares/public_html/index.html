@@ -107,23 +107,9 @@
                 map.addControl(click);
                 click.activate();
 
-                var radarStyle=  new OpenLayers.StyleMap({
-                "default": new OpenLayers.Style({
-                    pointRadius: 5, // sized according to type attribute
-                    fillColor: "#ffcc66",
-                    strokeColor: "#ff9933",
-                    strokeWidth: 2,
-                    graphicZIndex: 1
-                }),
-                "select": new OpenLayers.Style({
-                    fillColor: "#66ccff",
-                    strokeColor: "#3399ff",
-                    graphicZIndex: 2
-                })
-            });
-            
-
+                
     }
+    
     function calcularRuta (inicio,fin){
         var response ='<?xml version="1.0" encoding="UTF-8"?>\n\
                 <ns:ExecuteResponse xmlns:ns="http://www.opengis.net/wps/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd" serviceInstance="http://localhost:8080/wps/WebProcessingService?REQUEST=GetCapabilities&amp;SERVICE=WPS" xml:lang="en-US" service="WPS" version="1.0.0"><ns:Process ns:processVersion="1.1.0"><ns1:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">org.cnig.cartociudad.wps.RouteFinder</ns1:Identifier><ns1:Title xmlns:ns1="http://www.opengis.net/ows/1.1">RouteFinder</ns1:Title></ns:Process><ns:Status creationTime="2016-05-20T15:47:27.096+02:00"><ns:ProcessSucceeded>Process successful</ns:ProcessSucceeded></ns:Status><ns:ProcessOutputs><ns:Output><ns1:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">routeResult</ns1:Identifier><ns1:Title xmlns:ns1="http://www.opengis.net/ows/1.1">Ruta completa</ns1:Title><ns:Data>\n\
@@ -151,6 +137,12 @@
                         
                     }
                     var geomRuta=features[0].geometry;
+                    
+                    //dibujamos la ruta obtenida en un mapa                    
+                    var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
+                    var feature = new OpenLayers.Feature.Vector (geomRuta);
+                    vectorLayer.addFeatures(feature);
+                    map.addLayer (vectorLayer);
                     //peticion a nuestro geoserver para obtener el buffer
                     
                         var client = new OpenLayers.WPSClient({
@@ -266,6 +258,20 @@
             click control, double, doubleclick, double-click, event, events, 
             propagation, light
         </div>
-       
+
+        <p id="shortdesc">
+            This example shows the use of the click handler and 
+            getLonLatFromPixel functions to trigger events on mouse click. 
+        </p>
+
+        <div id="map" class="smallmap"></div>
+    
+        <div id="docs">
+            <p>Using the Click handler allows you to (for example) catch clicks 
+            without catching double clicks, something that standard browser 
+            events don't do for you. (Try double clicking: you'll zoom in, 
+            whereas using the browser click event, you would just get two 
+            alerts.) This example click control shows you how to use it.</p> 
+        </div>
     </body>
 </html>
