@@ -7,32 +7,11 @@
     <link rel="stylesheet" href="../theme/default/style.css" type="text/css">
     <link rel="stylesheet" href="style.css" type="text/css">
     <link rel="stylesheet" href="avada1.css"> 
- 	<link rel="stylesheet" href="estilo.css">
- 	<link rel="stylesheet" href="estilo_f.css">
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="estilo_f.css">
     <script src="../OpenLayers.js"></script>
-    <script src="../examples/geolocation.js"></script>
-    <script type="text/javascript">
-        var lon = -4;
-        var lat = 41;
-        var zoom = 5;
-        var map, layer;
-
-        function init(){
-            map = new OpenLayers.Map( 'map' );
-            layer = new OpenLayers.Layer.WMS( "OpenLayers WMS",
-                    "http://vmap0.tiles.osgeo.org/wms/vmap0", {layers: 'basic'} );
-			var pnoa_layer = new OpenLayers.Layer.WMS( "Ortofotos España",
-                    "http://www.ign.es/wms-inspire/pnoa-ma?", {layers: 'PNOA'} );
-            map.addLayers([pnoa_layer,layer]);
-	
-			var avisos_layer = new OpenLayers.Layer.WMS( "Usos del suelo",
-                    "http://localhost:8080/geoserver/wms?", {layers: 'Proyecto:Avisos',transparent: true}, {isBaseLayer: false, opacity: 1} );
-					map.addLayer(avisos_layer);
-            map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
-            map.addControl( new OpenLayers.Control.LayerSwitcher() );
-        }
-    </script>
   </head>
+  
   <body onload="init()" background="images/RS%20Reflejos.jpg">
 	  	<div class="header-v3">
 			<div class="header-social">
@@ -40,8 +19,7 @@
 					<div class="alignleft">
 						<div class="header-info" id="Noticias"><strong> SPOLLEN<span class="sep">|</span>
 						<a href="mailto:spollen@gmail.com">equipoA@gmail.com</a></strong>
-
-<!-- 						<a href="twitter.com/spollen"><img id="separacion" width="4%" title="Twitter de sPollen" src="images/twitter.png"></a><a href="facebook.com/sPollen"><img width="3.8%" title="Facebook de sPollen" src="images/facebook.png"></a> -->
+                                                <a href="twitter.com/spollen"><img id="separacion3" width="4%" title="Registro" src="images/twitter.png"></a>
 						</div>		
 					</div>
 				</div>
@@ -49,20 +27,14 @@
 		</div>	
 		
 <!--MENU-->
-	<div class="menu">
-			<nav class="menuprincipal">
-					<ul class="menup"> 
-						<li><a href="spollen.html"  tabindex="2">MAPA</a></li>
-						<li><a href="usuario.html"  tabindex="2">USUARIO</a></li>	
-						<li><a href="" accesskey="c" tabindex="2">CONSULTAS</a> 
-							<ul>
-								<li><a href="">HEAT</a></li> 
-								<li><a href="" tabindex="5">AREA</a></li>
-							</ul>
-						</li>	
-					</ul>
-				 </nav>
-			 </div>
+                <div class="menu">
+                    <nav class="menuprincipal">
+			<ul class="menup"> 
+                		<li><a href="spollen.html">MAPA</a></li>
+				<li><a href="usuario.html">USUARIO</a></li>
+			</ul>
+                    </nav> 
+                </div>
 	
 	<a>
 		<form id="separacion" name="formLogin" action="index.php" onsubmit="" method="post" >

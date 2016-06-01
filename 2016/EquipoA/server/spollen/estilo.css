@@ -21,23 +21,22 @@ body {
 
 .menu {
 	font-family:"Antic Slab";
-    font-weight:normal;
+        font-weight:normal;
 	font-size:200%;
 	float: none;
-	width: 93,75%;
-	background-color: #FFF /*#CC66CC*/ ; /* COLOR DE FONDO DEL MENU*/
-	padding-bottom: 12,5%;
-	padding-top: 12,5%;
+	width: auto;
+        background-color: #ede816; /* COLOR DE FONDO DEL MENU*/
+	padding-bottom: auto;
+	padding-top: auto;
 	overflow:visible;
 	text-align: center;
+        align-content: center;
 }
 
-.menuprincipal{   
-	
+.menuprincipal{  
    overflow:hidden;
-   padding:100px;
-   padding-top:3%;  
-   width:93,75%;
+   padding:auto;  
+   width:auto;
 }
 
 .menup{
