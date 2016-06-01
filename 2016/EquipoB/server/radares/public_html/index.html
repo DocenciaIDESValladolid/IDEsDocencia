@@ -133,6 +133,8 @@
         var aux2='</gml:pos></gml:Point></wp:geom></wp:waypoint></gml:featureMembers></wfs:FeatureCollection></wps:ComplexData></wps:Data></wps:Input></wps:DataInputs><wps:ResponseForm><wps:ResponseDocument><wps:Output schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" mimeType="text/xml" encoding="UTF-8"><ows:Identifier>routeResult</ows:Identifier></wps:Output></wps:ResponseDocument></wps:ResponseForm></wps:Execute>';
         var wpsRequestData=aux+inicio+aux1+fin+aux2;
         
+        var geometria;
+        
         var request = new OpenLayers.Request.POST({
                 url: 'http://localhost/wps',
                 data: wpsRequestData,
@@ -199,8 +201,7 @@
                                         graphicZIndex: 2
                                     })
                                 });
-                                var geometria = outputs.result[0].geometry;
-                                alert(geometria);
+                                geometria = outputs.result[0].geometry;
                                   //creacion de la peticion WFS  a geoserver para obtener los radares de la ruta
                                   var radaresFiltro = new OpenLayers.Layer.Vector("WFS", {
                                     strategies: [new OpenLayers.Strategy.BBOX], 
@@ -218,7 +219,35 @@
                                       
                                     })
                                 })
-                                map.addLayers([radaresFiltro]);
+                                var gasolinerasStyle=  new OpenLayers.StyleMap({
+                                    "default": new OpenLayers.Style({
+                                        pointRadius: 8, // sized according to type attribute
+                                        externalGraphic: "https://pixabay.com/static/uploads/photo/2013/07/12/18/42/service-station-153720_960_720.png",
+                                        strokeWidth: 2,
+                                        graphicZIndex: 1
+                                    }),
+                                    "select": new OpenLayers.Style({
+                                        fillColor: "red",
+                                        strokeColor: "red",
+                                        graphicZIndex: 2
+                                    })
+                                });
+                                var gasolinerasfiltro = new OpenLayers.Layer.Vector("WFS", {
+                                        strategies: [new OpenLayers.Strategy.BBOX], 
+                                        protocol: new OpenLayers.Protocol.WFS({
+                                        url:  "http://localhost/gasolineras",
+                                        featureType: "estaciones_servicio",
+                                        geometryName: "posicionEspacial"
+                                    }),styleMap: gasolinerasStyle,
+
+                                    filter: new OpenLayers.Filter.Spatial({
+                                        type: OpenLayers.Filter.Spatial.INTERSECTS,
+                                        property:"posicionEspacial",
+                                        value: geometria                                      
+
+                                    })
+                                })
+                                map.addLayers([radaresFiltro, gasolinerasfiltro]);
                              }
                              
                          });
@@ -228,6 +257,7 @@
                     alert("Something went wrong in the request");
                 }
             });
+
     }
     //respuesta del wps de cartociudad
     function readFeaturesFromWPSResponse(response,featureNSUri,featureName){
@@ -260,12 +290,15 @@
     </script>
     </head>
     <body onload="init()">
-        <h1 id="title">Click Event Example</h1>
+        <h1 id="title">Click Event Example (Raul deja de borrar lo que no debes)</h1>
 
         <div id="tags">
             click control, double, doubleclick, double-click, event, events, 
             propagation, light
         </div>
        
+        <div id="map" class="smallmap">
+              
+        </div>
     </body>
 </html>
