@@ -47,9 +47,9 @@
                         //inicio = "-3.8741284950823998 40.3296855748486";
                         alert ("Punto de inicio"+inicio);
                         var markers = new OpenLayers.Layer.Markers( "Markers" );
-                        var size = new OpenLayers.Size(21,25);
+                        var size = new OpenLayers.Size(25,30);
                         var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-                        var icon = new OpenLayers.Icon('https://image.freepik.com/iconos-gratis/banderas-marcador_318-28447.png',size,offset);
+                        var icon = new OpenLayers.Icon('https://cdn1.iconfinder.com/data/icons/Map-Markers-Icons-Demo-PNG/256/Map-Marker-Flag--Right-Azure.png',size,offset);
                         markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lonlat.lon,lonlat.lat),icon));
                         map.addLayer(markers);
 
@@ -62,9 +62,9 @@
                         
                         var fin = lonlat.lon+" "+lonlat.lat;
                         var markers = new OpenLayers.Layer.Markers( "Markers" );
-                        var size = new OpenLayers.Size(21,25);
+                        var size = new OpenLayers.Size(25,30);
                         var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-                        var icon = new OpenLayers.Icon('https://image.freepik.com/iconos-gratis/banderas-marcador_318-28447.png',size,offset);
+                        var icon = new OpenLayers.Icon('https://cdn1.iconfinder.com/data/icons/Map-Markers-Icons-Demo-PNG/256/Map-Marker-Flag--Right-Pink.png',size,offset);
                         markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lonlat.lon,lonlat.lat),icon));
                         map.addLayer(markers);
                         alert ("Punto final"+fin);
@@ -138,8 +138,15 @@
                     }
                     var geomRuta=features[0].geometry;
                     
-                    //dibujamos la ruta obtenida en un mapa                    
-                    var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
+                    //dibujamos la ruta obtenida en un mapa  
+                    var rutaStyle=  new OpenLayers.Style({                            
+                            fillColor: "#00ff00",
+                            strokeColor: "#00ff00",
+                            strokeWidth: 5,
+                            graphicZIndex: 1
+                        });
+                  
+                    var vectorLayer = new OpenLayers.Layer.Vector("Ruta",{styleMap:rutaStyle});                    
                     var feature = new OpenLayers.Feature.Vector (geomRuta);
                     vectorLayer.addFeatures(feature);
                     map.addLayer (vectorLayer);
@@ -179,11 +186,12 @@
                                  
                                  var radarStyle=  new OpenLayers.StyleMap({
                                     "default": new OpenLayers.Style({
-                                        pointRadius: 5, // sized according to type attribute
+                                        pointRadius: 11, // sized according to type attribute
                                         fillColor: "#ffcc66",
                                         strokeColor: "#ff9933",
                                         strokeWidth: 2,
-                                        graphicZIndex: 1
+                                        graphicZIndex: 1,
+                                        externalGraphic: "https://lh5.ggpht.com/vcegtTR6y9_mddm3E9EEH7s6z30oGOPMVdJnAcSZbi70pKapd_wDK1vpbU8kl1FlBoQ=w300"
                                     }),
                                     "select": new OpenLayers.Style({
                                         fillColor: "#66ccff",
@@ -192,8 +200,7 @@
                                     })
                                 });
                                 var geometria = outputs.result[0].geometry;
-                                alert(geometria);
-                                  //creacion de la peticion WFS  a geoserver para obtener los radares de la ruta
+                                //creacion de la peticion WFS  a geoserver para obtener los radares de la ruta
                                   var radaresFiltro = new OpenLayers.Layer.Vector("WFS", {
                                     strategies: [new OpenLayers.Strategy.BBOX], 
                                     protocol: new OpenLayers.Protocol.WFS({
