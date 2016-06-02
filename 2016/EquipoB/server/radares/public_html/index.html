@@ -8,7 +8,7 @@
         
         <link rel="stylesheet" href="OpenLayers-2.13.1/theme/default/style.css" type="text/css">
         <link rel="stylesheet" href="OpenLayers-2.13.1/examples/style.css" type="text/css">
-        <script src="OpenLayers-2.13.1/OpenLayers.js"></script>
+        <script src="OpenLayers-2.13.1/lib/OpenLayers.js"></script>
         <script type="text/javascript">
             var contador = 0;
             var inicio;
@@ -45,7 +45,7 @@
                         //var inicio='-3.86769495662188 40.3282382910204';
                         inicio = lonlat.lon+" "+lonlat.lat;
                         //inicio = "-3.8741284950823998 40.3296855748486";
-                        alert ("Punto de inicio"+inicio);
+                        //alert ("Punto de inicio"+inicio);
                         var markers = new OpenLayers.Layer.Markers( "Markers" );
                         var size = new OpenLayers.Size(25,30);
                         var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
@@ -67,7 +67,7 @@
                         var icon = new OpenLayers.Icon('https://cdn1.iconfinder.com/data/icons/Map-Markers-Icons-Demo-PNG/256/Map-Marker-Flag--Right-Pink.png',size,offset);
                         markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lonlat.lon,lonlat.lat),icon));
                         map.addLayer(markers);
-                        alert ("Punto final"+fin);
+                        //alert ("Punto final"+fin);
    
                         calcularRuta(inicio,fin);//calcula la ruta y llama al wps de geoserver para crear un buffer
                         //para poner el punto seleccionado bonito utilizamos el ejemplo markers de openlayers
@@ -81,7 +81,28 @@
             });
                         
                        
-            var map;
+            var map, selectControl;
+            
+            function onPopupClose(evt) {
+                selectControl.unselect(selectedFeature);
+            }
+            function onFeatureSelect(feature) {
+                selectedFeature = feature;
+               //alert(feature); 
+                popup = new OpenLayers.Popup.FramedCloud("chicken", 
+                    feature.geometry.getBounds().getCenterLonLat(),
+                    null,
+                    "<div style='font-size:.8em'>Descripción: "+ feature.descrip + "</div>",
+                    null, true, onPopupClose);
+                feature.popup = popup;
+                map.addPopup(popup);
+            }
+            function onFeatureUnselect(feature) {
+                map.removePopup(feature.popup);
+                feature.popup.destroy();
+                feature.popup = null;
+            }   
+            
             function init(){
                 map = new OpenLayers.Map('map',{displayProjection: new OpenLayers.Projection("EPSG: 4326"), Projection: new OpenLayers.Projection("EPSG: 4326")});
                 
@@ -100,7 +121,7 @@
                         new OpenLayers.Projection("EPSG:4326"),
                         map.getProjectionObject()
                     ), 
-                    5
+                    6
                 );
                 
                 var click = new OpenLayers.Control.Click();
@@ -250,7 +271,12 @@
 
                                     })
                                 })
+                                map.addControl(new OpenLayers.Control.LayerSwitcher());
+                                map.addControl(new OpenLayers.Control.MousePosition());
+                                selectControl = new OpenLayers.Control.SelectFeature([radaresFiltro, gasolinerasfiltro], {onSelect: onFeatureSelect, onUnselect: onFeatureUnselect});
+                                map.addControl(selectControl);
                                 map.addLayers([radaresFiltro, gasolinerasfiltro]);
+                                selectControl.activate();
                              }
                              
                          });
