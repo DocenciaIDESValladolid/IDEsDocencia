@@ -15,7 +15,7 @@ function init(){
     map = new OpenLayers.Map( 'map' );
     layer = new OpenLayers.Layer.WMS( "OpenLayers WMS","http://vmap0.tiles.osgeo.org/wms/vmap0", {layers: 'basic'} );
 	var pnoa_layer = new OpenLayers.Layer.WMS( "Ortofotos España","http://www.ign.es/wms-inspire/pnoa-ma?", {layers: 'PNOA',transparent: true} );
-  	var avisos_layer = new OpenLayers.Layer.WMS( "Avisos","http://localhost:8080/geoserver/wms?", {layers: 'Proyecto:Avisos',transparent: true}, {isBaseLayer: false, opacity: 1} );
+  	var avisos_layer = new OpenLayers.Layer.WMS( "Avisos","http://localhost:8080/geoserver/wms?", {layers: 'Proyecto:avisos',transparent: true}, {isBaseLayer: false, opacity: 1} );
 	geoloc = new OpenLayers.Layer.Vector('Geolocalicacion');
 	
 	
