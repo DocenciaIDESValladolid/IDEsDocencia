@@ -139,6 +139,9 @@ Alias /phpmyadmin "C:/xampp/phpMyAdmin/"
 
 ProxyPass /wps http://www.cartociudad.es/wps/WebProcessingService
 ProxyPass /geoserver http://localhost:8080/geoserver
+ProxyPass /gasolineras http://geoportalgasolineras.es/cgi-bin/mapserv
 ProxyPass /tel http://www.tel.uva.es
 ProxyPassReverse /geoserver http://localhost:8080/geoserver
 ProxyPassReverse /wps http://www.cartociudad.es/wps/WebProcessingService
+ProxyPassReverse /gasolineras http://geoportalgasolineras.es/cgi-bin/mapserv
+ProxyPassReverse /tel http://www.tel.uva.es
