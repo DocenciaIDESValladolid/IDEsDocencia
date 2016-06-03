@@ -89,11 +89,20 @@
             function onFeatureSelect(feature) {
                 selectedFeature = feature;
                //alert(feature); 
+               if(feature.layer.name=="radares"){
                 popup = new OpenLayers.Popup.FramedCloud("chicken", 
                     feature.geometry.getBounds().getCenterLonLat(),
                     null,
-                    "<div style='font-size:.8em'>Descripción: "+ feature.descrip + "</div>",
+                    "<div style='font-size:.8em'>Descripción: "+ feature.attributes.descrip + "</div>",
                     null, true, onPopupClose);
+                }
+                else{
+                    popup = new OpenLayers.Popup.FramedCloud("chicken", 
+                    feature.geometry.getBounds().getCenterLonLat(),
+                    null,
+                    "<div style='font-size:.8em'>Descripción: "+ feature.attributes.Direccion + "<br>" + feature.attributes.Rotulo + "</div>",
+                    null, true, onPopupClose);
+                }
                 feature.popup = popup;
                 map.addPopup(popup);
             }
@@ -226,7 +235,7 @@
                                 //creacion de la peticion WFS  a geoserver para obtener los radares de la ruta
 
                                   //creacion de la peticion WFS  a geoserver para obtener los radares de la ruta
-                                  var radaresFiltro = new OpenLayers.Layer.Vector("WFS", {
+                                  var radaresFiltro = new OpenLayers.Layer.Vector("radares", {
                                     strategies: [new OpenLayers.Strategy.BBOX], 
                                     protocol: new OpenLayers.Protocol.WFS({
                                         url:  "http://localhost/geoserver/wfs",
@@ -256,7 +265,7 @@
                                         graphicZIndex: 2
                                     })
                                 });
-                                var gasolinerasfiltro = new OpenLayers.Layer.Vector("WFS", {
+                                var gasolinerasfiltro = new OpenLayers.Layer.Vector("gasolineras", {
                                         strategies: [new OpenLayers.Strategy.BBOX], 
                                         protocol: new OpenLayers.Protocol.WFS({
                                         url:  "http://localhost/gasolineras",
