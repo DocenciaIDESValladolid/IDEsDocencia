@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <title>Click to get coordonates and a point </title>
+
+        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+          <script src="busapp.js"></script>
+        <style type="text/css">
+          html, body, #mapdiv {
+              width:100%; height:100%; margin:0;
+          }
+
+          .olImageLoadError { display: none; }
+        </style>
+
+        <script type="text/javascript">
+
+            //Aqui es el "click handler"
+            OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
+                defaultHandlerOptions: {
+                    'single': true,
+                    'double': false,
+                    'pixelTolerance': 0,
+                    'stopSingle': false,
+                    'stopDouble': false
+                },
+
+                initialize: function(options) {
+                    this.handlerOptions = OpenLayers.Util.extend(
+                        {}, this.defaultHandlerOptions
+                    );
+                    OpenLayers.Control.prototype.initialize.apply(
+                        this, arguments
+                    );
+                    this.handler = new OpenLayers.Handler.Click(
+                        this, {
+                            'click': this.trigger
+                        }, this.handlerOptions
+                    );
+                },
+
+                trigger: function(e) {
+                    //Aqui podemos recoger los coordenadas (con un pop up) de un punto cuando el usario hacer un click
+                  /*  var lonlat = map.getLonLatFromViewPortPx(e.xy)
+
+                    lonlat.transform(
+                      new OpenLayers.Projection("EPSG:900913"),
+                      new OpenLayers.Projection("EPSG:4326")
+                    );
+
+                    alert("You clicked near " + lonlat.lat + " N, " +
+                                              + lonlat.lon + " E");
+*/
+
+
+
+/*
+map.events.register("click", map, function(e) {
+//Aqui queremos hacer un bucle para limitar el numero de markers (2 al maxima)
+while (i=0)
+{
+nbMarker = nbMarker+1;
+if (nbMarker > 2)
+{
+markers.destroy();
+i=1;
+}
+}*/
+if (markers.markers.length==2){
+        // reset the process
+        markers.removeMarker(markers.markers[0]);
+        markers.removeMarker(markers.markers[0]);
+        //ruta.clear();
+        //analysis.clear();
+        return;
+}
+else
+if (markers.markers.length==1){
+        var initial=markers.markers[0];
+        addMarker(map.getLonLatFromPixel(e.xy));
+        // tenemos dos
+        var final=markers.markers[1];
+        // launch processes
+        launchProcesses(initial,final);
+}else if(markers.markers.length==0){
+        addMarker(map.getLonLatFromPixel(e.xy));
+}
+
+ }
+                
+            });
+
+function addMarker(position){
+var size = new OpenLayers.Size(21,25);
+var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+markers.id = "Markers";
+var icon = new OpenLayers.Icon('marker.png', size, offset);
+var markerslayer = map.getLayer('Markers');
+//Aqui establecemos los markers en la capa
+markerslayer.addMarker(new OpenLayers.Marker(position,icon));
+}
+function init(){
+map = new OpenLayers.Map('mapdiv');
+
+map.addLayer(new OpenLayers.Layer.OSM());
+markers = new OpenLayers.Layer.Markers( "Markers" );
+map.addLayer(markers);
+
+map.zoomToMaxExtent();
+
+var click = new OpenLayers.Control.Click();
+map.addControl(click);
+click.activate();
+
+}
+
+
+        </script>
+    </head>
+
+  <body onload="init()">
+    <div id="mapdiv"></div>
+
+  </body>
+
+</html>
