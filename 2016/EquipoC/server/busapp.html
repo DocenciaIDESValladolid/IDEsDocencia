@@ -16,6 +16,7 @@
           .olImageLoadError { display: none; }
         </style>
 
+
         <script type="text/javascript">
 
             //Aqui es el "click handler"
@@ -43,32 +44,7 @@
                 },
 
                 trigger: function(e) {
-                    //Aqui podemos recoger los coordenadas (con un pop up) de un punto cuando el usario hacer un click
-                  /*  var lonlat = map.getLonLatFromViewPortPx(e.xy)
-
-                    lonlat.transform(
-                      new OpenLayers.Projection("EPSG:900913"),
-                      new OpenLayers.Projection("EPSG:4326")
-                    );
-
-                    alert("You clicked near " + lonlat.lat + " N, " +
-                                              + lonlat.lon + " E");
-*/
-
-
-
-/*
-map.events.register("click", map, function(e) {
-//Aqui queremos hacer un bucle para limitar el numero de markers (2 al maxima)
-while (i=0)
-{
-nbMarker = nbMarker+1;
-if (nbMarker > 2)
-{
-markers.destroy();
-i=1;
-}
-}*/
+                   
 if (markers.markers.length==2){
         // reset the process
         markers.removeMarker(markers.markers[0]);
@@ -103,18 +79,31 @@ var markerslayer = map.getLayer('Markers');
 markerslayer.addMarker(new OpenLayers.Marker(position,icon));
 }
 function init(){
-map = new OpenLayers.Map('mapdiv');
 
-map.addLayer(new OpenLayers.Layer.OSM());
+ map = new OpenLayers.Map('mapdiv');
+ osm = new OpenLayers.Layer.WMS( "OSM",
+                    "http://ows.terrestris.de/osm/service", 
+                    {layers: 'OSM-WMS'});
+  layer = new OpenLayers.Layer.WMS( "OpenLayers WMS",
+                    "http://vmap0.tiles.osgeo.org/wms/vmap0",
+                    {layers: 'basic'} );
+ pate = new OpenLayers.Layer.WMS( "Pate WMS",
+                    "http://localhost/geoserver/wms", 
+                    {layers: 'busapp:pate',transparent: "true",
+                    format: "image/png",
+                    srs: "EPSG:4326"}
+                    ,{isBaseLayer: false,
+                    projection: new OpenLayers.Projection('EPSG:4326')} );
 markers = new OpenLayers.Layer.Markers( "Markers" );
-map.addLayer(markers);
-
-map.zoomToMaxExtent();
-
+            map.addLayers([layer,osm,pate,markers]);
+            map.zoomToMaxExtent();
+map.addControl( new OpenLayers.Control.LayerSwitcher() );
+var bounds = new OpenLayers.Bounds(-0.5746756221530446, 48.74939818591358, -0.5665527088867619, 48.752909733173375);
+map.zoomToExtent(bounds, true);
 var click = new OpenLayers.Control.Click();
 map.addControl(click);
 click.activate();
-
+   
 }
 
 
@@ -123,7 +112,6 @@ click.activate();
 
   <body onload="init()">
     <div id="mapdiv"></div>
-
-  </body>
+             <body>
 
 </html>
