@@ -2,6 +2,54 @@ var lon = -4;
 var lat = 41;
 var zoom = 5;
 var map, layer, wfs;
+distancia = 0.01;
+
+usosSuelo = new HashTable({111:"Tejido urbano continuo",
+112:"Tejido urbano discontinuo",
+121:"Zonas industriales y comerciales",
+122:"Redes viarias, ferroviarias y terrenos asociados",
+123:"Zonas portuarias",
+124:"Aeropuertos",
+131:"Zonas de extraccion minera",
+132:"Escombreas y vertederos",
+133:"Zonas en construccion",
+141:"Zonas verdes urbanas",
+142:"Instalaciones deportivas y recreativas",
+211:"Tierras de labor en secano",
+212:"Terrenos regados permanentemente",
+213:"Arrozales",
+221:"Viñedos",
+222:"Frutales y plantaciones de bayas",
+223:"Olivares",
+231:"Prados y praderas",
+241:"Cultivos anuales asociados con cultivos permanentes",
+242:"Mosaicos de cultivos",
+243:"Terrenos principalmente agricolas con importantes espacios de vegetacion natural",
+244:"Sistemas agro-forestales",
+311:"Bosques de frondosas",
+312:"Bosques de coniferas",
+313:"Bosque mixto",
+321:"Pastizales naturales",
+322:"Landas y matorrales mesofilos",
+323:"Vegetacion esclerofila",
+324:"Matorral boscoso de transicion",
+331:"Playas, dunas y arenales",
+332:"Roquedo",
+333:"Espacios con vegetacion escasa",
+334:"Zonas quemadas",
+335:"Glaciares y niveles permanentes",
+411:"Humedales y zonas pantanosas",
+412:"Turberas y prados turbosos",
+421:"Marismas",
+422:"Salinas",
+423:"Zonas llanas intermareales",
+511:"Cursos de agua",
+512:"Laminas de agua",
+521:"Lagunas costeras",
+522:"Estuarios",
+523:"Mares y oceanos"});
+
+
 
 function init(){
 	
@@ -11,13 +59,22 @@ function init(){
 	fillOpacity: 0.1,
 	strokeWidth: 0
 	};
-	
+	var stylecover = {
+	fillColor: '#000ff',
+	fillOpacity: 0.1,
+	strokeWidth: 1
+	};
     map = new OpenLayers.Map( 'map' );
     layer = new OpenLayers.Layer.WMS( "OpenLayers WMS","http://vmap0.tiles.osgeo.org/wms/vmap0", {layers: 'basic'} );
 	var pnoa_layer = new OpenLayers.Layer.WMS( "Ortofotos España","http://www.ign.es/wms-inspire/pnoa-ma?", {layers: 'PNOA',transparent: true} );
   	var avisos_layer = new OpenLayers.Layer.WMS( "Avisos","http://localhost:8080/geoserver/wms?", {layers: 'Proyecto:avisos',transparent: true}, {isBaseLayer: false, opacity: 1} );
 	geoloc = new OpenLayers.Layer.Vector('Geolocalicacion');
-	coverwfs = new OpenLayers.Layer.Vector("WFS");
+	coverwfs = new OpenLayers.Layer.Vector("WFS",{
+                styleMap: new OpenLayers.StyleMap({
+                    strokeWidth: "${factor}", // based on feature.attributes.type
+                    fillColor: "#666666",
+                    fillOpacity: 0.1,
+                })});
 	
     map.addLayers([pnoa_layer,layer, avisos_layer,geoloc,coverwfs]);
 	
@@ -25,54 +82,56 @@ function init(){
     map.addControl( new OpenLayers.Control.LayerSwitcher() );
     
     var geolocate = new OpenLayers.Control.Geolocate({
-	bind: false,
-	geolocationOptions: {
-	enableHighAccuracy: false,
-	maximumAge: 0,
-	timeout: 7000
-	}	
-		
-});
-	// GEOLOCALIZACION
+		bind: false,
+		geolocationOptions: {
+		enableHighAccuracy: false,
+		maximumAge: 0,
+		timeout: 7000
+		}	
+
+	});
 	
 	map.addControl(geolocate);
 			
 	geolocate.events.register("locationupdated",geolocate,function(e) {
-    geoloc.removeAllFeatures();
-    
-    var circle = new OpenLayers.Feature.Vector(OpenLayers.Geometry.Polygon.createRegularPolygon(new OpenLayers.Geometry.Point(e.point.x, e.point.y),e.position.coords.accuracy/2/110000,40,0),
-        {},
-        style
-    );
-    
-    geoloc.addFeatures([
-    
-    new OpenLayers.Feature.Vector(
-        e.point,
-        {},
-        {
-            graphicName: 'cross',
-            strokeColor: '#f00',
-            strokeWidth: 2,
-            fillOpacity: 0,
-            pointRadius: 10
-        }
-        ),
-        circle
-    ]);
-    
-    if (firstGeolocation) {
-        map.zoomToExtent(geoloc.getDataExtent());
-        pulsate(circle);
-        firstGeolocation = false;
-        this.bind = true;
-    }
-	getIntersectionFeatures(e.point,0.001);
-});
+		geoloc.removeAllFeatures();
+		
+		var circle = new OpenLayers.Feature.Vector(OpenLayers.Geometry.Polygon.createRegularPolygon(new OpenLayers.Geometry.Point(e.point.x, e.point.y),e.position.coords.accuracy/2/110000,40,0),
+			{},
+			style
+		);
+		
+		geoloc.addFeatures([
+		
+		new OpenLayers.Feature.Vector(
+			e.point,
+			{},
+			{
+				graphicName: 'cross',
+				strokeColor: '#f00',
+				strokeWidth: 2,
+				fillOpacity: 0,
+				pointRadius: 10
+			}
+			),
+			circle
+		]);
+		
+		if (firstGeolocation) {
+			map.zoomToExtent(geoloc.getDataExtent());
+			pulsate(circle);
+			firstGeolocation = false;
+			this.bind = true;
+		}
+	
+	punto = e.point;
+	getIntersectionFeatures(e.point,distancia);
+	
+	});
 	
 	geolocate.events.register("locationfailed",this,function() {
-    OpenLayers.Console.log('Location detection failed');
-});
+		OpenLayers.Console.log('Location detection failed');
+	});
 	
 	geoloc.removeAllFeatures();
     geolocate.deactivate();
@@ -81,36 +140,38 @@ function init(){
     geolocate.activate();
 }
         
+		
+		
     var pulsate = function(feature) {
-    var point = feature.geometry.getCentroid(),
-    bounds = feature.geometry.getBounds(),
-    radius = Math.abs((bounds.right - bounds.left)/2),
-    count = 0,
-    grow = 'up';
+		var point = feature.geometry.getCentroid(),
+		bounds = feature.geometry.getBounds(),
+		radius = Math.abs((bounds.right - bounds.left)/2),
+		count = 0,
+		grow = 'up';
 
-    var resize = function(){
-        if (count>16) {
-            clearInterval(window.resizeInterval);
-        }
-        var interval = radius * 0.03;
-        var ratio = interval/radius;
-        switch(count) {
-            case 4:
-            case 12:
-                grow = 'down'; break;
-            case 8:
-                grow = 'up'; break;
-        }
-        if (grow!=='up') {
-            ratio = - Math.abs(ratio);
-        }
-        feature.geometry.resize(1+ratio, point);
-        geoloc.drawFeature(feature);
-        count++;
-    };	
-	
-    
-    window.resizeInterval = window.setInterval(resize, 50, point, radius);
+		var resize = function(){
+			if (count>16) {
+				clearInterval(window.resizeInterval);
+			}
+			var interval = radius * 0.03;
+			var ratio = interval/radius;
+			switch(count) {
+				case 4:
+				case 12:
+					grow = 'down'; break;
+				case 8:
+					grow = 'up'; break;
+			}
+			if (grow!=='up') {
+				ratio = - Math.abs(ratio);
+			}
+			feature.geometry.resize(1+ratio, point);
+			geoloc.drawFeature(feature);
+			count++;
+		};	
+
+
+		window.resizeInterval = window.setInterval(resize, 50, point, radius);
 	
 };
 
@@ -215,6 +276,8 @@ function getGML3FormatInspire(){
 function _wfsLoaded (resp) {
 	var jstsGeom2 = getJSTSGeom(new OpenLayers.Feature.Vector(bufferGeom));
 	var ponderaciones = new Array();
+	var area;
+	var sumaArea=0;
     for (var i=0;i<resp.features.length;i++){
     	var feat=resp.features[i];
     	var jstsGeom1 = getJSTSGeom(feat);
@@ -227,26 +290,76 @@ function _wfsLoaded (resp) {
     			coverwfs.addFeatures(feat);
     		}		
 			
-		var area = feat.geometry.getArea();		
-		var sumaArea =+ area;		
-		ponderaciones[i] = area*0.8;
-		
+		area = feat.geometry.getArea();		
+		sumaArea += area;
+		var factor=extraccionAtributos(feat);
+		feat.attributes.factor=1+factor*10;		
+		ponderaciones[i] = area*factor;
+		var a = ponderaciones[i];
+				
     }	
 	
-	operacionArea(sumaArea,ponderaciones);
+	calcularRiesgo(sumaArea,ponderaciones);
 
+}
+
+function extraccionAtributos(feature){
+	var factor;
+	var atributo = feature.attributes.landCoverObservation;
+	atributo = parseInt(atributo.substring(52,55));
+	nombre = usosSuelo.getItem(atributo);
+	if(atributo>100 && atributo<200){
+		factor = 0;
+	}else if(atributo>200 && atributo<300){
+		factor = 0.5;
+	}else if(atributo>300 && atributo<400){
+		factor = 0.6;
+	}else if(atributo>400 && atributo<500){
+		factor = 0.8;
+	}else if(atributo>500 && atributo<600){
+		factor = 0.9;
+	}
+return factor;
 }	
 
-function operacionArea(sumaArea,ponderaciones){
+function calcularRiesgo(sumaArea,ponderaciones){
 	
-	var ponderacion
+	var ponderacion=0;
 	
 	for(var i=0;i<ponderaciones.length;i++){
-		ponderacion =+ ponderaciones[i];
+		ponderacion = ponderacion + ponderaciones[i];
 	}	
 	
-	riesgo = ponderacion/sumaArea;
-	riesgo = riesgo;
+	var riesgo = ponderacion/sumaArea;
+	
+	mostrarRiesgo(riesgo);
+}
+
+function mostrarRiesgo(riesgo){
+	
+    var markers = new OpenLayers.Layer.Markers( "Markers" );
+	var size = new OpenLayers.Size(21,25);
+	var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+	var icon = new OpenLayers.Icon('../images/riesgo.jpg', size, offset);
+	markers.addMarker(new OpenLayers.Marker(punto,icon));
+	map.addLayer(markers);
+    if(riesgo<50){
+		color = "#00FF00";
+    }else if(riesgo>=50 && riesgo<80){
+    	color = "#FFBF00"; 
+    }else if(riesgo>=80){
+    	color = "#FF0000";
+    }
+
+	var popup = new OpenLayers.Popup.FramedCloud("Popup", 
+		punto.getBounds().getCenterLonLat(), null,
+		("<div style='font-size:15px;text-align:center;font-weight: bold;'>Riesgo de alergia:</div>" +        
+		"<div style='font-size:15px;color:"+color+";text-align:center;font-weight: bold;'><br>" + riesgo + "%</div>"), 
+		null,
+		true
+		);
+
+	map.addPopup(popup);
 	
 }
 
@@ -333,4 +446,87 @@ function getJSTSGeom(OLfeature){
         var wktgeom=wkt.write(OLfeature);
         var jstsGeom = jtsparser.read(wktgeom);
         return jstsGeom;
+}
+
+function HashTable(obj)
+{
+    this.length = 0;
+    this.items = {};
+    for (var p in obj) {
+        if (obj.hasOwnProperty(p)) {
+            this.items[p] = obj[p];
+            this.length++;
+        }
+    }
+
+    this.setItem = function(key, value)
+    {
+        var previous = undefined;
+        if (this.hasItem(key)) {
+            previous = this.items[key];
+        }
+        else {
+            this.length++;
+        }
+        this.items[key] = value;
+        return previous;
+    }
+
+    this.getItem = function(key) {
+        return this.hasItem(key) ? this.items[key] : undefined;
+    }
+
+    this.hasItem = function(key)
+    {
+        return this.items.hasOwnProperty(key);
+    }
+   
+    this.removeItem = function(key)
+    {
+        if (this.hasItem(key)) {
+            previous = this.items[key];
+            this.length--;
+            delete this.items[key];
+            return previous;
+        }
+        else {
+            return undefined;
+        }
+    }
+
+    this.keys = function()
+    {
+        var keys = [];
+        for (var k in this.items) {
+            if (this.hasItem(k)) {
+                keys.push(k);
+            }
+        }
+        return keys;
+    }
+
+    this.values = function()
+    {
+        var values = [];
+        for (var k in this.items) {
+            if (this.hasItem(k)) {
+                values.push(this.items[k]);
+            }
+        }
+        return values;
+    }
+
+    this.each = function(fn) {
+        for (var k in this.items) {
+            if (this.hasItem(k)) {
+                fn(k, this.items[k]);
+            }
+        }
+    }
+
+    this.clear = function()
+    {
+        this.items = {}
+        this.length = 0;
+    }
 }
