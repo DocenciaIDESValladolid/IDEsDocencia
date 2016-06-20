@@ -1,0 +1,30 @@
+/***************************/
+/* Configuración de Apache */
+/***************************/
+-----------------------------
+Para que la aplicación funcione correctamente es necesario crear un proxy para que no existan problemas de XSS (Cross-site scripting) y se puedan realizar peticiones a distintos servidores en la misma aplicación web. Para crear los proxys tenemos que modificar el fichero httpd-xampp.conf.
+Primero creamos un alias "radares" para que nuestro servidor muestre nuestra aplicación web en la ruta localhost/radares. Para ello escribimos la ruta donde se escuentran los ficheros de la aplicación (index.html...) como se muestra a continuación:
+ 
+----Alias radares------
+Alias /radares "C:\Users\Mario\Desktop\UNIVERSIDAD\4\IDE\IDEsDocencia\2016\EquipoB\server\radares\public_html"
+    <Directory "C:\Users\Mario\Desktop\UNIVERSIDAD\4\IDE\IDEsDocencia\2016\EquipoB\server\radares\public_html">
+        AllowOverride None
+	Options Indexes FollowSymLinks
+	Order allow,deny
+	Allow from all
+	AllowOverride AuthConfig
+	Require all granted
+        ErrorDocument 403 /error/XAMPP_FORBIDDEN.html.var
+    </Directory>  
+  
+Una vez creado el alias creamos los proxys necesarios para todos los servidores externos que vamos a utilizar en nuestra aplicación. En nuestro caso creamos un alias para cartociudad, otro para geoportal (gasolineras) y otro para nuestro geoserver. Para crear los proxys vasta con añadir las siguientes líneas al final del fichero de configuración httpd-xampp.conf.
+
+----Proxys-------
+ProxyPass /wps http://www.cartociudad.es/wps/WebProcessingService
+ProxyPass /geoserver http://localhost:8080/geoserver
+ProxyPass /gasolineras http://geoportalgasolineras.es/cgi-bin/mapserv
+ProxyPassReverse /geoserver http://localhost:8080/geoserver
+ProxyPassReverse /wps http://www.cartociudad.es/wps/WebProcessingService
+ProxyPassReverse /gasolineras http://geoportalgasolineras.es/cgi-bin/mapserv
+
+*Para acceder a esas URLs basta con utilizar la ruta relativa indicada en el proxy (wps, geoserver, gasolineras).
