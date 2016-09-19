@@ -1,0 +1,156 @@
+#form1{
+margin-left:8%;
+margin-top: 3%;
+width:54.68%;
+
+}
+#INPUT{
+	float:right;
+	width:70%;
+	margin-left:8%;
+	border-color: whitesmoke;
+	background-color: whitesmoke;
+}    
+#name{
+	float:right;
+	width:70%;
+	margin-left:8%;
+	border-color: whitesmoke;
+	background-color: whitesmoke;
+}  
+
+#apellido{
+	float:right;
+	width:70%;
+	margin-left:8%;
+	border-color: whitesmoke;
+	background-color: whitesmoke;
+}  
+#nombre{
+	width:100%;
+}
+#edad{
+	float:right;
+	width:70%;
+	margin-left:8%;
+	border-color: whitesmoke;
+	background-color: whitesmoke;
+}  
+#email{
+	float:right;
+	width:70%;
+	margin-left:8%;
+	border-color: whitesmoke;
+	background-color: whitesmoke;
+}  
+#dni{
+	float:right;
+	width:70%;
+	margin-left:8%;
+	border-color: whitesmoke;
+	background-color: whitesmoke;
+}  
+#telefono{
+	float:right;
+	width:70%;
+	margin-left:8%;
+	border-color: whitesmoke;
+	background-color: whitesmoke;
+}  
+#cp{
+	float:right;
+	width:70%;
+	margin-left:8%;
+	border-color: whitesmoke;
+	background-color: whitesmoke;
+}  
+#direccion{
+	float:right;
+	width:70%;
+	margin-left:8%;
+	border-color: whitesmoke;
+	background-color: whitesmoke;
+}  
+#provincia{
+	float:right;
+	width:70%;
+	margin-left:8%;
+	border-color: whitesmoke;
+	background-color: whitesmoke;
+}  
+#fechaNacimiento{
+	float:right;
+	width:70%;
+	margin-left:8%;
+	border-color: whitesmoke;
+	background-color: whitesmoke;
+}  
+#mensaje{
+	float:right;
+	width:70%;
+	margin-left:8%;
+	border-color: #000;
+	background-color: whitesmoke;
+	
+} 
+#cod{
+
+	width:30%;
+	margin-left:5%;
+	border-color: whitesmoke;
+	background-color: whitesmoke;
+	margin-bottom: 8%;
+}  
+#sexo{
+	margin-left:4%;
+}
+#titulillo{	
+	margin-left:23.43%;
+}
+#Tform{
+	
+	font:"Antic Slab"; 
+	font-size: 200%;
+	text-decoration: underline;
+	font-weight: bolder;
+	color:#28425a;
+	
+}
+#Tdescpricion{
+	
+	font: helvetica, arial, sans-serif;
+	font-size: medium; 
+	color:#000000;
+	margin-left:5%;
+	
+}
+#de{
+	margin-left:11.71%;
+	margin-top: 3%;
+}
+
+.content {
+	padding: 8% 0;
+	width: 78.125%;
+	float: left;
+	margin-top:10px;
+	margin-left:11.71%;
+}
+
+.pagina_entera_f {
+	height: 1200px;
+	width: 93.75%;
+	background-color: #FFF/*#AFDCE8*/;
+	margin-left: auto ; /* el valor automático de los lados, unido a la anchura, centra el diseño  */
+	margin-right: auto
+	
+}
+#botonazo{
+	
+	font: helvetica, arial, sans-serif;
+	font-size: 100%; 
+	color:#ffffff;
+	margin-left:2%;
+	background-color: rgba(20, 74, 4, 0.83);
+	
+}

@@ -1,0 +1,232 @@
+
+body {
+	margin:0;
+	color:#747474;
+	min-width:25%;
+	-webkit-text-size-adjust:100%;
+	font:80% "Antic Slab", Arial, Helvetica, sans-serif;
+}
+.titulo{width: 50%; height: 20%;}
+/*Este contenedor de anchura fija rodea a todas las demás bloques  */
+
+.pagina_entera {
+	height: auto;
+	width: 93.75%;
+	/*background-color: #FFF*/;
+	margin-left: auto ; /* el valor automático de los lados, unido a la anchura, centra el diseño  */
+	margin-right: auto;
+	align-items: center;
+	
+}
+
+.menu {
+	font-family:"Antic Slab";
+        font-weight:normal;
+	font-size:200%;
+	float: none;
+	width: auto;
+        background-color: #ede816; /* COLOR DE FONDO DEL MENU*/
+	padding-bottom: auto;
+	padding-top: auto;
+	overflow:visible;
+	text-align: center;
+        align-content: center;
+}
+
+.menuprincipal{  
+   overflow:hidden;
+   padding:auto;  
+   width:auto;
+}
+
+.menup{
+    list-style: none; /*Ningún estilo para el listado*/
+	list-style-type: none;
+	list-style-position: outside;
+    margin:0;
+    padding:0;
+	margin-left:5%;/*Margen para el texto del menu*/
+	text-align: center;
+}
+
+.menup li a{
+
+    color:#28425a; /*999*/ /*FONDO COLOR DE LA LETRA */
+    display:block;
+	position: static;
+    padding:5px;
+    text-decoration: none;
+    /*Transiciones*/
+    -webkit-transition: 0.4s linear all;
+    -moz-transition: 0.4s linear all;
+    -o-transition: 0.4s linear all;
+    transition: 0.4s linear all;	
+}
+
+
+.menup li{
+    /*Bordes redondeados*/
+    -webkit-border-radius:15px;/*Chrome y Safari*/
+    -moz-border-radius:15px;/*Firefox*/
+    -o-border-radius:5px;/*Opera*/
+    border-radius:5px;/*Estandar por defecto*/
+    margin-right:40px;/*Cambiar separación entre las pestañas del menu*/
+	margin-left:10px;
+    text-align:center;
+	
+}
+
+.menup > li{ /*li directos dentro de nav*/
+
+	float: left;
+	
+}
+
+.menup li ul{
+	display:none;
+	position: absolute;
+
+}
+
+.menup li a:hover {
+    color:#000000; /*Color de la letra cuando estamos encima*/
+}
+
+/*Menu desplegable*/
+.menup li:hover > ul{
+display:block;
+float: none;
+background: #fff/*#CC66CC*/;
+
+
+}
+
+.menup li a.prueba{
+	
+	color:#000000;
+    /*Efecto degradado en el fondo cuando pasamos el ratón por encima de nuestro "botón"*/
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#10eb3c), to( #10eb3c));/* Adecuamos para Android,iOS,Chrome y Safari*/
+    background-image: -moz-linear-gradient(top center, #10eb3c, #10eb3c);/*Igual para Firefox*/
+    background-image: -o-linear-gradient(top, #10eb3c, #10eb3c);/*Igual para Opera*/
+    background-image: linear-gradient(top, #10eb3c, #10eb3c);/*Estandar por defecto sin niguna especificación*/
+	
+	 /*Bordes redondeados*/
+    -webkit-border-radius:5px;/*Chrome y Safari*/
+    -moz-border-radius:5px;/*Firefox*/
+    -o-border-radius:5px;/*Opera*/
+    border-radius:5px;/*Estandar por defecto*/
+    
+	/*Sombras*/
+    -webkit-box-shadow:  1px -1px 0px #999;/*Adecuamos paraChrome y Safari*/
+    -moz-box-shadow:  1px -1px 0px #999;/*Igual paraFirefox*/
+    -o-box-shadow:  1px -1px 0px #999;/*Igual paraOpera*/
+    box-shadow:  1px -1px 0px #999;/*Estandar por defecto sin niguna especificación*/
+    border:1px solid #E3E3E3; /*Marca los bordes */
+	
+	
+}
+.menup li:hover{
+    /*Efecto degradado en el fondo cuando pasamos el ratón por encima de nuestro "botón"*/
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#00f7ff), to( #00f7ff));/* Adecuamos para Android,iOS,Chrome y Safari*/
+    background-image: -moz-linear-gradient(top center, #F5F40D, #F5F40D);/*Igual para Firefox*/
+    background-image: -o-linear-gradient(top, #F5F40D, #F5F40D);/*Igual para Opera*/
+    background-image: linear-gradient(top, #F5F40D, #F5F40D);/*Estandar por defecto sin niguna especificación*/
+	
+    
+	/*Sombras*/
+    -webkit-box-shadow:  1px -1px 0px #999;/*Adecuamos paraChrome y Safari*/
+    -moz-box-shadow:  1px -1px 0px #999;/*Igual paraFirefox*/
+    -o-box-shadow:  1px -1px 0px #999;/*Igual paraOpera*/
+    box-shadow:  1px -1px 0px #999;/*Estandar por defecto sin niguna especificación*/
+    border:1px solid #E3E3E3; /*Marca los bordes */
+	
+	
+}
+
+/*
+nav.menuprincipal ul.menup li ul.subs: {
+display:vertical;
+}
+*/
+
+.content {
+	padding: 10px 0;
+	width: 1000px;
+	float: left;
+	margin-top:40px;
+}
+aside {
+	float: left;
+	margin-top:30px;
+	height: 638px;
+	width: 15.625%;
+	background-color: #FFFFFF;
+	padding: 10px;
+}
+#Noticias{
+	
+	font:"Antic Slab" 120%; 
+	color:#28425a;
+	margin-left:15px;
+}
+
+#separacion
+{
+	margin-left:55%;
+}
+#separacion1
+{
+	margin-left:10%;
+}
+
+#separacion2
+{
+	text-align: center;
+	margin-left:25%;
+}
+#separacion3
+{
+	margin-right:2%;
+}
+.imagenes {
+    width: 60%;
+    height: 60%;
+}
+
+#hora{
+	font: 250% "Antic Slab", Verdana, Arial, Helvetica, sans-serif;
+	margin-left:78.125%;
+	padding:0px;
+}
+
+#mapa{
+	border: gray;
+	padding-top: 2%;
+	padding-bottom: 5%;
+	width: 80%;
+	height: auto;
+}
+
+#calculadora{
+	padding-bottom: 5%;
+	padding-top: 3%;
+	border: solid;
+}
+#calc{
+	padding-bottom: 5%;
+	padding-top: 3%;
+}
+#piepag{
+	color: white;
+}
+
+
+/*Compatibilidad con HTML5 */
+header, section, footer, aside, article, figure {
+	display: block;
+}
+
+</style>
+
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]--></head>

@@ -1,0 +1,20 @@
+<layer>
+  <name>radares</name>
+  <id>LayerInfoImpl-6ba2709c:154c48f4f4f:-7ff7</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-6ba2709c:154c48f4f4f:-7ffa</id>
+  </defaultStyle>
+  <styles class="linked-hash-set">
+    <style>
+      <id>StyleInfoImpl-6ba2709c:154c48f4f4f:-7ffa</id>
+    </style>
+  </styles>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-6ba2709c:154c48f4f4f:-7ff8</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

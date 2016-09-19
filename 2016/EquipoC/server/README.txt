@@ -1,0 +1,2 @@
+En esta carpeta se deben poner los scripts PHP, html y javascript que se vayan a instalar en el servidor.
+Si en el diseño de la aplicación html y php se mezclan en la misma carpeta, todos deben ir aquí.
