@@ -8,3 +8,5 @@ La estructura de carpetas para cada equipo es la siguiente:
 - docs : carpeta para otros documentos explicativos, instrucciones de instalación, etc.
 - geoserver : carpeta de configuración de geoserver con los workspaces y otros ficheros del catálogo de Geoserver.
 - server : scripts de servidor como por ejemplo los PHP.
+
+Matteo Gibellini
