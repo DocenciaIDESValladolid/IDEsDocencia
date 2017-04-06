@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach (Inspector Protocol)",
+            "port": 9229,
+            "protocol": "inspector"
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome",
@@ -21,7 +28,7 @@
         {
             "type": "node",
             "request": "attach",
-            "name": "Asociar al proceso",
+            "name": "Asociar a node (legacy)",
             "port": 5858
         }
     ]

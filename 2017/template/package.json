@@ -7,13 +7,11 @@
   "dependencies": {
     "express": "^4.15.2",
     "jquery":"",
-    "openlayers":"",
-  },
+    "openlayers":""},
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node serve.js"
-  },
+    "start": "node serve.js"},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/juacas/IDEsDocencia.git"
