@@ -1,0 +1,307 @@
+<html dir="ltr" lang="es" xml:lang="es">
+
+<head>
+    <title>Aplicación IDEs</title>
+    <link rel="shortcut icon" href="pix/app-icon.png" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="IDEs, UVa" />
+    <link rel="stylesheet" href="css/jquerymobile.css" type="text/css">
+    <link rel="stylesheet" href="css/styles.css" type="text/css">
+    <link rel="stylesheet" href="css/introjs.css" type="text/css">
+    <link rel="stylesheet" href="css/ol.css" type="text/css">
+    <script src="js/jquery2/jquery-2.1.4.min.js"></script>
+    <script src="js/jquery-mobile/jquerymobile.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery-mobile/jquery.mobile-config.js"></script>
+    <script src="js/openlayers/dist/ol-debug.js"></script>
+    <script src="js/geocoder/geocoder.js"></script>
+    <script src="init_map.js"></script>
+    <script src="app.js"></script>
+</head>
+
+<body id="page-main">
+    <div data-role="page" id="mappage" data-quicklinks="true" data-theme="b">
+        <div data-role="panel" data-position="left" data-position-fixed="true" data-display="overlay" id="infopanel">
+            <div data-role="header" data-position="fixed" data-tap-toggle="false">
+                <a href="#" data-role="button" data-rel="close" class=" ui-btn-inline ui-nodisc-icon ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
+                <h1>Información</h1>
+            </div>
+            <div id="collapsibleset" data-role="collapsibleset" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b" data-content-theme="b">
+                <div data-role="collapsible" data-theme="a" data-iconpos="right">
+                    <h3>Ejemplo de app IDEs</h3>
+                    <div>
+                        <ul id="listdemos" data-role="listview" data-inset="true"></ul>
+                    </div>
+                </div>
+                <h3>Instrucciones.</h3>
+                <div id="welcomingInfo">
+                    <p>Instrucciones de uso de este panel inicial.</p>
+                    <a href="#dosomething" id="dosmething_button" class="ui-btn ui-btn-a ui-shadow ui-corner-all ui-btn-inline ui_mini">Haz esto</a>
+                </div>
+                <div>
+                    <a href="#" id="pruebaMatteo" data-role="button">Prueba Matteo</a>
+                </div>
+            </div>
+        </div>
+        <div data-role="panel" data-position="right" data-position-fixed="true" data-display="overlay" id="searchpanel">
+            <div data-role="header" data-position="fixed" data-tap-toggle="false">
+                <a href="#" data-role="button" data-rel="close" class="ui-btn-right ui-nodisc-icon ui-btn 
+                   ui-icon-carat-r ui-btn-icon-notext ui-corner-all"></a>
+                <h1>Buscar</h1>
+                <div class="ui-bar ui-bar-b">
+                    <form class="ui-filterable">
+                        <input id="autocomplete-input" data-type="search" placeholder="Find a city...">
+                    </form>
+                </div>
+            </div>
+            <ul id="autocomplete" data-role="listview" data-inset="true" data-filter="true" data-input="#autocomplete-input"></ul>
+
+        </div>
+
+        <div data-role="popup" id="popupdialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+            <div data-role="header" data-theme="b">
+                <h1>¿Estás seguro de que deseas enviar esta ubicación?</h1>
+            </div>
+            <div role="content" id="popup_content" class="ui-content ui-overlay-b">
+                <p>Esta acción no se puede deshacer.</p>
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b">
+                            Cancelar
+                        </a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-transition="flow" id="sendLocation">
+                            Enviar
+                        </a>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    
+        <!-- Configure New Training -->
+        <div data-role="popup" id="new_training_config" data-overlay-theme="b" data-theme="b" data-dismissible="false">
+            <div data-role="header" data-theme="b">
+                <h1>Nuevo Entrenamiento</h1>
+            </div>
+            <div role="content" id="new_training_config_content" class="ui-content ui-overlay-b">
+                <div data-demo-html="true"> <!-- not working -->
+                    <form>
+                    <div class="ui-field-contain">
+                        <div class="ui-select">
+                            <div id="select-native-1-button" class="ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow">
+                                <select name="select-native-1" id="select-native-1">
+                                    <option value="1">Preferido</option>
+                                    <option value="2">Ejercicio 1</option>
+                                    <option value="3">Ejercicio 2</option>
+                                    <option value="4">Ejercicio 3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-field-contain"> <!-- not working -->
+                      <label for="slider-3">Difficultad:</label>
+                      <input type="range" name="slider-3" id="slider-3" value="0" min="0" max="3" data-theme="b" data-track-theme="a">
+                    </div>
+                    <fieldset data-role="controlgroup">
+                        <input type="checkbox" name="checkbox-t-2a" id="checkbox-t-2a" data-theme="b">
+                        <label for="checkbox-t-2a">Parques</label>
+                        <input type="checkbox" name="checkbox-t-2b" id="checkbox-t-2b" data-theme="b">
+                        <label for="checkbox-t-2b">Fuentes</label>
+                        <input type="checkbox" name="checkbox-t-2c" id="checkbox-t-2c" data-theme="b">
+                        <label for="checkbox-t-2c">Baños</label>
+                    </fieldset>
+                    </form>
+                </div>
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b">
+                            Cancelar
+                        </a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-transition="flow" id="">
+                            Enviar
+                        </a>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <a href="#infopanel" data-rel="panel" data-dismissible="true" class="ui-btn ui-btn-left ui-btn-inline ui-icon-bars ui-btn-icon-notext"></a>
+            <a href="#searchpanel" data-transition="none" class="ui-btn  ui-btn-right ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-search">
+                Buscar
+            </a>
+            <h1><img class="smallicon" alt=" app icon " title=" app icon " src="pix/app-icon.png" height="24" /> App Demo IDEs</h1>
+        </div>
+        <div data-role="content" id="content">
+            <div id="map"></div>
+        </div>
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+            <!-- New Training button -->
+             <a href="#new_training_config" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-plus" id="make_new_training">Nuevo Entrenamiento</a>
+            
+            <a href="#layerspage" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-bullets ui-btn-icon-notext">
+                Capas
+            </a>
+            <a href="#historypage" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-info ui-btn-icon-notext">
+                Historial
+            </a>
+            <a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-location ui-btn-icon-notext" id="autolocate"></a>
+            <a href="#authors" data-transition="fade" data-role="button" class="ui-btn">About Us</a>
+            <!--div id="navigation"></div-->
+        </div>
+    </div>
+    <div data-role="page" id="layerspage" data-theme="b">
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <a href="#mappage" data-role="button" class="ui-btn-left  ui-nodisc-icon ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
+            <h1>Capas</h1>
+        </div>
+        <div data-role="content">
+            <ul data-role="listview" data-inset="true" data-theme="b" data-divider-theme="b" id="layerslist">
+                <li data-role="list-divider" id="baseLayer">Vista del mapa</li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="page" id="historypage" data-theme="b">
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <a href="#mappage" data-role="button" class="ui-btn-left  ui-nodisc-icon ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
+            <h1>Historial</h1>
+        </div>
+        <div data-role="content">
+            <ol data-role="listview" data-inset="true" data-theme="b" id="historylist">
+                <li>No has realizado ningún intento</li>
+            </ol>
+        </div>
+    </div>
+    <!--
+		Página de "About us"
+		-->
+    <div data-role="page" id="authors" data-theme="b">
+        <div data-role="header">
+            <h1>About Us</h1>
+        </div>
+        <div role="content">
+            <ul data-role="listview" data-inset="true">
+                <li>
+                    <a href="#director" data-prefetch="true">
+                        <h2>JUAN PABLO DE CASTRO</h2>
+                        <p>Profesor de la Escuela Técnica Superior de Ingenieros de Telecomunicación, en la Universidad de Valladolid.</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#creador1" data-prefetch="true">
+                        <h2>Matteo Gibellini</h2>
+                        <p>Estudiante Erasmus en Valladolid. Escuela Técnica Superior de Ingenieros de Telecomunicaciones.</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#creador2" data-prefetch="true">
+                        <h2>Alumno 2</h2>
+                        <p>Estudiante Erasmus en Valladolid. Escuela Técnica Superior de Ingenieros de Telecomunicaciones.</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#creador3" data-prefetch="true">
+                        <h2>Alumno 3</h2>
+                        <p>Estudiante Erasmus en Valladolid. Escuela Técnica Superior de Ingenieros de Telecomunicaciones.</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#creador4" data-prefetch="true">
+                        <h2>Alumno 4</h2>
+                        <p>Estudiante Erasmus en Valladolid. Escuela Técnica Superior de Ingenieros de Telecomunicaciones.</p>
+                    </a>
+                </li>
+            </ul>
+            <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+        </div>
+    </div>
+
+    <!--
+		Página de "About us": Director
+		-->
+    <div data-role="page" id="director" data-theme="b">
+        <div data-role="header" data-position="fixed">
+            <h1>Director del trabajo</h1>
+        </div>
+        <div data-role="content" class="ui-content">
+            <h3 class="ui-bar ui-bar-a ui-corner-all">Juan Pablo De Castro</h3>
+
+            <div class="ui-body ui-body-a ui-corner-all">
+                <p>Profesor de la asignatura "Infraestructuras de Datos Espaciales" de la E.T.S.I.Telecomunicación de Valladolid</p>
+                <p><a href="mailto:jpdecastro@tel.uva.es">jpdecastro@tel.uva.es</a></p>
+            </div>
+            <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+        </div>
+    </div>
+
+    <!--
+		Página de "About us": Creador 1
+		-->
+    <div data-role="page" id="creador1" data-theme="b">
+        <div data-role="header">
+            <h1>Miembro del equipo</h1>
+        </div>
+        <div data-role="content" class="ui-content">
+            <h3 class="ui-bar ui-bar-a ui-corner-all">Matteo Gibellini</h3>
+            <div class="ui-body ui-body-a ui-corner-all">
+                <p>Estudiante Erasmus en Valladolid. Escuela Técnica Superior de Ingenieros de Telecomunicaciones.</p>
+                <p><a href="mailto:email@gmail.com">matteo.gibe@gmail.com</p>
+				</div>		
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+            </div>
+        </div>
+
+        <!--
+		Página de "About us": Creador 2
+		-->
+        <div data-role="page" id="creador2" data-theme="b">
+            <div data-role="header">
+                <h1>Miembro del equipo</h1>
+            </div>
+            <div data-role="content" class="ui-content">
+                <h3 class="ui-bar ui-bar-a ui-corner-all">Pierre-Étienne Horreau</h3>
+                <div class="ui-body ui-body-a ui-corner-all">
+                    <p>Estudiante Erasmus en Valladolid. Escuela Técnica Superior de Ingenieros de Telecomunicaciones.</p>
+                    <p><a href="mailto:email@gmail.com">email@gmail.com</p>
+				</div>		
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+                </div>
+            </div>
+
+            <!--
+		Página de "About us": Creador 3
+		-->
+            <div data-role="page" id="creador3" data-theme="b">
+                <div data-role="header">
+                    <h1>Miembro del equipo</h1>
+                </div>
+                <div data-role="content" class="ui-content">
+                    <h3 class="ui-bar ui-bar-a ui-corner-all">Thibaut Kazinzcky</h3>
+                    <div class="ui-body ui-body-a ui-corner-all">
+                        <p>Estudiante Erasmus en Valladolid. Escuela Técnica Superior de Ingenieros de Telecomunicaciones.</p>
+                        <p><a href="mailto:email@gmail.com">email@gmail.com</p>
+				</div>		
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+                    </div>
+                </div>
+
+                <!--
+		Página de "About us": Creador 4
+		-->
+            <div data-role="page" id="creador4" data-theme="b">
+                <div data-role="header">
+                    <h1>Miembro del equipo</h1>
+                </div>
+                <div data-role="content" class="ui-content">
+                    <h3 class="ui-bar ui-bar-a ui-corner-all">Cherifa Idrissa</h3>
+                    <div class="ui-body ui-body-a ui-corner-all">
+                        <p>Estudiante Erasmus en Valladolid. Escuela Técnica Superior de Ingenieros de Telecomunicaciones.</p>
+                        <p><a href="mailto:email@gmail.com">email@gmail.com</p>
+				</div>		
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+                    </div>
+                </div>
+</body>
