@@ -1,0 +1,30 @@
+<settings>
+  <id>SettingsInfoImpl-27f99646:15ac874bcfc:-7fec</id>
+  <workspace>
+    <id>WorkspaceInfoImpl-27f99646:15ac874bcfc:-7fee</id>
+    <name>semana6</name>
+  </workspace>
+  <contact>
+    <id>contact</id>
+    <addressCity>Valladolid</addressCity>
+    <addressCountry>Spain</addressCountry>
+    <contactEmail>matteo.gibe@gmail.com</contactEmail>
+    <contactOrganization>Valladolid University</contactOrganization>
+    <contactPerson>Matteo Gibellini</contactPerson>
+    <contactPosition>Student</contactPosition>
+  </contact>
+  <charset>UTF-8</charset>
+  <numDecimals>8</numDecimals>
+  <onlineResource>http://geoserver.org</onlineResource>
+  <verbose>false</verbose>
+  <verboseExceptions>false</verboseExceptions>
+  <metadata>
+    <map>
+      <entry>
+        <string>quietOnNotFound</string>
+        <boolean>false</boolean>
+      </entry>
+    </map>
+  </metadata>
+  <localWorkspaceIncludesPrefix>false</localWorkspaceIncludesPrefix>
+</settings>

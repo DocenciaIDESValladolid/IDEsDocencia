@@ -1,0 +1,123 @@
+<coverage>
+  <id>CoverageInfoImpl-27f99646:15ac874bcfc:-7fe4</id>
+  <name>OSMap</name>
+  <nativeName>OSMap</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-27f99646:15ac874bcfc:-7fed</id>
+  </namespace>
+  <title>OSMap</title>
+  <description>Generated from GeoTIFF</description>
+  <abstract>London Map</abstract>
+  <keywords>
+    <string>WCS</string>
+    <string>GeoTIFF</string>
+    <string>OSMap</string>
+  </keywords>
+  <nativeCRS class="projected">PROJCS[&quot;PCS Name = OSGB_1936_British_National_Grid&quot;, 
+  GEOGCS[&quot;GCS Name = GCS_OSGB_1936&quot;, 
+    DATUM[&quot;OSGB 1936&quot;, 
+      SPHEROID[&quot;Airy 1830&quot;, 6377563.396, 299.3249646, AUTHORITY[&quot;EPSG&quot;,&quot;7001&quot;]], 
+      TOWGS84[446.448, -125.157, 542.06, 0.15, 0.247, 0.842, -20.489], 
+      AUTHORITY[&quot;EPSG&quot;,&quot;6277&quot;]], 
+    PRIMEM[&quot;Greenwich&quot;, 0.0, AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]], 
+    UNIT[&quot;degree&quot;, 0.017453292519943295], 
+    AXIS[&quot;Geodetic longitude&quot;, EAST], 
+    AXIS[&quot;Geodetic latitude&quot;, NORTH]], 
+  PROJECTION[&quot;Transverse_Mercator&quot;], 
+  PARAMETER[&quot;central_meridian&quot;, -2.0], 
+  PARAMETER[&quot;latitude_of_origin&quot;, 49.0], 
+  PARAMETER[&quot;scale_factor&quot;, 0.9996012717], 
+  PARAMETER[&quot;false_easting&quot;, 400000.0], 
+  PARAMETER[&quot;false_northing&quot;, -100000.0], 
+  UNIT[&quot;m&quot;, 1.0], 
+  AXIS[&quot;Easting&quot;, EAST], 
+  AXIS[&quot;Northing&quot;, NORTH]]</nativeCRS>
+  <srs>EPSG:27700</srs>
+  <nativeBoundingBox>
+    <minx>528765.0</minx>
+    <maxx>529934.0</maxx>
+    <miny>180466.0</miny>
+    <maxy>181519.0</maxy>
+    <crs class="projected">EPSG:27700</crs>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-0.1459677547561733</minx>
+    <maxx>-0.1287450516928815</maxx>
+    <miny>51.50819381225128</miny>
+    <maxy>51.517924177826686</maxy>
+    <crs>GEOGCS[&quot;WGS84(DD)&quot;, 
+  DATUM[&quot;WGS84&quot;, 
+    SPHEROID[&quot;WGS84&quot;, 6378137.0, 298.257223563]], 
+  PRIMEM[&quot;Greenwich&quot;, 0.0], 
+  UNIT[&quot;degree&quot;, 0.017453292519943295], 
+  AXIS[&quot;Geodetic longitude&quot;, EAST], 
+  AXIS[&quot;Geodetic latitude&quot;, NORTH]]</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="dirName">John Snow Map_OSMap</entry>
+  </metadata>
+  <store class="coverageStore">
+    <id>CoverageStoreInfoImpl-27f99646:15ac874bcfc:-7fe5</id>
+  </store>
+  <nativeFormat>GeoTIFF</nativeFormat>
+  <grid dimension="2">
+    <range>
+      <low>0 0</low>
+      <high>1169 1053</high>
+    </range>
+    <transform>
+      <scaleX>1.0</scaleX>
+      <scaleY>-1.0</scaleY>
+      <shearX>0.0</shearX>
+      <shearY>0.0</shearY>
+      <translateX>528765.5</translateX>
+      <translateY>181518.5</translateY>
+    </transform>
+    <crs>EPSG:27700</crs>
+  </grid>
+  <supportedFormats>
+    <string>ArcGrid</string>
+    <string>Gtopo30</string>
+    <string>ImageMosaic</string>
+    <string>GIF</string>
+    <string>PNG</string>
+    <string>JPEG</string>
+    <string>TIFF</string>
+    <string>GEOTIFF</string>
+  </supportedFormats>
+  <interpolationMethods>
+    <string>nearest neighbor</string>
+    <string>bilinear</string>
+    <string>bicubic</string>
+  </interpolationMethods>
+  <defaultInterpolationMethod>nearest neighbor</defaultInterpolationMethod>
+  <dimensions>
+    <coverageDimension>
+      <name>PALETTE_INDEX</name>
+      <description>GridSampleDimension[255.0,255.0]</description>
+      <range>
+        <min>255.0</min>
+        <max>255.0</max>
+      </range>
+      <nullValues>
+        <double>255.0</double>
+      </nullValues>
+      <dimensionType>
+        <name>UNSIGNED_8BITS</name>
+      </dimensionType>
+    </coverageDimension>
+  </dimensions>
+  <parameters>
+    <entry>
+      <string>InputTransparentColor</string>
+      <string></string>
+    </entry>
+    <entry>
+      <string>SUGGESTED_TILE_SIZE</string>
+      <string>512,512</string>
+    </entry>
+  </parameters>
+  <nativeCoverageName>OSMap</nativeCoverageName>
+</coverage>

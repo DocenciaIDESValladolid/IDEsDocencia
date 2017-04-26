@@ -7,7 +7,7 @@ $(document).bind('pageinit', function(){
         {title:'add WFS layer BBOX',function:'addWFSLayer'},
         {title:'add WFS Feature',function:'addWFSFeature'},
         {title:'add WMS layer',function:'addWMSLayer'},
-        {title:'add Editable layer',function:'addEditableLayer'}
+        {title:'add Editable layer',function:'addEditableLayer'},
     ];
     var liststring ='';
     demoFunctions.forEach(function(element) {
@@ -18,18 +18,6 @@ $(document).bind('pageinit', function(){
     list.html(liststring);
     list.trigger('create');
     }, 100);
-
-
-
-
-   $("#pruebaMatteo").click(function(){
-        testAction(); 
-    });
-
-    function testAction(){
-        
-    }
-
 
 
     function addEditableLayer(){
@@ -174,6 +162,66 @@ $(document).bind('pageinit', function(){
             }
           });
     }
+    
+    
+    // Trying to do stuff
+   $("#pruebaMatteo").click(function(){
+        layerplus();
+    });
+    
+    function layerplus(){
+        var deaths = new ol.Layer.WMS(
+                "Colera", "http://localhost:8080/geoserver/wfs",
+                {
+                srs: 'EPSG:4326',
+                layers: 'semana6:Deaths',
+                styles: '',
+                format:'image/png'
+                },
+                {singleTile: true, ratio: 1}
+            );
+
+                 map.addLayer(deaths);
+    }
+    
+    function tst(){
+            var dWithin = `
+                <wfs:GetFeature service="WFS" version="1.0.0"
+                  outputFormat="GML2"
+                  xmlns:wfs="http://www.opengis.net/wfs"
+                  xmlns:ogc="http://www.opengis.net/ogc"
+                  xmlns:gml="http://www.opengis.net/gml"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://www.opengis.net/wfs 
+                  http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">
+                  <wfs:Query typeName="semana6:Deaths">
+                    <ogc:Filter>
+                      <ogc:DWithin>
+                            <ogc:PropertyName>the_geom</ogc:PropertyName>
+                            <Literal>
+                              <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#27700">
+                                <gml:coordinates xmlns:gml="http://www.opengis.net/gml">529192.53786754,181079.391379652</gml:coordinates>
+                              </gml:Point>
+                            </Literal>
+                            <ogc:Distance unit="meters">100</ogc:Distance>
+                    </ogc:DWithin>
+                    </ogc:Filter>
+                    </wfs:Query>
+                </wfs:GetFeature>`;
+        
+            fetch('http://localhost:8080/geoserver/wfs', {
+                method: 'POST',
+                body: new XMLSerializer().serializeToString(dWithin)
+              }).then(function(response) {
+                return response.json();
+              }).then(function(json) {
+                var features = new ol.format.GeoJSON().readFeatures(json);
+                vectorSource.addFeatures(features);
+                map.addLayer(vector);
+                add_layer_to_list(vector);
+                map.getView().fit(vectorSource.getExtent());
+              });
+        }
 
     /**
      * @param {*} cdemo 

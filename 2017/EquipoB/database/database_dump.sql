@@ -152,14 +152,6 @@ ALTER TABLE ONLY parques ALTER COLUMN id SET DEFAULT nextval('parques_id_seq'::r
 
 
 --
--- Data for Name: fuentes; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY fuentes (id, fuente_geom, codigo_postal, via) FROM stdin;
-\.
-
-
---
 -- Name: fuentes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -167,27 +159,10 @@ SELECT pg_catalog.setval('fuentes_id_seq', 1, false);
 
 
 --
--- Data for Name: parques; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY parques (id, localidad, codigo_postal, via, descripcion, equipamiento, url, nombre, parque_geom) FROM stdin;
-1	Madrid	\N	\N	\N	\N	\N	Bosque del Recuerdo	0101000020E20B000000000000C0F41A41000000001C115141
-\.
-
-
---
 -- Name: parques_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('parques_id_seq', 1, true);
-
-
---
--- Data for Name: spatial_ref_sys; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY spatial_ref_sys (srid, auth_name, auth_srid, srtext, proj4text) FROM stdin;
-\.
 
 
 --
