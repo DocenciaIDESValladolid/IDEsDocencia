@@ -1,0 +1,15 @@
+<layer>
+  <name>parques</name>
+  <id>LayerInfoImpl--1e4b42f1:15baabbf647:-7fc8</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--1e4b42f1:15baabbf647:-7e6e</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--1e4b42f1:15baabbf647:-7fc9</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>
