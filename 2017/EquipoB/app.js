@@ -170,18 +170,39 @@ $(document).bind('pageinit', function(){
     });
     
     function layerplus(){
-        var deaths = new ol.Layer.WMS(
-                "Colera", "http://localhost:8080/geoserver/wfs",
-                {
-                srs: 'EPSG:4326',
-                layers: 'semana6:Deaths',
-                styles: '',
-                format:'image/png'
-                },
-                {singleTile: true, ratio: 1}
-            );
-
-                 map.addLayer(deaths);
+        var vectorSource = new ol.source.Vector({
+            format: new ol.format.GeoJSON(),
+            url: function (extent) {
+                return  'http://localhost:8080/geoserver/Prototype/wms?'+
+                        'service=WMS&version=1.1.0&'+
+                        'request=GetMap&'+
+                        'layers=Prototype:fuentes&styles=&'+
+                        'bbox=' + extent.join(',') +
+                        'srs=EPSG:4326&'+
+                        'outputFormat=application/json';
+                
+                        // Access-Control-Allow-Origin headers
+                        // header('Access-Control-Allow-Origin: *');
+                
+                /*return 'https://ahocevar.com/geoserver/wfs?service=WFS&' +
+                    'version=1.1.0&request=GetFeature&typename=osm:water_areas&' +
+                    'outputFormat=application/json&srsname=EPSG:3857&' +
+                    'bbox=' + extent.join(',') + ',EPSG:3857';*/
+            },
+            strategy: ol.loadingstrategy.bbox
+        });
+        var vectorrr = new ol.layer.Vector({
+            name: 'WFS example layer',
+            source: vectorSource,
+            style: new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: 'rgba(0, 0, 255, 1.0)',
+                    width: 2
+                })
+            })
+        });
+        map.addLayer(vectorrr);
+        add_layer_to_list(vectorrr);
     }
     
     function tst(){
@@ -208,19 +229,6 @@ $(document).bind('pageinit', function(){
                     </ogc:Filter>
                     </wfs:Query>
                 </wfs:GetFeature>`;
-        
-            fetch('http://localhost:8080/geoserver/wfs', {
-                method: 'POST',
-                body: new XMLSerializer().serializeToString(dWithin)
-              }).then(function(response) {
-                return response.json();
-              }).then(function(json) {
-                var features = new ol.format.GeoJSON().readFeatures(json);
-                vectorSource.addFeatures(features);
-                map.addLayer(vector);
-                add_layer_to_list(vector);
-                map.getView().fit(vectorSource.getExtent());
-              });
         }
 
     /**
