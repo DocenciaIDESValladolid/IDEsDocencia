@@ -1,0 +1,35 @@
+<settings>
+  <id>SettingsInfoImpl-50f24b37:15ba0e51f03:-7ffe</id>
+  <workspace>
+    <id>WorkspaceInfoImpl-50f24b37:15ba0e51f03:-8000</id>
+    <name>APP</name>
+  </workspace>
+  <contact>
+    <id>contact</id>
+    <address>Calle del Nogal, 2 - 4D</address>
+    <addressCity>Valladolid</addressCity>
+    <addressCountry>Spain</addressCountry>
+    <addressElectronicMailAddress>matteo.gibe@gmail.com</addressElectronicMailAddress>
+    <addressPostalCode>47004</addressPostalCode>
+    <addressType>Personal</addressType>
+    <contactEmail>matteo.gibe@gmail.com</contactEmail>
+    <contactOrganization>Valladolid University</contactOrganization>
+    <contactPerson>Matteo Gibellini</contactPerson>
+    <contactPosition>Student</contactPosition>
+    <contactVoice>+33 6 64 47 41 35</contactVoice>
+  </contact>
+  <charset>UTF-8</charset>
+  <numDecimals>8</numDecimals>
+  <onlineResource>http://geoserver.org</onlineResource>
+  <verbose>false</verbose>
+  <verboseExceptions>false</verboseExceptions>
+  <metadata>
+    <map>
+      <entry>
+        <string>quietOnNotFound</string>
+        <boolean>false</boolean>
+      </entry>
+    </map>
+  </metadata>
+  <localWorkspaceIncludesPrefix>false</localWorkspaceIncludesPrefix>
+</settings>

@@ -1,0 +1,11 @@
+<coverageStore>
+  <id>CoverageStoreInfoImpl-27f99646:15ac874bcfc:-7fe5</id>
+  <name>John Snow Map</name>
+  <type>GeoTIFF</type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl-27f99646:15ac874bcfc:-7fee</id>
+  </workspace>
+  <__default>false</__default>
+  <url>file:data/SnowGIS/OSMap.tif</url>
+</coverageStore>
