@@ -165,45 +165,9 @@ $(document).bind('pageinit', function(){
     
     
     // Trying to do stuff
-   $("#pruebaMatteo").click(function(){
-        layerplus();
+    $("#pruebaMatteo").click(function(){
+        tst();
     });
-    
-    function layerplus(){
-        var vectorSource = new ol.source.Vector({
-            format: new ol.format.GeoJSON(),
-            url: function (extent) {
-                return  'http://localhost:8080/geoserver/Prototype/wms?'+
-                        'service=WMS&version=1.1.0&'+
-                        'request=GetMap&'+
-                        'layers=Prototype:fuentes&styles=&'+
-                        'bbox=' + extent.join(',') +
-                        'srs=EPSG:4326&'+
-                        'outputFormat=application/json';
-                
-                        // Access-Control-Allow-Origin headers
-                        // header('Access-Control-Allow-Origin: *');
-                
-                /*return 'https://ahocevar.com/geoserver/wfs?service=WFS&' +
-                    'version=1.1.0&request=GetFeature&typename=osm:water_areas&' +
-                    'outputFormat=application/json&srsname=EPSG:3857&' +
-                    'bbox=' + extent.join(',') + ',EPSG:3857';*/
-            },
-            strategy: ol.loadingstrategy.bbox
-        });
-        var vectorrr = new ol.layer.Vector({
-            name: 'WFS example layer',
-            source: vectorSource,
-            style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: 'rgba(0, 0, 255, 1.0)',
-                    width: 2
-                })
-            })
-        });
-        map.addLayer(vectorrr);
-        add_layer_to_list(vectorrr);
-    }
     
     function tst(){
             var dWithin = `
@@ -229,7 +193,23 @@ $(document).bind('pageinit', function(){
                     </ogc:Filter>
                     </wfs:Query>
                 </wfs:GetFeature>`;
-        }
+        
+        var request = new ol.Request.POST({
+            url: 'http://localhost:8080/geoserver/wfs',
+            data: dWithin,
+            headers: {"Content-Type": "text/xml;charset=utf-8"},
+            async: true,
+            callback: function(response){
+                //read the response from GeoServer
+                console.log(response.responseText);
+                var analysisLayer = readFeaturesFromWPSResponse(response.responseText);
+                map.addLayer(analysisLayer);
+            },
+            failure: function(response){
+                console.log("there is a problem with request");
+          }
+        });
+    }
 
     /**
      * @param {*} cdemo 
