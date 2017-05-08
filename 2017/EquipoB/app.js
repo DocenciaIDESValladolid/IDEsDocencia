@@ -165,24 +165,9 @@ $(document).bind('pageinit', function(){
     
     
     // Trying to do stuff
-   $("#pruebaMatteo").click(function(){
-        layerplus();
+    $("#pruebaMatteo").click(function(){
+        tst();
     });
-    
-    function layerplus(){
-        var deaths = new ol.Layer.WMS(
-                "Colera", "http://localhost:8080/geoserver/wfs",
-                {
-                srs: 'EPSG:4326',
-                layers: 'semana6:Deaths',
-                styles: '',
-                format:'image/png'
-                },
-                {singleTile: true, ratio: 1}
-            );
-
-                 map.addLayer(deaths);
-    }
     
     function tst(){
             var dWithin = `
@@ -209,19 +194,22 @@ $(document).bind('pageinit', function(){
                     </wfs:Query>
                 </wfs:GetFeature>`;
         
-            fetch('http://localhost:8080/geoserver/wfs', {
-                method: 'POST',
-                body: new XMLSerializer().serializeToString(dWithin)
-              }).then(function(response) {
-                return response.json();
-              }).then(function(json) {
-                var features = new ol.format.GeoJSON().readFeatures(json);
-                vectorSource.addFeatures(features);
-                map.addLayer(vector);
-                add_layer_to_list(vector);
-                map.getView().fit(vectorSource.getExtent());
-              });
-        }
+        var request = new ol.Request.POST({
+            url: 'http://localhost:8080/geoserver/wfs',
+            data: dWithin,
+            headers: {"Content-Type": "text/xml;charset=utf-8"},
+            async: true,
+            callback: function(response){
+                //read the response from GeoServer
+                console.log(response.responseText);
+                var analysisLayer = readFeaturesFromWPSResponse(response.responseText);
+                map.addLayer(analysisLayer);
+            },
+            failure: function(response){
+                console.log("there is a problem with request");
+          }
+        });
+    }
 
     /**
      * @param {*} cdemo 

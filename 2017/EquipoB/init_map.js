@@ -85,12 +85,32 @@ function initmap() {
         source: new ol.source.OSM()
     });
     roadlayer.set("name", "roadview");
-    var layergroup = new ol.layer.Group({ layers: [aeriallayer, roadlayer] });
+    
+    var fuentesLayer = new ol.layer.Image({
+            name: 'Fuentes',
+            source: new ol.source.ImageWMS({
+                url: 'http://localhost:8080/geoserver/wms',
+                params: {'LAYERS': 'prototype:fuentes', 'VERSION': '1.1.0'},
+                serverType: 'geoserver'
+            })
+        });
+        
+    var parquesLayer = new ol.layer.Image({
+            name: 'Parques',
+            source: new ol.source.ImageWMS({
+                url: 'http://localhost:8080/geoserver/wms',
+                params: {'LAYERS': 'prototype:parques', 'VERSION': '1.1.0'},
+                serverType: 'geoserver'
+            })
+        });
+    
+    var layergroup = new ol.layer.Group({ layers: [aeriallayer, roadlayer, fuentesLayer, parquesLayer] });
     var view = new ol.View({
-        center: [0, 0],
-        zoom: 2,
+        center: [-413065.700853, 4928659.583828],
+        zoom: 12,
         minZoom: 2
     });
+    
     var select = new ol.interaction.Select({
         layers: [vectorCustomLayer],
         style: select_style_function,
