@@ -20,9 +20,10 @@
 
     <!-- CARGA DE SIMPLE FACEBOOK GRAPH -->
     <script src="js/facebook.js"></script>
+
 </head>
 
-<body id="page-main">
+<body id="page-main" onload="addWMSLayerInit()">
 
     <div data-role="page" id="mappage" data-quicklinks="true" data-theme="b">
         <div data-role="panel" data-position="left" data-position-fixed="true" data-display="overlay" id="infopanel">
@@ -38,20 +39,15 @@
             <div id="collapsibleset" data-role="collapsibleset" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b"
                 data-content-theme="b">
                 <div data-role="collapsible" data-theme="a" data-iconpos="right">
-                    <h3>Ejemplo de app IDEs</h3>
+                    <h3>Espacios Naturales</h3>
                     <div>
                         <p>
                             <div class="no-overflow">
-                                <p>Algunas funciones adaptadas de <a href="http://openlayers.org/en/latest/examples/">OpenLayers</a></p>
+                                <p>Capas Disponibles</p>
                             </div>
                         </p>
                         <ul id="listdemos" data-role="listview" data-inset="true" data-divider-theme="b">
-                            <li data-role="list-divider">WFS</li>
-                            <li><a href="#" onclick="addWFSLayer()">Añade capa WFS</a></li>
-                            <li data-role="list-divider">WMS</li>
-                            <li><a href="#" onclick="addWMSLayer()">Añade capa WMS</a></li>
-                            <li data-role="list-divider">WPS</li>
-                            <li><a href="#" onclick="addWPSLayer()">Añade capa WPS</a></li>
+                            
                         </ul>
                     </div>
                 </div>

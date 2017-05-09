@@ -3,14 +3,19 @@
  */
 setTimeout(function() {
     var demoFunctions=[
-    {title:'add WFS layer BBOX',function:'addWFSLayer'},
-    {title:'add WFS Feature',function:'addWFSFeature'},
-    {title:'add WMS layer',function:'addWMSLayer'},
-    {title:'add Editable layer',function:'addEditableLayer'},
+    {title:'Paisajes Protegidos',function:'addWMSLayer(\'p_casas_rurales:paisajes_protegidos_esp,paisajes_protegidos_canarias\')'},
+	{title:'Monumentos Naturales',function:'addWMSLayer(\'p_casas_rurales:monumentos_naturales_esp,monumentos_naturales_canarias\')'},
+	{title:'Parques Nacionales',function:'addWMSLayer(\'p_casas_rurales:parques_nacionales_esp,parques_nacionales_canarias\')'},
+	{title:'Parques Naturales',function:'addWMSLayer(\'p_casas_rurales:parques_naturales_esp,parques_naturales_canarias\')'},
+	{title:'Reservas Naturales',function:'addWMSLayer(\'p_casas_rurales:reservas_naturales_esp,reservas_naturales_canarias\')'},
+	{title:'Otros',function:'addWMSLayer(\'p_casas_rurales:otros_esp\')'},
+	//{title:'Provincias',function:'addWMSLayer'},
+    //{title:'Estados',function:'addWMSLayer(\'prueba:Provincias_ETRS89_30N\')'},
+    //{title:'add Editable layer',function:'addEditableLayer()'},
 ];
 var liststring ='';
 demoFunctions.forEach(function(element) {
-    liststring = liststring +  '<li><a href="#" onclick="'+element.function+'()">'+ element.title +'</a></li>';
+    liststring = liststring +  '<li><a href="#" onclick="'+element.function+'">'+ element.title +'</a></li>';
 }, this);
 var list = $('#listdemos');
 var listcontent = $(liststring);
@@ -133,13 +138,14 @@ function addWFSFeature(){
         map.getView().fit(vectorSource.getExtent());
       });
 }
-function addWMSLayer(){
+//Para añadir las capas a la lista de capas.
+function addWMSLayer(nombre){
     var wms =new ol.layer.Image({
-          extent: [-13884991, 2870341, -7455066, 6338219],
-          name: 'Test WMS',
+          //extent: [-13884991, 2870341, -7455066, 6338219],
+          name: 'Provincias',
           source: new ol.source.ImageWMS({
-            url: 'https://ahocevar.com/geoserver/wms',
-            params: {'LAYERS': 'topp:states'},
+            url: 'http://localhost:8081/geoserver/wms',
+            params: {'LAYERS': nombre},
             serverType: 'geoserver'
           })
         });
@@ -159,6 +165,21 @@ function addWMSLayer(){
             });
         }
       });
+}
+
+//Para añadir las capas a la lista de capas.
+function addWMSLayerInit(){
+    var wms =new ol.layer.Image({
+          //extent: [-13884991, 2870341, -7455066, 6338219],
+          name: 'Provincias',
+          source: new ol.source.ImageWMS({
+            url: 'http://localhost:8081/geoserver/wms',
+            params: {'LAYERS': 'prueba:Provincias_ETRS89_30N' },
+            serverType: 'geoserver'
+          })
+        });
+    map.addLayer(wms);
+    add_layer_to_list(wms);
 }
 
 /**
