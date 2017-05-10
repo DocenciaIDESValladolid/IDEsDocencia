@@ -57,6 +57,43 @@ function initmap() {
             src: 'pix/flagmarker.png'
         })
     });
+
+    var earthquakeFill = new ol.style.Fill({
+        color: 'rgba(0, 0, 255, 0.8)'
+    });
+    var earthquakeStroke = new ol.style.Stroke({
+        color: 'rgba(255, 204, 0, 0.2)',
+        width: 1
+    });
+    var textFill = new ol.style.Fill({
+        color: '#fff'
+    });
+    var textStroke = new ol.style.Stroke({
+        color: 'rgba(0, 0, 0, 0.6)',
+        width: 3
+    });
+    var invisibleFill = new ol.style.Fill({
+        color: 'rgba(255, 255, 255, 0.01)'
+    });
+
+    var earthquakeFill2 = new ol.style.Fill({
+        color: 'rgba(50, 205, 50, 0.8)'
+    });
+    var earthquakeStroke2 = new ol.style.Stroke({
+        color: 'rgba(255, 0,100, 0.2)',
+        width: 1
+    });
+    var textFill2 = new ol.style.Fill({
+        color: '#eee'
+    });
+    var textStroke2 = new ol.style.Stroke({
+        color: 'rgba(0, 0, 0, 0.6)',
+        width: 3
+    });
+    var invisibleFill2 = new ol.style.Fill({
+        color: 'rgba(255, 255, 255, 0.01)'
+    });
+
     /*-------------------------------Layers-----------------------------------*/
     var layers = [];
     var geoJSONFormat = new ol.format.GeoJSON();
@@ -66,8 +103,8 @@ function initmap() {
     var vectorCustomLayer = new ol.layer.Vector({
         source: source,
         style: style_function
-        /*updateWhileAnimating: true,
-         updateWhileInteracting: true*/
+            /*updateWhileAnimating: true,
+             updateWhileInteracting: true*/
     });
     var aeriallayer = new ol.layer.Tile({
         visible: false,
@@ -75,9 +112,9 @@ function initmap() {
             key: 'AmC3DXdnK5sXC_Yp_pOLqssFSaplBbvN68jnwKTEM3CSn2t6G5PGTbYN3wzxE5BR',
             imagerySet: 'AerialWithLabels',
             maxZoom: 19
-            // use maxZoom 19 to see stretched tiles instead of the BingMaps
-            // "no photos at this zoom level" tiles
-            // maxZoom: 19
+                // use maxZoom 19 to see stretched tiles instead of the BingMaps
+                // "no photos at this zoom level" tiles
+                // maxZoom: 19
         })
     });
     aeriallayer.set("name", "aerialview");
@@ -85,36 +122,264 @@ function initmap() {
         source: new ol.source.OSM()
     });
     roadlayer.set("name", "roadview");
-    
+
     var fuentesLayer = new ol.layer.Image({
-            name: 'Fuentes',
-            source: new ol.source.ImageWMS({
-                url: 'http://localhost:8080/geoserver/wms',
-                params: {'LAYERS': 'prototype:fuentes', 'VERSION': '1.1.0'},
-                serverType: 'geoserver'
+        name: 'Fuentes',
+        source: new ol.source.ImageWMS({
+            url: 'http://localhost:8080/geoserver/wms',
+            params: { 'LAYERS': 'prototype:fuentes', 'VERSION': '1.1.0' },
+            serverType: 'geoserver'
+        })
+
+
+
+    })
+
+
+
+
+    function createEarthquakeStyle(feature) {
+        // 2012_Earthquakes_Mag5.kml stores the magnitude of each earthquake in a
+        // standards-violating <magnitude> tag in each Placemark.  We extract it
+        // from the Placemark's name instead.
+        var name = feature.get('name');
+        var radius = 5 + 20;
+
+        return new ol.style.Style({
+            image: new ol.style.Icon({
+                anchor: [0.5, 0.5],
+                size: [1000, 520],
+                offset: [52, 0],
+                opacity: 1,
+                scale: 0.08,
+                src: '../pix/fuentes.png'
             })
         });
-        
+    }
+
+    var maxFeatureCount, Fuentesvector;
+
+    function calculateClusterInfo(resolution) {
+        maxFeatureCount = 0;
+        var features = Fuentesvector.getSource().getFeatures();
+        var feature, radius;
+        for (var i = features.length - 1; i >= 0; --i) {
+            feature = features[i];
+            var originalFeatures = feature.get('features');
+            var extent = ol.extent.createEmpty();
+            var j, jj;
+            for (j = 0, jj = originalFeatures.length; j < jj; ++j) {
+                ol.extent.extend(extent, originalFeatures[j].getGeometry().getExtent());
+            }
+            maxFeatureCount = Math.max(maxFeatureCount, jj);
+            radius = 0.25 * (ol.extent.getWidth(extent) + ol.extent.getHeight(extent)) /
+                resolution;
+            feature.set('radius', radius);
+        }
+    }
+
+    var currentResolution;
+
+    function styleFunction(feature, resolution) {
+        if (resolution != currentResolution) {
+            calculateClusterInfo(resolution);
+            currentResolution = resolution;
+        }
+        var style;
+        var size = feature.get('features').length;
+        if (size > 1) {
+            style = new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: feature.get('radius'),
+                    fill: new ol.style.Fill({
+                        color: [0, 0, 255, 0.5]
+                    })
+                }),
+                text: new ol.style.Text({
+                    text: size.toString(),
+                    fill: textFill,
+                    stroke: textStroke
+                })
+            });
+        } else {
+            var originalFeature = feature.get('features')[0];
+            style = createEarthquakeStyle(originalFeature);
+        }
+        return style;
+    }
+
+    function selectStyleFunction(feature) {
+        var styles = [new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: feature.get('radius'),
+                fill: invisibleFill
+            })
+        })];
+        var originalFeatures = feature.get('features');
+        var originalFeature;
+        for (var i = originalFeatures.length - 1; i >= 0; --i) {
+            originalFeature = originalFeatures[i];
+            styles.push(createEarthquakeStyle(originalFeature));
+        }
+        return styles;
+    }
+
+    Fuentesvector = new ol.layer.Vector({
+        source: new ol.source.Cluster({
+            distance: 40,
+            source: new ol.source.Vector({
+                url: 'fuentes.kml',
+                format: new ol.format.KML({
+                    extractStyles: false
+                })
+            })
+        }),
+        style: styleFunction
+    });
+
+    var raster = new ol.layer.Tile({
+        source: new ol.source.Stamen({
+            layer: 'watercolor'
+        })
+    });
+
+    /*var mappage = new ol.Map({
+      layers: [layergroup, vector],
+      interactions: ol.interaction.defaults().extend([new ol.interaction.Select({
+        condition: function(evt) {
+          return evt.originalEvent.type == 'mousemove' ||
+              evt.type == 'singleclick';
+        },
+        style: selectStyleFunction
+      })]),
+      target: 'mappage',
+      view: new ol.View({
+        center: [0, 0],
+        zoom: 2
+      })
+    });*/
+
     var parquesLayer = new ol.layer.Image({
-            name: 'Parques',
-            source: new ol.source.ImageWMS({
-                url: 'http://localhost:8080/geoserver/wms',
-                params: {'LAYERS': 'prototype:parques', 'VERSION': '1.1.0'},
-                serverType: 'geoserver'
+        name: 'Parques',
+        source: new ol.source.ImageWMS({
+            url: 'http://localhost:8080/geoserver/wms',
+            params: { 'LAYERS': 'prototype:parques', 'VERSION': '1.1.0' },
+            serverType: 'geoserver'
+        })
+    });
+
+
+
+    function createEarthquakeStyle1(feature) {
+        // 2012_Earthquakes_Mag5.kml stores the magnitude of each earthquake in a
+        // standards-violating <magnitude> tag in each Placemark.  We extract it
+        // from the Placemark's name instead.
+        var name = feature.get('name');
+        var radius = 5 + 20;
+
+        return new ol.style.Style({
+            image: new ol.style.Icon({
+                anchor: [0.5, 0.5],
+                size: [256, 256],
+                offset: [0, 0],
+                opacity: 1,
+                scale: 0.15,
+                src: '../pix/parques.png'
             })
         });
-    
-    var layergroup = new ol.layer.Group({ layers: [aeriallayer, roadlayer, fuentesLayer, parquesLayer] });
+    }
+
+    var maxFeatureCount2, Vectorparques;
+
+    function calculateClusterInfo2(resolution) {
+        maxFeatureCount2 = 0;
+        var features = Vectorparques.getSource().getFeatures();
+        var feature, radius;
+        for (var i = features.length - 1; i >= 0; --i) {
+            feature = features[i];
+            var originalFeatures = feature.get('features');
+            var extent = ol.extent.createEmpty();
+            var j, jj;
+            for (j = 0, jj = originalFeatures.length; j < jj; ++j) {
+                ol.extent.extend(extent, originalFeatures[j].getGeometry().getExtent());
+            }
+            maxFeatureCount2 = Math.max(maxFeatureCount2, jj);
+            radius = 0.25 * (ol.extent.getWidth(extent) + ol.extent.getHeight(extent)) /
+                resolution;
+            feature.set('radius', radius);
+        }
+    }
+
+    var currentResolution2;
+
+    function styleFunction2(feature, resolution) {
+        if (resolution != currentResolution2) {
+            calculateClusterInfo2(resolution);
+            currentResolution2 = resolution;
+        }
+        var style;
+        var size = feature.get('features').length;
+        if (size > 1) {
+            style = new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: feature.get('radius'),
+                    fill: new ol.style.Fill({
+                        color: [50, 205, 50, 0.4],
+                    })
+                }),
+                text: new ol.style.Text({
+                    text: size.toString(),
+                    fill: textFill2,
+                    stroke: textStroke2
+                })
+            });
+        } else {
+            var originalFeature = feature.get('features')[0];
+            style = createEarthquakeStyle1(originalFeature);
+        }
+        return style;
+    }
+
+    function selectstyleFunction2(feature) {
+        var styles = [new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: feature.get('radius'),
+                fill: invisibleFill2
+            })
+        })];
+        var originalFeatures = feature.get('features');
+        var originalFeature;
+        for (var i = originalFeatures.length - 1; i >= 0; --i) {
+            originalFeature = originalFeatures[i];
+            styles.push(createEarthquakeStyle1(originalFeature));
+        }
+        return styles;
+    }
+
+    Vectorparques = new ol.layer.Vector({
+        source: new ol.source.Cluster({
+            distance: 40,
+            source: new ol.source.Vector({
+                url: 'parques.kml',
+                format: new ol.format.KML({
+                    extractStyles: false
+                })
+            })
+        }),
+        style: styleFunction2
+    });
+
+    var layergroup = new ol.layer.Group({ layers: [aeriallayer, roadlayer, Fuentesvector, Vectorparques] });
     var view = new ol.View({
         center: [-413065.700853, 4928659.583828],
         zoom: 12,
         minZoom: 2
     });
-    
+
     var select = new ol.interaction.Select({
         layers: [vectorCustomLayer],
         style: select_style_function,
-        filter: function (feature, layer) {
+        filter: function(feature, layer) {
             // Do something with marker
             if (feature.get('attr') === 0) {
                 return false;
@@ -122,9 +387,9 @@ function initmap() {
             return true;
         }
     });
-    var drag_rotate =ol.interaction.defaults().extend([
-          new ol.interaction.DragRotateAndZoom()
-        ]);
+    var drag_rotate = ol.interaction.defaults().extend([
+        new ol.interaction.DragRotateAndZoom()
+    ]);
     geolocation = new ol.Geolocation({
         projection: view.getProjection(),
         trackingOptions: {
@@ -155,12 +420,12 @@ function initmap() {
     var zoom = new ol.control.Zoom({ target: "navigation", className: "custom-zoom" });
     map = new ol.Map({
         layers: layers,
-        controls:  ol.control.defaults({rotate: true, attribution: true}),
+        controls: ol.control.defaults({ rotate: true, attribution: true }),
         //interactions: drag_rotate,
         target: 'map',
         view: view
-        /*loadTilesWhileAnimating: true,
-         loadTilesWhileInteracting: true*/
+            /*loadTilesWhileAnimating: true,
+             loadTilesWhileInteracting: true*/
     });
     map.addInteraction(select);
 
@@ -168,7 +433,7 @@ function initmap() {
     add_layergroup_to_list(layergroup);
 
     /*-------------------------------Events-----------------------------------*/
-    geolocation.on('change:position', function () {
+    geolocation.on('change:position', function() {
         var coordinates = this.getPosition();
         if (this.get("center")) {
             fly_to(map, coordinates);
@@ -179,12 +444,12 @@ function initmap() {
             renew_source(true, false);
         }
     });
-    geolocation.on('change:accuracyGeometry', function () {
+    geolocation.on('change:accuracyGeometry', function() {
         accuracyFeature.setGeometry(this.getAccuracyGeometry());
         this.setTracking(false);
         $.mobile.loading("hide");
     });
-    geolocation.on('error', function (error) {
+    geolocation.on('error', function(error) {
         this.setTracking(false);
         $.mobile.loading("hide");
         toast(error.message);
@@ -192,16 +457,17 @@ function initmap() {
     /**
      * Customize this function
      */
-    select.on("select", function (features) {
+    select.on("select", function(features) {
         if (features.selected.length === 1) {
-            if (lastsuccessfulstage.position === features.selected[0].get('stageposition')
-                && features.selected[0].get('geometrysolved') && !roadfinished && available) {
+            if (lastsuccessfulstage.position === features.selected[0].get('stageposition') &&
+                features.selected[0].get('geometrysolved') && !roadfinished && available) {
                 $("#infopanel").panel("open");
                 $("#lastsuccessfulstage").collapsible("expand");
             } else {
                 var title, stagename = features.selected[0].get('name'),
                     stageclue = features.selected[0].get('clue'),
-                    info = features.selected[0].get('info'), body = '';
+                    info = features.selected[0].get('info'),
+                    body = '';
                 if (features.selected[0].get('geometrysolved')) {
                     if (stagename && stageclue) {
                         title = "stageovercome";
@@ -220,9 +486,9 @@ function initmap() {
             }
         }
     });
-    map.on('click', function (evt) {
+    map.on('click', function(evt) {
         var hasFeature = false;
-        map.forEachFeatureAtPixel(map.getEventPixel(evt.originalEvent), function (feature, layer) {
+        map.forEachFeatureAtPixel(map.getEventPixel(evt.originalEvent), function(feature, layer) {
             if (feature.get('stageposition') === 0) {
                 return false;
             }
@@ -237,7 +503,7 @@ function initmap() {
     /**
      * Location searching panel
      */
-    $("#autocomplete").on("filterablebeforefilter", function (e, data) {
+    $("#autocomplete").on("filterablebeforefilter", function(e, data) {
         var $ul = $(this),
             value = $(data.input).val(),
             html = "";
@@ -248,15 +514,15 @@ function initmap() {
                 textVisible: true,
                 theme: "b"
             });
-            openStreetMapGeocoder.geocode(value, function (response) {
+            openStreetMapGeocoder.geocode(value, function(response) {
                 if (response[0] === false) {
                     $ul.html("<li data-filtertext='" + value + "'>" + "noresults" + "</li>");
                 } else {
-                    $.each(response, function (i, place) {
+                    $.each(response, function(i, place) {
                         $("<li data-filtertext='" + value + "'>")
                             .hide().append($("<a href='#'>").text(place.totalName)
                                 .append($("<p>").text(place.type))
-                            ).appendTo($ul).click(function () {
+                            ).appendTo($ul).click(function() {
                                 var extent = [];
                                 extent[0] = parseFloat(place.boundingbox[2]);
                                 extent[1] = parseFloat(place.boundingbox[0]);
@@ -275,34 +541,34 @@ function initmap() {
         }
     });
     // Scroll to collapsible expanded
-    $("#infopanel").on("collapsibleexpand", "[data-role='collapsible']", function (event, ui) {
+    $("#infopanel").on("collapsibleexpand", "[data-role='collapsible']", function(event, ui) {
         var innerinfopanel = $("#infopanel .ui-panel-inner");
         innerinfopanel.animate({
-            scrollTop: parseInt($(this).offset().top - innerinfopanel.offset().top
-                + innerinfopanel.scrollTop())
+            scrollTop: parseInt($(this).offset().top - innerinfopanel.offset().top +
+                innerinfopanel.scrollTop())
         }, 500);
     });
     // Set a max-height to make large images shrink to fit the screen.
-    $(document).on("popupbeforeposition", function () {
+    $(document).on("popupbeforeposition", function() {
         var maxHeight = $(window).height() - 200 + "px";
         $('.ui-popup [data-role="content"]').css("max-height", maxHeight);
     });
     // Remove the popup after it has been closed to manage DOM size
-    $(document).on("popupafterclose", ".ui-popup:not(#popupdialog)", function () {
+    $(document).on("popupafterclose", ".ui-popup:not(#popupdialog)", function() {
         $(this).remove();
         select.getFeatures().clear();
     });
-    $(document).on("click", "#acceptupdates", function () {
+    $(document).on("click", "#acceptupdates", function() {
         infomsgs = [];
     });
     // Redraw map
     // Customize this
-    $(window).on("pagecontainershow resize", function (event, ui) {
+    $(window).on("pagecontainershow resize", function(event, ui) {
         $.mobile.resetActivePageHeight();
         var pageId = $.mobile.pageContainer.pagecontainer('getActivePage').prop("id");
         if (pageId === 'mappage') {
             if (event.type === "resize") {
-                setTimeout(function () {
+                setTimeout(function() {
                     map.updateSize();
                 }, 200);
             } else {
@@ -326,11 +592,11 @@ function initmap() {
 
     });
     //Buttons events
-    $('#autolocate').on('click', function () {
+    $('#autolocate').on('click', function() {
         autolocate(true);
     });
     $('#infopanel').panel({
-        beforeclose: function () {
+        beforeclose: function() {
             select.getFeatures().clear();
         }
     });
@@ -388,6 +654,7 @@ function style_function(feature, resolution) {
     defaultstageStyle.getText().setText('' + stageposition);
     return [defaultstageStyle];
 }
+
 function select_style_function(feature, resolution) {
     var stageposition = feature.get('stageposition');
     if (!feature.get('geometrysolved')) {
@@ -397,6 +664,7 @@ function select_style_function(feature, resolution) {
     defaultSelectstageStyle.getText().setText('' + stageposition);
     return [defaultSelectstageStyle];
 }
+
 function autolocate(center, validate) {
     center = center || false;
     validate = validate || false;
@@ -412,6 +680,7 @@ function autolocate(center, validate) {
         geolocation.setTracking(true);
     }
 }
+
 function fly_to(map, point, extent) {
     var duration = 700;
     var view = map.getView();
@@ -427,9 +696,10 @@ function fly_to(map, point, extent) {
         });
     }
 }
+
 function fit_map_to_layer(source) {
 
-    var features = typeof (source.getFeatures) === 'undefined' ? null : source.getFeatures();
+    var features = typeof(source.getFeatures) === 'undefined' ? null : source.getFeatures();
     if (features && features.length === 1 && features[0].getGeometry() instanceof ol.geom.Point) {
         fly_to(map, features[0].getGeometry().getCoordinates());
     } else if (features && features.length > 1) {
@@ -441,46 +711,47 @@ function fit_map_to_layer(source) {
  * @param {*} layergroup 
  */
 function add_layergroup_to_list(layergroup) {
-    layergroup.getLayers().forEach(function (layer) {
-    var item = $('<li>', {
-        "data-icon": "check",
-        "class": layer.getVisible() ? "checked" : "unchecked"
-    })
-        .append($('<a />', {
-            text: layer.get("name"),
-            href: "#mappage"
-        })
-            .click(function () {
-                layergroup.getLayers().forEach(function (l) {
-                    if (l === layer) {
-                        l.setVisible(true);
-                    } else {
-                        l.setVisible(false);
-                    }
-                });
+    layergroup.getLayers().forEach(function(layer) {
+        var item = $('<li>', {
+                "data-icon": "check",
+                "class": layer.getVisible() ? "checked" : "unchecked"
             })
-        );
-    layer.on('change:visible', function () {
-        $(item).toggleClass('checked unchecked');
+            .append($('<a />', {
+                    text: layer.get("name"),
+                    href: "#mappage"
+                })
+                .click(function() {
+                    layergroup.getLayers().forEach(function(l) {
+                        if (l === layer) {
+                            l.setVisible(true);
+                        } else {
+                            l.setVisible(false);
+                        }
+                    });
+                })
+            );
+        layer.on('change:visible', function() {
+            $(item).toggleClass('checked unchecked');
+        });
+        item.insertAfter('#baseLayer');
     });
-    item.insertAfter('#baseLayer');
-});
 
 }
+
 function add_layer_to_list(layer) {
     var item = $('<li>', {
-        "data-icon": "check",
-        "class": layer.getVisible() ? "checked" : "unchecked"
-    })
-        .append($('<a />', {
-            text: layer.get("name"),
-            href: "#mappage"
+            "data-icon": "check",
+            "class": layer.getVisible() ? "checked" : "unchecked"
         })
-            .click(function () {
+        .append($('<a />', {
+                text: layer.get("name"),
+                href: "#mappage"
+            })
+            .click(function() {
                 layer.setVisible(!layer.getVisible());
             })
         );
-    layer.on('change:visible', function () {
+    layer.on('change:visible', function() {
         $(item).toggleClass('checked unchecked');
     });
     item.insertAfter('#baseLayer');
@@ -489,26 +760,27 @@ function add_layer_to_list(layer) {
 /*-------------------------------Helper functions -------------*/
 function toast(msg) {
     if ($(".toast").length > 0) {
-        setTimeout(function () {
+        setTimeout(function() {
             toast(msg);
         }, 2500);
     } else {
         $("<div class='ui-loader ui-overlay-shadow  ui-corner-all toast'>" +
-            "<p>" + msg + "</p></div>")
+                "<p>" + msg + "</p></div>")
             .css({
                 left: ($(window).width() - 284) / 2,
                 top: $(window).height() / 2
             })
             .appendTo($.mobile.pageContainer).delay(2000)
-            .fadeOut(400, function () {
+            .fadeOut(400, function() {
                 $(this).remove();
             });
     }
 }
+
 function create_popup(type, title, body) {
     var header = $('<div data-role="header"><h2>' + title + '</h2></div>'),
-        content = $('<div data-role="content" class="ui-content ui-overlay-b">' + body
-            + '</div>'),
+        content = $('<div data-role="content" class="ui-content ui-overlay-b">' + body +
+            '</div>'),
         popup = $('<div data-role="popup" id="' + type + '"' +
             'data-theme="b" data-transition="slidedown"></div>');
     if (type === 'info') {
@@ -516,17 +788,17 @@ function create_popup(type, title, body) {
             'ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right"></a>').appendTo(header);
     }
     if (type === 'displayupdates') {
-        $('<p class="center-wrapper"><a id="acceptupdates" href="#" data-rel="back"'
-            + 'class="ui-btn center-button ui-mini ui-btn-inline">'
-            + "continue" + '</a></p>')
+        $('<p class="center-wrapper"><a id="acceptupdates" href="#" data-rel="back"' +
+                'class="ui-btn center-button ui-mini ui-btn-inline">' +
+                "continue" + '</a></p>')
             .appendTo(content);
         var attributes = { 'data-dismissible': false, 'data-overlay-theme': "b" };
         $(popup).attr(attributes);
     }
     if (type === 'displayerror') {
         $('<p class="center-wrapper"><a href="view.php?id=' + cmid +
-            '" class="ui-btn  center-button ui-mini ui-icon-forward ui-btn-inline ui-btn-icon-left"'
-            + 'data-ajax="false">' + "continue" + '</a></p>')
+                '" class="ui-btn  center-button ui-mini ui-icon-forward ui-btn-inline ui-btn-icon-left"' +
+                'data-ajax="false">' + "continue" + '</a></p>')
             .appendTo(content);
         var attributes = { 'data-dismissible': false, 'data-overlay-theme': "b" };
         $(popup).attr(attributes);
@@ -542,7 +814,7 @@ function create_popup(type, title, body) {
     totalimg = $(content).find('img');
     if (totalimg.length > 0) {
         $.mobile.loading("show");
-        totalimg.one('load', function () {
+        totalimg.one('load', function() {
             imgloaded++;
             if (totalimg.length === imgloaded) {
                 open_popup(popup);
@@ -553,7 +825,7 @@ function create_popup(type, title, body) {
             }
         });
         // Fallback in case the browser doesn't fire a load event
-        var fallback = setTimeout(function () {
+        var fallback = setTimeout(function() {
             open_popup(popup);
             $.mobile.loading("hide");
         }, 2000);
@@ -563,11 +835,12 @@ function create_popup(type, title, body) {
 
 
 }
+
 function open_popup(popup) {
     // Because chaining of popups not allowed in jquery mobile.
     if ($(".ui-popup-active").length > 0) {
         $(".ui-popup").popup("close");
-        setTimeout(function () {
+        setTimeout(function() {
             $(popup).popup("open", { positionTo: "window" });
         }, 1000);
     } else {
@@ -575,6 +848,7 @@ function open_popup(popup) {
     }
 
 }
+
 function get_block_text(title, body) {
     return '<div class="ui-bar ui-bar-a">' + title +
         '</div><div class="ui-body ui-body-a">' + body +
