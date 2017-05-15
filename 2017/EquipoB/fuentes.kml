@@ -1,0 +1,1986 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:ns2="http://www.google.com/kml/ext/2.2" xmlns:ns3="http://www.w3.org/2005/Atom" xmlns:ns4="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
+    <Document>
+        <LookAt>
+            <longitude>-3.703528149256755</longitude>
+            <latitude>40.41556510924566</latitude>
+            <altitude>8465.087593014468</altitude>
+            <heading>0.0</heading>
+            <tilt>0.0</tilt>
+            <range>6840.234783139295</range>
+            <altitudeMode>clampToGround</altitudeMode>
+        </LookAt>
+        <Folder>
+            <name>prototype:fuentes</name>
+            <LookAt>
+                <longitude>-3.703528149256755</longitude>
+                <latitude>40.41556510924566</latitude>
+                <altitude>8465.087593014468</altitude>
+                <heading>0.0</heading>
+                <tilt>0.0</tilt>
+                <range>6840.234783139295</range>
+                <altitudeMode>clampToGround</altitudeMode>
+            </LookAt>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b8d">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b8d</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;37&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;MADRID RÃO	Z.07. - ERMITA VIRGEN DEL PUERTO	&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7221549000000067</longitude>
+                    <latitude>40.41543999999999</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7221549,40.41544</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b8c">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b8c</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;38&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;ARGANZUELA	ED 3/3 MENDEZ ALVARO - DELICIAS	PLAZA DEL AMANECER EN MÃ‰NDEZ ÃLVARO NÂº3	&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.68488600000002</longitude>
+                    <latitude>40.39923400000001</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.684886,40.399234</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b8b">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b8b</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;39&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;ARGANZUELA	RAMIREZ DE PRADO	C/RAMIREZ DE PRADO NÂº 5	&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.6874052999999947</longitude>
+                    <latitude>40.39899400000001</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.6874053,40.398994</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b8a">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b8a</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;40&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;ARGANZUELA	Z.V. PUERTO DE  BEJAR	CALLE PUERTO DE BEJAR NÂº 24	&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.6865928999999937</longitude>
+                    <latitude>40.38862</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.6865929,40.38862</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b89">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b89</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;41&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;ARGANZUELA	PARQUE DEL BRONCE PVF	C/BRONCE NÂº 19	&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.687482000000003</longitude>
+                    <latitude>40.390316999999996</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.687482,40.390317</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b88">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b88</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;42&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;ARGANZUELA	PARQUE DE DELICIAS	C/PÃ€RROCO EUSEBIO CUENCA NÂº 46	&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.6883358000000044</longitude>
+                    <latitude>40.395483999999996</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.6883358,40.395484</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b87">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b87</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;43&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;ARGANZUELA	PZA. LUCA DE TENA	PZA  LUCA DE TENA N Âº2	&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.693528999999998</longitude>
+                    <latitude>40.40205599999998</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.693529,40.402056</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b86">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b86</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;44&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;ARGANZUELA	PZA. LUCA DE TENA	PZA  LUCA DE TENA N Âº13	&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.69408270000001</longitude>
+                    <latitude>40.402044</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.6940827,40.402044</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b85">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b85</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;45&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;ARGANZUELA	ANTIGUA ESTACION SUR	C/PALOS DE LA FRONTERA NÂº 29 	&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.6947160999999937</longitude>
+                    <latitude>40.40289599999999</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.6947161,40.402896</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b84">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b84</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;46&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;ARGANZUELA	ANTIGUA ESTACION SUR	C/CANARIAS NÂº 22	&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.6950388000000203</longitude>
+                    <latitude>40.402191</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.6950388,40.402191</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b83">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b83</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;47&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;ARGANZUELA	PZA. RUTILIO GACIS	PLAZA RUTILIO GACIS NÂº 2	&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.6968306999999925</longitude>
+                    <latitude>40.39426199999998</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.6968307,40.394262</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b82">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b82</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;48&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;ARGANZUELA	PZA. PEÃ‘UELAS	PLAZA DE LAS PEÃ‘UELAS NÂº 12	&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7026513999999935</longitude>
+                    <latitude>40.401046</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7026514,40.401046</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b81">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b81</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;49&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;ARGANZUELA	PARQUE PEÃ‘UELAS	PASEO ESPERANZA NÂº 25 	&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.705291299999999</longitude>
+                    <latitude>40.401066</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7052913,40.401066</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b80">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b80</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;1&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PLAZA COMENDADORAS&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7086060999999972</longitude>
+                    <latitude>40.427235</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7086061,40.427235</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b7f">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b7f</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;2&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;JARDINES CONDE DUQUE&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.710107100000002</longitude>
+                    <latitude>40.428721</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7101071,40.428721</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b7e">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b7e</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;3&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PLAZA DE LAS SALESAS&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.6946054999999944</longitude>
+                    <latitude>40.42423899999999</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.6946055,40.424239</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b7d">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b7d</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;4&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PLAZA VILLA DE PARIS&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.6931809000000015</longitude>
+                    <latitude>40.425554</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.6931809,40.425554</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b7c">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b7c</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;5&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PLAZA CRISTINO MARTOS&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7120197000000132</longitude>
+                    <latitude>40.425638000000006</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7120197,40.425638</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b7b">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b7b</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;6&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PLAZA SAN ILDEFONSO&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7018189000000064</longitude>
+                    <latitude>40.424141</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7018189,40.424141</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b7a">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b7a</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;7&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PARQUE CASINO DE LA REINA&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.704929699999994</longitude>
+                    <latitude>40.405942</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7049297,40.405942</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b79">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b79</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;8&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PLAZA DE LOS CARROS&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7114600000000166</longitude>
+                    <latitude>40.41166800000001</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.71146,40.411668</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b78">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b78</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;9&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PARQUE DE LA CORNISA&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.715353500000006</longitude>
+                    <latitude>40.409833</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7153535,40.409833</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b77">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b77</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;10&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PASEO DEL PRADO&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.693202299999996</longitude>
+                    <latitude>40.41271600000001</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.6932023,40.412716</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b76">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b76</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;11&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;MERCADO PUERTA DE TOLEDO&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7102217999999993</longitude>
+                    <latitude>40.407126</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7102218,40.407126</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b75">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b75</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;12&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PLAZA DOS DE MAYO&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.704406199999994</longitude>
+                    <latitude>40.426946</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7044062,40.426946</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b74">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b74</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;13&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PARQUE DE ATENAS&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.72055960000003</longitude>
+                    <latitude>40.41505300000001</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7205596,40.415053</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b73">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b73</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;14&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PLAZA DE SANTO DOMINGO&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.708283300000005</longitude>
+                    <latitude>40.420066000000006</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7082833,40.420066</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b72">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b72</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;15&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;JARDINES PLAZA GABRIEL MIRO&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7148884000000066</longitude>
+                    <latitude>40.41265599999999</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7148884,40.412656</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b71">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b71</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;16&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PLAZA GABRIEL MIRO&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.715158400000007</longitude>
+                    <latitude>40.412555</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7151584,40.412555</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b70">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b70</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;17&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PARQUE DE ATENAS&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7189300000000003</longitude>
+                    <latitude>40.414766</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.71893,40.414766</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b6f">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b6f</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;18&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PARQUE DE ATENAS&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7201557000000065</longitude>
+                    <latitude>40.41475800000001</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7201557,40.414758</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b6e">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b6e</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;19&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PARQUE CASINO DE LA REINA&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.704607100000004</longitude>
+                    <latitude>40.406656</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7046071,40.406656</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b6d">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b6d</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;20&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PARQUE CASINO DE LA REINA&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.705724200000006</longitude>
+                    <latitude>40.44250499999999</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7057242,40.442505</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b6c">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b6c</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;21&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;CL ARGANZUELA NÂº:1&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7102634999999964</longitude>
+                    <latitude>40.408847</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7102635,40.408847</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b6b">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b6b</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;22&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;CL MESON DE PAREDES&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7039283999999952</longitude>
+                    <latitude>40.409381</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7039284,40.409381</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b6a">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b6a</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;23&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;CL SAN JUSTO NÂº:1	PLAZA PUERTA CERRADA&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.70904280000002</longitude>
+                    <latitude>40.413818</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7090428,40.413818</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b69">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b69</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;24&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PLAZA JESUS NÂº:4&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7072105000000164</longitude>
+                    <latitude>40.409919</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7072105,40.409919</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b68">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b68</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;25&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;CL SANTA ISABEL NÂº:48&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.6957464000000044</longitude>
+                    <latitude>40.41369199999998</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.6957464,40.413692</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b67">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b67</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;26&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PLAZA CASCORRO NÂº:11&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.6959374000000054</longitude>
+                    <latitude>40.409347999999994</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.6959374,40.409348</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b66">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b66</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;27&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PLAZA ISABEL II NÂº:8&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7091469000000075</longitude>
+                    <latitude>40.418115</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7091469,40.418115</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b65">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b65</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;28&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PZA. GENERAL VARA DE REY&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7083939000000044</longitude>
+                    <latitude>40.409254</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7083939,40.409254</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b64">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b64</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;29&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PZA. GABRIEL MIRO&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7149875000000065</longitude>
+                    <latitude>40.411998</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7149875,40.411998</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b63">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b63</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;30&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;CUESTA DE LOS CIEGOS&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7149583999999862</longitude>
+                    <latitude>40.413701</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7149584,40.413701</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b62">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b62</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;31&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;C/ SANTA CRUZ DE MARCENADO&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.7096606000000065</longitude>
+                    <latitude>40.42886799999999</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7096606,40.428868</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b61">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b61</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;32&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;PLAZA SANTA MARÃA SOLEDAD TORRES ACOSTA&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.705496299999993</longitude>
+                    <latitude>40.421831000000005</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7054963,40.421831</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b60">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b60</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;33&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;CALLE DEL ALMENDRO&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.709021000000007</longitude>
+                    <latitude>40.412863</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.709021,40.412863</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b5f">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b5f</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;34&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;JARDINES DE LA PLAZA DE ORIENTE&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.711899200000005</longitude>
+                    <latitude>40.41755700000001</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7118992,40.417557</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b5e">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b5e</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;35&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;JARDINES DE SABATINI	A. 1 Â· PLATAFORMA&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.713768799999997</longitude>
+                    <latitude>40.420474</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7137688,40.420474</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="fuentes.fid--564997a5_15bf31f4ff3_-7b5d">
+                <name>fuentes.fid--564997a5_15bf31f4ff3_-7b5d</name>
+                <description>&lt;h4&gt;fuentes&lt;/h4&gt;
+
+&lt;ul class="textattributes"&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;id&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;36&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;span class="atr-name"&gt;via&lt;/span&gt;:&lt;/strong&gt; &lt;span class="atr-value"&gt;MADRID RÃO Z.06. - VIRGEN DEL PUERTO&lt;/span&gt;&lt;/li&gt;
+  
+  
+&lt;/ul&gt;
+</description>
+                <LookAt>
+                    <longitude>-3.721651500000007</longitude>
+                    <latitude>40.416866</latitude>
+                    <altitude>0.0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>0.0</tilt>
+                    <range>0.0</range>
+                    <altitudeMode>clampToGround</altitudeMode>
+                </LookAt>
+                <Style>
+                    <IconStyle>
+                        <color>ffffffff</color>
+                        <scale>32.0</scale>
+                        <heading>0.0</heading>
+                        <Icon>
+                            <refreshInterval>0.0</refreshInterval>
+                            <viewRefreshTime>0.0</viewRefreshTime>
+                            <viewBoundScale>0.0</viewBoundScale>
+                        </Icon>
+                    </IconStyle>
+                    <LabelStyle>
+                        <color>00ffffff</color>
+                        <scale>0.0</scale>
+                    </LabelStyle>
+                </Style>
+                <Point>
+                    <coordinates>-3.7216515,40.416866</coordinates>
+                </Point>
+            </Placemark>
+        </Folder>
+    </Document>
+</kml>
