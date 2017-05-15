@@ -169,46 +169,195 @@ $(document).bind('pageinit', function(){
         tst();
     });
     
+    tst();
+    
     function tst(){
-            var dWithin = `
-                <wfs:GetFeature service="WFS" version="1.0.0"
-                  outputFormat="GML2"
-                  xmlns:wfs="http://www.opengis.net/wfs"
-                  xmlns:ogc="http://www.opengis.net/ogc"
-                  xmlns:gml="http://www.opengis.net/gml"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://www.opengis.net/wfs 
-                  http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">
-                  <wfs:Query typeName="semana6:Deaths">
-                    <ogc:Filter>
-                      <ogc:DWithin>
-                            <ogc:PropertyName>the_geom</ogc:PropertyName>
-                            <Literal>
-                              <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#27700">
-                                <gml:coordinates xmlns:gml="http://www.opengis.net/gml">529192.53786754,181079.391379652</gml:coordinates>
-                              </gml:Point>
-                            </Literal>
-                            <ogc:Distance unit="meters">100</ogc:Distance>
-                    </ogc:DWithin>
-                    </ogc:Filter>
-                    </wfs:Query>
-                </wfs:GetFeature>`;
         
-        var request = new ol.Request.POST({
-            url: 'http://localhost:8080/geoserver/wfs',
-            data: dWithin,
-            headers: {"Content-Type": "text/xml;charset=utf-8"},
-            async: true,
-            callback: function(response){
-                //read the response from GeoServer
-                console.log(response.responseText);
-                var analysisLayer = readFeaturesFromWPSResponse(response.responseText);
-                map.addLayer(analysisLayer);
-            },
-            failure: function(response){
-                console.log("there is a problem with request");
-          }
-        });
+        var origin = { x: -3.703790, y: 40.41675 },
+            distance = 0.01;
+        
+        dWithin(origin, distance, dWithinReturn); // http://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
+        
+        function dWithinReturn(result){
+            var parc = { x: result[0], y: result[1] };
+            waypoints(origin, parc, waypointsReturn);
+        }
+        
+        function waypointsReturn(result){
+            dWithinRoute(result, distance, dWithinRouteReturn);
+        }
+        
+        function dWithinRouteReturn(result1, result2){
+            var fuente1 = { x: result1[0], y: result1[1] },
+                fuente2 = { x: result2[0], y: result2[1] };
+            console.log(fuente1);
+            console.log(fuente2);
+        }
+    }
+    
+    // Get Distance from origin radius
+    function dWithin(origin, distance, dWithinCallback){
+        
+        var dWithinXML = `<?xml version="1.0"?>
+        <wfs:GetFeature service="WFS" version="1.0.0"
+          outputFormat="GML3"
+          xmlns:wfs="http://www.opengis.net/wfs"
+          xmlns:ogc="http://www.opengis.net/ogc"
+          xmlns:gml="http://www.opengis.net/gml"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">
+          <wfs:Query typeName="prototype:parques">
+            <ogc:Filter>
+              <ogc:DWithin>
+                    <ogc:PropertyName>parque_geom</ogc:PropertyName>
+                    <Literal>
+                      <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
+                        <gml:coordinates xmlns:gml="http://www.opengis.net/gml">${origin.x},${origin.y}</gml:coordinates>
+                      </gml:Point>
+                    </Literal>
+                    <ogc:Distance>${distance}</ogc:Distance>
+            </ogc:DWithin>
+            </ogc:Filter>
+            </wfs:Query>
+        </wfs:GetFeature>`;
+        
+        var dWithinRequest = new XMLHttpRequest();
+
+        dWithinRequest.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200){
+                var features = (new ol.format.GML3()).readFeatures(this.responseText); // https://github.com/openlayers/openlayers/issues/2999
+                var chosenParc = features[0].values_.parque_geom;
+                var coordinates = chosenParc.getCoordinates();
+
+                dWithinCallback(coordinates);
+            }
+        }
+
+        dWithinRequest.open("POST","http://localhost:8080/geoserver/wfs",true);
+        dWithinRequest.send(dWithinXML);
+    }
+    
+    // Get route
+    function waypoints(origin, destination, waypointsCallback){
+
+        var waypointsXML = `<?xml version="1.0"?>
+        <wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="WPS" version="1.0.0" outputFormat="GML3" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
+        <ows:Identifier>org.cnig.cartociudad.wps.RouteFinder</ows:Identifier>
+        <wps:DataInputs>
+            <wps:Input>
+                <ows:Identifier>waypoints</ows:Identifier>
+                <wps:Data>
+                    <wps:ComplexData mimeType="text/xml">
+                    <wfs:FeatureCollection xmlns:ogc="http://www.opengis.net/ogc" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ows="http://www.opengis.net/ows" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wp="http://localhost/waypoint" xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://localhost http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd http://www.opengis.net/gml http://schemas.opengis.net/gml/3.1.1/base/feature.xsd http://localhost:8080/wps/schemas/waypoint.xsd">
+                    <gml:featureMembers>
+                        <wp:waypoint gml:id="1">
+                            <wp:geom>
+                                <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
+                                <gml:pos>
+                                    ${origin.x} ${origin.y}
+                                </gml:pos>
+                            </gml:Point>
+                        </wp:geom>
+                    </wp:waypoint>
+                    <wp:waypoint gml:id="2">
+                        <wp:geom>
+                            <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
+                            <gml:pos>
+                                ${destination.y} ${destination.x}
+                            </gml:pos>
+                        </gml:Point>
+                    </wp:geom>
+                </wp:waypoint>
+            </gml:featureMembers>
+        </wfs:FeatureCollection>
+        </wps:ComplexData>
+        </wps:Data>
+        </wps:Input>
+        </wps:DataInputs>
+        <wps:ResponseForm>
+            <wps:ResponseDocument>
+                <wps:Output schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" mimeType="text/xml" encoding="UTF-8">
+                <ows:Identifier>routeResult</ows:Identifier>
+            </wps:Output>
+        </wps:ResponseDocument>
+        </wps:ResponseForm>
+        </wps:Execute>`;
+
+        var waypointsRequest = new XMLHttpRequest();
+
+        waypointsRequest.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200){
+                
+                var start = this.responseText.indexOf("<gml:posList>"),
+                    end = this.responseText.indexOf("</gml:posList>"),
+                    lineString = this.responseText.substring(start,end);
+                
+                    newLineString = reformLineString(lineString);
+            }
+            
+            waypointsCallback(newLineString);
+        }
+
+        waypointsRequest.open("POST","http://www.cartociudad.es/wps/WebProcessingService",true);
+        waypointsRequest.send(waypointsXML);
+    }
+    
+    // <gml:posList> to <gml:coordinates>
+    function reformLineString(lineString){
+        var string = lineString.substring(13),
+            myarray = string.split(' '),
+            reformed = '<gml:LineString srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"><gml:coordinates xmlns:gml="http://www.opengis.net/gml" decimal="." cs="," ts=" ">';
+        
+        for(i=0; i<myarray.length; i++){
+            reformed += myarray.slice(i,i+2).join(",")+' ';   
+        }
+        
+        reformed += '</gml:coordinates></gml:LineString>';
+
+        return reformed;
+    }
+    
+    // Get Distance from route radius
+    function dWithinRoute(originRoute, distance, dWithinRouteCallback){
+        
+        var dWithinRouteXML = `<?xml version="1.0"?>
+        <wfs:GetFeature service="WFS" version="1.0.0"
+          outputFormat="GML3"
+          xmlns:wfs="http://www.opengis.net/wfs"
+          xmlns:ogc="http://www.opengis.net/ogc"
+          xmlns:gml="http://www.opengis.net/gml"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">
+          <wfs:Query typeName="prototype:fuentes">
+            <ogc:Filter>
+              <ogc:DWithin>
+                    <ogc:PropertyName>fuente_geom</ogc:PropertyName>
+                    <Literal>
+                      ${originRoute}
+                    </Literal>
+                    <ogc:Distance>${distance}</ogc:Distance>
+            </ogc:DWithin>
+            </ogc:Filter>
+            </wfs:Query>
+        </wfs:GetFeature>`;
+        
+        var dWithinRouteRequest = new XMLHttpRequest();
+
+        dWithinRouteRequest.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200){
+                var features = (new ol.format.GML3()).readFeatures(this.responseText);
+                
+                var fuente1 = features[0].values_.fuente_geom,
+                    fuente1Coord = fuente1.getCoordinates(),
+                    fuente2 = features[1].values_.fuente_geom,
+                    fuente2Coord = fuente2.getCoordinates();
+                
+                dWithinRouteCallback(fuente1Coord,fuente2Coord);
+            }
+        }
+
+        dWithinRouteRequest.open("POST","http://localhost:8080/geoserver/wfs",true);
+        dWithinRouteRequest.send(dWithinRouteXML);
     }
 
     /**

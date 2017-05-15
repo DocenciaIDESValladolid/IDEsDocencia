@@ -112,9 +112,6 @@ function initmap() {
             key: 'AmC3DXdnK5sXC_Yp_pOLqssFSaplBbvN68jnwKTEM3CSn2t6G5PGTbYN3wzxE5BR',
             imagerySet: 'AerialWithLabels',
             maxZoom: 19
-                // use maxZoom 19 to see stretched tiles instead of the BingMaps
-                // "no photos at this zoom level" tiles
-                // maxZoom: 19
         })
     });
     aeriallayer.set("name", "aerialview");
@@ -371,7 +368,8 @@ function initmap() {
 
     var layergroup = new ol.layer.Group({ layers: [aeriallayer, roadlayer, Fuentesvector, Vectorparques] });
     var view = new ol.View({
-        center: [-413065.700853, 4928659.583828],
+        projection: 'EPSG:4326',
+        center: [-3.703790, 40.416775], //https://epsg.io/
         zoom: 12,
         minZoom: 2
     });

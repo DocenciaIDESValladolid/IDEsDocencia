@@ -1,0 +1,96 @@
+<!-- DWITHIN -->
+<?xml version="1.0"?>
+<wfs:GetFeature service="WFS" version="1.0.0"
+  outputFormat="GML2"
+  xmlns:wfs="http://www.opengis.net/wfs"
+  xmlns:ogc="http://www.opengis.net/ogc"
+  xmlns:gml="http://www.opengis.net/gml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">
+  <wfs:Query typeName="prototype:parques">
+    <ogc:Filter>
+      <ogc:DWithin>
+            <ogc:PropertyName>parque_geom</ogc:PropertyName>
+        	<Literal>
+              <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
+                <gml:coordinates xmlns:gml="http://www.opengis.net/gml">-3.703790,40.41677</gml:coordinates>
+              </gml:Point>
+        	</Literal>
+         	<ogc:Distance>0.01</ogc:Distance>
+    </ogc:DWithin>
+    </ogc:Filter>
+    </wfs:Query>
+</wfs:GetFeature>
+
+<!-- FIRST WAYPOINT -->
+<?xml version="1.0"?>
+<wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="WPS" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
+<ows:Identifier>org.cnig.cartociudad.wps.RouteFinder</ows:Identifier>
+<wps:DataInputs>
+    <wps:Input>
+        <ows:Identifier>waypoints</ows:Identifier>
+        <wps:Data>
+            <wps:ComplexData mimeType="text/xml">
+            <wfs:FeatureCollection xmlns:ogc="http://www.opengis.net/ogc" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ows="http://www.opengis.net/ows" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wp="http://localhost/waypoint" xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://localhost http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd http://www.opengis.net/gml http://schemas.opengis.net/gml/3.1.1/base/feature.xsd http://localhost:8080/wps/schemas/waypoint.xsd">
+            <gml:featureMembers>
+                <wp:waypoint gml:id="1">
+                    <wp:geom>
+                        <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
+                        <gml:pos>
+                            -3.703790 40.416775
+                        </gml:pos>
+                    </gml:Point>
+                </wp:geom>
+            </wp:waypoint>
+            <wp:waypoint gml:id="2">
+                <wp:geom>
+                    <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
+                    <gml:pos>
+                        -3.71318531 40.41991129
+                    </gml:pos>
+                </gml:Point>
+            </wp:geom>
+        </wp:waypoint>
+    </gml:featureMembers>
+</wfs:FeatureCollection>
+</wps:ComplexData>
+</wps:Data>
+</wps:Input>
+</wps:DataInputs>
+<wps:ResponseForm>
+    <wps:ResponseDocument>
+        <wps:Output schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" mimeType="text/xml" encoding="UTF-8">
+        <ows:Identifier>routeResult</ows:Identifier>
+    </wps:Output>
+</wps:ResponseDocument>
+</wps:ResponseForm>
+</wps:Execute>
+
+<?xml version="1.0"?>
+<wfs:GetFeature service="WFS" version="1.0.0"
+  outputFormat="GML2"
+  xmlns:wfs="http://www.opengis.net/wfs"
+  xmlns:ogc="http://www.opengis.net/ogc"
+  xmlns:gml="http://www.opengis.net/gml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">
+  <wfs:Query typeName="prototype:fuentes">
+    <ogc:Filter>
+      <ogc:DWithin>
+            <ogc:PropertyName>parque_geom</ogc:PropertyName>
+        	<Literal>
+                <gml:LineString>
+                    <gml:coordinates xmlns:gml="http://www.opengis.net/gml" decimal="." cs="," ts=" ">-3.70384,40.41673 -3.7039,40.41683</gml:coordinates>
+                </gml:LineString>
+                <gml:LineString srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
+                    <gml:posList>-3.70384 40.41673 -3.7039 40.41683 -3.70432 40.4168 -3.70452 40.41681 -3.70476 40.41684 -3.70559 40.417 -3.70592 40.41708 -3.70601 40.4171 -3.70666 40.41726 -3.70716 40.41739 -3.70729 40.41743 -3.70734 40.41745 -3.70777 40.41757 -3.70858 40.41779 -3.70881 40.41782 -3.70917 40.41785 -3.70943 40.41787 -3.70981 40.4179 -3.70976 40.41843 -3.70981 40.41843 -3.71008 40.41856 -3.71016 40.41861 -3.71036 40.41873 -3.71039 40.41876 -3.71043 40.41881 -3.71126 40.41948 -3.71158 40.41949 -3.7127 40.41956 -3.71291 40.41956 -3.71292 40.41956 -3.71297 40.41958 -3.713 40.4196 -3.71301 40.4196 -3.71303 40.41967 -3.71304 40.41975 -3.71305 40.41982 -3.71306 40.41983 -3.71306 40.41991</gml:posList>
+                </gml:LineString>
+        	</Literal>
+         	<ogc:Distance>0.01</ogc:Distance>
+    </ogc:DWithin>
+    </ogc:Filter>
+    </wfs:Query>
+</wfs:GetFeature>
+
+
+
