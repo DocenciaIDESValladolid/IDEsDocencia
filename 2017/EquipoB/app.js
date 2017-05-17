@@ -170,35 +170,7 @@ $(document).bind('pageinit', function(){
     });
     
     tst();
-    
-    function tryPoint(){
-      var selectedStyle = new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: 400,
-                    fill: new ol.style.Fill({
-                        color: 'rgba(150,150,200,1)'
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: 'rgba(20,30,100,1)',
-                        width: 3
-                    })
-                })
-            });
-
-            var vectorLayer = new ol.layer.Vector({
-                name:"pointi",
-                source: new ol.source.Vector({ features: [new ol.Feature({ geometry: new ol.geom.Point(-3.70384, 40.41673),})] }),
-                style: selectedStyle
-            });
-
-    map.addLayer(vectorLayer);
-    add_layer_to_list(vectorLayer);  
-    }
-    
-    tryPoint();
-            
-            
-    
+        
     function tst(){
         
         var waypoints = {
@@ -209,15 +181,18 @@ $(document).bind('pageinit', function(){
         dWithin(waypoints.origin, distance, dWithinReturn); // http://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
         
         function dWithinReturn(result){
-            waypoints.destination = { x: result[1], y: result[0] }; // Coordinates of destination parc
+            console.log("dWithinReturn1");console.log(result);
+            waypoints.destination = { x: result[0], y: result[1] }; // Coordinates of destination parc
             waypointsCalc(waypoints.origin, waypoints.destination, null, null, waypointsReturn); 
         }
         
         function waypointsReturn(result){
+            console.log("waypointsReturn2");console.log(result);
             dWithinRoute(result, distance, dWithinRouteReturn);
         }
         
         function dWithinRouteReturn(result1, result2){
+            console.log("dWithinRouteReturn3");console.log(result1);console.log(result2);
             waypoints.fuente1 = { x: result1[0], y: result1[1] };
             waypoints.fuente2 = { x: result2[0], y: result2[1] };
             
@@ -225,32 +200,44 @@ $(document).bind('pageinit', function(){
         }
         
         function waypointsReturnBis(result){
-          
+            console.log("waypointsReturnBis4");console.log(result);
+            
             var onlyNumbers = result.substring(13), // <gml:posList>
                 fullCoordinates = onlyNumbers.split(' ');
+        
+            // lol
+            var rutaCompleta = new ol.geom.LineString();
             
-            //console.log(fullCoordinates);
+            for(i=0; i<fullCoordinates.length; i=i+2){
+                
+                var coord = [];
+                
+                coord.push(fullCoordinates[i]);
+                coord.push(fullCoordinates[i+1]);
+    
+                rutaCompleta.appendCoordinate(coord);
+            }
             
-            var crac = [[-3.70384, 40.41673]];
+            var selectedStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: 'rgba(255,30,100,1)',
+                    width: 10
+                })
+        });
 
-            var layerPlease = new ol.layer.Vector({
+            var rutaVector = new ol.layer.Vector({
                             name: "Ruta",
+                            style: selectedStyle,
                             source: new ol.source.Vector({
-                                feature: [new ol.Feature({
-                                    geometry: new ol.geom.LineString(crac),
-                                    name: 'Linestring',
-                                    style: new ol.style.Style({
-                                        stroke: new ol.style.Stroke({
-                                            color: 'rgba(255, 255, 0, 1.0)',
-                                            width: 500
-                                        })
-                                    })
-                                })]
-                            }),
+                                features: [new ol.Feature({
+                                    geometry: rutaCompleta
+                                    //geometry: new ol.geom.LineString([[-3.70384, 40.41673], [-3.7039, 40.41683], [-3.70432, 40.4168]])
+                                    })]
+                                })
             });
 
-            map.addLayer(layerPlease);
-            add_layer_to_list(layerPlease);
+            map.addLayer(rutaVector);
+            add_layer_to_list(rutaVector);
         }
     }
     
@@ -346,7 +333,7 @@ $(document).bind('pageinit', function(){
                                 '<wp:geom>'+
                                     '<gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">'+
                                     '<gml:pos>'+
-                                        destination.x+' '+destination.y+
+                                        destination.y+' '+destination.x+
                                     '</gml:pos>'+ 
                                 '</gml:Point>'+
                             '</wp:geom>'+
