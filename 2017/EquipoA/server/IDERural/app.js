@@ -2,818 +2,545 @@
  * Demo functions
  */
 setTimeout(function() {
-    var demoFunctions=[
-    {title:'Paisajes Protegidos',function:'addWMSLayer(\'p_casas_rurales:paisajes_protegidos_esp,paisajes_protegidos_canarias\')'},
+
+  var demoFunctions=[
+  //mostar las capas con los distintos tipos de zonas
+  {title:'Paisajes Protegidos',function:'addWMSLayer(\'p_casas_rurales:paisajes_protegidos_esp,paisajes_protegidos_canarias\')'},
 	{title:'Monumentos Naturales',function:'addWMSLayer(\'p_casas_rurales:monumentos_naturales_esp,monumentos_naturales_canarias\')'},
 	{title:'Parques Nacionales',function:'addWMSLayer(\'p_casas_rurales:parques_nacionales_esp,parques_nacionales_canarias\')'},
 	{title:'Parques Naturales',function:'addWMSLayer(\'p_casas_rurales:parques_naturales_esp,parques_naturales_canarias\')'},
 	{title:'Reservas Naturales',function:'addWMSLayer(\'p_casas_rurales:reservas_naturales_esp,reservas_naturales_canarias\')'},
 	{title:'Otros',function:'addWMSLayer(\'p_casas_rurales:otros_esp\')'},
-  {title:'GetFeature Provinica',function:'peticionPrueba(\'-4.83386,38.08648\')'},
-  {title:'GetFeature Provinica 2',function:'addWFSFeature(-4.83386,38.08648)'},
-  {title:'WFS Riesgos',function:'addWFSFeatureRiesgos()'},
-	{title:'WFS Distancias',function:'addWFSFeatureDistancias()'},
+
+  //{title:'GetFeature Provincia',function:'peticionPrueba(\'-4.83386,38.08648\')'},//NO FUNCIONA
+
+  //WFS(0):Obtener la Feature de la provincia a partir de unas coordenadas(falta cogerlas con la banderita)
+  {title:'GetFeature Provincia 2',function:'addWFSFeatureProvincia(-4.83386,41.58648)'},
+
+  //WFS(1), hay que pasarle el riesgo máximo, usuario, y el codigo de la provincia, WFS(0)
+   {title:'WFS Riesgos',function:'addWFSFeatureRiesgos(3,47)'},
+  
+   //WFS(2), hay que pasarle la distancia máxima, usuario, y la geometría de la provincia, WFS(0)
+	{title:'WFS Distancias',function:'addWFSFeatureDistancias(9)'},
+
+   //WPS(3), Intersect WFS(1) y WFS(2)
+	{title:'WPS Intersect',function:'WPSIntersect(null)'},
+
+  //WPS(4), pasar una features collection a geometry
+  {title:'WPS Geometry',function:'WPSGeometry()'},
+  
+
+  //Muestra las provincias en el mapa de España(Estilo mal y no hace el zoom a la capa añadida) 
   {title:'Provincias',function:"addWMSLayer('p_casas_rurales:provincias')"},
+
+  //Pruebas Hector
     //{title:'Estados',function:'addWMSLayer(\'prueba:Provincias_ETRS89_30N\')'},
     //{title:'add Editable layer',function:'addEditableLayer()'},
-];
-ol.proj.setProj4(proj4);
-proj4.defs("EPSG:4258","+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs");
-var liststring ='';
-demoFunctions.forEach(function(element) {
-    liststring = liststring +  '<li><a href="#" onclick="'+element.function+'">'+ element.title +'</a></li>';
-}, this);
-var list = $('#listdemos');
-var listcontent = $(liststring);
-list.html(liststring);
-list.trigger('create');
-}, 100);
+  ];
 
-function addEditableLayer(){
-      var features = new ol.Collection();
-      var featureOverlay = new ol.layer.Vector({
-        source: new ol.source.Vector({features: features}),
-        style: new ol.style.Style({
-          fill: new ol.style.Fill({
-            color: 'rgba(255, 255, 255, 0.2)'
-          }),
-          stroke: new ol.style.Stroke({
-            color: '#ffcc33',
-            width: 2
-          }),
-          image: new ol.style.Circle({
-            radius: 7,
+  //Para poder trabajar con el SRS EPSG:4258
+  ol.proj.setProj4(proj4);
+  proj4.defs("EPSG:4258","+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs");
+
+
+  var liststring ='';
+  demoFunctions.forEach(function(element) {
+      liststring = liststring +  '<li><a href="#" onclick="'+element.function+'">'+ element.title +'</a></li>';
+  }, this);
+  var list = $('#listdemos');
+  var listcontent = $(liststring);
+  list.html(liststring);
+  list.trigger('create');
+  }, 100);
+
+  //Ejemplo profesor
+  function addEditableLayer(){
+        var features = new ol.Collection();
+        var featureOverlay = new ol.layer.Vector({
+          source: new ol.source.Vector({features: features}),
+          style: new ol.style.Style({
             fill: new ol.style.Fill({
-              color: '#ffcc33'
-            })
-          })
-        })
-      });
-      featureOverlay.setMap(map);
-
-      var modify = new ol.interaction.Modify({
-        features: features,
-        // the SHIFT key must be pressed to delete vertices, so
-        // that new vertices can be drawn at the same position
-        // of existing vertices
-        deleteCondition: function(event) {
-          return ol.events.condition.shiftKeyOnly(event) &&
-              ol.events.condition.singleClick(event);
-        }
-      });
-      map.addInteraction(modify);
-
-      var draw; // global so we can remove it later
-      //TODO: use globals draw
-      function activateDraw() {
-        draw = new ol.interaction.Draw({
-          features: features,
-          type: /** @type {ol.geom.GeometryType} */ 'Polygon'
-        });
-        map.addInteraction(draw);
-      }
-
-      /**
-       * Handle change event.
-       */
-      function deactivateDraw() {
-        map.removeInteraction(draw);
-      };   
-      activateDraw();
-}
-function addWFSLayer() {
-    var vectorSource = new ol.source.Vector({
-        format: new ol.format.GeoJSON(),
-        url: function (extent) {
-            return 'https://ahocevar.com/geoserver/wfs?service=WFS&' +
-                'version=1.1.0&request=GetFeature&typename=osm:water_areas&' +
-                'outputFormat=application/json&srsname=EPSG:3857&' +
-                'bbox=' + extent.join(',') + ',EPSG:3857';
-        },
-        strategy: ol.loadingstrategy.bbox
-    });
-    var vector = new ol.layer.Vector({
-        name: 'WFS example layer',
-        source: vectorSource,
-        style: new ol.style.Style({
+              color: 'rgba(255, 255, 255, 0.2)'
+            }),
             stroke: new ol.style.Stroke({
-                color: 'rgba(0, 0, 255, 1.0)',
-                width: 2
+              color: '#ffcc33',
+              width: 2
+            }),
+            image: new ol.style.Circle({
+              radius: 7,
+              fill: new ol.style.Fill({
+                color: '#ffcc33'
+              })
             })
-        })
-    });
-    map.addLayer(vector);
-    add_layer_to_list(vector);
-}
-function addWFSFeature(lon,lat){
-     var vectorSource = new ol.source.Vector();
-      var vector = new ol.layer.Vector({
-          name: 'GetFeature result',
-        source: vectorSource,
-        style: new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'rgba(0, 0, 0, 1.0)',
-            width: 2
           })
-        })
-      });
-      // generate a GetFeature request
-      var coordenadas = new ol.geom.Point([lon,lat]);
-      var featureRequest = new ol.format.WFS().writeGetFeature({
-        srsName: 'EPSG:3857',
-        featureNS: 'p_casas_rurales',
-        featurePrefix: 'p_casas_rurales',
-        featureTypes: ['provincias'],
-        outputFormat: 'application/json',
-        filter: ol.format.filter.intersects('the_geom', coordenadas,'EPSG:4258')
-      });
+        });
+        featureOverlay.setMap(map);
 
-      // then post the request and add the received features to a layer
-      fetch('http://localhost:8081/geoserver/wfs', {
-        method: 'POST',
-        body: new XMLSerializer().serializeToString(featureRequest)
-      }).then(function(response) {
+        var modify = new ol.interaction.Modify({
+          features: features,
+          // the SHIFT key must be pressed to delete vertices, so
+          // that new vertices can be drawn at the same position
+          // of existing vertices
+          deleteCondition: function(event) {
+            return ol.events.condition.shiftKeyOnly(event) &&
+                ol.events.condition.singleClick(event);
+          }
+        });
+        map.addInteraction(modify);
+
+        var draw; // global so we can remove it later
+        //TODO: use globals draw
+        function activateDraw() {
+          draw = new ol.interaction.Draw({
+            features: features,
+            type: /** @type {ol.geom.GeometryType} */ 'Polygon'
+          });
+          map.addInteraction(draw);
+        }
+
+        /**
+         * Handle change event.
+         */
+        function deactivateDraw() {
+          map.removeInteraction(draw);
+        };   
+        activateDraw();
+  }
+
+  //Ejemplo profesor
+  function addWFSLayer() {
+      var vectorSource = new ol.source.Vector({
+          format: new ol.format.GeoJSON(),
+          url: function (extent) {
+              return 'https://ahocevar.com/geoserver/wfs?service=WFS&' +
+                  'version=1.1.0&request=GetFeature&typename=osm:water_areas&' +
+                  'outputFormat=application/json&srsname=EPSG:3857&' +
+                  'bbox=' + extent.join(',') + ',EPSG:3857';
+          },
+          strategy: ol.loadingstrategy.bbox
+      });
+      var vector = new ol.layer.Vector({
+          name: 'WFS example layer',
+          source: vectorSource,
+          style: new ol.style.Style({
+              stroke: new ol.style.Stroke({
+                  color: 'rgba(0, 0, 255, 1.0)',
+                  width: 2
+              })
+          })
+      });
+      map.addLayer(vector);
+      add_layer_to_list(vector);
+  }
+
+
+  //Para añadir las capas a la lista de capas.
+  function addWMSLayer(nombre){
+      var wms =new ol.layer.Image({
+            //extent: [-13884991, 2870341, -7455066, 6338219],
+            name: 'Provincias',
+            source: new ol.source.ImageWMS({
+              url: 'http://localhost:8081/geoserver/wms',
+              params: {'LAYERS': nombre},
+              serverType: 'geoserver'
+            })
+          });
+      map.addLayer(wms);
+      add_layer_to_list(wms);
+
+      // GetFeatureInfo
+      map.on('singleclick', function(evt) {
+          var view = map.getView();
+          var viewResolution = /** @type {number} */ (view.getResolution());
+          var url = wms.getSource().getGetFeatureInfoUrl(
+              evt.coordinate, viewResolution, 'EPSG:4258',
+              {'INFO_FORMAT': 'text/plain'});
+          if (url) {
+              $.get(url,function(data){
+                  create_popup('info','GetFeatureInfo',data);
+              });
+          }
+        });
+  }
+
+  //Para añadir el mapa al inicio.
+  function addWMSLayerInit(){
+      var wms =new ol.layer.Image({
+            //extent: [-13884991, 2870341, -7455066, 6338219],
+            name: 'Provincias',
+            source: new ol.source.ImageWMS({
+              url: 'http://localhost:8081/geoserver/wms',
+              params: {'LAYERS': 'p_casas_rurales:provincias',
+                        'SRSName': 'EPSG:4258' },
+              serverType: 'geoserver'
+            })
+          });
+      map.addLayer(wms);
+      add_layer_to_list(wms);
+  }
+
+
+
+
+
+
+
+
+  /***************************************************************/
+
+  //WFS(0):Obtener la Feature de la provincia a partir de unas coordenadas
+  function addWFSFeatureProvincia(coord,riesgoMax,distMax){
+      var vectorSource = new ol.source.Vector();
+        var vector = new ol.layer.Vector({
+            name: 'GetFeature result',
+          source: vectorSource,
+          style: new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: 'rgba(0, 0, 0, 1.0)',
+              width: 2
+            })
+          })
+        });
+        // generate a GetFeature request
+        var coordenadas = new ol.geom.Point(coord);
+        var featureRequest = new ol.format.WFS().writeGetFeature({
+          srsName: 'EPSG:3857',
+          featureNS: 'p_casas_rurales',
+          featurePrefix: 'p_casas_rurales',
+          featureTypes: ['provincias'],
+          outputFormat: 'application/json',//'text/xml; subtype=gml/3.1.1',
+          filter: ol.format.filter.intersects('the_geom', coordenadas,'EPSG:3857')
+        });
+
+        // then post the request and add the received features to a layer
+        fetch('http://localhost:8081/geoserver/wfs', {
+          method: 'POST',
+          body: new XMLSerializer().serializeToString(featureRequest)
+        })
+        .then(function(response) {
         return response.json();
       }).then(function(json) {
         var features = new ol.format.GeoJSON().readFeatures(json);
-        vectorSource.addFeatures(features);
-        map.addLayer(vector);
-        add_layer_to_list(vector);
-        //Para hacer zoom a la provincia
-        map.getView().fit(vectorSource.getExtent());
-      });
-}
-//Para añadir las capas a la lista de capas.
-function addWMSLayer(nombre){
-    var wms =new ol.layer.Image({
-          //extent: [-13884991, 2870341, -7455066, 6338219],
-          name: 'Provincias',
-          source: new ol.source.ImageWMS({
-            url: 'http://localhost:8081/geoserver/wms',
-            params: {'LAYERS': nombre},
-            serverType: 'geoserver'
+        /*var the_geomProvincia = new ol.geom.Geometry();
+        the_geomProvincia=response.getGeometry();*/     
+          var cod_prov=features[0].get('codigo');
+          var the_geom=features[0].getGeometry();
+          vectorSource.addFeatures(features);
+          map.addLayer(vector);
+          add_layer_to_list(vector);
+          //Para hacer zoom a la provincia
+          map.getView().fit(vectorSource.getExtent());
+      
+          
+          var featuresRiesgo=addWFSFeatureRiesgos(riesgoMax,cod_prov);
+          console.log(featuresRiesgo);
+          var featuresDistancia=addWFSFeatureDistancias(distMax,the_geom);
+          console.log(featuresDistancia);
+          var feautureIntersect=WPSIntersect(featuresRiesgo,featuresDistancia);
+          //var geometry=WPSGeometry(feautureIntersect);
+          //var feturesSuelo=WFSSuelo(geometry);
+          //WPSIntersect(feturesSuelo,feautureIntersect);
+
+        });
+        
+  }
+
+  function addWFSFeatureRiesgos(riesgo,cod_prov){
+      var vectorSource = new ol.source.Vector();
+        var vector = new ol.layer.Vector({
+            name: 'GetFeature riesgos',
+          source: vectorSource,
+          style: new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: 'rgba(0, 0, 0, 1.0)',
+              width: 1
+            }),
+              fill: new ol.style.Fill({
+              color: 'rgba(255, 0, 0, 1.0)'
+            })
           })
         });
-    map.addLayer(wms);
-    add_layer_to_list(wms);
+        // generate a GetFeature request
+        var featureRequest = new ol.format.WFS().writeGetFeature({
+          srsName: 'EPSG:3857',
+          featureNS: 'p_casas_rurales',
+          featurePrefix: 'p_casas_rurales',
+          featureTypes: ['incendios_por_municipios'],
+          outputFormat: 'application/json',
+          filter: ol.format.filter.and(
+            ol.format.filter.like('cod_prov', cod_prov),
+            ol.format.filter.lessThan('total', riesgo)
+          )
+        });
 
-    // GetFeatureInfo
-    map.on('singleclick', function(evt) {
-        var view = map.getView();
-        var viewResolution = /** @type {number} */ (view.getResolution());
-        var url = wms.getSource().getGetFeatureInfoUrl(
-            evt.coordinate, viewResolution, 'EPSG:4258',
-            {'INFO_FORMAT': 'text/plain'});
-        if (url) {
-            $.get(url,function(data){
-                create_popup('info','GetFeatureInfo',data);
-            });
-        }
-      });
-}
+        // then post the request and add the received features to a layer
+        
+          fetch('http://localhost:8081/geoserver/wfs', {
+          method: 'POST',
+          body: new XMLSerializer().serializeToString(featureRequest)
+        }).then(function(response) {
+          return response.json();
+        }).then(function(json) {
+          var features = new ol.format.GeoJSON().readFeatures(json);
+          vectorSource.addFeatures(features);
+          map.addLayer(vector);
+          add_layer_to_list(vector);
+          
+        });
+        return features;
+  }
 
-//Para añadir las capas a la lista de capas.
-function addWMSLayerInit(){
-    var wms =new ol.layer.Image({
-          //extent: [-13884991, 2870341, -7455066, 6338219],
-          name: 'Provincias',
-          source: new ol.source.ImageWMS({
-            url: 'http://localhost:8081/geoserver/wms',
-            params: {'LAYERS': 'p_casas_rurales:provincias',
-                      'SRSName': 'EPSG:4258' },
-            serverType: 'geoserver'
+  function addWFSFeatureDistancias(distMax,the_geom){
+      var vectorSource = new ol.source.Vector();
+        var vector = new ol.layer.Vector({
+            name: 'GetFeature distancias',
+          source: vectorSource,
+          style: new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: 'rgba(0, 255, 0, 1.0)',
+              width: 2
+              }),
           })
         });
-    map.addLayer(wms);
-    add_layer_to_list(wms);
+        
+        // generate a GetFeature request
+        var featureRequest = new ol.format.WFS().writeGetFeature({
+          srsName: 'EPSG:3857',
+          featureNS: 'p_casas_rurales',
+          featurePrefix: 'p_casas_rurales',
+          featureTypes: ['distancias_zonas'],
+          outputFormat: 'application/json',
+          filter: ol.format.filter.and(
+            ol.format.filter.greaterThan('distancia', distMax),
+            ol.format.filter.intersects('the_geom', the_geom,'EPSG:3857')
+            
+          )
+        });
+
+        // then post the request and add the received features to a layer
+        fetch('http://localhost:8081/geoserver/wfs', {
+          method: 'POST',
+          body: new XMLSerializer().serializeToString(featureRequest)
+        }).then(function(response) {
+          return response.json();
+        }).then(function(json) {
+          var features = new ol.format.GeoJSON().readFeatures(json);
+          vectorSource.addFeatures(features);
+          map.addLayer(vector);
+          add_layer_to_list(vector);
+          
+        });
+        return features;
+  }
+
+  function WPSIntersect(feature1,feature2){
+
+  $.ajax({url:'http://localhost:8081/geoserver/wps',
+  type:'post',
+  data: getWPSRequest(feature1,feature2),
+  contentType:'application/json; charset=utf-8',
+  success:function(response, status, xhr){
+     // WPS que queremos manejar como FeatureCollection
+          response.json();
+          var features = new ol.format.GeoJSON().readFeatures(json);
+          vectorSource.addFeatures(features);
+          map.addLayer(vector);
+          add_layer_to_list(vector);
+          console.log(features);
+          return features;  
+  }});
+  
 }
 
-/**
- * @param {*} cdemo 
- * @param {*} cvalue 
- * @param {*} exdays 
- */
-function setCookie(cdemo, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    var expires = "expires=" + d.toGMTString();
-    document.cookie = cdemo + "=" + cvalue + "; " + expires;
-}
-function getCookie(cdemo) {
-    var demo = cdemo + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1);
-        if (c.indexOf(demo) == 0) {
-            return c.substring(demo.length, c.length);
-        }
-    }
-    return "";
-}
-function checkCookie(cookiename, redirect) {
-    var demo = getCookie(cookiename);
-    if (demo == "false") {
-        document.location.href = redirect;
-    }
-    setCookie(cookiename, false, 1000);
-}
+ function WPSGeometry(feautureIntersect){
 
+  $.ajax({url:'http://localhost:8081/geoserver/wps',
+  type:'post',
+  data: getWPSTransform(feautureIntersect),
+  contentType:"application/json; charset=utf-8",
+  success:function(response, status, xhr){
+    console.log(response);
+    //WPS que devuelve Geometry
+    var start=response.indexOf("<gml:Multipolygon>");
+    var end=response.indexOf("</gml:Multipolygon>");
+    var geomStr = responseStr.substring(start,end+19);
+    console.log(geomStr);
+  }});
+    return geomStr;
+      
+  }
 
+  function WFSSuelo(geometry){
 
-
-
-peticionPrueba(null);
-
-
-/***************************************************************/
-
-function peticionPrueba(punto){
-
-$.ajax({url:'http://localhost:8081/geoserver/wps',
-type:'post',
-data: getWPSTransform(),
-contentType:"application/json; charset=utf-8",
-success:function(response, status, xhr){
-  //WPS que devuelve Geometry
-   var start=response.indexOf("<gml:Multipolygon>");
-  var end=response.indexOf("</gml:Multipolygon>");
-  var geomStr = response.substring(start,end+19);
-// WPS que devuelve FeatureCollections
-  var formatoGML=new ol.format.GML3();
-  var featColl=formatoGML.readFeatures(response);
-  console.log(response);
-}});
-/*
-   fetch('http://localhost:8081/geoserver/wfs', {
-        method: 'POST',
-        body: getWPSRequest(),
-      }).then(function(response) {
-        console.log(response.responseText);
-                    var features = readFeaturesFromWPSResponse(response.responseText,'http://www.52north.org/fbf1fd13-6432-41dd-ada7-3a7a5bf673b6','Feature-fbf1fd13-6432-41dd-ada7-3a7a5bf673b6');
-                                console.log(features.length+ " Features decoded.");
-                    
-        return response.json();
-      }).then(function(json) {
-        var features = new ol.format.GML(response,'http://www.52north.org/fbf1fd13-6432-41dd-ada7-3a7a5bf673b6',).readFeatures(response,'EPSG:4326');
-        vectorSource.addFeatures(features);
-        map.addLayer(vector);
-        add_layer_to_list(vector);
-        //Para hacer zoom a la provincia
-        map.getView().fit(vectorSource.getExtent());
-      });
-      */
-    //$.post(URL,data,callback);
-   /* $.post('http://localhost:8081/geoserver/wfs','<wfs:GetFeature service="WFS" version="1.1.0" xmlns:p_casas_rurales="p_casas_rurales" xmlns:wfs="http://www.opengis.net/wfs" xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"><wfs:Query typeName="p_casas_rurales:provincias"><Filter><Intersects><PropertyName>the_geom</PropertyName><gml:Point srsName="EPSG:4258"><gml:coordinates>'+punto+'</gml:coordinates></gml:Point></Intersects></Filter></wfs:Query></wfs:GetFeature>',
-      function(response){
-        //response.json();
-        var vectorSource = new ol.source.Vector();
-        //var features = new ol.format.GeoJSON().readFeatures(response);
-        vectorSource.addFeatures(response);
-        map.getView().fit(vectorSource.getExtent());
-      }
-    );*/
-    
-    /* var vectorSource = new ol.source.Vector();
-      var vector = new ol.layer.Vector({
-          name: 'GetFeature result',
-        source: vectorSource,
-        style: new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'rgba(0, 0, 0, 1.0)',
-            width: 2
-          })
-        })
-      });
-   */
-     
-}
-
- function readFeaturesFromWPSResponse(response,featureNSUri,featureName){
-            //var cleaned= response.replace(/<gml\:posList/g,'<gml:posList dimension="2"');
-            var gml=new ol.format.GML({uri:featureNSUri,
-                                            featureName:featureName});
-    // Parche para que se pueda buscar en Features que no sean del espacio de nombres gmlns        				
-            gml.read = function (data){
-            if(typeof data == "string") { 
-                data = ol.format.XML.prototype.read.apply(this, [data]);
-            }
-            var featureMembers = this.getElementsByTagNameNS(data.documentElement,this.gmlns,"featureMembers");
-
-            var featureNodes = this.getElementsByTagNameNS(data.documentElement,
-                                                           this.uri,
-                                                          this.featureName);
-
-            var featureNodes = featureMembers[0].childNodes;
-            var features = [];
-            for(var i=0; i<featureNodes.length; i++) {
-                var feature = this.parseFeature(featureNodes[i]);
-                if(feature) {
-                    features.push(feature);
-                }
-            }            
-            return features;
-        };
-        return gml.read(response);
-    }
-function addWFSFeatureRiesgos(){
-     var vectorSource = new ol.source.Vector();
-      var vector = new ol.layer.Vector({
-          name: 'GetFeature riesgos',
-        source: vectorSource,
-        style: new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'rgba(255, 0, 0, 1.0)',
-            width: 2
-          })
-        })
-      });
-      // generate a GetFeature request
-      var featureRequest = new ol.format.WFS().writeGetFeature({
-        srsName: 'EPSG:3857',
-        featureNS: 'p_casas_rurales',
-        featurePrefix: 'p_casas_rurales',
-        featureTypes: ['incendios_por_municipios'],
-        outputFormat: 'application/json',
-        filter: ol.format.filter.and(
-          ol.format.filter.like('cod_prov', '47'),
-          ol.format.filter.lessThan('total', '5')
-        )
-      });
-
-      // then post the request and add the received features to a layer
-      fetch('http://localhost:8081/geoserver/wfs', {
-        method: 'POST',
-        body: new XMLSerializer().serializeToString(featureRequest)
-      }).then(function(response) {
-        return response.json();
-      }).then(function(json) {
-        var features = new ol.format.GeoJSON().readFeatures(json);
-        vectorSource.addFeatures(features);
-        map.addLayer(vector);
-        add_layer_to_list(vector);
-        //Para hacer zoom a la provincia
-        map.getView().fit(vectorSource.getExtent());
-      });
-}
-function addWFSFeatureDistancias(){
-     var vectorSource = new ol.source.Vector();
+      var vectorSource = new ol.source.Vector();
       var vector = new ol.layer.Vector({
           name: 'GetFeature distancias',
-        source: vectorSource,
-        style: new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'rgba(0, 255, 0, 1.0)',
-            width: 2
+          source: vectorSource,
+          style: new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: 'rgba(0, 0, 255, 1.0)',
+              width: 2
+              }),
           })
-        })
-      });
-      // generate a GetFeature request
-      var featureRequest = new ol.format.WFS().writeGetFeature({
-        srsName: 'EPSG:3857',
-        featureNS: 'p_casas_rurales',
-        featurePrefix: 'p_casas_rurales',
-        featureTypes: ['distancias_zonas'],
-        outputFormat: 'application/json',
-        filter: //ol.format.filter.and(
-          ol.format.filter.greaterThan('distancia', 9),
-         // ol.format.filter.Intersects('the_geom','<gml:MultiSurface srsName="urn:x-ogc:def:crs:EPSG:4258" srsDimension="2"><gml:surfaceMember><gml:Polygon><gml:exterior><gml:LinearRing><gml:posList>42.0934502 -5.51673215 42.09294931 -5.51041275 42.09116138 -5.51022123 42.08367326 -5.49846484 42.07512879 -5.49092487 42.06623012 -5.48516183 42.05982093 -5.48336473 42.05646234 -5.47709487 42.05242602 -5.48092551 42.04364552 -5.46421237 42.04068085 -5.45463789 42.03150223 -5.43867732 42.03516113 -5.43049388 42.03564244 -5.42477404 42.03067553 -5.42158924 42.01365534 -5.44743845 42.01072961 -5.44780918 42.01195573 -5.44309827 42.00902767 -5.43638087 42.00432303 -5.43145584 41.99341042 -5.43346666 41.98307075 -5.43351918 41.96738964 -5.43827978 41.97288588 -5.4470342 41.97573486 -5.45615904 41.97471678 -5.4608026 41.97545945 -5.46312439 41.97765509 -5.46278663 41.97815936 -5.46698216 41.98456507 -5.48480474 41.995537 -5.48840707 41.99623369 -5.48410001 41.99926007 -5.47908652 42.004425 -5.47845414 42.00629018 -5.47172835 42.01009734 -5.47141705 42.01357957 -5.4728079 42.02585728 -5.48766982 42.02996896 -5.48826515 42.03329466 -5.49270756 42.03880562 -5.48650807 42.04557321 -5.49584607 42.04919443 -5.49621754 42.05750731 -5.50774587 42.06254897 -5.50286853 42.06652144 -5.50158653 42.07702116 -5.50904679 42.08469629 -5.51839264 42.09062269 -5.51795028 42.09714117 -5.52089283 42.0934502 -5.51673215</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:surfaceMember><gml:surfaceMember><gml:Polygon><gml:exterior><gml:LinearRing><gml:posList>42.26772942 -5.32206123 42.26718834 -5.32031962 42.27158409 -5.30643942 42.26923771 -5.30175835 42.26535983 -5.30068358 42.25692845 -5.30392881 42.25199648 -5.30332491 42.24946426 -5.30609332 42.24940533 -5.30723058 42.25209741 -5.3090501 42.24955525 -5.31676347 42.2411234 -5.31644259 42.2387331 -5.32729891 42.23871957 -5.33283694 42.23353471 -5.33625708 42.2308284 -5.33559977 42.23082452 -5.3371143 42.23274702 -5.34131766 42.24670294 -5.34057357 42.25103988 -5.34604337 42.25396432 -5.34660036 42.257254 -5.34603147 42.25922988 -5.34717158 42.26269714 -5.34540896 42.26776865 -5.34534254 42.26875952 -5.34136588 42.26968221 -5.33719259 42.27414573 -5.32850557 42.26772942 -5.32206123</gml:posList>    </gml:LinearRing></gml:exterior></gml:Polygon></gml:surfaceMember><gml:surfaceMember><gml:Polygon><gml:exterior><gml:LinearRing><gml:posList>42.31184148 -5.11200233 42.31183192 -5.10958747 42.31064895 -5.10878351 42.30929448 -5.09375398 42.2974842 -5.0870545 42.29223204 -5.08616536 42.29372329 -5.08240578 42.29160781 -5.0778967 42.28976007 -5.07897603 42.28501542 -5.07542397 42.28279982 -5.07643061 42.27888755 -5.07515001 42.27781202 -5.07187682 42.27915697 -5.07070815 42.27619601 -5.06611218 42.27788765 -5.06218975 42.26650332 -5.06625607 42.26588876 -5.0653751 42.26119098 -5.06819205 42.25752319 -5.05480936 42.26141965 -5.04591585 42.2675574 -5.04160399 42.27147086 -5.04233661 42.27725007 -5.03893382 42.28911875 -5.03695156 42.29282864 -5.04153499 42.29712699 -5.03834998 42.29510697 -5.02631219 42.29264198 -5.02004691 42.29060484 -5.00528074 42.28912873 -5.00214097 42.28112851 -5.00592597 42.27529705 -5.00620185 42.26656853 -5.0099139 42.26145718 -5.00866033 42.25896821 -5.01654637 42.2538582 -5.01880793 42.2483508 -5.01550482 42.2422515 -5.00897163 42.23600414 -5.01036091 42.23102694 -5.00916067 42.22811546 -5.01034059 42.21989315 -5.02466711 42.21729538 -5.02489911 42.20561349 -5.02038287 42.19463101 -5.01294772 42.19341403 -5.01455614 42.18975963 -5.01239334 42.17861691 -5.0197041 42.17362839 -5.03189441 42.1646001 -5.02603674 42.15391168 -5.02696631 42.15679688 -5.01502718 42.15377519 -5.01529435 42.14865235 -5.0085359 42.14956467 -5.00580538 42.14909283 -5.00240181 42.14655524 -4.99918738 42.14779699 -4.99511171 42.14490203 -4.99430674 42.14540598 -4.99018379 42.14438183 -4.98848167 42.14684855 -4.98124929 42.14882131 -4.982267 42.15103254 -4.97990342 42.15575888 -4.96639789 42.15154814 -4.96563803 42.15129306 -4.96370572 42.14960359 -4.96244327 42.15155649 -4.96094236 42.1527415 -4.94424028 42.1511621 -4.9385883 42.1502143 -4.92749744 42.14460989 -4.92979605 42.1305111 -4.92899259 42.12068827 -4.9250773 42.11831275 -4.9287069 42.11055217 -4.92426229 42.0964988 -4.92019724 42.09129294 -4.91213225 42.09079261 -4.9178243 42.07839343 -4.90417692 42.07830995 -4.91675908 42.0734967 -4.92774726 42.05431109 -4.94762548 42.05101569 -4.94969978 42.01987923 -4.93813144 42.01791572 -4.93600658 42.00705644 -4.96553972 41.99759051 -4.96976388 41.99851861 -4.97026342 41.99354728 -4.97549453 41.98899595 -4.97149076 41.97361491 -4.97610945 41.96991122 -4.98301876 41.96668265 -4.98326858 41.96528361 -4.98553009 41.96539993 -4.98817646 41.96256864 -4.99407374 41.95798881 -4.99537885 41.95106104 -5.0001455 41.94796757 -5.00246163 41.94722792 -5.00510468 41.94321097 -5.00150455 41.94082636 -5.0019005 41.93794693 -5.00485011 41.92889147 -4.99734219 41.92556894 -4.99003865 41.92177424 -4.98709883 41.91344639 -4.98692491 41.91074527 -4.98532188 41.91002606 -4.98368397 41.91189161 -4.98309064 41.9136003 -4.97645142 41.91798009 -4.97576658 41.91852837 -4.97739938 41.92016619 -4.97328947 41.91937929 -4.97191473 41.92466867 -4.96703656 41.92827727 -4.95719738 41.93115318 -4.95543996 41.93382859 -4.9495873 41.93121027 -4.94306687 41.92973215 -4.94206923 41.92665233 -4.93244809 41.91899855 -4.9280689 41.91735275 -4.93006925 41.915029 -4.92793732 41.91783909 -4.9166385 41.91623222 -4.91578247 41.91565924 -4.91179813 41.92824138 -4.89984777 41.93278473 -4.8897785 41.93304412 -4.87396132 41.93172764 -4.8690861 41.92321282 -4.86931996 41.91760128 -4.86769701 41.91828067 -4.86302598 41.91747394 -4.86056659 41.91511007 -4.85915942 41.91559446 -4.85594187 41.91310394 -4.85790753 41.91318721 -4.85610124 41.8985326 -4.83826893 41.88680906 -4.83246071 41.88039774 -4.83238592 41.87506106 -4.82930506 41.8674445 -4.82289455 41.86299483 -4.81382806 41.85638561 -4.80973794 41.84824833 -4.80715956 41.84127045 -4.80186845 41.83409812 -4.79919833 41.83002235 -4.79548356 41.82204819 -4.79339441 41.81949696 -4.78892841 41.81802389 -4.78924868 41.82312127 -4.77008864 41.82585435 -4.76923666 41.82578634 -4.75842143 41.83243488 -4.75536381 41.84055309 -4.748058 41.85451603 -4.72644018 41.86177712 -4.73229832 41.86536556 -4.7314433 41.86882718 -4.72824715 41.8743053 -4.71729596 41.88728164 -4.7010943 41.89160636 -4.6851049 41.89800728 -4.67790749 41.89986478 -4.67837805 41.900505 -4.66967851 41.89946846 -4.66476901 41.89681319 -4.65843136 41.89459166 -4.65821715 41.89150908 -4.65150768 41.89124908 -4.64389488 41.88957559 -4.63999476 41.88822261 -4.63950209 41.88810984 -4.63730549 41.88268874 -4.63472044 41.87912383 -4.63649757 41.87576803 -4.63371252 41.87103022 -4.63500181 41.87081639 -4.63357434 41.86822736 -4.63196606 41.86827091 -4.62953315 41.86517702 -4.63239461 41.86172563 -4.63189718 41.85824584 -4.6264113 41.8571931 -4.62697494 41.85398294 -4.62406256 41.85200852 -4.61845909 41.84845608 -4.61361138 41.84232594 -4.60888032 41.83864136 -4.60378979 41.8368101 -4.59104992 41.82399463 -4.58380896 41.81257406 -4.56608296 41.81623231 -4.56729168 41.81837586 -4.56464693 41.816269 -4.55331435 41.81898774 -4.54807026 41.82611963 -4.54549646 41.82882195 -4.55014946 41.83101497 -4.54915459 41.83082696 -4.54572996 41.8293573 -4.54384016 41.82776617 -4.529472 41.82317775 -4.52095817 41.82330334 -4.51212301 41.82426335 -4.50966512 41.82626156 -4.5090738 41.82682976 -4.50558301 41.82998574 -4.50530769 41.8323114 -4.50858966 41.83206969 -4.50367054 41.83320581 -4.49943398 41.83841089 -4.49188351 41.83913462 -4.48468598 41.83819435 -4.47937703 41.84333157 -4.47841127 41.84310105 -4.47532253 41.84218792 -4.47559068 41.843028 -4.47329733 41.8397161 -4.47169181 41.83347013 -4.47413798 41.83204839 -4.47333464 41.82858892 -4.47831302 41.82036025 -4.4611469 41.81930112 -4.46580642 41.82063522 -4.46854596 41.8185387 -4.47401246 41.81830156 -4.47914815 41.82034192 -4.48366209 41.82009622 -4.48734078 41.78035785 -4.49365458 41.77865386 -4.49239978 41.77140615 -4.50118316 41.7702084 -4.49702869 41.76953161 -4.48463304 41.76332202 -4.46811747 41.75836327 -4.45006956 41.75831333 -4.44330826 41.76178061 -4.43397888 41.76813331 -4.42141592 41.78317297 -4.40396244 41.78519207 -4.3949571 41.78777353 -4.38929671 41.7864586 -4.38032709 41.78371106 -4.38261472 41.78233885 -4.38138193 41.77398312 -4.35392684 41.77245704 -4.34429372 41.77297485 -4.34160948 41.77154071 -4.33792204 41.77214645 -4.33385592 41.76930497 -4.33112628 41.76796962 -4.32587731 41.76344402 -4.31764002 41.76764613 -4.31799063 41.76972772 -4.31554285 41.76946351 -4.31344401 41.77592519 -4.3067896 41.77648805 -4.30402166 41.77456492 -4.29168604 41.77488348 -4.28657886 41.7885982 -4.2787415 41.79340027 -4.26967793 41.80525809 -4.26023354 41.80637372 -4.25623472 41.80292992 -4.24744046 41.81144425 -4.23633706 41.8139695 -4.23602446 41.80693781 -4.23159186 41.80697582 -4.22972661 41.80507919 -4.22769213 41.79940691 -4.21394652 41.80381615 -4.19631053 41.80403405 -4.19441259 41.80163527 -4.19035978 41.80351956 -4.17882662 41.8001935 -4.1702678 41.80124386 -4.16351004 41.79621631 -4.15386255 41.79886868 -4.15073242 41.80731022 -4.12319549 41.80027362 -4.11789694 41.79436627 -4.11035634 41.78534025 -4.10862434 41.78135732 -4.10415161 41.77471147 -4.10027176 41.77480946 -4.09661564 41.77962752 -4.08909274 41.7785608 -4.08379231 41.77062289 -4.07162759 41.77019756 -4.06407692 41.7721352 -4.06395247 41.77473416 -4.06145656 41.77392521 -4.05540322 41.76992006 -4.04820315 41.76835636 -4.04087498 41.76743204 -4.0444813 41.76820519 -4.0495829 41.75948497 -4.05273701 41.74068695 -4.05578559 41.73914263 -4.06308387 41.74116747 -4.06909407 41.73484008 -4.07634843 41.72931722 -4.07460913 41.72608544 -4.0763588 41.7265496 -4.06811868 41.72172231 -4.06029658 41.71956521 -4.05293987 41.7153016 -4.04937221 41.71108992 -4.04205567 41.69767147 -4.03188867 41.69238281 -4.02603623 41.68300476 -4.02625991 41.67133563 -4.02382845 41.6616631 -4.02474439 41.65711947 -4.02723067 41.63049413 -4.03036204 41.62564386 -4.03488259 41.62062338 -4.03528263 41.61440452 -4.02871401 41.61604424 -4.02260672 41.62036523 -4.01778951 41.61698734 -4.01169903 41.61936168 -4.00592647 41.61719739 -4.00312018 41.61596179 -4.00331708 41.61373208 -4.00492688 41.61196268 -4.00847605 41.61003294 -4.00873411 41.6086577 -3.9928589 41.60043783 -3.99244501 41.59839551 -3.99008586 41.59853912 -3.9859482 41.59748943 -3.98440835 41.58887694 -3.98461356 41.5859677 -3.98354961 41.58337123 -3.98066703 41.57452587 -3.98071327 41.57197558 -3.98297769 41.56494679 -3.98546181 41.55601156 -3.99386424 41.53097282 -3.99370894 41.52114594 -3.99578792 41.51668546 -3.99912319 41.51571125 -4.00549579 41.51716039 -4.00664476 41.51581294 -4.010339 41.51755968 -4.01144479 41.5182328 -4.01376828 41.51779662 -4.02739987 41.50995133 -4.03643095 41.50975971 -4.04268306 41.50787789 -4.04854836 41.50315667 -4.05165944 41.50059955 -4.05647057 41.4973155 -4.0580346 41.49474463 -4.06527685 41.49540353 -4.07865763 41.4896379 -4.09494965 41.48327296 -4.1087012 41.47777843 -4.13454985 41.47700255 -4.13650055 41.46993545 -4.14248474 41.48209899 -4.15831722 41.47606502 -4.16801878 41.4753921 -4.17834248 41.47109614 -4.19746199 41.45996687 -4.22783837 41.45573588 -4.23349371 41.46142422 -4.24392301 41.46208905 -4.24823437 41.45644908 -4.25991995 41.45059044 -4.26109971 41.45701445 -4.26503146 41.46127271 -4.27013118 41.45789554 -4.27414826 41.45882096 -4.28326628 41.45824776 -4.28780489 41.45502351 -4.29098588 41.45497898 -4.29414582 41.45772271 -4.30004324 41.45511083 -4.31349656 41.45331591 -4.31921921 41.44842908 -4.32042531 41.44575128 -4.32769746 41.44478564 -4.32785741 41.44497565 -4.33168 41.44897095 -4.33744813 41.44807951 -4.3466839 41.4505088 -4.34844603 41.44919969 -4.35788862 41.44993008 -4.36239326 41.44466416 -4.36134962 41.43888417 -4.36492767 41.43600195 -4.36491529 41.43921809 -4.36790319 41.43869921 -4.37289573 41.44173284 -4.37681398 41.44156978 -4.37914474 41.43843924 -4.38106564 41.44049249 -4.3885784 41.4390517 -4.38854773 41.43781596 -4.39092727 41.43785338 -4.39378883 41.43968811 -4.39401958 41.44164735 -4.41061631 41.43886603 -4.41778582 41.43983411 -4.41889611 41.43278863 -4.42560086 41.43338319 -4.43139463 41.43104421 -4.43188194 41.43052097 -4.43483854 41.42897076 -4.43057982 41.42814359 -4.43118397 41.42701254 -4.44312657 41.42563999 -4.44339542 41.42469947 -4.44942988 41.42326603 -4.45024764 41.42375337 -4.45302282 41.42139682 -4.45347295 41.4218693 -4.4545724 41.42039769 -4.4555567 41.42177357 -4.45715504 41.41913284 -4.46366538 41.41685021 -4.46254923 41.41663585 -4.46594259 41.41443961 -4.4658215 41.41307675 -4.4681599 41.4134424 -4.47337281 41.41194283 -4.47441579 41.4116273 -4.47724422 41.41197956 -4.48276785 41.41036916 -4.48471729 41.40911261 -4.48367183 41.40879002 -4.48633241 41.41024809 -4.48989505 41.41000657 -4.49532124 41.41150393 -4.49515216 41.41202504 -4.49802361 41.41393527 -4.50004161 41.41085885 -4.50180147 41.40965947 -4.51495826 41.40852226 -4.51649912 41.40598371 -4.51433463 41.40141362 -4.51596319 41.39409076 -4.5152789 41.36680132 -4.48400209 41.36565735 -4.48400003 41.36392692 -4.49590444 41.36012587 -4.49728793 41.35763088 -4.50005195 41.35336039 -4.49943995 41.35184301 -4.49699053 41.34961314 -4.49668847 41.34715449 -4.49942909 41.35019399 -4.49980959 41.34719668 -4.50447402 41.34687381 -4.5023032 41.34280325 -4.5022455 41.33532685 -4.49743699 41.32641035 -4.49391102 41.32616451 -4.48227921 41.32346101 -4.4781794 41.32226407 -4.47388687 41.31846061 -4.47055136 41.2958874 -4.46778677 41.29156194 -4.47146362 41.29495272 -4.48167958 41.29735433 -4.48264166 41.30118273 -4.49028915 41.30081799 -4.49341024 41.30240334 -4.49618167 41.30091162 -4.50006529 41.31129072 -4.50538038 41.31306041 -4.51123896 41.32008521 -4.52428088 41.32109939 -4.52862965 41.31928916 -4.53402348 41.31338841 -4.53881895 41.31236983 -4.54358542 41.30216557 -4.55954132 41.30319065 -4.56232499 41.30279041 -4.56526566 41.30665059 -4.57413775 41.31708865 -4.58669441 41.32058707 -4.59685114 41.31637618 -4.59977098 41.31313971 -4.60515133 41.30760452 -4.60096607 41.30265445 -4.6019798 41.29893063 -4.59577339 41.291946 -4.59020514 41.28821505 -4.58053715 41.28486529 -4.57652765 41.27966697 -4.57529212 41.2770276 -4.57662559 41.27520058 -4.57388332 41.27323872 -4.57639107 41.27033015 -4.58551383 41.27049561 -4.58788167 41.2641673 -4.59867492 41.25589635 -4.60401143 41.25405077 -4.60329791 41.24136458 -4.61517157 41.23434161 -4.62393576 41.23288135 -4.62911374 41.22735243 -4.63725644 41.22411229 -4.64781725 41.22142046 -4.65086332 41.21984114 -4.64918925 41.21883652 -4.65015414 41.21693318 -4.64846009 41.21329344 -4.64851184 41.20914351 -4.64645151 41.20010334 -4.65062536 41.19726004 -4.64537839 41.19400209 -4.64266138 41.19368254 -4.64043539 41.1899019 -4.63836157 41.19060599 -4.63635201 41.18483196 -4.63192785 41.18273158 -4.63204262 41.1766848 -4.62842318 41.17079433 -4.62775279 41.16823522 -4.63418584 41.16809995 -4.64369462 41.17216829 -4.65271314 41.18032807 -4.66591353 41.1857359 -4.6805612 41.18446609 -4.68300875 41.18068014 -4.68443782 41.17450798 -4.70234009 41.16691592 -4.70894967 41.15696737 -4.72133617 41.14931763 -4.72210118 41.15077247 -4.72900334 41.15041202 -4.73739516 41.14896225 -4.73915628 41.14974209 -4.74892468 41.14235819 -4.76707796 41.14421943 -4.77139374 41.14499774 -4.77875475 41.14355862 -4.78618686 41.1398939 -4.78900656 41.13579281 -4.79612694 41.13516346 -4.80584341 41.12937717 -4.81352342 41.12636136 -4.81227297 41.12202017 -4.81339229 41.11676536 -4.81704711 41.10971365 -4.81754333 41.10795378 -4.81890011 41.10344906 -4.8149652 41.09915427 -4.82795709 41.10046996 -4.84655754 41.09977774 -4.85320635 41.10073072 -4.8555551 41.09401519 -4.8636769 41.0978868 -4.87210939 41.09916595 -4.87265777 41.10026799 -4.87024798 41.10035145 -4.87176257 41.10345851 -4.87456582 41.1053058 -4.87894117 41.10447149 -4.8809418 41.1093441 -4.88977453 41.11313703 -4.89411136 41.11449524 -4.90188012 41.11873093 -4.90501591 41.11876376 -4.90901889 41.12413797 -4.92382648 41.12926887 -4.93101693 41.13258108 -4.94081173 41.13762414 -4.94514243 41.14070794 -4.95080975 41.13869049 -4.95981703 41.140114 -4.96296919 41.14974949 -4.96468666 41.15230271 -4.96761105 41.15120814 -4.9773502 41.15223734 -4.98454331 41.1548924 -4.9825736 41.15598364 -4.98771927 41.16080372 -4.98973615 41.15892735 -5.00444617 41.16016088 -5.00705815 41.16195472 -5.00749425 41.16196667 -5.01093918 41.16424853 -5.01385768 41.1622029 -5.01391423 41.16233578 -5.01558693 41.15678542 -5.02391428 41.1535533 -5.021777 41.13862011 -5.05986181 41.13940233 -5.07599493 41.14285094 -5.08353881 41.14709833 -5.10012939 41.14268104 -5.10231185 41.13501102 -5.11144303 41.13638783 -5.11298833 41.13559903 -5.12404297 41.13204289 -5.12492889 41.13238135 -5.12854957 41.13363812 -5.12829235 41.13612108 -5.13235197 41.13685177 -5.13180373 41.14117023 -5.13644743 41.14400361 -5.13617007 41.14723312 -5.14220906 41.14763001 -5.14508181 41.1490162 -5.14561559 41.14993376 -5.14857692 41.15124687 -5.14867941 41.15721237 -5.16008889 41.15672402 -5.16163403 41.16026117 -5.16608857 41.16129136 -5.17451309 41.16333512 -5.17455683 41.16313668 -5.17791141 41.16459171 -5.17860323 41.16525015 -5.17664643 41.16729189 -5.17965817 41.16600233 -5.18164172 41.16672114 -5.18506254 41.16210884 -5.19126188 41.16315536 -5.19637408 41.16645419 -5.20050114 41.16493111 -5.20713671 41.16683447 -5.20792772 41.15958416 -5.21821975 41.16215154 -5.22240635 41.16755427 -5.21734448 41.17055762 -5.22227336 41.17652945 -5.22459726 41.17821463 -5.22361714 41.17844441 -5.22571121 41.17934165 -5.22448982 41.18145859 -5.22494297 41.1832748 -5.22836657 41.18671205 -5.2276128 41.18832143 -5.22962286 41.18923119 -5.22868789 41.19052853 -5.22960233 41.19001988 -5.2307536 41.19216087 -5.23460613 41.19314886 -5.2347471 41.19388927 -5.23882654 41.19714123 -5.2425029 41.19611426 -5.24436389 41.19615655 -5.24865817 41.19814592 -5.24779617 41.19977414 -5.2529678 41.19763277 -5.25561319 41.19725758 -5.26417425 41.19925063 -5.26861947 41.19796122 -5.27189007 41.19578033 -5.2696682 41.19546473 -5.27059934 41.19719048 -5.27397409 41.19567551 -5.27816672 41.19672342 -5.27891859 41.19504818 -5.28255705 41.19615926 -5.28284609 41.19561535 -5.2884674 41.18731484 -5.29189818 41.18648871 -5.29041481 41.18388937 -5.29158788 41.18199147 -5.28874393 41.18117001 -5.29697713 41.1854342 -5.30174024 41.18326753 -5.307387 41.18445337 -5.30844208 41.17762219 -5.32697796 41.17761872 -5.33026806 41.17826684 -5.33250842 41.18159539 -5.32781015 41.18435063 -5.32963649 41.18838452 -5.33857876 41.18999165 -5.33616788 41.19410493 -5.34029685 41.2041523 -5.32984998 41.21191092 -5.31538312 41.21650713 -5.3112153 41.21974538 -5.31007685 41.22140047 -5.31153085 41.22209414 -5.30838209 41.22479351 -5.30761811 41.22654506 -5.3047092 41.22409008 -5.30271418 41.22625253 -5.29365172 41.2260485 -5.29801099 41.22932395 -5.29545327 41.22980912 -5.29777291 41.23175788 -5.29850933 41.23599611 -5.2969039 41.23629237 -5.29469491 41.23760563 -5.29523012 41.23741227 -5.29679836 41.24061023 -5.29496539 41.24359037 -5.29727733 41.25459422 -5.29920268 41.25927175 -5.30220759 41.26281614 -5.30152048 41.2691899 -5.29174059 41.27071481 -5.29656914 41.28253694 -5.294954 41.29234412 -5.29726837 41.30033103 -5.30367582 41.30837371 -5.30324246 41.31159638 -5.3064737 41.31597895 -5.3035104 41.31894035 -5.3058488 41.31869983 -5.30975885 41.32044027 -5.3159254 41.32633187 -5.32212021 41.34041674 -5.32442541 41.35820889 -5.33312782 41.37064373 -5.33462453 41.37773401 -5.33407716 41.38391276 -5.33184664 41.39418433 -5.32229859 41.40145323 -5.32048801 41.40866691 -5.31112628 41.41405291 -5.3075366 41.42085153 -5.31835506 41.42559851 -5.3392379 41.43623932 -5.33327683 41.44412892 -5.33284139 41.44721484 -5.32723016 41.45020298 -5.33222118 41.45534311 -5.3247912 41.45947727 -5.32923709 41.45948237 -5.33387074 41.46129123 -5.33749164 41.47925601 -5.34473636 41.48128135 -5.34213857 41.47570197 -5.33615331 41.47565006 -5.3324989 41.4779441 -5.33218595 41.47807914 -5.32863386 41.48176661 -5.32087316 41.48759473 -5.31323567 41.4987113 -5.30234625 41.50116614 -5.29623922 41.50105543 -5.28959809 41.50635528 -5.27715636 41.50440335 -5.27019878 41.50542037 -5.26886837 41.50368463 -5.26188278 41.50766959 -5.2575523 41.51387002 -5.24724677 41.51978811 -5.24167519 41.51772504 -5.23383858 41.52021977 -5.23152756 41.52843127 -5.22887322 41.53078908 -5.23314937 41.53416493 -5.23369699 41.54051024 -5.23947783 41.54465758 -5.24710179 41.54676977 -5.24778642 41.54709424 -5.25742489 41.54811315 -5.25690883 41.55164812 -5.26400996 41.55130001 -5.27024452 41.55018065 -5.27265122 41.55268132 -5.27417767 41.55704744 -5.27200453 41.55918788 -5.2726191 41.56214797 -5.28050558 41.56425152 -5.2793443 41.56692713 -5.28294022 41.56862416 -5.28320391 41.57035403 -5.28770231 41.57437197 -5.29307356 41.5846743 -5.28091417 41.59004658 -5.26795457 41.59287785 -5.26642204 41.59393685 -5.27071832 41.59608489 -5.27186143 41.59871294 -5.27012981 41.60113663 -5.2705387 41.60507945 -5.27746889 41.60889682 -5.29248376 41.60828275 -5.29437007 41.60949966 -5.29747342 41.60833446 -5.30573627 41.61169081 -5.30858008 41.61036826 -5.3161174 41.61141072 -5.31757075 41.61085298 -5.32021497 41.61591917 -5.32889379 41.62512864 -5.32420774 41.63014189 -5.32526412 41.63416913 -5.32341605 41.63426532 -5.32177482 41.63601425 -5.32169348 41.63676981 -5.31951161 41.64339164 -5.32475595 41.64867057 -5.32291638 41.6496307 -5.32442792 41.65764936 -5.32428391 41.66256978 -5.32235894 41.68052645 -5.32735356 41.68179766 -5.32818025 41.68300716 -5.33204441 41.68471054 -5.33198575 41.68679538 -5.33841696 41.6960127 -5.34132239 41.69911207 -5.34082187 41.7004301 -5.34287662 41.70202966 -5.34569878 41.69969448 -5.35813597 41.71705414 -5.356162 41.7199209 -5.35865895 41.72713104 -5.36016099 41.72884683 -5.36169059 41.72941564 -5.36555874 41.72700889 -5.37002691 41.72134105 -5.37147759 41.71978719 -5.37519505 41.72803838 -5.37555912 41.72893397 -5.37710705 41.73325598 -5.37802379 41.74136473 -5.38438363 41.75257232 -5.39069176 41.76051038 -5.39138337 41.76883584 -5.38210448 41.7753061 -5.37147948 41.77784569 -5.37017738 41.77934721 -5.36505882 41.78087359 -5.34949674 41.78612939 -5.34571757 41.78916854 -5.34154429 41.78840379 -5.335319 41.78926288 -5.33514561 41.78895256 -5.32914131 41.78983859 -5.32630933 41.78821042 -5.32265236 41.79032751 -5.32039413 41.79098533 -5.31636228 41.79898966 -5.30617936 41.80403307 -5.29539459 41.81479638 -5.27861155 41.8228924 -5.27681557 41.82768551 -5.28714828 41.82625791 -5.29054123 41.8275571 -5.29493437 41.82551541 -5.29840148 41.82646651 -5.29992862 41.8255677 -5.30253341 41.82667856 -5.30417467 41.82599578 -5.30588407 41.82679581 -5.30640651 41.82571529 -5.30774031 41.82907335 -5.32653736 41.83179525 -5.33042919 41.83534687 -5.32716203 41.83976974 -5.31999982 41.84080539 -5.32178359 41.85783825 -5.30647368 41.86391138 -5.30945102 41.86709219 -5.30533648 41.87584465 -5.3098807 41.8823411 -5.31151267 41.89159033 -5.31106284 41.90033546 -5.30656839 41.91116714 -5.29591439 41.91993752 -5.29373277 41.92208682 -5.2988384 41.9306028 -5.30933559 41.93225773 -5.30988977 41.93751162 -5.32087496 41.93747281 -5.33521516 41.94012088 -5.33475699 41.94258354 -5.33145723 41.94948961 -5.31239425 41.95355165 -5.30566405 41.96131847 -5.29964561 41.96799965 -5.28844585 41.97148641 -5.28882421 41.97411411 -5.28530974 41.98101267 -5.26943079 41.98190749 -5.26334289 41.98093978 -5.25440075 41.98461113 -5.26050547 41.97879984 -5.28064952 41.99132836 -5.30177659 41.99110106 -5.3032291 41.99278705 -5.30223971 42.00164153 -5.30842712 42.00282727 -5.30947218 42.00262345 -5.31332858 42.00662098 -5.31784472 42.01886632 -5.32331399 42.02039764 -5.32551953 42.02016608 -5.33204512 42.02258599 -5.34894629 42.03548731 -5.37145673 42.03964489 -5.37639567 42.04146612 -5.37629445 42.04319766 -5.37443792 42.04677521 -5.37563465 42.05143305 -5.37119242 42.06406397 -5.37313739 42.07505748 -5.3780441 42.08572228 -5.38877987 42.08981002 -5.3901183 42.09951523 -5.3763952 42.10319024 -5.37723397 42.10384121 -5.37971335 42.10981411 -5.38048125 42.11280497 -5.38000056 42.11289088 -5.37759685 42.11421615 -5.37796091 42.11829607 -5.37273083 42.12141385 -5.37525454 42.12671966 -5.37518683 42.12801126 -5.3723921 42.1300645 -5.37152507 42.13791079 -5.37619829 42.13844804 -5.37460917 42.14197874 -5.37589081 42.14663455 -5.3802402 42.15935234 -5.38145568 42.16333544 -5.37959584 42.16688753 -5.38504341 42.17254441 -5.38887601 42.18942172 -5.38711442 42.19788619 -5.38022698 42.20528759 -5.38851169 42.22144324 -5.38810347 42.225404 -5.38082533 42.22237365 -5.37409591 42.2228538 -5.36829814 42.22515187 -5.36123527 42.21924326 -5.35295806 42.22046484 -5.34916275 42.21760495 -5.34104845 42.21633652 -5.34054117 42.21675151 -5.3356499 42.21347368 -5.3374067 42.20862831 -5.33211592 42.20680007 -5.32680359 42.20818301 -5.32433477 42.20529879 -5.31733669 42.19977632 -5.312084 42.19926603 -5.30746288 42.1996365 -5.30650747 42.20062224 -5.3080937 42.20247505 -5.30820963 42.20599914 -5.30583063 42.20829076 -5.30607152 42.21544142 -5.29978989 42.21978091 -5.29985061 42.22215379 -5.3018754 42.22264604 -5.29933677 42.22535884 -5.29698767 42.22992781 -5.28692616 42.21639775 -5.27669691 42.2154145 -5.27496547 42.21617982 -5.27361183 42.21089816 -5.26564498 42.21075962 -5.25714805 42.21290931 -5.25316635 42.21316726 -5.24920195 42.21473052 -5.24571994 42.21390066 -5.24440638 42.21451623 -5.24148431 42.21936136 -5.2327144 42.22394222 -5.23102208 42.2241416 -5.22818175 42.22672363 -5.22599457 42.23132003 -5.22952499 42.23032698 -5.235658 42.23174121 -5.24255468 42.23352517 -5.2448113 42.23518443 -5.24470051 42.23607567 -5.25160357 42.23977485 -5.25400154 42.24559318 -5.24984539 42.24544856 -5.24849483 42.25080097 -5.2460425 42.2638677 -5.24468807 42.26618183 -5.23871994 42.27130813 -5.23538506 42.27334868 -5.23650007 42.27564888 -5.23029997 42.26442927 -5.23161369 42.26246453 -5.22845267 42.27792307 -5.22031483 42.27799346 -5.21667914 42.27612555 -5.21314546 42.26930022 -5.20702576 42.26471046 -5.20030614 42.26402085 -5.201046 42.26054185 -5.19790609 42.26420927 -5.18272057 42.26804912 -5.18348358 42.27110436 -5.17815682 42.2718265 -5.16618933 42.27107993 -5.16423571 42.27390731 -5.15613523 42.2777172 -5.15610756 42.28154974 -5.14431677 42.29653083 -5.12957708 42.29781741 -5.12964465 42.30100542 -5.12624621 42.30182485 -5.12333795 42.30359809 -5.12338544 42.30769406 -5.11958005 42.30971025 -5.11378746 42.31184148 -5.11200233</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:surfaceMember></gml:MultiSurface>')
-       // )
-      });
+        });
+        //geometría de la provincia obtenida en otra consulta
+        var geom= new ol.geom.MultiPolygon([[[[-614119.8139002897,5174988.131379608],[-613416.3419002825,5174912.991179562],[-613395.0217002793,5174644.778979278],[-612086.3061002758,5173521.5502781235],[-611246.9600002734,5172240.030676764],[-610605.4219002681,5170905.56897534],[-610405.3696002675,5169944.551674302],[-609707.4121002596,5169440.991173792],[-610133.8363002673,5168835.8514731],[-608273.3389002535,5167519.581571753],[-607207.5119002478,5167075.1933713285],[-605430.7901002357,5165699.500469904],[-604519.8135002317,5166247.872970557],[-603883.0841002292,5166320.010270672],[-603528.5535002257,5165575.603369856],[-606406.0743002411,5163025.173566913],[-606447.3435002422,5162586.828666413],[-605922.9278002434,5162770.529166653],[-605175.1497002338,5162331.847166203],[-604626.8989002296,5161627.040665458],[-604850.7415002352,5159992.413563639],[-604856.5883002343,5158443.868061919],[-605386.5359002418,5156095.827559296],[-606361.0737002473,5156918.75126015],[-607376.8455002516,5157345.34296058],[-607893.7642002512,5157192.898660376],[-608152.224700257,5157304.103560483],[-608114.6255002568,5157632.878960855],[-608581.6702002594,5157708.389760907],[-610565.6712002713,5158667.653061855],[-610966.6799002757,5160310.937463649],[-610487.220800267,5160415.2922637975],[-609929.1216002617,5160868.612964323],[-609858.7254002661,5161642.317065183],[-609110.0138002563,5161921.7355655385],[-609075.3604002594,5162492.102066169],[-609230.1886002593,5163013.820766733],[-610884.609600267,5164853.532668678],[-610950.881300268,5165469.713169347],[-611445.4081002725,5165968.134269869],[-610755.284900265,5166794.117170818],[-611794.7865002742,5167808.542971869],[-611836.1373002726,5168351.387372472],[-613119.4653002828,5169597.662673758],[-612576.5230002778,5170353.591974621],[-612433.8110002764,5170949.25347528],[-613264.2833002841,5172523.838376955],[-614304.6590002909,5173674.998978153],[-614255.4151002889,5174563.971379129],[-614582.9784002879,5175541.850880183],[-614119.8139002897,5174988.131379608]]],[[[-592449.1458001588,5201168.770509088],[-592255.271500159,5201087.375909012],[-590710.1343001551,5201748.645209783],[-590189.0403001531,5201395.66450942],[-590069.3971001552,5200812.320808799],[-590430.6543001552,5199544.122507431],[-590363.4287001552,5198802.364806623],[-590671.6068001535,5198421.545506209],[-590798.2052001597,5198412.683106188],[-591000.7533001563,5198817.542606621],[-591859.4025001582,5198435.229906172],[-591823.6823001604,5197167.278704812],[-593032.2015001609,5196807.865204367],[-593648.6928001667,5196805.8304043375],[-594029.4208001676,5196026.264103485],[-593956.2497001701,5195619.383903056],[-594124.8466001678,5195618.801903046],[-594592.7617001717,5195907.836803333],[-594509.9307001714,5198006.290505598],[-595118.8252001746,5198658.5005062735],[-595180.8292001737,5199098.316006742],[-595117.5006001733,5199593.087107279],[-595244.4178001751,5199890.272507601],[-595048.2034001714,5200411.795708161],[-595040.8093001763,5201174.671508984],[-594598.1298001693,5201323.72970916],[-594133.5611001643,5201462.53280933],[-593166.5263001606,5202134.0228100885],[-592449.1458001588,5201168.770509088]]],[[[-569065.4965000806,5207806.8582169805],[-568796.6752000817,5207805.418816983],[-568707.1791000769,5207627.3425167985],[-567034.0989000738,5207423.452216623],[-566288.3170000741,5205645.829414739],[-566189.3385000767,5204855.409613884],[-565770.8229000758,5205079.827014142],[-565268.8751000748,5204761.470313813],[-565389.0256000734,5204483.414413515],[-564993.6121000719,5203769.455412752],[-565105.6701000708,5203436.076912397],[-564963.114500074,5202847.4328117715],[-564598.7445000693,5202685.613911602],[-564468.6490000671,5202887.9691118235],[-563957.0287000684,5202442.482211365],[-563520.3850000688,5202696.9927116465],[-563973.045700067,5200984.330409788],[-563874.9773000658,5200891.884309695],[-564188.5580000659,5200185.245108927],[-562698.8043000653,5199633.574708369],[-561708.7835000661,5200219.641109026],[-561228.7894000587,5201142.894210019],[-561310.3436000625,5201731.610010652],[-560931.5473000605,5202601.067211589],[-560710.8823000642,5204386.90771352],[-561221.1082000571,5204945.190714104],[-560866.5537000619,5205592.069414803],[-559526.5133000587,5205288.062414507],[-558829.0654000595,5204917.099614126],[-557185.3027000544,5204610.537413829],[-556835.7857000562,5204388.409513605],[-557257.1304000512,5203184.606312304],[-557287.8410000548,5202307.235311351],[-557701.0648000584,5200994.139309944],[-557561.5173000532,5200225.286109118],[-558439.3879000514,5199850.916008698],[-558691.1433000558,5199082.355707865],[-558323.4431000599,5198254.097606972],[-557596.171000057,5197336.908806004],[-557750.8249000545,5196397.546704998],[-557617.2154000506,5195649.233504186],[-557748.5634000578,5195211.524703709],[-559343.3842000561,5193975.503102344],[-559369.2103000578,5193585.025401917],[-558866.4650000553,5191829.288800037],[-558038.787200056,5190178.965398272],[-558217.8356000548,5189996.108798062],[-557977.0743000528,5189447.042197471],[-558790.9041000619,5187773.06229565],[-560147.9236000574,5187023.728194813],[-559495.8507000589,5185667.725393348],[-559599.3303000623,5184062.628291598],[-558270.2717000525,5184495.877292097],[-558300.0131000569,5184042.1332915975],[-557547.6665000566,5183272.925790781],[-557243.705800054,5183409.909090939],[-556864.8226000525,5183339.061990858],[-556506.9932000539,5182958.057990451],[-556053.2920000512,5183144.497590671],[-555963.6836000521,5182709.846290199],[-555504.7187000497,5182785.507690288],[-555315.2390000543,5182631.744790127],[-554510.1345000507,5183002.095790537],[-554623.4259000542,5183298.294190863],[-554360.3128000502,5183630.30919123],[-552856.884000045,5184340.006092024],[-552772.2974000454,5183707.728491345],[-552557.1935000449,5183669.427191296],[-552416.6580000479,5183415.751891032],[-552249.5778000413,5183708.982891354],[-550390.3098000438,5183886.9166915715],[-549761.1343000454,5183649.76399133],[-548526.5058000388,5183507.449491194],[-548782.3858000421,5182665.984190273],[-548692.9451000368,5180549.472287965],[-548257.0976000406,5179075.147086369],[-548661.1422000399,5178718.634985975],[-548166.3702000403,5177554.040584712],[-547713.8516000401,5175445.480082407],[-546816.0613000377,5174664.514981569],[-547449.6970000386,5174589.459981478],[-545930.4773000327,5172729.648379461],[-547331.1175000407,5172717.128979428],[-548554.3155000394,5171995.265778613],[-550767.148600042,5169118.46357542],[-550998.0589000453,5168624.418674878],[-549710.2776000408,5163957.727569753],[-549473.7391000405,5163663.515769427],[-552761.3531000486,5162036.529067581],[-553231.5850000496,5160618.527466005],[-553287.1925000512,5160757.548066155],[-553869.5174000516,5160012.91286532],[-553423.8199000482,5159331.239264574],[-553937.9698000484,5157027.909862014],[-554707.1108000568,5156473.36136138],[-554734.9204000517,5155989.979160839],[-554986.6712000526,5155780.520760613],[-555281.2635000538,5155797.936060621],[-555937.7452000584,5155374.061460147],[-556083.0301000536,5154688.453259371],[-556613.6510000557,5153651.448458209],[-556871.4817000591,5153188.428357701],[-557165.7045000598,5153077.724057563],[-556764.9395000591,5152476.520356909],[-556809.0162000534,5152119.6432565125],[-557137.366000057,5151688.728356022],[-556301.5875000567,5150333.681754533],[-555488.5617000542,5149836.550253992],[-555161.3023000506,5149268.803653363],[-555141.9413000565,5148022.943451971],[-554963.4928000523,5147618.88615153],[-554781.1614000535,5147511.303751415],[-554715.1125000527,5147790.363851724],[-553976.0375000559,5148045.967052024],[-553899.8023000527,5148701.173152757],[-554081.5640000515,5148783.197552841],[-553624.0514000496,5149028.224553121],[-553471.0163000511,5148910.4992529955],[-552927.980200047,5149701.853453893],[-551832.6879000447,5150241.780654507],[-551637.0533000503,5150672.103154994],[-550985.5377000452,5151072.442055452],[-550259.687400041,5150680.64555502],[-550148.6297000434,5150459.471254775],[-549077.6101000407,5149998.649454271],[-548590.1207000449,5148853.537053012],[-548812.7982000405,5148607.32095274],[-548575.4732000412,5148259.691952351],[-547317.6941000379,5148680.078652838],[-547222.4012000412,5148439.690352573],[-546778.8668000358,5148353.973252486],[-545448.5582000358,5150236.409654599],[-544327.6528000373,5150916.240455377],[-542566.8927000359,5150955.054455445],[-542024.1855000294,5150758.061355232],[-542050.2181000324,5149484.034353817],[-541869.5529000328,5148644.501252876],[-541349.5754000256,5148746.139553002],[-541075.7975000291,5148625.451752877],[-540919.1528000322,5148271.820252476],[-540560.9768000272,5148344.283652565],[-540779.7924000279,5147971.715852151],[-540578.7169000263,5147984.173052168],[-538593.633400025,5145792.223149737],[-537947.0651000263,5144039.04714779],[-537938.7403000259,5143080.414546715],[-537595.7804000287,5142282.536145826],[-536882.1650000243,5141143.913244555],[-535872.8889000244,5140478.781543822],[-535417.5786000263,5139490.928242724],[-535130.5543000249,5138274.8217413565],[-534541.550700025,5137232.109140192],[-534244.3142000233,5136160.457738993],[-533830.7881000255,5135551.531138306],[-533598.2251000206,5134360.292736968],[-533101.0720000232,5133979.201936541],[-533136.7240000229,5133759.168736295],[-531003.8390000201,5134520.589037177],[-530908.9969000204,5134928.8662376385],[-529705.0506000194,5134918.706337637],[-529364.6783000149,5135911.9629387595],[-528551.3985000135,5137124.91904013],[-526144.9141000152,5139211.507842496],[-526797.0397000165,5140296.768443711],[-526701.8585000131,5140833.151144324],[-526346.0655000134,5141350.6052449],[-525126.9840000109,5142169.549445832],[-523323.4240000118,5144109.712648022],[-521543.4918000069,5144756.41164876],[-520742.279900009,5145713.657449832],[-520794.66280000674,5145991.462250144],[-519826.2335000096,5146087.213750256],[-519279.71060000773,5145932.188150082],[-518574.2073000063,5145535.077349646],[-518550.3610000088,5145202.846049282],[-517803.4668000087,5144741.864748769],[-516956.013100007,5144702.98374873],[-516521.8540000058,5144452.734148456],[-516467.0107000039,5144250.417648224],[-516222.4857000039,5144233.554348206],[-515934.7188000034,5143422.957847314],[-516132.54900000157,5142889.948746702],[-515822.5184000078,5142388.231146148],[-515966.0412000054,5141679.937345353],[-515807.13610000827,5141647.970845317],[-515628.10360000364,5141260.940044887],[-515357.27250000945,5141267.449944896],[-515675.80960000434,5140804.968244371],[-515620.4360000038,5140289.071743799],[-515009.74970000074,5139768.958343216],[-515072.4939000092,5139611.615543035],[-514748.2900000052,5139131.835842509],[-514124.51370000775,5138836.757642175],[-513584.86990000197,5138305.867341582],[-513058.2100000065,5137389.823940559],[-512491.53530000814,5136839.269939943],[-511073.3393000026,5136565.6536396425],[-510267.2788000046,5134651.05223749],[-508294.0296999996,5132945.169135579],[-508428.58370000584,5133491.5664361995],[-508134.171500006,5133811.742336554],[-506872.6353999997,5133497.046136208],[-506288.86550000083,5133903.138336671],[-506002.35130000097,5134968.496037876],[-506520.3204000027,5135372.197238328],[-506409.57229999977,5135699.82753869],[-506028.3449000008,5135671.737738667],[-505817.97239999607,5135452.17553842],[-504218.5169999978,5135214.471738163],[-503270.76089999586,5134529.025137392],[-502287.23609999864,5134547.785937417],[-502013.62459999695,5134691.193837585],[-501947.79950000177,5134989.698637913],[-501559.20679999824,5135074.5808380125],[-501528.55790000246,5135546.062438548],[-501893.9050999977,5135893.514638938],[-501346.3115000031,5135857.402838903],[-500874.699499997,5136027.142239098],[-500034.1847999966,5136804.8345399685],[-499232.95939999545,5136912.97164009],[-498641.9695000013,5136772.479039943],[-498534.46249999653,5137540.091940807],[-498190.6254999981,5137505.645740763],[-498220.4755999988,5137369.200240606],[-497965.1803999936,5137494.730240755],[-497786.4557999996,5136999.855940196],[-498058.7617999934,5136066.633139143],[-497969.33390000043,5135854.219738911],[-498523.5247000021,5135337.383738318],[-496612.6012,5134108.153936945],[-497131.29720000224,5133949.94913677],[-497436.2606000011,5134149.227136993],[-498044.78939999524,5133836.065836627],[-498616.4915999998,5133800.644236592],[-499118.9809999952,5134105.416836934],[-499528.49089999666,5134068.7149368925],[-500231.3400000003,5128134.692930188],[-500091.655900003,5127880.323729899],[-501069.4173000017,5126798.468328671],[-500606.9435999964,5126619.693728468],[-499227.0663000002,5126518.677128353],[-497388.5617999962,5125591.905227308],[-495379.4770999972,5124851.8839264875],[-494626.8124999988,5124844.431526479],[-493588.2706999982,5125361.865927073],[-492189.769099997,5126309.974928153],[-490246.85579999245,5128554.946530697],[-489244.3859999947,5128856.378031047],[-488614.27469999855,5129241.777131476],[-487615.7812999968,5129045.462331271],[-487870.438499992,5128635.276130801],[-487733.20559999824,5128430.423230562],[-484676.91859999707,5127183.113829157],[-483604.5649999984,5126955.325228907],[-483305.7559999948,5127032.614428994],[-482895.27279999375,5126818.551928755],[-482442.63419999357,5126908.965328864],[-482138.7720999935,5126484.850628375],[-481554.4588999947,5126285.545228152],[-480637.48869999277,5125610.112227392],[-480676.5177999951,5126237.263028103],[-480404.03229999467,5126547.948728453],[-480170.3909999895,5126508.513828413],[-479429.62479999167,5127473.004829501],[-479121.4989999932,5127557.022229594],[-477748.3040999932,5127269.958129276],[-477179.7763999953,5127317.508729336],[-476307.3249999938,5129364.899931648],[-475298.373099998,5130081.876932474],[-474247.0286999964,5131852.547934466],[-473801.88189999195,5132019.155734654],[-472822.90949999326,5131504.866734077],[-471586.88469999575,5132776.427235509],[-471552.08629999624,5133153.588635942],[-471058.65109998983,5132103.398134753],[-470851.0119999913,5132109.074434765],[-470624.535299995,5131825.830534443],[-469094.38109999447,5130978.778333492],[-467131.150899992,5131637.212034234],[-466919.8734999955,5131669.751734267],[-466468.7169999913,5131311.534533869],[-465184.8508999938,5131592.919834188],[-464232.0879999923,5131096.236733627],[-463479.8171999917,5131253.084233811],[-462405.8635999941,5130502.352732957],[-462057.41959998786,5130898.4072334105],[-458992.0221999886,5132159.014934833],[-458402.1901999944,5131108.200533643],[-457562.7746999904,5130226.111532658],[-457369.9690999933,5128878.498831137],[-456872.0668999936,5128283.896330456],[-456440.16439999157,5127291.833729335],[-456033.1669999892,5127306.460029352],[-455195.7216999906,5128025.669530177],[-454605.6800999933,5127866.432029986],[-453251.5097999875,5126681.55862865],[-452410.97309998865,5126618.075128571],[-452397.11999999144,5126907.2863289025],[-452119.27639998944,5127295.220529346],[-451445.42189999326,5127174.470829203],[-450643.91349999286,5126576.6557285255],[-449828.1445999894,5126343.26702826],[-450229.5989999897,5126205.309728109],[-450797.5066999941,5126320.704628238],[-451148.62069999403,5125019.275726766],[-451487.98689999216,5122214.412823578],[-452300.4272999883,5121984.021123315],[-452969.47939999646,5122286.101923656],[-453777.03109999245,5121342.165222592],[-453583.413299994,5120518.327721645],[-453778.1855999969,5120036.279921103],[-452860.90039999277,5120105.511321183],[-451990.14799999056,5119385.519720363],[-451171.2024999915,5119063.805219993],[-450774.0526999929,5118427.953119269],[-449959.5787999906,5117799.886718558],[-448827.7937999935,5115799.13571628],[-448176.30259999156,5115010.6884153765],[-448201.2033999945,5113612.742113779],[-447930.5342999942,5111873.55811179],[-448032.4964999949,5110432.189610137],[-448309.26749999024,5109755.188509372],[-448657.8497999927,5105788.966104816],[-449161.0748999914,5105066.625703978],[-449205.60799999256,5104318.993403116],[-448474.39209999284,5103392.984002057],[-447794.53169999033,5103637.135202342],[-447258.2823999964,5104280.552403084],[-446580.29309998854,5103777.5637024995],[-445937.6943999961,5104131.115202906],[-445625.29969999444,5103808.841202541],[-445647.2191999912,5103624.859202329],[-445826.4204999936,5103292.86010195],[-446221.51249999483,5103029.41000164],[-446250.23929999134,5102742.093501302],[-444483.0197999921,5102537.34180107],[-444436.9452999974,5101313.620699666],[-444174.3266999896,5101009.597199313],[-443713.72449999035,5101030.975899344],[-443542.30839999125,5100874.719599157],[-443565.1519999916,5099592.773897688],[-443446.7138999916,5099159.779897179],[-443125.82719999214,5098773.354396735],[-443130.9743999912,5097457.035595211],[-443383.04879999306,5097077.549794781],[-443659.5791999948,5096031.733193576],[-444594.9334999933,5094702.422092029],[-444577.6460999919,5090978.337987705],[-444809.07699998986,5089517.152386017],[-445180.35739999363,5088853.984385249],[-445889.75169999304,5088709.148285074],[-446017.65399999387,5088924.593085326],[-446428.89519999136,5088724.265885098],[-446551.9918999911,5088983.956485395],[-446810.6410999961,5089084.030885518],[-448328.1031999944,5089019.183085438],[-449333.43829998834,5087852.864284073],[-450029.4200999954,5087824.379384038],[-450682.3415999913,5087544.640883725],[-451028.66609999264,5086842.851682902],[-451564.2387999922,5086462.768982458],[-451738.34499999083,5085974.658981893],[-452544.54919999203,5085592.566381446],[-454034.09029999544,5085690.492881558],[-455847.7095999958,5084833.628980559],[-457378.5252999939,5083887.7873794595],[-460255.9836999923,5083071.364478506],[-460473.1351999961,5082956.0834783735],[-461139.29169999587,5081906.110077136],[-462901.75549999566,5083713.343079242],[-463981.7280999919,5082816.786178202],[-465130.95769999136,5082716.805578083],[-467259.3313999933,5082078.548377332],[-470640.8147999955,5080425.251575386],[-471270.3639999924,5079796.795974656],[-472431.34809999325,5080641.730175648],[-472911.28649999236,5080740.487975761],[-474212.11949999206,5079902.72887478],[-474343.44959999353,5079032.565673765],[-474781.13079999364,5079986.7049748795],[-475348.82859999494,5080619.22417561],[-475796.008199993,5080117.578575027],[-476811.0208999916,5080255.037375189],[-477316.2565999958,5080169.896375082],[-477670.3632999964,5079690.987174524],[-478022.1260999932,5079684.372974517],[-478678.62429999124,5080091.90697499],[-480176.24049999216,5079703.95577453],[-480813.28349999595,5079437.360174217],[-480947.54549999186,5078711.5674733715],[-481757.0779999974,5078313.882172908],[-481774.8832999909,5078170.477272733],[-482200.41219999595,5078198.694772766],[-482842.51719999633,5078792.042373467],[-483870.6386999957,5078659.651173299],[-484066.7977999967,5079020.440973721],[-485117.94159999344,5078826.0148735],[-485619.39649999747,5078934.49037363],[-485503.2184999974,5078152.437772712],[-485901.52519999637,5077294.111271697],[-485900.147499994,5076866.132071197],[-486232.7593999955,5077343.69677176],[-486788.52559999854,5077266.646471668],[-487224.7039999967,5077717.127372187],[-487484.1621999963,5077692.913772164],[-487697.99659999384,5077228.043271617],[-488534.3126999985,5077532.937871968],[-488530.8990999938,5077318.988271721],[-488795.78789999615,5077135.491671504],[-489114.33509999316,5077141.048371516],[-489140.02209999505,5077413.491971833],[-490987.5614999987,5077704.432772168],[-491785.66739999515,5077291.418371671],[-491909.265199999,5077435.171871837],[-492655.6342999976,5076389.0089706145],[-493300.59339999553,5076477.2891707225],[-493354.84089999733,5076130.003270307],[-493683.96790000086,5076052.315570222],[-493209.88969999907,5075822.153369945],[-493277.1431999946,5075699.344469806],[-494606.58719999605,5075531.420569607],[-494636.51570000174,5075327.645469365],[-495308.2690999945,5075188.0142691955],[-495399.3009999966,5074975.207068949],[-495708.23289999715,5075047.556469035],[-495758.34059999854,5074697.713968625],[-495880.73129999987,5074767.855768704],[-495990.3034999996,5074549.390968449],[-496168.229299999,5074753.644268691],[-496892.9567000019,5074361.625468227],[-496768.70739999786,5074022.780667833],[-497146.4552999989,5073990.960567786],[-497132.97560000094,5073664.950767414],[-497393.28439999715,5073462.655167165],[-497973.5836999981,5073516.929767228],[-498089.6869999966,5073294.343466966],[-498404.54669999925,5073247.509266917],[-499019.434699999,5073299.7958669765],[-499236.4453999985,5073060.765766694],[-499120.064800002,5072874.260466468],[-499416.23900000105,5072826.380366416],[-499812.8311999995,5073042.795066664],[-500416.8710999989,5073006.946466621],[-500398.0500000023,5073229.198266888],[-500717.697599997,5073306.546166968],[-500942.34070000023,5073590.08946731],[-501138.2477999997,5073133.448566762],[-502602.85490000277,5072955.427266551],[-502774.3818999992,5072786.637266354],[-502533.43250000407,5072409.864765913],[-502714.7226000008,5071731.607065122],[-502638.5482000042,5070644.9018638395],[-499156.8295000017,5066596.257459083],[-499156.6004000004,5066426.576458883],[-500481.7926000009,5066169.912758572],[-500635.80280000105,5065606.150657908],[-500943.49139999715,5065236.118757474],[-500875.3637999977,5064602.794556731],[-500602.6957999995,5064377.77285646],[-500569.0712000002,5064047.1019560695],[-500874.154699997,5063682.516855629],[-500916.5117999973,5064133.236356173],[-501435.7545999996,5063688.773655644],[-501194.0994000018,5063640.896955593],[-501187.67639999907,5063037.321254873],[-500652.3958999989,5061928.832553567],[-500259.88650000154,5060606.993152002],[-498965.0393999999,5060570.5511519695],[-498508.6501999947,5060169.804451492],[-498030.8086999995,5059992.383751287],[-497659.5014999969,5059428.626050617],[-497351.74779999733,5056083.443946653],[-497761.05330000055,5055442.574945886],[-498898.289,5055944.956346484],[-499005.38669999794,5056300.797446904],[-499856.70190000226,5056868.069047576],[-500204.13969999785,5056814.022847503],[-500512.65450000204,5057048.938647779],[-500944.9763000015,5056827.8955475185],[-501536.6493000001,5058365.976049344],[-502188.82380000333,5058628.25134965],[-503640.6433000045,5059669.423350873],[-504124.74650000106,5059819.748151055],[-504725.18490000465,5059551.431950728],[-505259.01410000434,5058676.862949692],[-505789.6148000019,5058525.90334951],[-507565.81800000125,5057013.705447711],[-507875.69450000307,5057165.604247888],[-508203.0488000044,5057106.295247814],[-509190.68560000474,5057678.324848484],[-510588.485600002,5059225.2790503185],[-511719.12850000244,5059743.810950923],[-512044.1636000092,5059119.680550182],[-512643.10070000624,5058640.003749604],[-512177.20010000886,5057819.69014864],[-512290.0481000064,5057086.148747765],[-511599.1532000079,5056534.360847114],[-510979.2992000069,5055499.4772458915],[-509903.0629000019,5054946.723045239],[-509456.7277000033,5054450.470144654],[-509319.1889000034,5053680.413043736],[-509467.62990000384,5053289.450743273],[-509162.36250000587,5053018.828742949],[-509441.5241000007,5052728.241842605],[-510457.06500000984,5052297.447542096],[-510720.6512000032,5052321.954242112],[-511922.15090000397,5051384.717540985],[-512516.2077000049,5050159.909539528],[-512436.77900000673,5049886.6279392],[-513758.54900000326,5048008.341036957],[-514734.1740000047,5046968.6935357135],[-515310.5840000053,5046752.537435451],[-516217.0257000065,5045934.159934463],[-517392.6501000099,5045454.592733879],[-517731.73690001376,5045056.1999333985],[-517545.37980001135,5044822.465633124],[-517652.79050001345,5044673.788532944],[-517464.2102000117,5044392.114032614],[-517469.97100001195,5043853.491231971],[-517240.61660001223,5043239.40513123],[-517705.2474000148,5041901.821429627],[-517121.15700000885,5041481.16522912],[-516818.7007000087,5040999.183828555],[-516570.90460000595,5040951.912128497],[-516340.04840001033,5040392.637027826],[-516116.34480000805,5040496.791927952],[-515623.8502000129,5039642.686326933],[-515636.62620001077,5039332.013626566],[-515233.7117000072,5038437.672225486],[-515159.0841000112,5037566.52782444],[-515875.20770001115,5037188.085123982],[-516933.7205000093,5037168.081223951],[-517937.6579000139,5037769.717124666],[-519407.11820001487,5038976.514626102],[-521037.68900001165,5039776.394427057],[-521310.14930001367,5039588.569426824],[-521469.2333000171,5039028.58852616],[-523462.10470001725,5038115.732425045],[-524197.87970001565,5036992.991723679],[-525576.7378000143,5035521.962821905],[-525661.8992000212,5034390.996720549],[-526430.2433000143,5034606.075220805],[-527364.4172000183,5034552.786520728],[-527560.4641000164,5034338.458720463],[-528647.8774000197,5034453.745820594],[-530668.6909000267,5033362.200619259],[-531149.1218000241,5033637.332219594],[-531968.5453000255,5033752.385619723],[-532795.8845000295,5033539.649919451],[-533109.7719000251,5032997.936918796],[-533902.4091000239,5032391.757318057],[-534984.041700031,5032298.737117935],[-535838.9756000316,5031443.542816896],[-535699.7762000284,5030997.846016364],[-535824.3782000315,5030356.310215582],[-536231.2316000304,5029579.820014648],[-536286.4707000282,5028537.9012133805],[-536437.5069000293,5028277.8913130695],[-535999.473700035,5027612.377312265],[-537445.7247000299,5026977.921611483],[-539516.317900036,5027172.279711689],[-540256.4594000332,5027070.022511566],[-540517.9217000349,5027210.801011725],[-541422.0363000409,5026218.794010522],[-542360.7369000418,5026790.6901111975],[-542421.7820000397,5026979.6469114255],[-542153.5253000417,5027142.443611622],[-542322.1288000412,5027154.773311635],[-542634.1853000403,5027613.773912188],[-543121.2470000412,5027886.681112516],[-543343.9554000426,5027763.424512359],[-544327.2103000411,5028483.30221322],[-544809.984100044,5029043.705213879],[-545674.7991000466,5029244.387614119],[-546023.8732000487,5029870.260014867],[-546469.4826000435,5029875.110914876],[-548117.8570000514,5030669.270315807],[-548918.293500052,5031427.537616694],[-550008.645700057,5031917.060417273],[-550490.7368000534,5032662.440518168],[-551121.6206000566,5033118.265318707],[-552124.3064000588,5032820.057818325],[-552475.2035000557,5033030.4714185875],[-552666.3908000573,5034454.840120286],[-552991.9325000601,5034832.306720736],[-554076.0894000599,5034670.483320521],[-554876.8232000598,5034822.642020697],[-554657.556000065,5035215.178121168],[-555230.3695000664,5035376.516421355],[-555454.8877000661,5036089.193122209],[-557092.3997000671,5035811.754721847],[-557383.163600072,5035994.143122053],[-557431.7104000683,5036259.38322237],[-557815.1979000742,5036261.150322369],[-558140.0840000692,5036598.55942277],[-558146.3789000682,5036296.079722412],[-558332.583400074,5036315.728522423],[-559259.5792000741,5035495.060721424],[-559021.6581000738,5035017.196820855],[-563261.2400000804,5032809.654818108],[-565057.1709000904,5032925.277218214],[-565896.9519000943,5033435.038618804],[-567743.8069000989,5034062.911019513],[-567986.756900103,5033409.9248187225],[-569003.2351001017,5032276.206317336],[-569175.2576000994,5032479.704617585],[-570405.8546001059,5032363.1172174],[-570504.474400104,5031837.517616774],[-570907.5263001039,5031887.541216822],[-570878.8926001106,5032073.289517047],[-571330.807900109,5032440.277317478],[-571269.7784001105,5032548.278317607],[-571786.7121001082,5033186.598018364],[-571755.8366001117,5033605.428818869],[-572428.0941001145,5034082.836619429],[-572747.8873001132,5034141.509819487],[-572807.3071001153,5034346.434519728],[-573136.9614001152,5034482.082519883],[-573148.370000115,5034676.210320126],[-574418.4676001214,5035558.186021145],[-574590.4724001171,5035485.983621061],[-575086.3491001251,5036008.971121664],[-576024.1626001225,5036161.296121831],[-576029.031700127,5036463.496222197],[-576402.4611001253,5036434.152722148],[-576479.4741001299,5036649.305522408],[-576261.6450001255,5036746.669522538],[-576596.9105001319,5037048.589222879],[-576817.7183001307,5036857.895722651],[-577198.5212001293,5036964.188322759],[-577888.6292001329,5036282.170921923],[-578457.7164001336,5036436.915222091],[-578917.1391001337,5036924.7144226665],[-579655.8075001421,5036699.492322376],[-579743.8622001385,5036980.948122708],[-580889.5655001451,5035908.869921386],[-581355.6157001448,5036288.486021825],[-580792.1313001398,5037087.388822798],[-581340.8114001447,5037531.523023316],[-581599.5065001426,5038414.695424377],[-581490.3997001468,5038663.931424669],[-581723.5106001497,5038697.916324708],[-581587.5462001452,5038830.61912487],[-581637.9908001495,5039143.725525243],[-582019.1038001461,5039412.362025559],[-581935.1950001488,5039920.785026169],[-582158.953800149,5040158.846426449],[-582054.8737001499,5040293.421426613],[-582156.6680001478,5040485.333726835],[-582284.8268001499,5040410.090326738],[-582713.6886001511,5040726.805227107],[-582729.3812001509,5040872.961727286],[-583183.5023001529,5040982.493827401],[-583592.7531001569,5041463.587227973],[-583799.9181001537,5041311.655427783],[-584277.9544001569,5041317.911527772],[-584181.9972001609,5041612.225828127],[-584757.70080016,5041853.11692839],[-585052.1843001612,5041536.307428006],[-586005.1973001612,5041480.800127908],[-586500.0371001688,5041775.663228244],[-586864.1181001678,5041584.900028001],[-586616.7802001733,5041262.253927622],[-586720.4351001718,5041215.564027559],[-587096.1106001699,5041470.873427849],[-587562.8318001752,5041246.747027572],[-587646.5289001735,5041401.775927759],[-588051.560700176,5041153.939727449],[-588083.7365001758,5041318.313427638],[-588709.4979001823,5041237.846027525],[-589091.410600182,5040009.9488260355],[-588926.2827001815,5039887.7487258995],[-589056.8688001811,5039503.264625427],[-588740.2813001812,5039222.5428251065],[-589656.7966001829,5039101.043624923],[-590187.0241001862,5039731.7678256575],[-590815.6182001916,5039411.286625251],[-590933.0695001887,5039586.686625462],[-592996.4739002006,5038576.309624168],[-593362.7262002059,5038575.796424153],[-593612.1219002045,5038671.653824256],[-593089.1128002023,5039163.960524867],[-593292.4206002065,5039571.490425348],[-594287.8688002054,5040168.179526028],[-594019.4914002077,5040405.913926322],[-594479.1262002125,5041014.397727034],[-593316.1853001993,5042500.883428862],[-591705.7422001897,5043648.908530301],[-591241.7831001957,5044329.063331128],[-591115.0512001918,5044808.293531704],[-591276.9100001946,5045053.24103199],[-590926.3907001896,5045155.903832124],[-590841.3458001891,5045555.417532608],[-590517.5273001839,5045814.659632923],[-590295.4427001827,5045451.306832508],[-589286.6136001826,5045771.3624329185],[-589771.8851001831,5045741.165232862],[-589487.1611001843,5046225.970633454],[-589745.3822001843,5046297.785233532],[-589827.360800185,5046586.238633876],[-589648.6449001812,5047213.608134634],[-589402.7417001816,5047257.46313469],[-589462.3211001805,5047451.86993492],[-589636.8958001799,5047423.245334885],[-589432.8513001807,5047896.665535462],[-589690.2152001819,5048337.858735979],[-589904.5439001865,5049967.09773791],[-590239.0494001859,5050659.738838722],[-590162.5604001851,5051184.619339351],[-589073.8681001746,5052128.567240509],[-589611.3792001811,5052354.418940756],[-589431.5833001786,5054105.550342841],[-589689.2178001788,5055558.46174456],[-590402.4911001846,5056741.86514594],[-590354.2504001829,5057933.679847353],[-590713.9505001849,5058411.275947905],[-590384.0768001869,5059060.805748694],[-590644.3869001832,5059499.7320492035],[-591079.6511001858,5059464.0819491455],[-591766.1087001918,5059722.052049414],[-592455.7115001911,5060595.360750417],[-592712.3250001969,5062683.471952878],[-593681.0729001978,5065321.841355964],[-593847.6857002018,5067166.213058127],[-593786.753200198,5068218.0202593645],[-593538.4531001975,5069134.702560455],[-592475.5691001944,5070658.787762289],[-592274.0165001921,5071737.484463567],[-591231.8733001887,5072808.107764865],[-590832.2712001811,5073607.551565817],[-592036.5771001874,5074616.765066953],[-594361.2438001971,5075321.486967683],[-593697.6612002002,5076901.378869561],[-593649.1881001929,5078072.951370937],[-593024.5483001932,5078531.236071499],[-593580.1461001926,5078975.020971996],[-592753.0449001932,5079738.456472923],[-593247.9594001892,5080352.52637362],[-593763.7748001916,5080353.283973602],[-594166.8514001948,5080621.975673895],[-594973.330100203,5083290.90907697],[-594684.1451001986,5083591.848877336],[-594017.8695001965,5082762.844976398],[-593611.0626001956,5082755.132276404],[-593576.2247001966,5083095.979876804],[-593180.8074001935,5083116.04437684],[-592316.8907001918,5083663.9548775125],[-591466.688700186,5084529.999678567],[-590254.4849001766,5086182.113680531],[-589574.6533001745,5086546.983580981],[-588835.3663001698,5086530.528880986],[-587450.3593001624,5087318.305181949],[-586675.8446001569,5087028.160081649],[-586527.7436001613,5087179.334481821],[-585750.1121001542,5086921.328481558],[-585268.0443001555,5087513.677082259],[-584120.8386001444,5088435.4172833655],[-583500.6129001467,5089315.26898441],[-582628.2456001404,5089008.540784084],[-582370.9837001425,5089379.448884528],[-582075.5038001392,5090600.406785953],[-582551.5226001411,5090951.014786334],[-582612.484400144,5091453.029586922],[-583256.0037001427,5092396.696087992],[-584104.6998001502,5093013.533388684],[-584180.9121001466,5093327.696489038],[-585253.8614001519,5093375.957289057],[-585196.4144001541,5093527.512189237],[-585986.9082001579,5094053.331389822],[-586680.9360001566,5094001.549489732],[-586948.8492001576,5093835.04488953],[-587118.7731001601,5094207.022789962],[-586876.859600158,5094856.522490721],[-586945.2730001583,5095174.948591089],[-587823.1920001644,5095615.327791561],[-587693.9192001629,5095928.289491926],[-588094.2157001654,5096326.377892374],[-588123.5692001681,5096578.8760926565],[-588624.3282001709,5096836.26759294],[-589222.2532001699,5097434.134793611],[-587868.6764001593,5098967.285195437],[-586426.0200001535,5099766.862096403],[-586255.4201001569,5100188.278096894],[-586733.6798001607,5100345.907797059],[-586860.9301001593,5100665.647397425],[-586668.166800155,5101056.85009788],[-586713.6844001546,5101417.647598298],[-587485.1491001587,5102004.615798944],[-589156.5975001651,5102572.942999527],[-589366.5798001704,5102481.518499421],[-589712.0438001709,5102662.696899624],[-590631.8602001738,5102489.216799381],[-590948.4316001775,5102988.931199948],[-591787.4817001793,5102792.018699686],[-591949.2676001816,5102947.228199859],[-592243.6219001828,5102864.187599756],[-593209.743000185,5103618.512400582],[-592688.094300188,5104989.898102179],[-592805.6901001843,5105736.505803041],[-592599.9645001839,5106336.312503734],[-592417.2631001811,5106350.639203755],[-592408.208700183,5106611.131304059],[-592165.3234001829,5106723.67020419],[-592749.1207001834,5107710.027705302],[-592544.3405001806,5108496.427406206],[-592712.6045001853,5108639.4646063605],[-592696.5734001821,5109834.138907729],[-592482.2874001826,5110567.291808587],[-593038.2856001811,5113243.345311621],[-593130.3122001817,5113432.819911836],[-593560.4687001844,5113613.099012026],[-593553.938400189,5113867.000712309],[-594269.8581001897,5114177.768412645],[-594593.2887001921,5115551.835014199],[-594537.5712001881,5116013.91581472],[-594766.3047001874,5116210.425614939],[-595080.4658001908,5116448.915315193],[-596464.9681002041,5116100.749514741],[-596245.2266001963,5118689.312417702],[-596523.1852001976,5119116.852618172],[-596690.3916002013,5120192.237719383],[-596860.6660002021,5120448.162719668],[-597291.2668002051,5120533.008519751],[-597788.661600209,5120174.018419322],[-597950.1498002075,5119328.657518357],[-598363.9764002063,5119096.912118074],[-598404.5037002073,5120327.575319467],[-598576.8187002119,5120461.161219614],[-598678.8697002126,5121105.860820334],[-599386.8434002186,5122315.530521684],[-600089.0616002202,5123987.739423551],[-600166.0518002226,5125172.301224893],[-599133.1306002125,5126414.83042634],[-597950.3601002073,5127380.59282748],[-597805.4116002051,5127759.683427925],[-597235.6156002036,5127983.825028196],[-595503.2527001958,5128211.683828526],[-595082.5580001909,5128996.31232943],[-594617.9909001854,5129450.051629973],[-593924.9943001866,5129335.873929866],[-593905.6921001876,5129464.136930015],[-593237.2968001787,5129417.806229992],[-592922.0419001793,5129550.091830157],[-592514.9501001794,5129307.004029896],[-592263.5653001781,5129623.089630258],[-591814.7422001695,5129721.305130395],[-590681.1843001693,5130916.47193179],[-589480.6293001623,5131669.605532672],[-587612.3496001542,5133277.0917345695],[-587412.4218001518,5134486.4002359435],[-588562.6548001587,5135202.422436693],[-588940.3563001597,5134989.153636441],[-589429.3982001648,5135183.237736643],[-589815.3547001616,5134878.233136282],[-589985.3548001681,5135020.315136439],[-590275.3191001688,5134886.04483628],[-590458.0236001667,5135051.99303646],[-590648.3133001635,5134949.994036325],[-590706.47030017,5135069.508536466],[-590854.9489001698,5134908.092336276],[-592947.4271001748,5135409.755536756],[-593380.6633001829,5135816.400737197],[-593016.9642001776,5136347.030437812],[-592219.6712001772,5137007.870338586],[-592418.2391001772,5137162.6183387535],[-590713.9479001684,5139708.0396416765],[-591045.3836001676,5140615.783542687],[-590587.3557001649,5141091.248943235],[-591093.2160001682,5142399.68624468],[-591274.8863001679,5143370.978845766],[-591224.8109001693,5144754.01544731],[-590724.4910001691,5146061.857548789],[-589538.4928001594,5147681.992450643],[-589295.6359001582,5148994.01295212],[-589863.9924001641,5149315.5696524605],[-591032.5338001666,5150589.747153823],[-591094.2255001677,5150837.381354102],[-592317.0908001716,5151623.584354924],[-593913.4349001802,5151617.776754854],[-593862.4312001795,5152014.064755299],[-593495.1040001763,5152382.618955727],[-591373.0229001652,5153416.238756963],[-590623.8199001628,5154024.249257666],[-589953.8505001588,5155186.903858982],[-588707.099300153,5156187.15676014],[-588749.2177001534,5156709.208560717],[-588357.9893001554,5157102.658061161],[-586590.3521001446,5158135.664862372],[-585912.6504001431,5158269.665262552],[-584917.2157001429,5158124.74926243],[-585596.7898001447,5158674.550663015],[-587839.2157001497,5157804.297761963],[-590191.0701001588,5159680.569363949],[-590352.7625001598,5159646.525163906],[-590242.6244001593,5159899.045964198],[-590931.404100166,5161225.346465641],[-591047.7397001657,5161402.97036582],[-591477.0322001654,5161372.438665771],[-591979.7659001721,5161971.293066412],[-592588.6026001727,5163805.952368415],[-592834.1224001695,5164035.4077686565],[-593560.5482001738,5164000.709268594],[-595441.9777001846,5164363.322068911],[-597947.8280001954,5166296.759870934],[-598497.6282001986,5166919.913471588],[-598486.360400196,5167192.899171888],[-598279.6921001947,5167452.447272185],[-598412.9115001966,5167988.726472762],[-597918.405400192,5168686.988473556],[-598134.9182001947,5170580.757575629],[-598681.130900196,5172229.335577417],[-599876.2307002016,5173828.893079109],[-600025.2247002058,5174442.064079769],[-598497.5761001942,5175898.024281436],[-598590.9478001931,5176449.403082031],[-598866.9512002018,5176547.073382126],[-598952.4332002,5177443.291883111],[-598898.9223001952,5177892.094283592],[-598631.3427001939,5177904.985283621],[-598671.8695001985,5178103.860383837],[-598089.660400191,5178716.132184536],[-598370.5987001988,5179184.041885031],[-598363.060400197,5179980.381285904],[-598051.9524001891,5180174.245086133],[-597955.4354001919,5180482.436686469],[-598475.6562001908,5181660.256587723],[-598298.7559001906,5181740.908787823],[-598441.4271001931,5182270.959588396],[-598925.5995001955,5182969.965489126],[-599060.9062001958,5184879.626991202],[-598853.8694001933,5185477.795591857],[-599460.2899001975,5186011.267092409],[-599886.9339002004,5186860.909593308],[-599690.8339001999,5189396.272996072],[-598924.1282001917,5190668.086997482],[-599846.3771001959,5191780.311498639],[-599800.9345001975,5194208.508201267],[-598990.7359001931,5194803.90650195],[-598241.6203001869,5194348.368501498],[-597596.2159001863,5194420.544501601],[-596809.9807001872,5194766.003802002],[-595888.5654001824,5193877.814601094],[-595466.0734001774,5194061.43720131],[-594562.7933001696,5193631.556400887],[-594506.323300174,5193440.900800672],[-593961.8297001708,5193503.276300773],[-594157.3959001716,5193010.604800225],[-593568.4294001666,5192282.3707994735],[-592977.0633001633,5192007.610799194],[-592702.2351001656,5192215.447999435],[-591923.2127001596,5191781.995198995],[-591338.4858001643,5190952.109298119],[-590824.0657001558,5190875.4287980655],[-590717.7095001591,5190931.098198123],[-590894.2874001593,5191079.223498281],[-590907.1925001532,5191357.64929858],[-590642.3641001576,5191887.243899159],[-590669.1797001533,5192231.641999529],[-589969.9119001522,5193306.361400727],[-589976.6712001504,5193958.631101422],[-590202.0700001522,5194315.317501808],[-589919.470400156,5194389.3147018915],[-589657.9699001537,5194797.117602346],[-588537.9279001472,5195483.988803133],[-587399.2129001429,5193450.103700969],[-587206.470000138,5193302.31530082],[-587055.7841001393,5193417.347400955],[-586168.9176001364,5192623.510300121],[-585223.0435001306,5192602.689600138],[-584779.8030001284,5192925.780100503],[-584338.4876001292,5192964.5500005605],[-583950.8727001294,5193199.509600827],[-583804.6477001322,5193074.780100702],[-583479.3645001276,5193167.301800807],[-582503.1026001238,5193895.5669016335],[-582314.7144001244,5194584.161402376],[-581998.5303001219,5194614.132502424],[-581755.054900123,5195002.286602849],[-582148.0585001231,5195693.296803587],[-582830.7830001226,5195544.001203396],[-583598.5169001254,5195756.619403603],[-583849.7234001277,5196024.8307038825],[-583837.3901001298,5196274.300504149],[-584605.8349001289,5196408.300304275],[-584872.7764001293,5196964.505204853],[-584410.1154001325,5197839.40630582],[-584259.7717001261,5197817.659605796],[-583986.779600129,5198622.570006672],[-583836.0057001271,5200587.8712087935],[-583171.6364001227,5200935.970309192],[-582800.3995001265,5201707.130010033],[-582924.5213001213,5202014.111310358],[-582234.329700123,5202360.167510752],[-582380.5718001222,5200672.3426089315],[-582028.6889001202,5200376.808308638],[-581122.7884001198,5202702.322411158],[-580718.0653001114,5202712.912111181],[-580324.6975001136,5202431.881810895],[-579643.4565001143,5201405.069009809],[-578895.4316001098,5200714.640109096],[-578977.7928001103,5200610.907008979],[-578628.2594001082,5200087.608208424],[-576937.8150001046,5200639.250009075],[-577022.7529001063,5201216.862809695],[-576429.7802001027,5201676.475410203],[-575097.5661001003,5201785.112910366],[-574880.0901000998,5201672.7993102465],[-573978.3488000944,5202098.154510729],[-573975.2686000927,5202671.347911349],[-572662.7230000906,5203247.985412],[-571021.9083000874,5205502.347514464],[-571029.4305000863,5205695.978514668],[-570651.1178000874,5206175.791715184],[-570327.3721000855,5206299.123015338],[-570332.6584000845,5206566.01941562],[-569909.0438000815,5207182.54671629],[-569264.2161000823,5207486.038216624],[-569065.4965000806,5207806.8582169805]]]]);
 
-      // then post the request and add the received features to a layer
-      fetch('http://localhost:8081/geoserver/wfs', {
-        method: 'POST',
-        body: new XMLSerializer().serializeToString(featureRequest)
-      }).then(function(response) {
-        return response.json();
-      }).then(function(json) {
-        var features = new ol.format.GeoJSON().readFeatures(json);
-        vectorSource.addFeatures(features);
-        map.addLayer(vector);
-        add_layer_to_list(vector);
-        //Para hacer zoom a la provincia
-        map.getView().fit(vectorSource.getExtent());
-      });
+        // generate a GetFeature request
+        var featureRequest = new ol.format.WFS().writeGetFeature({
+          srsName: 'EPSG:3857',
+          featureNS: 'http://visorsiu.fomento.es',
+          featurePrefix: 's',
+          featureTypes: ['su'],
+          outputFormat: 'text/xml; subtype=gml/3.1.1',
+          filter: ol.format.filter.and(
+            ol.format.filter.notEqualTo('clasesuelo', 'SUELO NO URBANIZABLE'),
+            ol.format.filter.intersects('the_geom', geom,'EPSG:3857')
+            
+          )
+        });
+
+        // then post the request and add the received features to a layer
+        fetch('http://visorsiu.fomento.es/geoserver/wfs', {
+          method: 'POST',
+          mode: 'no-cors',                    
+          headers:{
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Allow-Methods': '*',
+            'Access-Control-Allow-Credentials':'true',
+            'Access-Control-Allow-Origin':		'chrome-extension://aejoelaoggembcahagimdiliamlcdmfm'
+                },
+                    
+		
+          body: new XMLSerializer().serializeToString(featureRequest)
+        }).then(function(response) {
+          console.log(response);
+          return response.json();
+        }).then(function(json) {
+          var features = new ol.format.GeoJSON().readFeatures(json);
+          vectorSource.addFeatures(features);
+          map.addLayer(vector);
+          add_layer_to_list(vector);
+        });
+        console.log(features);
+        return features;
+  }
+
+  function getWPSRequest(feature1,feature2){
+
+    return `<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
+    <ows:Identifier>gs:IntersectionFeatureCollection</ows:Identifier>
+    <wps:DataInputs>
+      <wps:Input>
+        <ows:Identifier>first feature collection</ows:Identifier>
+        <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8081/geoserver/wfs" method="POST">
+          <wps:Body><![CDATA[`+feature1+`]]></wps:Body>
+        </wps:Reference>
+      </wps:Input>
+      <wps:Input>
+        <ows:Identifier>second feature collection</ows:Identifier>
+        <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8081/geoserver/wfs" method="POST">
+          <wps:Body><![CDATA[`+feature2+`]]></wps:Body>
+        </wps:Reference>
+      </wps:Input>
+    </wps:DataInputs>
+    <wps:ResponseForm>
+      <wps:RawDataOutput mimeType="text/xml; subtype=wfs-collection/1.1">
+        <ows:Identifier>result</ows:Identifier>
+      </wps:RawDataOutput>
+    </wps:ResponseForm>
+  </wps:Execute>`;
+  }
+
+function getWPSTransform(feauture){
+    return `<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
+    <ows:Identifier>gs:CollectGeometries</ows:Identifier>
+    <wps:DataInputs>
+      <wps:Input>
+        <ows:Identifier>features</ows:Identifier>
+        <wps:Data>
+          <wps:ComplexData mimeType="text/xml; subtype=wfs-collection/1.1"><![CDATA[`+feature+`]]></wps:ComplexData>
+        </wps:Data>
+      </wps:Input>
+    </wps:DataInputs>
+    <wps:ResponseForm>
+      <wps:RawDataOutput mimeType="text/xml; subtype=gml/3.1.1">
+        <ows:Identifier>result</ows:Identifier>
+      </wps:RawDataOutput>
+    </wps:ResponseForm>
+  </wps:Execute>`;
 }
 
-function getWPSRequest(){
-  return `<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
-  <ows:Identifier>gs:IntersectionFeatureCollection</ows:Identifier>
-  <wps:DataInputs>
-    <wps:Input>
-      <ows:Identifier>first feature collection</ows:Identifier>
-      <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8081/geoserver/wfs" method="POST">
-        <wps:Body><![CDATA[<wfs:GetFeature service="WFS" version="1.1.0"
-  xmlns:p_casas_rurales="p_casas_rurales"
-  xmlns:wfs="http://www.opengis.net/wfs"
-  xmlns:ogc="http://www.opengis.net/ogc"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.opengis.net/wfs
-                      http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-  <wfs:Query typeName="p_casas_rurales:incendios_por_municipios">
-	<ogc:Filter>
-<And>
-       <PropertyIsLessThan>
-     		<PropertyName>total</PropertyName>
-   			<Literal>1</Literal>
-		</PropertyIsLessThan>
- <PropertyIsEqualTo>
-     		<PropertyName>cod_prov</PropertyName>
-   			<Literal>47</Literal>
-		</PropertyIsEqualTo>
-</And>
-    </ogc:Filter>
-  </wfs:Query>
-</wfs:GetFeature>]]></wps:Body>
-      </wps:Reference>
-    </wps:Input>
-    <wps:Input>
-      <ows:Identifier>second feature collection</ows:Identifier>
-      <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8081/geoserver/wfs" method="POST">
-        <wps:Body><![CDATA[<wfs:GetFeature service="WFS" version="1.1.0"
-  xmlns:p_casas_rurales="p_casas_rurales"
-  xmlns:gml="http://www.opengis.net/gml"
-  xmlns:wfs="http://www.opengis.net/wfs"
-  xmlns:ogc="http://www.opengis.net/ogc"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-<wfs:Query typeName="p_casas_rurales:distancias_the_geom">
-<ogc:Filter>
-<And>
-   <PropertyIsGreaterThan>
-     		<PropertyName>distancia</PropertyName>
-   			<Literal>9</Literal>
-	</PropertyIsGreaterThan>
-    <Intersects>
-        <PropertyName>the_geom</PropertyName>
-        <gml:MultiSurface srsName="urn:x-ogc:def:crs:EPSG:4258" srsDimension="2">
-            <gml:surfaceMember>
-                <gml:Polygon>
-                    <gml:exterior>
-                        <gml:LinearRing>
-                            <gml:posList>42.0934502 -5.51673215 42.09294931 -5.51041275 42.09116138 -5.51022123 42.08367326 -5.49846484 42.07512879 -5.49092487 42.06623012 -5.48516183 42.05982093 -5.48336473 42.05646234 -5.47709487 42.05242602 -5.48092551 42.04364552 -5.46421237 42.04068085 -5.45463789 42.03150223 -5.43867732 42.03516113 -5.43049388 42.03564244 -5.42477404 42.03067553 -5.42158924 42.01365534 -5.44743845 42.01072961 -5.44780918 42.01195573 -5.44309827 42.00902767 -5.43638087 42.00432303 -5.43145584 41.99341042 -5.43346666 41.98307075 -5.43351918 41.96738964 -5.43827978 41.97288588 -5.4470342 41.97573486 -5.45615904 41.97471678 -5.4608026 41.97545945 -5.46312439 41.97765509 -5.46278663 41.97815936 -5.46698216 41.98456507 -5.48480474 41.995537 -5.48840707 41.99623369 -5.48410001 41.99926007 -5.47908652 42.004425 -5.47845414 42.00629018 -5.47172835 42.01009734 -5.47141705 42.01357957 -5.4728079 42.02585728 -5.48766982 42.02996896 -5.48826515 42.03329466 -5.49270756 42.03880562 -5.48650807 42.04557321 -5.49584607 42.04919443 -5.49621754 42.05750731 -5.50774587 42.06254897 -5.50286853 42.06652144 -5.50158653 42.07702116 -5.50904679 42.08469629 -5.51839264 42.09062269 -5.51795028 42.09714117 -5.52089283 42.0934502 -5.51673215</gml:posList>
-                        </gml:LinearRing>
-                    </gml:exterior>
-                </gml:Polygon>
-            </gml:surfaceMember>
-            <gml:surfaceMember>
-                <gml:Polygon>
-                    <gml:exterior>
-                        <gml:LinearRing>
-                            <gml:posList>42.26772942 -5.32206123 42.26718834 -5.32031962 42.27158409 -5.30643942 42.26923771 -5.30175835 42.26535983 -5.30068358 42.25692845 -5.30392881 42.25199648 -5.30332491 42.24946426 -5.30609332 42.24940533 -5.30723058 42.25209741 -5.3090501 42.24955525 -5.31676347 42.2411234 -5.31644259 42.2387331 -5.32729891 42.23871957 -5.33283694 42.23353471 -5.33625708 42.2308284 -5.33559977 42.23082452 -5.3371143 42.23274702 -5.34131766 42.24670294 -5.34057357 42.25103988 -5.34604337 42.25396432 -5.34660036 42.257254 -5.34603147 42.25922988 -5.34717158 42.26269714 -5.34540896 42.26776865 -5.34534254 42.26875952 -5.34136588 42.26968221 -5.33719259 42.27414573 -5.32850557 42.26772942 -5.32206123</gml:posList>
-                        </gml:LinearRing>
-                    </gml:exterior>
-                </gml:Polygon>
-            </gml:surfaceMember>
-            <gml:surfaceMember>
-                <gml:Polygon>
-                    <gml:exterior>
-                        <gml:LinearRing>
-                            <gml:posList>42.31184148 -5.11200233 42.31183192 -5.10958747 42.31064895 -5.10878351 42.30929448 -5.09375398 42.2974842 -5.0870545 42.29223204 -5.08616536 42.29372329 -5.08240578 42.29160781 -5.0778967 42.28976007 -5.07897603 42.28501542 -5.07542397 42.28279982 -5.07643061 42.27888755 -5.07515001 42.27781202 -5.07187682 42.27915697 -5.07070815 42.27619601 -5.06611218 42.27788765 -5.06218975 42.26650332 -5.06625607 42.26588876 -5.0653751 42.26119098 -5.06819205 42.25752319 -5.05480936 42.26141965 -5.04591585 42.2675574 -5.04160399 42.27147086 -5.04233661 42.27725007 -5.03893382 42.28911875 -5.03695156 42.29282864 -5.04153499 42.29712699 -5.03834998 42.29510697 -5.02631219 42.29264198 -5.02004691 42.29060484 -5.00528074 42.28912873 -5.00214097 42.28112851 -5.00592597 42.27529705 -5.00620185 42.26656853 -5.0099139 42.26145718 -5.00866033 42.25896821 -5.01654637 42.2538582 -5.01880793 42.2483508 -5.01550482 42.2422515 -5.00897163 42.23600414 -5.01036091 42.23102694 -5.00916067 42.22811546 -5.01034059 42.21989315 -5.02466711 42.21729538 -5.02489911 42.20561349 -5.02038287 42.19463101 -5.01294772 42.19341403 -5.01455614 42.18975963 -5.01239334 42.17861691 -5.0197041 42.17362839 -5.03189441 42.1646001 -5.02603674 42.15391168 -5.02696631 42.15679688 -5.01502718 42.15377519 -5.01529435 42.14865235 -5.0085359 42.14956467 -5.00580538 42.14909283 -5.00240181 42.14655524 -4.99918738 42.14779699 -4.99511171 42.14490203 -4.99430674 42.14540598 -4.99018379 42.14438183 -4.98848167 42.14684855 -4.98124929 42.14882131 -4.982267 42.15103254 -4.97990342 42.15575888 -4.96639789 42.15154814 -4.96563803 42.15129306 -4.96370572 42.14960359 -4.96244327 42.15155649 -4.96094236 42.1527415 -4.94424028 42.1511621 -4.9385883 42.1502143 -4.92749744 42.14460989 -4.92979605 42.1305111 -4.92899259 42.12068827 -4.9250773 42.11831275 -4.9287069 42.11055217 -4.92426229 42.0964988 -4.92019724 42.09129294 -4.91213225 42.09079261 -4.9178243 42.07839343 -4.90417692 42.07830995 -4.91675908 42.0734967 -4.92774726 42.05431109 -4.94762548 42.05101569 -4.94969978 42.01987923 -4.93813144 42.01791572 -4.93600658 42.00705644 -4.96553972 41.99759051 -4.96976388 41.99851861 -4.97026342 41.99354728 -4.97549453 41.98899595 -4.97149076 41.97361491 -4.97610945 41.96991122 -4.98301876 41.96668265 -4.98326858 41.96528361 -4.98553009 41.96539993 -4.98817646 41.96256864 -4.99407374 41.95798881 -4.99537885 41.95106104 -5.0001455 41.94796757 -5.00246163 41.94722792 -5.00510468 41.94321097 -5.00150455 41.94082636 -5.0019005 41.93794693 -5.00485011 41.92889147 -4.99734219 41.92556894 -4.99003865 41.92177424 -4.98709883 41.91344639 -4.98692491 41.91074527 -4.98532188 41.91002606 -4.98368397 41.91189161 -4.98309064 41.9136003 -4.97645142 41.91798009 -4.97576658 41.91852837 -4.97739938 41.92016619 -4.97328947 41.91937929 -4.97191473 41.92466867 -4.96703656 41.92827727 -4.95719738 41.93115318 -4.95543996 41.93382859 -4.9495873 41.93121027 -4.94306687 41.92973215 -4.94206923 41.92665233 -4.93244809 41.91899855 -4.9280689 41.91735275 -4.93006925 41.915029 -4.92793732 41.91783909 -4.9166385 41.91623222 -4.91578247 41.91565924 -4.91179813 41.92824138 -4.89984777 41.93278473 -4.8897785 41.93304412 -4.87396132 41.93172764 -4.8690861 41.92321282 -4.86931996 41.91760128 -4.86769701 41.91828067 -4.86302598 41.91747394 -4.86056659 41.91511007 -4.85915942 41.91559446 -4.85594187 41.91310394 -4.85790753 41.91318721 -4.85610124 41.8985326 -4.83826893 41.88680906 -4.83246071 41.88039774 -4.83238592 41.87506106 -4.82930506 41.8674445 -4.82289455 41.86299483 -4.81382806 41.85638561 -4.80973794 41.84824833 -4.80715956 41.84127045 -4.80186845 41.83409812 -4.79919833 41.83002235 -4.79548356 41.82204819 -4.79339441 41.81949696 -4.78892841 41.81802389 -4.78924868 41.82312127 -4.77008864 41.82585435 -4.76923666 41.82578634 -4.75842143 41.83243488 -4.75536381 41.84055309 -4.748058 41.85451603 -4.72644018 41.86177712 -4.73229832 41.86536556 -4.7314433 41.86882718 -4.72824715 41.8743053 -4.71729596 41.88728164 -4.7010943 41.89160636 -4.6851049 41.89800728 -4.67790749 41.89986478 -4.67837805 41.900505 -4.66967851 41.89946846 -4.66476901 41.89681319 -4.65843136 41.89459166 -4.65821715 41.89150908 -4.65150768 41.89124908 -4.64389488 41.88957559 -4.63999476 41.88822261 -4.63950209 41.88810984 -4.63730549 41.88268874 -4.63472044 41.87912383 -4.63649757 41.87576803 -4.63371252 41.87103022 -4.63500181 41.87081639 -4.63357434 41.86822736 -4.63196606 41.86827091 -4.62953315 41.86517702 -4.63239461 41.86172563 -4.63189718 41.85824584 -4.6264113 41.8571931 -4.62697494 41.85398294 -4.62406256 41.85200852 -4.61845909 41.84845608 -4.61361138 41.84232594 -4.60888032 41.83864136 -4.60378979 41.8368101 -4.59104992 41.82399463 -4.58380896 41.81257406 -4.56608296 41.81623231 -4.56729168 41.81837586 -4.56464693 41.816269 -4.55331435 41.81898774 -4.54807026 41.82611963 -4.54549646 41.82882195 -4.55014946 41.83101497 -4.54915459 41.83082696 -4.54572996 41.8293573 -4.54384016 41.82776617 -4.529472 41.82317775 -4.52095817 41.82330334 -4.51212301 41.82426335 -4.50966512 41.82626156 -4.5090738 41.82682976 -4.50558301 41.82998574 -4.50530769 41.8323114 -4.50858966 41.83206969 -4.50367054 41.83320581 -4.49943398 41.83841089 -4.49188351 41.83913462 -4.48468598 41.83819435 -4.47937703 41.84333157 -4.47841127 41.84310105 -4.47532253 41.84218792 -4.47559068 41.843028 -4.47329733 41.8397161 -4.47169181 41.83347013 -4.47413798 41.83204839 -4.47333464 41.82858892 -4.47831302 41.82036025 -4.4611469 41.81930112 -4.46580642 41.82063522 -4.46854596 41.8185387 -4.47401246 41.81830156 -4.47914815 41.82034192 -4.48366209 41.82009622 -4.48734078 41.78035785 -4.49365458 41.77865386 -4.49239978 41.77140615 -4.50118316 41.7702084 -4.49702869 41.76953161 -4.48463304 41.76332202 -4.46811747 41.75836327 -4.45006956 41.75831333 -4.44330826 41.76178061 -4.43397888 41.76813331 -4.42141592 41.78317297 -4.40396244 41.78519207 -4.3949571 41.78777353 -4.38929671 41.7864586 -4.38032709 41.78371106 -4.38261472 41.78233885 -4.38138193 41.77398312 -4.35392684 41.77245704 -4.34429372 41.77297485 -4.34160948 41.77154071 -4.33792204 41.77214645 -4.33385592 41.76930497 -4.33112628 41.76796962 -4.32587731 41.76344402 -4.31764002 41.76764613 -4.31799063 41.76972772 -4.31554285 41.76946351 -4.31344401 41.77592519 -4.3067896 41.77648805 -4.30402166 41.77456492 -4.29168604 41.77488348 -4.28657886 41.7885982 -4.2787415 41.79340027 -4.26967793 41.80525809 -4.26023354 41.80637372 -4.25623472 41.80292992 -4.24744046 41.81144425 -4.23633706 41.8139695 -4.23602446 41.80693781 -4.23159186 41.80697582 -4.22972661 41.80507919 -4.22769213 41.79940691 -4.21394652 41.80381615 -4.19631053 41.80403405 -4.19441259 41.80163527 -4.19035978 41.80351956 -4.17882662 41.8001935 -4.1702678 41.80124386 -4.16351004 41.79621631 -4.15386255 41.79886868 -4.15073242 41.80731022 -4.12319549 41.80027362 -4.11789694 41.79436627 -4.11035634 41.78534025 -4.10862434 41.78135732 -4.10415161 41.77471147 -4.10027176 41.77480946 -4.09661564 41.77962752 -4.08909274 41.7785608 -4.08379231 41.77062289 -4.07162759 41.77019756 -4.06407692 41.7721352 -4.06395247 41.77473416 -4.06145656 41.77392521 -4.05540322 41.76992006 -4.04820315 41.76835636 -4.04087498 41.76743204 -4.0444813 41.76820519 -4.0495829 41.75948497 -4.05273701 41.74068695 -4.05578559 41.73914263 -4.06308387 41.74116747 -4.06909407 41.73484008 -4.07634843 41.72931722 -4.07460913 41.72608544 -4.0763588 41.7265496 -4.06811868 41.72172231 -4.06029658 41.71956521 -4.05293987 41.7153016 -4.04937221 41.71108992 -4.04205567 41.69767147 -4.03188867 41.69238281 -4.02603623 41.68300476 -4.02625991 41.67133563 -4.02382845 41.6616631 -4.02474439 41.65711947 -4.02723067 41.63049413 -4.03036204 41.62564386 -4.03488259 41.62062338 -4.03528263 41.61440452 -4.02871401 41.61604424 -4.02260672 41.62036523 -4.01778951 41.61698734 -4.01169903 41.61936168 -4.00592647 41.61719739 -4.00312018 41.61596179 -4.00331708 41.61373208 -4.00492688 41.61196268 -4.00847605 41.61003294 -4.00873411 41.6086577 -3.9928589 41.60043783 -3.99244501 41.59839551 -3.99008586 41.59853912 -3.9859482 41.59748943 -3.98440835 41.58887694 -3.98461356 41.5859677 -3.98354961 41.58337123 -3.98066703 41.57452587 -3.98071327 41.57197558 -3.98297769 41.56494679 -3.98546181 41.55601156 -3.99386424 41.53097282 -3.99370894 41.52114594 -3.99578792 41.51668546 -3.99912319 41.51571125 -4.00549579 41.51716039 -4.00664476 41.51581294 -4.010339 41.51755968 -4.01144479 41.5182328 -4.01376828 41.51779662 -4.02739987 41.50995133 -4.03643095 41.50975971 -4.04268306 41.50787789 -4.04854836 41.50315667 -4.05165944 41.50059955 -4.05647057 41.4973155 -4.0580346 41.49474463 -4.06527685 41.49540353 -4.07865763 41.4896379 -4.09494965 41.48327296 -4.1087012 41.47777843 -4.13454985 41.47700255 -4.13650055 41.46993545 -4.14248474 41.48209899 -4.15831722 41.47606502 -4.16801878 41.4753921 -4.17834248 41.47109614 -4.19746199 41.45996687 -4.22783837 41.45573588 -4.23349371 41.46142422 -4.24392301 41.46208905 -4.24823437 41.45644908 -4.25991995 41.45059044 -4.26109971 41.45701445 -4.26503146 41.46127271 -4.27013118 41.45789554 -4.27414826 41.45882096 -4.28326628 41.45824776 -4.28780489 41.45502351 -4.29098588 41.45497898 -4.29414582 41.45772271 -4.30004324 41.45511083 -4.31349656 41.45331591 -4.31921921 41.44842908 -4.32042531 41.44575128 -4.32769746 41.44478564 -4.32785741 41.44497565 -4.33168 41.44897095 -4.33744813 41.44807951 -4.3466839 41.4505088 -4.34844603 41.44919969 -4.35788862 41.44993008 -4.36239326 41.44466416 -4.36134962 41.43888417 -4.36492767 41.43600195 -4.36491529 41.43921809 -4.36790319 41.43869921 -4.37289573 41.44173284 -4.37681398 41.44156978 -4.37914474 41.43843924 -4.38106564 41.44049249 -4.3885784 41.4390517 -4.38854773 41.43781596 -4.39092727 41.43785338 -4.39378883 41.43968811 -4.39401958 41.44164735 -4.41061631 41.43886603 -4.41778582 41.43983411 -4.41889611 41.43278863 -4.42560086 41.43338319 -4.43139463 41.43104421 -4.43188194 41.43052097 -4.43483854 41.42897076 -4.43057982 41.42814359 -4.43118397 41.42701254 -4.44312657 41.42563999 -4.44339542 41.42469947 -4.44942988 41.42326603 -4.45024764 41.42375337 -4.45302282 41.42139682 -4.45347295 41.4218693 -4.4545724 41.42039769 -4.4555567 41.42177357 -4.45715504 41.41913284 -4.46366538 41.41685021 -4.46254923 41.41663585 -4.46594259 41.41443961 -4.4658215 41.41307675 -4.4681599 41.4134424 -4.47337281 41.41194283 -4.47441579 41.4116273 -4.47724422 41.41197956 -4.48276785 41.41036916 -4.48471729 41.40911261 -4.48367183 41.40879002 -4.48633241 41.41024809 -4.48989505 41.41000657 -4.49532124 41.41150393 -4.49515216 41.41202504 -4.49802361 41.41393527 -4.50004161 41.41085885 -4.50180147 41.40965947 -4.51495826 41.40852226 -4.51649912 41.40598371 -4.51433463 41.40141362 -4.51596319 41.39409076 -4.5152789 41.36680132 -4.48400209 41.36565735 -4.48400003 41.36392692 -4.49590444 41.36012587 -4.49728793 41.35763088 -4.50005195 41.35336039 -4.49943995 41.35184301 -4.49699053 41.34961314 -4.49668847 41.34715449 -4.49942909 41.35019399 -4.49980959 41.34719668 -4.50447402 41.34687381 -4.5023032 41.34280325 -4.5022455 41.33532685 -4.49743699 41.32641035 -4.49391102 41.32616451 -4.48227921 41.32346101 -4.4781794 41.32226407 -4.47388687 41.31846061 -4.47055136 41.2958874 -4.46778677 41.29156194 -4.47146362 41.29495272 -4.48167958 41.29735433 -4.48264166 41.30118273 -4.49028915 41.30081799 -4.49341024 41.30240334 -4.49618167 41.30091162 -4.50006529 41.31129072 -4.50538038 41.31306041 -4.51123896 41.32008521 -4.52428088 41.32109939 -4.52862965 41.31928916 -4.53402348 41.31338841 -4.53881895 41.31236983 -4.54358542 41.30216557 -4.55954132 41.30319065 -4.56232499 41.30279041 -4.56526566 41.30665059 -4.57413775 41.31708865 -4.58669441 41.32058707 -4.59685114 41.31637618 -4.59977098 41.31313971 -4.60515133 41.30760452 -4.60096607 41.30265445 -4.6019798 41.29893063 -4.59577339 41.291946 -4.59020514 41.28821505 -4.58053715 41.28486529 -4.57652765 41.27966697 -4.57529212 41.2770276 -4.57662559 41.27520058 -4.57388332 41.27323872 -4.57639107 41.27033015 -4.58551383 41.27049561 -4.58788167 41.2641673 -4.59867492 41.25589635 -4.60401143 41.25405077 -4.60329791 41.24136458 -4.61517157 41.23434161 -4.62393576 41.23288135 -4.62911374 41.22735243 -4.63725644 41.22411229 -4.64781725 41.22142046 -4.65086332 41.21984114 -4.64918925 41.21883652 -4.65015414 41.21693318 -4.64846009 41.21329344 -4.64851184 41.20914351 -4.64645151 41.20010334 -4.65062536 41.19726004 -4.64537839 41.19400209 -4.64266138 41.19368254 -4.64043539 41.1899019 -4.63836157 41.19060599 -4.63635201 41.18483196 -4.63192785 41.18273158 -4.63204262 41.1766848 -4.62842318 41.17079433 -4.62775279 41.16823522 -4.63418584 41.16809995 -4.64369462 41.17216829 -4.65271314 41.18032807 -4.66591353 41.1857359 -4.6805612 41.18446609 -4.68300875 41.18068014 -4.68443782 41.17450798 -4.70234009 41.16691592 -4.70894967 41.15696737 -4.72133617 41.14931763 -4.72210118 41.15077247 -4.72900334 41.15041202 -4.73739516 41.14896225 -4.73915628 41.14974209 -4.74892468 41.14235819 -4.76707796 41.14421943 -4.77139374 41.14499774 -4.77875475 41.14355862 -4.78618686 41.1398939 -4.78900656 41.13579281 -4.79612694 41.13516346 -4.80584341 41.12937717 -4.81352342 41.12636136 -4.81227297 41.12202017 -4.81339229 41.11676536 -4.81704711 41.10971365 -4.81754333 41.10795378 -4.81890011 41.10344906 -4.8149652 41.09915427 -4.82795709 41.10046996 -4.84655754 41.09977774 -4.85320635 41.10073072 -4.8555551 41.09401519 -4.8636769 41.0978868 -4.87210939 41.09916595 -4.87265777 41.10026799 -4.87024798 41.10035145 -4.87176257 41.10345851 -4.87456582 41.1053058 -4.87894117 41.10447149 -4.8809418 41.1093441 -4.88977453 41.11313703 -4.89411136 41.11449524 -4.90188012 41.11873093 -4.90501591 41.11876376 -4.90901889 41.12413797 -4.92382648 41.12926887 -4.93101693 41.13258108 -4.94081173 41.13762414 -4.94514243 41.14070794 -4.95080975 41.13869049 -4.95981703 41.140114 -4.96296919 41.14974949 -4.96468666 41.15230271 -4.96761105 41.15120814 -4.9773502 41.15223734 -4.98454331 41.1548924 -4.9825736 41.15598364 -4.98771927 41.16080372 -4.98973615 41.15892735 -5.00444617 41.16016088 -5.00705815 41.16195472 -5.00749425 41.16196667 -5.01093918 41.16424853 -5.01385768 41.1622029 -5.01391423 41.16233578 -5.01558693 41.15678542 -5.02391428 41.1535533 -5.021777 41.13862011 -5.05986181 41.13940233 -5.07599493 41.14285094 -5.08353881 41.14709833 -5.10012939 41.14268104 -5.10231185 41.13501102 -5.11144303 41.13638783 -5.11298833 41.13559903 -5.12404297 41.13204289 -5.12492889 41.13238135 -5.12854957 41.13363812 -5.12829235 41.13612108 -5.13235197 41.13685177 -5.13180373 41.14117023 -5.13644743 41.14400361 -5.13617007 41.14723312 -5.14220906 41.14763001 -5.14508181 41.1490162 -5.14561559 41.14993376 -5.14857692 41.15124687 -5.14867941 41.15721237 -5.16008889 41.15672402 -5.16163403 41.16026117 -5.16608857 41.16129136 -5.17451309 41.16333512 -5.17455683 41.16313668 -5.17791141 41.16459171 -5.17860323 41.16525015 -5.17664643 41.16729189 -5.17965817 41.16600233 -5.18164172 41.16672114 -5.18506254 41.16210884 -5.19126188 41.16315536 -5.19637408 41.16645419 -5.20050114 41.16493111 -5.20713671 41.16683447 -5.20792772 41.15958416 -5.21821975 41.16215154 -5.22240635 41.16755427 -5.21734448 41.17055762 -5.22227336 41.17652945 -5.22459726 41.17821463 -5.22361714 41.17844441 -5.22571121 41.17934165 -5.22448982 41.18145859 -5.22494297 41.1832748 -5.22836657 41.18671205 -5.2276128 41.18832143 -5.22962286 41.18923119 -5.22868789 41.19052853 -5.22960233 41.19001988 -5.2307536 41.19216087 -5.23460613 41.19314886 -5.2347471 41.19388927 -5.23882654 41.19714123 -5.2425029 41.19611426 -5.24436389 41.19615655 -5.24865817 41.19814592 -5.24779617 41.19977414 -5.2529678 41.19763277 -5.25561319 41.19725758 -5.26417425 41.19925063 -5.26861947 41.19796122 -5.27189007 41.19578033 -5.2696682 41.19546473 -5.27059934 41.19719048 -5.27397409 41.19567551 -5.27816672 41.19672342 -5.27891859 41.19504818 -5.28255705 41.19615926 -5.28284609 41.19561535 -5.2884674 41.18731484 -5.29189818 41.18648871 -5.29041481 41.18388937 -5.29158788 41.18199147 -5.28874393 41.18117001 -5.29697713 41.1854342 -5.30174024 41.18326753 -5.307387 41.18445337 -5.30844208 41.17762219 -5.32697796 41.17761872 -5.33026806 41.17826684 -5.33250842 41.18159539 -5.32781015 41.18435063 -5.32963649 41.18838452 -5.33857876 41.18999165 -5.33616788 41.19410493 -5.34029685 41.2041523 -5.32984998 41.21191092 -5.31538312 41.21650713 -5.3112153 41.21974538 -5.31007685 41.22140047 -5.31153085 41.22209414 -5.30838209 41.22479351 -5.30761811 41.22654506 -5.3047092 41.22409008 -5.30271418 41.22625253 -5.29365172 41.2260485 -5.29801099 41.22932395 -5.29545327 41.22980912 -5.29777291 41.23175788 -5.29850933 41.23599611 -5.2969039 41.23629237 -5.29469491 41.23760563 -5.29523012 41.23741227 -5.29679836 41.24061023 -5.29496539 41.24359037 -5.29727733 41.25459422 -5.29920268 41.25927175 -5.30220759 41.26281614 -5.30152048 41.2691899 -5.29174059 41.27071481 -5.29656914 41.28253694 -5.294954 41.29234412 -5.29726837 41.30033103 -5.30367582 41.30837371 -5.30324246 41.31159638 -5.3064737 41.31597895 -5.3035104 41.31894035 -5.3058488 41.31869983 -5.30975885 41.32044027 -5.3159254 41.32633187 -5.32212021 41.34041674 -5.32442541 41.35820889 -5.33312782 41.37064373 -5.33462453 41.37773401 -5.33407716 41.38391276 -5.33184664 41.39418433 -5.32229859 41.40145323 -5.32048801 41.40866691 -5.31112628 41.41405291 -5.3075366 41.42085153 -5.31835506 41.42559851 -5.3392379 41.43623932 -5.33327683 41.44412892 -5.33284139 41.44721484 -5.32723016 41.45020298 -5.33222118 41.45534311 -5.3247912 41.45947727 -5.32923709 41.45948237 -5.33387074 41.46129123 -5.33749164 41.47925601 -5.34473636 41.48128135 -5.34213857 41.47570197 -5.33615331 41.47565006 -5.3324989 41.4779441 -5.33218595 41.47807914 -5.32863386 41.48176661 -5.32087316 41.48759473 -5.31323567 41.4987113 -5.30234625 41.50116614 -5.29623922 41.50105543 -5.28959809 41.50635528 -5.27715636 41.50440335 -5.27019878 41.50542037 -5.26886837 41.50368463 -5.26188278 41.50766959 -5.2575523 41.51387002 -5.24724677 41.51978811 -5.24167519 41.51772504 -5.23383858 41.52021977 -5.23152756 41.52843127 -5.22887322 41.53078908 -5.23314937 41.53416493 -5.23369699 41.54051024 -5.23947783 41.54465758 -5.24710179 41.54676977 -5.24778642 41.54709424 -5.25742489 41.54811315 -5.25690883 41.55164812 -5.26400996 41.55130001 -5.27024452 41.55018065 -5.27265122 41.55268132 -5.27417767 41.55704744 -5.27200453 41.55918788 -5.2726191 41.56214797 -5.28050558 41.56425152 -5.2793443 41.56692713 -5.28294022 41.56862416 -5.28320391 41.57035403 -5.28770231 41.57437197 -5.29307356 41.5846743 -5.28091417 41.59004658 -5.26795457 41.59287785 -5.26642204 41.59393685 -5.27071832 41.59608489 -5.27186143 41.59871294 -5.27012981 41.60113663 -5.2705387 41.60507945 -5.27746889 41.60889682 -5.29248376 41.60828275 -5.29437007 41.60949966 -5.29747342 41.60833446 -5.30573627 41.61169081 -5.30858008 41.61036826 -5.3161174 41.61141072 -5.31757075 41.61085298 -5.32021497 41.61591917 -5.32889379 41.62512864 -5.32420774 41.63014189 -5.32526412 41.63416913 -5.32341605 41.63426532 -5.32177482 41.63601425 -5.32169348 41.63676981 -5.31951161 41.64339164 -5.32475595 41.64867057 -5.32291638 41.6496307 -5.32442792 41.65764936 -5.32428391 41.66256978 -5.32235894 41.68052645 -5.32735356 41.68179766 -5.32818025 41.68300716 -5.33204441 41.68471054 -5.33198575 41.68679538 -5.33841696 41.6960127 -5.34132239 41.69911207 -5.34082187 41.7004301 -5.34287662 41.70202966 -5.34569878 41.69969448 -5.35813597 41.71705414 -5.356162 41.7199209 -5.35865895 41.72713104 -5.36016099 41.72884683 -5.36169059 41.72941564 -5.36555874 41.72700889 -5.37002691 41.72134105 -5.37147759 41.71978719 -5.37519505 41.72803838 -5.37555912 41.72893397 -5.37710705 41.73325598 -5.37802379 41.74136473 -5.38438363 41.75257232 -5.39069176 41.76051038 -5.39138337 41.76883584 -5.38210448 41.7753061 -5.37147948 41.77784569 -5.37017738 41.77934721 -5.36505882 41.78087359 -5.34949674 41.78612939 -5.34571757 41.78916854 -5.34154429 41.78840379 -5.335319 41.78926288 -5.33514561 41.78895256 -5.32914131 41.78983859 -5.32630933 41.78821042 -5.32265236 41.79032751 -5.32039413 41.79098533 -5.31636228 41.79898966 -5.30617936 41.80403307 -5.29539459 41.81479638 -5.27861155 41.8228924 -5.27681557 41.82768551 -5.28714828 41.82625791 -5.29054123 41.8275571 -5.29493437 41.82551541 -5.29840148 41.82646651 -5.29992862 41.8255677 -5.30253341 41.82667856 -5.30417467 41.82599578 -5.30588407 41.82679581 -5.30640651 41.82571529 -5.30774031 41.82907335 -5.32653736 41.83179525 -5.33042919 41.83534687 -5.32716203 41.83976974 -5.31999982 41.84080539 -5.32178359 41.85783825 -5.30647368 41.86391138 -5.30945102 41.86709219 -5.30533648 41.87584465 -5.3098807 41.8823411 -5.31151267 41.89159033 -5.31106284 41.90033546 -5.30656839 41.91116714 -5.29591439 41.91993752 -5.29373277 41.92208682 -5.2988384 41.9306028 -5.30933559 41.93225773 -5.30988977 41.93751162 -5.32087496 41.93747281 -5.33521516 41.94012088 -5.33475699 41.94258354 -5.33145723 41.94948961 -5.31239425 41.95355165 -5.30566405 41.96131847 -5.29964561 41.96799965 -5.28844585 41.97148641 -5.28882421 41.97411411 -5.28530974 41.98101267 -5.26943079 41.98190749 -5.26334289 41.98093978 -5.25440075 41.98461113 -5.26050547 41.97879984 -5.28064952 41.99132836 -5.30177659 41.99110106 -5.3032291 41.99278705 -5.30223971 42.00164153 -5.30842712 42.00282727 -5.30947218 42.00262345 -5.31332858 42.00662098 -5.31784472 42.01886632 -5.32331399 42.02039764 -5.32551953 42.02016608 -5.33204512 42.02258599 -5.34894629 42.03548731 -5.37145673 42.03964489 -5.37639567 42.04146612 -5.37629445 42.04319766 -5.37443792 42.04677521 -5.37563465 42.05143305 -5.37119242 42.06406397 -5.37313739 42.07505748 -5.3780441 42.08572228 -5.38877987 42.08981002 -5.3901183 42.09951523 -5.3763952 42.10319024 -5.37723397 42.10384121 -5.37971335 42.10981411 -5.38048125 42.11280497 -5.38000056 42.11289088 -5.37759685 42.11421615 -5.37796091 42.11829607 -5.37273083 42.12141385 -5.37525454 42.12671966 -5.37518683 42.12801126 -5.3723921 42.1300645 -5.37152507 42.13791079 -5.37619829 42.13844804 -5.37460917 42.14197874 -5.37589081 42.14663455 -5.3802402 42.15935234 -5.38145568 42.16333544 -5.37959584 42.16688753 -5.38504341 42.17254441 -5.38887601 42.18942172 -5.38711442 42.19788619 -5.38022698 42.20528759 -5.38851169 42.22144324 -5.38810347 42.225404 -5.38082533 42.22237365 -5.37409591 42.2228538 -5.36829814 42.22515187 -5.36123527 42.21924326 -5.35295806 42.22046484 -5.34916275 42.21760495 -5.34104845 42.21633652 -5.34054117 42.21675151 -5.3356499 42.21347368 -5.3374067 42.20862831 -5.33211592 42.20680007 -5.32680359 42.20818301 -5.32433477 42.20529879 -5.31733669 42.19977632 -5.312084 42.19926603 -5.30746288 42.1996365 -5.30650747 42.20062224 -5.3080937 42.20247505 -5.30820963 42.20599914 -5.30583063 42.20829076 -5.30607152 42.21544142 -5.29978989 42.21978091 -5.29985061 42.22215379 -5.3018754 42.22264604 -5.29933677 42.22535884 -5.29698767 42.22992781 -5.28692616 42.21639775 -5.27669691 42.2154145 -5.27496547 42.21617982 -5.27361183 42.21089816 -5.26564498 42.21075962 -5.25714805 42.21290931 -5.25316635 42.21316726 -5.24920195 42.21473052 -5.24571994 42.21390066 -5.24440638 42.21451623 -5.24148431 42.21936136 -5.2327144 42.22394222 -5.23102208 42.2241416 -5.22818175 42.22672363 -5.22599457 42.23132003 -5.22952499 42.23032698 -5.235658 42.23174121 -5.24255468 42.23352517 -5.2448113 42.23518443 -5.24470051 42.23607567 -5.25160357 42.23977485 -5.25400154 42.24559318 -5.24984539 42.24544856 -5.24849483 42.25080097 -5.2460425 42.2638677 -5.24468807 42.26618183 -5.23871994 42.27130813 -5.23538506 42.27334868 -5.23650007 42.27564888 -5.23029997 42.26442927 -5.23161369 42.26246453 -5.22845267 42.27792307 -5.22031483 42.27799346 -5.21667914 42.27612555 -5.21314546 42.26930022 -5.20702576 42.26471046 -5.20030614 42.26402085 -5.201046 42.26054185 -5.19790609 42.26420927 -5.18272057 42.26804912 -5.18348358 42.27110436 -5.17815682 42.2718265 -5.16618933 42.27107993 -5.16423571 42.27390731 -5.15613523 42.2777172 -5.15610756 42.28154974 -5.14431677 42.29653083 -5.12957708 42.29781741 -5.12964465 42.30100542 -5.12624621 42.30182485 -5.12333795 42.30359809 -5.12338544 42.30769406 -5.11958005 42.30971025 -5.11378746 42.31184148 -5.11200233</gml:posList>
-                        </gml:LinearRing>
-                    </gml:exterior>
-                </gml:Polygon>
-            </gml:surfaceMember>
-        </gml:MultiSurface>
-    </Intersects>
-  </And>
-</ogc:Filter>
-</wfs:Query>
-</wfs:GetFeature>]]></wps:Body>
-      </wps:Reference>
-    </wps:Input>
-  </wps:DataInputs>
-  <wps:ResponseForm>
-    <wps:RawDataOutput mimeType="text/xml; subtype=wfs-collection/1.1">
-      <ows:Identifier>result</ows:Identifier>
-    </wps:RawDataOutput>
-  </wps:ResponseForm>
-</wps:Execute>`;
-}
-function getWPSTransform(){
-  return `<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
-  <ows:Identifier>gs:CollectGeometries</ows:Identifier>
-  <wps:DataInputs>
-    <wps:Input>
-      <ows:Identifier>features</ows:Identifier>
-      <wps:Data>
-        <wps:ComplexData mimeType="text/xml; subtype=wfs-collection/1.1"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-<wfs:FeatureCollection xmlns:wfs="http://www.opengis.net/wfs" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:feature="p_casas_rurales" xmlns:ogc="http://www.opengis.net/ogc" xmlns:ows="http://www.opengis.net/ows" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml">
-	<gml:boundedBy>
-		<gml:Envelope srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-			<gml:lowerCorner>-5.48840707 41.09401519</gml:lowerCorner>
-			<gml:upperCorner>-3.99365882 42.29712699</gml:upperCorner>
-		</gml:Envelope>
-	</gml:boundedBy>
-	<gml:featureMember>
-		<feature:incendios_por_municipios gml:id="0">
-			<gml:boundedBy>
-				<gml:Envelope srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:lowerCorner>-5.20863533175856 41.57753551</gml:lowerCorner>
-					<gml:upperCorner>-5.17763882 41.58892362</gml:upperCorner>
-				</gml:Envelope>
-			</gml:boundedBy>
-			<feature:the_geom>
-				<gml:MultiPolygon srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:polygonMember>
-						<gml:Polygon srsDimension="2">
-							<gml:exterior>
-								<gml:LinearRing srsDimension="2">
-									<gml:posList>-5.185526616039128 41.58892362 -5.18357037 41.58480906 -5.1842436 41.58413875 -5.17787323 41.58126944 -5.17763882 41.58000392 -5.1790723 41.58018394 -5.17958078 41.57889528 -5.18693278 41.58242138 -5.19440309 41.58020745 -5.19895468 41.57753551 -5.20141009 41.57778572 -5.20381416 41.57864032 -5.20686634 41.58373351 -5.20863533175856 41.58392294 -5.19411968 41.58392294 -5.18911995 41.58392294 -5.18911995 41.58892362 -5.185526616039128 41.58892362</gml:posList>
-								</gml:LinearRing>
-							</gml:exterior>
-						</gml:Polygon>
-					</gml:polygonMember>
-				</gml:MultiPolygon>
-			</feature:the_geom>
-			<feature:incendios_por_municipios_gid>7511</feature:incendios_por_municipios_gid>
-			<feature:incendios_por_municipios_ine>47213</feature:incendios_por_municipios_ine>
-			<feature:incendios_por_municipios_texto>Villalbarba</feature:incendios_por_municipios_texto>
-			<feature:incendios_por_municipios_total>0</feature:incendios_por_municipios_total>
-			<feature:incendios_por_municipios_cod_prov>47</feature:incendios_por_municipios_cod_prov>
-			<feature:distancias_the_geom_distancia>10</feature:distancias_the_geom_distancia>
-			<feature:INTERSECTION_ID>0</feature:INTERSECTION_ID>
-		</feature:incendios_por_municipios>
-	</gml:featureMember>
-	<gml:featureMember>
-		<feature:incendios_por_municipios gml:id="1">
-			<gml:boundedBy>
-				<gml:Envelope srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:lowerCorner>-5.19243198 41.48618374</gml:lowerCorner>
-					<gml:upperCorner>-5.11011978 41.58490657313677</gml:upperCorner>
-				</gml:Envelope>
-			</gml:boundedBy>
-			<feature:the_geom>
-				<gml:MultiPolygon srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:polygonMember>
-						<gml:Polygon srsDimension="2">
-							<gml:exterior>
-								<gml:LinearRing srsDimension="2">
-									<gml:posList>-5.168360134154989 41.58392294 -5.16642419 41.58218838 -5.16160782 41.58020755 -5.15938163 41.57495345 -5.15853117 41.57534771 -5.1594664 41.57317753 -5.1569022 41.57289246 -5.15654052 41.57103487 -5.151664 41.57299069 -5.15148583 41.56328473 -5.14698245 41.55765879 -5.14108019 41.56520835 -5.12806721 41.55969477 -5.12152659 41.5621034 -5.1170498 41.5605197 -5.11706656 41.55735804 -5.11187607 41.55114877 -5.11282347 41.54968128 -5.11139319 41.54551942 -5.11152093 41.53765416 -5.11175306 41.53520902 -5.11341937 41.53447588 -5.11011978 41.53179845 -5.11233109 41.52865949 -5.11206354 41.52596238 -5.11455656 41.52338561 -5.11609733 41.52359146 -5.12195498 41.51102709 -5.12825023 41.50311077 -5.13772359 41.4997196 -5.15370398 41.50003384 -5.15639676 41.49236365 -5.16082503 41.492965 -5.16299747 41.48769122 -5.16939146 41.48618374 -5.17112137 41.48741203 -5.17912049 41.49168030607105 -5.17912049 41.4939108 -5.18327448552451 41.4939108 -5.18620482 41.49569162 -5.17899073 41.50455612 -5.19243198 41.52012542 -5.1876675 41.52419713 -5.18551696 41.52795784 -5.18516298 41.53026127 -5.18953216 41.53293419 -5.18724204 41.53433781 -5.18458074 41.5339741 -5.18567061 41.53715074 -5.18194602 41.54046396 -5.18281454 41.54276217 -5.17620096 41.54681452 -5.17632179 41.54827135 -5.1731291 41.54780937 -5.16902226 41.55192188 -5.16756996 41.55151699 -5.16830271 41.56195998 -5.1713502 41.56737849 -5.17029041 41.56939798 -5.17508595 41.58185361 -5.17657084 41.58392406 -5.17412076 41.58490657313677 -5.17412076 41.58392294 -5.168360134154989 41.58392294</gml:posList>
-								</gml:LinearRing>
-							</gml:exterior>
-						</gml:Polygon>
-					</gml:polygonMember>
-				</gml:MultiPolygon>
-			</feature:the_geom>
-			<feature:incendios_por_municipios_gid>7508</feature:incendios_por_municipios_gid>
-			<feature:incendios_por_municipios_ine>47210</feature:incendios_por_municipios_ine>
-			<feature:incendios_por_municipios_texto>Villalar de los Comuneros</feature:incendios_por_municipios_texto>
-			<feature:incendios_por_municipios_total>0</feature:incendios_por_municipios_total>
-			<feature:incendios_por_municipios_cod_prov>47</feature:incendios_por_municipios_cod_prov>
-			<feature:distancias_the_geom_distancia>10</feature:distancias_the_geom_distancia>
-			<feature:INTERSECTION_ID>1</feature:INTERSECTION_ID>
-		</feature:incendios_por_municipios>
-	</gml:featureMember>
-	<gml:featureMember>
-		<feature:incendios_por_municipios gml:id="2">
-			<gml:boundedBy>
-				<gml:Envelope srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:lowerCorner>-5.026608790892801 41.54028738161922</gml:lowerCorner>
-					<gml:upperCorner>-4.99913026 41.56392025</gml:upperCorner>
-				</gml:Envelope>
-			</gml:boundedBy>
-			<feature:the_geom>
-				<gml:MultiPolygon srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:polygonMember>
-						<gml:Polygon srsDimension="2">
-							<gml:exterior>
-								<gml:LinearRing srsDimension="2">
-									<gml:posList>-4.99913026 41.54028738161922 -5.01469196 41.54134642 -5.01486019 41.54637825 -5.0199162 41.55204491 -5.01997879 41.55443961 -5.02267032 41.55500473 -5.02362629 41.55874376 -5.026608790892801 41.56392025 -5.01912917 41.56392025 -5.01912917 41.55891957 -5.01412944 41.55891957 -5.01412944 41.5539189 -5.00912972 41.5539189 -5.00912972 41.54891822 -5.00412999 41.54891822 -5.00412999 41.54391755 -4.99913026 41.54391755 -4.99913026 41.54028738161922</gml:posList>
-								</gml:LinearRing>
-							</gml:exterior>
-						</gml:Polygon>
-					</gml:polygonMember>
-				</gml:MultiPolygon>
-			</feature:the_geom>
-			<feature:incendios_por_municipios_gid>7490</feature:incendios_por_municipios_gid>
-			<feature:incendios_por_municipios_ine>47190</feature:incendios_por_municipios_ine>
-			<feature:incendios_por_municipios_texto>Velilla</feature:incendios_por_municipios_texto>
-			<feature:incendios_por_municipios_total>0</feature:incendios_por_municipios_total>
-			<feature:incendios_por_municipios_cod_prov>47</feature:incendios_por_municipios_cod_prov>
-			<feature:distancias_the_geom_distancia>10</feature:distancias_the_geom_distancia>
-			<feature:INTERSECTION_ID>2</feature:INTERSECTION_ID>
-		</feature:incendios_por_municipios>
-	</gml:featureMember>
-	<gml:featureMember>
-		<feature:incendios_por_municipios gml:id="3">
-			<gml:boundedBy>
-				<gml:Envelope srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:lowerCorner>-5.48840707 41.96738964</gml:lowerCorner>
-					<gml:upperCorner>-5.43410666 42.00397963</gml:upperCorner>
-				</gml:Envelope>
-			</gml:boundedBy>
-			<feature:the_geom>
-				<gml:MultiPolygon srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:polygonMember>
-						<gml:Polygon srsDimension="2">
-							<gml:exterior>
-								<gml:LinearRing srsDimension="2">
-									<gml:posList>-5.43827978 41.96738964 -5.4470342 41.97288588 -5.45615904 41.97573486 -5.4608026 41.97471678 -5.46312439 41.97545945 -5.46278663 41.97765509 -5.46698216 41.97815936 -5.48480474 41.98456507 -5.48840707 41.995537 -5.48410001 41.99623369 -5.47908652 41.99926007 -5.478508669893067 42.00397963 -5.47410449 42.00397963 -5.47410449 41.99897896 -5.46410503 41.99897896 -5.46410503 41.99397828 -5.45410557 41.99397828 -5.45410557 41.98897761 -5.44410611 41.98897761 -5.44410611 41.98397693 -5.43410666 41.98397693 -5.43410666 41.98113562869118 -5.43827978 41.96738964</gml:posList>
-								</gml:LinearRing>
-							</gml:exterior>
-						</gml:Polygon>
-					</gml:polygonMember>
-				</gml:MultiPolygon>
-			</feature:the_geom>
-			<feature:incendios_por_municipios_gid>7429</feature:incendios_por_municipios_gid>
-			<feature:incendios_por_municipios_ine>47128</feature:incendios_por_municipios_ine>
-			<feature:incendios_por_municipios_texto>Quintanilla del Molar</feature:incendios_por_municipios_texto>
-			<feature:incendios_por_municipios_total>0</feature:incendios_por_municipios_total>
-			<feature:incendios_por_municipios_cod_prov>47</feature:incendios_por_municipios_cod_prov>
-			<feature:distancias_the_geom_distancia>10</feature:distancias_the_geom_distancia>
-			<feature:INTERSECTION_ID>3</feature:INTERSECTION_ID>
-		</feature:incendios_por_municipios>
-	</gml:featureMember>
-	<gml:featureMember>
-		<feature:incendios_por_municipios gml:id="4">
-			<gml:boundedBy>
-				<gml:Envelope srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:lowerCorner>-5.168360134154989 41.55765879</gml:lowerCorner>
-					<gml:upperCorner>-5.11278162 41.58392294</gml:upperCorner>
-				</gml:Envelope>
-			</gml:boundedBy>
-			<feature:the_geom>
-				<gml:MultiPolygon srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:polygonMember>
-						<gml:Polygon srsDimension="2">
-							<gml:exterior>
-								<gml:LinearRing srsDimension="2">
-									<gml:posList>-5.11384609 41.57039606 -5.11713274 41.56673283 -5.11833331 41.56824185 -5.12031736 41.566566 -5.12152659 41.5621034 -5.12806721 41.55969477 -5.14108019 41.56520835 -5.14698245 41.55765879 -5.15148583 41.56328473 -5.151664 41.57299069 -5.15654052 41.57103487 -5.1569022 41.57289246 -5.1594664 41.57317753 -5.15853117 41.57534771 -5.15938163 41.57495345 -5.16160782 41.58020755 -5.16642419 41.58218838 -5.168360134154989 41.58392294 -5.14912212 41.58392294 -5.14912212 41.57892227 -5.13912266 41.57892227 -5.13912266 41.5739216 -5.1291232 41.5739216 -5.1291232 41.56892092 -5.12412348 41.56892092 -5.12412348 41.5739216 -5.115026541409057 41.5739216 -5.11464627 41.57212859 -5.11278162 41.57232505 -5.11384609 41.57039606</gml:posList>
-								</gml:LinearRing>
-							</gml:exterior>
-						</gml:Polygon>
-					</gml:polygonMember>
-				</gml:MultiPolygon>
-			</feature:the_geom>
-			<feature:incendios_por_municipios_gid>7385</feature:incendios_por_municipios_gid>
-			<feature:incendios_por_municipios_ine>47081</feature:incendios_por_municipios_ine>
-			<feature:incendios_por_municipios_texto>Marzales</feature:incendios_por_municipios_texto>
-			<feature:incendios_por_municipios_total>0</feature:incendios_por_municipios_total>
-			<feature:incendios_por_municipios_cod_prov>47</feature:incendios_por_municipios_cod_prov>
-			<feature:distancias_the_geom_distancia>10</feature:distancias_the_geom_distancia>
-			<feature:INTERSECTION_ID>4</feature:INTERSECTION_ID>
-		</feature:incendios_por_municipios>
-	</gml:featureMember>
-	<gml:featureMember>
-		<feature:incendios_por_municipios gml:id="5">
-			<gml:boundedBy>
-				<gml:Envelope srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:lowerCorner>-5.20863533175856 41.57753551</gml:lowerCorner>
-					<gml:upperCorner>-5.17763882 41.58892362</gml:upperCorner>
-				</gml:Envelope>
-			</gml:boundedBy>
-			<feature:the_geom>
-				<gml:MultiPolygon srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:polygonMember>
-						<gml:Polygon srsDimension="2">
-							<gml:exterior>
-								<gml:LinearRing srsDimension="2">
-									<gml:posList>-5.185526616039128 41.58892362 -5.18357037 41.58480906 -5.1842436 41.58413875 -5.17787323 41.58126944 -5.17763882 41.58000392 -5.1790723 41.58018394 -5.17958078 41.57889528 -5.18693278 41.58242138 -5.19440309 41.58020745 -5.19895468 41.57753551 -5.20141009 41.57778572 -5.20381416 41.57864032 -5.20686634 41.58373351 -5.20863533175856 41.58392294 -5.19411968 41.58392294 -5.18911995 41.58392294 -5.18911995 41.58892362 -5.185526616039128 41.58892362</gml:posList>
-								</gml:LinearRing>
-							</gml:exterior>
-						</gml:Polygon>
-					</gml:polygonMember>
-				</gml:MultiPolygon>
-			</feature:the_geom>
-			<feature:incendios_por_municipios_gid>7511</feature:incendios_por_municipios_gid>
-			<feature:incendios_por_municipios_ine>47213</feature:incendios_por_municipios_ine>
-			<feature:incendios_por_municipios_texto>Villalbarba</feature:incendios_por_municipios_texto>
-			<feature:incendios_por_municipios_total>0</feature:incendios_por_municipios_total>
-			<feature:incendios_por_municipios_cod_prov>47</feature:incendios_por_municipios_cod_prov>
-			<feature:distancias_the_geom_distancia>10</feature:distancias_the_geom_distancia>
-			<feature:INTERSECTION_ID>5</feature:INTERSECTION_ID>
-		</feature:incendios_por_municipios>
-	</gml:featureMember>
-	<gml:featureMember>
-		<feature:incendios_por_municipios gml:id="6">
-			<gml:boundedBy>
-				<gml:Envelope srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:lowerCorner>-5.19243198 41.48618374</gml:lowerCorner>
-					<gml:upperCorner>-5.11011978 41.58490657313677</gml:upperCorner>
-				</gml:Envelope>
-			</gml:boundedBy>
-			<feature:the_geom>
-				<gml:MultiPolygon srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:polygonMember>
-						<gml:Polygon srsDimension="2">
-							<gml:exterior>
-								<gml:LinearRing srsDimension="2">
-									<gml:posList>-5.168360134154989 41.58392294 -5.16642419 41.58218838 -5.16160782 41.58020755 -5.15938163 41.57495345 -5.15853117 41.57534771 -5.1594664 41.57317753 -5.1569022 41.57289246 -5.15654052 41.57103487 -5.151664 41.57299069 -5.15148583 41.56328473 -5.14698245 41.55765879 -5.14108019 41.56520835 -5.12806721 41.55969477 -5.12152659 41.5621034 -5.1170498 41.5605197 -5.11706656 41.55735804 -5.11187607 41.55114877 -5.11282347 41.54968128 -5.11139319 41.54551942 -5.11152093 41.53765416 -5.11175306 41.53520902 -5.11341937 41.53447588 -5.11011978 41.53179845 -5.11233109 41.52865949 -5.11206354 41.52596238 -5.11455656 41.52338561 -5.11609733 41.52359146 -5.12195498 41.51102709 -5.12825023 41.50311077 -5.13772359 41.4997196 -5.15370398 41.50003384 -5.15639676 41.49236365 -5.16082503 41.492965 -5.16299747 41.48769122 -5.16939146 41.48618374 -5.17112137 41.48741203 -5.17912049 41.49168030607105 -5.17912049 41.4939108 -5.18327448552451 41.4939108 -5.18620482 41.49569162 -5.17899073 41.50455612 -5.19243198 41.52012542 -5.1876675 41.52419713 -5.18551696 41.52795784 -5.18516298 41.53026127 -5.18953216 41.53293419 -5.18724204 41.53433781 -5.18458074 41.5339741 -5.18567061 41.53715074 -5.18194602 41.54046396 -5.18281454 41.54276217 -5.17620096 41.54681452 -5.17632179 41.54827135 -5.1731291 41.54780937 -5.16902226 41.55192188 -5.16756996 41.55151699 -5.16830271 41.56195998 -5.1713502 41.56737849 -5.17029041 41.56939798 -5.17508595 41.58185361 -5.17657084 41.58392406 -5.17412076 41.58490657313677 -5.17412076 41.58392294 -5.168360134154989 41.58392294</gml:posList>
-								</gml:LinearRing>
-							</gml:exterior>
-						</gml:Polygon>
-					</gml:polygonMember>
-				</gml:MultiPolygon>
-			</feature:the_geom>
-			<feature:incendios_por_municipios_gid>7508</feature:incendios_por_municipios_gid>
-			<feature:incendios_por_municipios_ine>47210</feature:incendios_por_municipios_ine>
-			<feature:incendios_por_municipios_texto>Villalar de los Comuneros</feature:incendios_por_municipios_texto>
-			<feature:incendios_por_municipios_total>0</feature:incendios_por_municipios_total>
-			<feature:incendios_por_municipios_cod_prov>47</feature:incendios_por_municipios_cod_prov>
-			<feature:distancias_the_geom_distancia>10</feature:distancias_the_geom_distancia>
-			<feature:INTERSECTION_ID>6</feature:INTERSECTION_ID>
-		</feature:incendios_por_municipios>
-	</gml:featureMember>
-	<gml:featureMember>
-		<feature:incendios_por_municipios gml:id="7">
-			<gml:boundedBy>
-				<gml:Envelope srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:lowerCorner>-5.026608790892801 41.54028738161922</gml:lowerCorner>
-					<gml:upperCorner>-4.99913026 41.56392025</gml:upperCorner>
-				</gml:Envelope>
-			</gml:boundedBy>
-			<feature:the_geom>
-				<gml:MultiPolygon srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:polygonMember>
-						<gml:Polygon srsDimension="2">
-							<gml:exterior>
-								<gml:LinearRing srsDimension="2">
-									<gml:posList>-4.99913026 41.54028738161922 -5.01469196 41.54134642 -5.01486019 41.54637825 -5.0199162 41.55204491 -5.01997879 41.55443961 -5.02267032 41.55500473 -5.02362629 41.55874376 -5.026608790892801 41.56392025 -5.01912917 41.56392025 -5.01912917 41.55891957 -5.01412944 41.55891957 -5.01412944 41.5539189 -5.00912972 41.5539189 -5.00912972 41.54891822 -5.00412999 41.54891822 -5.00412999 41.54391755 -4.99913026 41.54391755 -4.99913026 41.54028738161922</gml:posList>
-								</gml:LinearRing>
-							</gml:exterior>
-						</gml:Polygon>
-					</gml:polygonMember>
-				</gml:MultiPolygon>
-			</feature:the_geom>
-			<feature:incendios_por_municipios_gid>7490</feature:incendios_por_municipios_gid>
-			<feature:incendios_por_municipios_ine>47190</feature:incendios_por_municipios_ine>
-			<feature:incendios_por_municipios_texto>Velilla</feature:incendios_por_municipios_texto>
-			<feature:incendios_por_municipios_total>0</feature:incendios_por_municipios_total>
-			<feature:incendios_por_municipios_cod_prov>47</feature:incendios_por_municipios_cod_prov>
-			<feature:distancias_the_geom_distancia>10</feature:distancias_the_geom_distancia>
-			<feature:INTERSECTION_ID>7</feature:INTERSECTION_ID>
-		</feature:incendios_por_municipios>
-	</gml:featureMember>
-	<gml:featureMember>
-		<feature:incendios_por_municipios gml:id="8">
-			<gml:boundedBy>
-				<gml:Envelope srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:lowerCorner>-5.48840707 41.96738964</gml:lowerCorner>
-					<gml:upperCorner>-5.43410666 42.00397963</gml:upperCorner>
-				</gml:Envelope>
-			</gml:boundedBy>
-			<feature:the_geom>
-				<gml:MultiPolygon srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:polygonMember>
-						<gml:Polygon srsDimension="2">
-							<gml:exterior>
-								<gml:LinearRing srsDimension="2">
-									<gml:posList>-5.43827978 41.96738964 -5.4470342 41.97288588 -5.45615904 41.97573486 -5.4608026 41.97471678 -5.46312439 41.97545945 -5.46278663 41.97765509 -5.46698216 41.97815936 -5.48480474 41.98456507 -5.48840707 41.995537 -5.48410001 41.99623369 -5.47908652 41.99926007 -5.478508669893067 42.00397963 -5.47410449 42.00397963 -5.47410449 41.99897896 -5.46410503 41.99897896 -5.46410503 41.99397828 -5.45410557 41.99397828 -5.45410557 41.98897761 -5.44410611 41.98897761 -5.44410611 41.98397693 -5.43410666 41.98397693 -5.43410666 41.98113562869118 -5.43827978 41.96738964</gml:posList>
-								</gml:LinearRing>
-							</gml:exterior>
-						</gml:Polygon>
-					</gml:polygonMember>
-				</gml:MultiPolygon>
-			</feature:the_geom>
-			<feature:incendios_por_municipios_gid>7429</feature:incendios_por_municipios_gid>
-			<feature:incendios_por_municipios_ine>47128</feature:incendios_por_municipios_ine>
-			<feature:incendios_por_municipios_texto>Quintanilla del Molar</feature:incendios_por_municipios_texto>
-			<feature:incendios_por_municipios_total>0</feature:incendios_por_municipios_total>
-			<feature:incendios_por_municipios_cod_prov>47</feature:incendios_por_municipios_cod_prov>
-			<feature:distancias_the_geom_distancia>10</feature:distancias_the_geom_distancia>
-			<feature:INTERSECTION_ID>8</feature:INTERSECTION_ID>
-		</feature:incendios_por_municipios>
-	</gml:featureMember>
-	<gml:featureMember>
-		<feature:incendios_por_municipios gml:id="9">
-			<gml:boundedBy>
-				<gml:Envelope srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:lowerCorner>-5.168360134154989 41.55765879</gml:lowerCorner>
-					<gml:upperCorner>-5.11278162 41.58392294</gml:upperCorner>
-				</gml:Envelope>
-			</gml:boundedBy>
-			<feature:the_geom>
-				<gml:MultiPolygon srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-					<gml:polygonMember>
-						<gml:Polygon srsDimension="2">
-							<gml:exterior>
-								<gml:LinearRing srsDimension="2">
-									<gml:posList>-5.11384609 41.57039606 -5.11713274 41.56673283 -5.11833331 41.56824185 -5.12031736 41.566566 -5.12152659 41.5621034 -5.12806721 41.55969477 -5.14108019 41.56520835 -5.14698245 41.55765879 -5.15148583 41.56328473 -5.151664 41.57299069 -5.15654052 41.57103487 -5.1569022 41.57289246 -5.1594664 41.57317753 -5.15853117 41.57534771 -5.15938163 41.57495345 -5.16160782 41.58020755 -5.16642419 41.58218838 -5.168360134154989 41.58392294 -5.14912212 41.58392294 -5.14912212 41.57892227 -5.13912266 41.57892227 -5.13912266 41.5739216 -5.1291232 41.5739216 -5.1291232 41.56892092 -5.12412348 41.56892092 -5.12412348 41.5739216 -5.115026541409057 41.5739216 -5.11464627 41.57212859 -5.11278162 41.57232505 -5.11384609 41.57039606</gml:posList>
-								</gml:LinearRing>
-							</gml:exterior>
-						</gml:Polygon>
-					</gml:polygonMember>
-				</gml:MultiPolygon>
-			</feature:the_geom>
-			<feature:incendios_por_municipios_gid>7385</feature:incendios_por_municipios_gid>
-			<feature:incendios_por_municipios_ine>47081</feature:incendios_por_municipios_ine>
-			<feature:incendios_por_municipios_texto>Marzales</feature:incendios_por_municipios_texto>
-			<feature:incendios_por_municipios_total>0</feature:incendios_por_municipios_total>
-			<feature:incendios_por_municipios_cod_prov>47</feature:incendios_por_municipios_cod_prov>
-			<feature:distancias_the_geom_distancia>10</feature:distancias_the_geom_distancia>
-			<feature:INTERSECTION_ID>9</feature:INTERSECTION_ID>
-		</feature:incendios_por_municipios>
-	</gml:featureMember>
-</wfs:FeatureCollection>]]></wps:ComplexData>
-      </wps:Data>
-    </wps:Input>
-  </wps:DataInputs>
-  <wps:ResponseForm>
-    <wps:RawDataOutput mimeType="text/xml; subtype=gml/3.1.1">
-      <ows:Identifier>result</ows:Identifier>
-    </wps:RawDataOutput>
-  </wps:ResponseForm>
-</wps:Execute>`;
-}
+  function readFeaturesFromWPSResponse(response,featureNSUri,featureName){
+              //var cleaned= response.replace(/<gml\:posList/g,'<gml:posList dimension="2"');
+              var gml=new ol.format.GML({uri:featureNSUri,
+                                              featureName:featureName});
+      // Parche para que se pueda buscar en Features que no sean del espacio de nombres gmlns        				
+              gml.read = function (data){
+              if(typeof data == "string") { 
+                  data = ol.format.XML.prototype.read.apply(this, [data]);
+              }
+              var featureMembers = this.getElementsByTagNameNS(data.documentElement,this.gmlns,"featureMembers");
+
+              var featureNodes = this.getElementsByTagNameNS(data.documentElement,
+                                                            this.uri,
+                                                            this.featureName);
+
+              var featureNodes = featureMembers[0].childNodes;
+              var features = [];
+              for(var i=0; i<featureNodes.length; i++) {
+                  var feature = this.parseFeature(featureNodes[i]);
+                  if(feature) {
+                      features.push(feature);
+                  }
+              }            
+              return features;
+          };
+          return gml.read(response);
+      }
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+/****************************************************************************************/
+
+  /**
+   * @param {*} cdemo 
+   * @param {*} cvalue 
+   * @param {*} exdays 
+   */
+  function setCookie(cdemo, cvalue, exdays) {
+      var d = new Date();
+      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+      var expires = "expires=" + d.toGMTString();
+      document.cookie = cdemo + "=" + cvalue + "; " + expires;
+  }
+  function getCookie(cdemo) {
+      var demo = cdemo + "=";
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') c = c.substring(1);
+          if (c.indexOf(demo) == 0) {
+              return c.substring(demo.length, c.length);
+          }
+      }
+      return "";
+  }
+  function checkCookie(cookiename, redirect) {
+      var demo = getCookie(cookiename);
+      if (demo == "false") {
+          document.location.href = redirect;
+      }
+      setCookie(cookiename, false, 1000);
+  }
