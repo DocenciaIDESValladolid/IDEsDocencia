@@ -211,7 +211,7 @@ function initmap() {
         if (!hasFeature) {
             var coordinates = map.getEventCoordinate(evt.originalEvent);
             markerFeature.setGeometry(coordinates ?
-                new ol.geom.Point(coordinates) : null);
+                addWFSFeatureProvincia(coordinates,5,9) : null);
         }
     });
     /**
