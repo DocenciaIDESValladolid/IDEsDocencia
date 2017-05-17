@@ -120,21 +120,6 @@ function initmap() {
     });
     roadlayer.set("name", "roadview");
 
-    var fuentesLayer = new ol.layer.Image({
-        name: 'Fuentes',
-        source: new ol.source.ImageWMS({
-            url: 'http://localhost:8080/geoserver/wms',
-            params: { 'LAYERS': 'prototype:fuentes', 'VERSION': '1.1.0' },
-            serverType: 'geoserver'
-        })
-
-
-
-    })
-
-
-
-
     function createEarthquakeStyle(feature) {
         // 2012_Earthquakes_Mag5.kml stores the magnitude of each earthquake in a
         // standards-violating <magnitude> tag in each Placemark.  We extract it
@@ -154,11 +139,11 @@ function initmap() {
         });
     }
 
-    var maxFeatureCount, Fuentesvector;
+    var maxFeatureCount, fuentesVector;
 
     function calculateClusterInfo(resolution) {
         maxFeatureCount = 0;
-        var features = Fuentesvector.getSource().getFeatures();
+        var features = fuentesVector.getSource().getFeatures();
         var feature, radius;
         for (var i = features.length - 1; i >= 0; --i) {
             feature = features[i];
@@ -221,7 +206,8 @@ function initmap() {
         return styles;
     }
 
-    Fuentesvector = new ol.layer.Vector({
+    fuentesVector = new ol.layer.Vector({
+        name: "Fuentes",
         source: new ol.source.Cluster({
             distance: 40,
             source: new ol.source.Vector({
@@ -239,33 +225,6 @@ function initmap() {
             layer: 'watercolor'
         })
     });
-
-    /*var mappage = new ol.Map({
-      layers: [layergroup, vector],
-      interactions: ol.interaction.defaults().extend([new ol.interaction.Select({
-        condition: function(evt) {
-          return evt.originalEvent.type == 'mousemove' ||
-              evt.type == 'singleclick';
-        },
-        style: selectStyleFunction
-      })]),
-      target: 'mappage',
-      view: new ol.View({
-        center: [0, 0],
-        zoom: 2
-      })
-    });*/
-
-    var parquesLayer = new ol.layer.Image({
-        name: 'Parques',
-        source: new ol.source.ImageWMS({
-            url: 'http://localhost:8080/geoserver/wms',
-            params: { 'LAYERS': 'prototype:parques', 'VERSION': '1.1.0' },
-            serverType: 'geoserver'
-        })
-    });
-
-
 
     function createEarthquakeStyle1(feature) {
         // 2012_Earthquakes_Mag5.kml stores the magnitude of each earthquake in a
@@ -286,11 +245,11 @@ function initmap() {
         });
     }
 
-    var maxFeatureCount2, Vectorparques;
+    var maxFeatureCount2, parquesVector;
 
     function calculateClusterInfo2(resolution) {
         maxFeatureCount2 = 0;
-        var features = Vectorparques.getSource().getFeatures();
+        var features = parquesVector.getSource().getFeatures();
         var feature, radius;
         for (var i = features.length - 1; i >= 0; --i) {
             feature = features[i];
@@ -353,7 +312,8 @@ function initmap() {
         return styles;
     }
 
-    Vectorparques = new ol.layer.Vector({
+    parquesVector = new ol.layer.Vector({
+        name: "Parques",
         source: new ol.source.Cluster({
             distance: 40,
             source: new ol.source.Vector({
@@ -366,7 +326,7 @@ function initmap() {
         style: styleFunction2
     });
 
-    var layergroup = new ol.layer.Group({ layers: [aeriallayer, roadlayer, Fuentesvector, Vectorparques] });
+    var layergroup = new ol.layer.Group({ layers: [aeriallayer, roadlayer, fuentesVector, parquesVector] });
     var view = new ol.View({
         projection: 'EPSG:4326',
         center: [-3.703790, 40.416775], //https://epsg.io/
@@ -413,7 +373,9 @@ function initmap() {
             features: [markerFeature]
         })
     });
+    
     layers = [layergroup, userPosition, markerVector];
+    
     // New Custom zoom.
     var zoom = new ol.control.Zoom({ target: "navigation", className: "custom-zoom" });
     map = new ol.Map({
