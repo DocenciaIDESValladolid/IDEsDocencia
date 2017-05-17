@@ -374,10 +374,34 @@ function initmap() {
         })
     });
     
+    /////////////////////////
+    
+    var selectedStyle = new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 40,
+                fill: new ol.style.Fill({
+                    color: 'rgba(255,150,200,1)'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: 'rgba(20,30,100,1)',
+                    width: 3
+                })
+            })
+        });
+
+    var notrepoint = new ol.layer.Vector({
+        name:"pointi",
+        source: new ol.source.Vector({ features: [new ol.Feature({ geometry: new ol.geom.Point([-3.70384, 40.41673])})] }),
+        style: selectedStyle
+    });
+    
+    /////////////////////////
+    
     layers = [layergroup, userPosition, markerVector];
     
     // New Custom zoom.
     var zoom = new ol.control.Zoom({ target: "navigation", className: "custom-zoom" });
+    
     map = new ol.Map({
         layers: layers,
         controls: ol.control.defaults({ rotate: true, attribution: true }),
@@ -388,7 +412,7 @@ function initmap() {
              loadTilesWhileInteracting: true*/
     });
     map.addInteraction(select);
-
+    
     // Initialize the page layers.
     add_layergroup_to_list(layergroup);
 
