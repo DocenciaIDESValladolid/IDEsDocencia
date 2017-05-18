@@ -170,28 +170,74 @@ $(document).bind('pageinit', function(){
     });
     
     tst();
-    
+        
     function tst(){
         
-        var origin = { x: -3.703790, y: 40.41675 },
-            distance = 0.01;
+        var waypoints = {
+                origin: { x: -3.703790, y: 40.41675 }
+            };
+        var distance = 0.01;
         
-        dWithin(origin, distance, dWithinReturn); // http://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
+        dWithin(waypoints.origin, distance, dWithinReturn); // http://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
         
         function dWithinReturn(result){
-            var parc = { x: result[0], y: result[1] };
-            waypoints(origin, parc, waypointsReturn);
+            console.log("dWithinReturn1");console.log(result);
+            waypoints.destination = { x: result[0], y: result[1] }; // Coordinates of destination parc
+            waypointsCalc(waypoints.origin, waypoints.destination, null, null, waypointsReturn); 
         }
         
         function waypointsReturn(result){
+            console.log("waypointsReturn2");console.log(result);
             dWithinRoute(result, distance, dWithinRouteReturn);
         }
         
         function dWithinRouteReturn(result1, result2){
-            var fuente1 = { x: result1[0], y: result1[1] },
-                fuente2 = { x: result2[0], y: result2[1] };
-            console.log(fuente1);
-            console.log(fuente2);
+            console.log("dWithinRouteReturn3");console.log(result1);console.log(result2);
+            waypoints.fuente1 = { x: result1[0], y: result1[1] };
+            waypoints.fuente2 = { x: result2[0], y: result2[1] };
+            
+            waypointsCalc(waypoints.origin, waypoints.fuente1, waypoints.fuente2, waypoints.destination, waypointsReturnBis);
+        }
+        
+        function waypointsReturnBis(result){
+            console.log("waypointsReturnBis4");console.log(result);
+            
+            var onlyNumbers = result.substring(13), // <gml:posList>
+                fullCoordinates = onlyNumbers.split(' ');
+        
+            // lol
+            var rutaCompleta = new ol.geom.LineString();
+            
+            for(i=0; i<fullCoordinates.length; i=i+2){
+                
+                var coord = [];
+                
+                coord.push(fullCoordinates[i]);
+                coord.push(fullCoordinates[i+1]);
+    
+                rutaCompleta.appendCoordinate(coord);
+            }
+            
+            var selectedStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: 'rgba(255,30,100,1)',
+                    width: 10
+                })
+        });
+
+            var rutaVector = new ol.layer.Vector({
+                            name: "Ruta",
+                            style: selectedStyle,
+                            source: new ol.source.Vector({
+                                features: [new ol.Feature({
+                                    geometry: rutaCompleta
+                                    //geometry: new ol.geom.LineString([[-3.70384, 40.41673], [-3.7039, 40.41683], [-3.70432, 40.4168]])
+                                    })]
+                                })
+            });
+
+            map.addLayer(rutaVector);
+            add_layer_to_list(rutaVector);
         }
     }
     
@@ -238,7 +284,7 @@ $(document).bind('pageinit', function(){
     }
     
     // Get route
-    function waypoints(origin, destination, waypointsCallback){
+    function waypointsCalc(origin, destination, fuente1, fuente2, waypointsCallback){
 
         var waypointsXML = `<?xml version="1.0"?>
         <wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="WPS" version="1.0.0" outputFormat="GML3" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
@@ -249,39 +295,63 @@ $(document).bind('pageinit', function(){
                 <wps:Data>
                     <wps:ComplexData mimeType="text/xml">
                     <wfs:FeatureCollection xmlns:ogc="http://www.opengis.net/ogc" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ows="http://www.opengis.net/ows" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wp="http://localhost/waypoint" xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://localhost http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd http://www.opengis.net/gml http://schemas.opengis.net/gml/3.1.1/base/feature.xsd http://localhost:8080/wps/schemas/waypoint.xsd">
-                    <gml:featureMembers>
-                        <wp:waypoint gml:id="1">
-                            <wp:geom>
-                                <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
-                                <gml:pos>
-                                    ${origin.x} ${origin.y}
-                                </gml:pos>
-                            </gml:Point>
-                        </wp:geom>
-                    </wp:waypoint>
-                    <wp:waypoint gml:id="2">
-                        <wp:geom>
-                            <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
-                            <gml:pos>
-                                ${destination.y} ${destination.x}
-                            </gml:pos>
-                        </gml:Point>
-                    </wp:geom>
-                </wp:waypoint>
-            </gml:featureMembers>
-        </wfs:FeatureCollection>
-        </wps:ComplexData>
-        </wps:Data>
-        </wps:Input>
-        </wps:DataInputs>
-        <wps:ResponseForm>
-            <wps:ResponseDocument>
-                <wps:Output schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" mimeType="text/xml" encoding="UTF-8">
-                <ows:Identifier>routeResult</ows:Identifier>
-            </wps:Output>
-        </wps:ResponseDocument>
-        </wps:ResponseForm>
-        </wps:Execute>`;
+                    <gml:featureMembers>`;
+            // ORIGIN
+            waypointsXML += '<wp:waypoint gml:id="1">'+
+                                '<wp:geom>'+
+                                    '<gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">'+
+                                        '<gml:pos>'+
+                                            origin.x+' '+origin.y+
+                                        '</gml:pos>'+
+                                    '</gml:Point>'+
+                                '</wp:geom>'+
+                            '</wp:waypoint>';
+            if(fuente1){
+                waypointsXML += '<wp:waypoint gml:id="2">'+
+                                    '<wp:geom>'+
+                                        '<gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">'+
+                                        '<gml:pos>'+
+                                            fuente1.y+' '+fuente1.x+
+                                        '</gml:pos>'+ 
+                                    '</gml:Point>'+
+                                '</wp:geom>'+
+                            '</wp:waypoint>';
+            }
+            if(fuente2){
+                waypointsXML += '<wp:waypoint gml:id="3">'+
+                                    '<wp:geom>'+
+                                        '<gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">'+
+                                        '<gml:pos>'+
+                                            fuente2.y+' '+fuente2.x+
+                                        '</gml:pos>'+ 
+                                    '</gml:Point>'+
+                                '</wp:geom>'+
+                            '</wp:waypoint>';
+            }
+            // DESTINATION
+            waypointsXML += '<wp:waypoint gml:id="'; if(fuente2) waypointsXML += '4'; else waypointsXML += '2'; waypointsXML += '">'+
+                                '<wp:geom>'+
+                                    '<gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">'+
+                                    '<gml:pos>'+
+                                        destination.y+' '+destination.x+
+                                    '</gml:pos>'+ 
+                                '</gml:Point>'+
+                            '</wp:geom>'+
+                        '</wp:waypoint>';
+            waypointsXML += `</gml:featureMembers>
+                                </wfs:FeatureCollection>
+                            </wps:ComplexData>
+                        </wps:Data>
+                    </wps:Input>
+                </wps:DataInputs>
+                <wps:ResponseForm>
+                    <wps:ResponseDocument>
+                        <wps:Output schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" mimeType="text/xml" encoding="UTF-8">
+                            <ows:Identifier>routeResult</ows:Identifier>
+                        </wps:Output>
+                    </wps:ResponseDocument>
+                </wps:ResponseForm>
+            </wps:Execute>`;
 
         var waypointsRequest = new XMLHttpRequest();
 
@@ -290,12 +360,17 @@ $(document).bind('pageinit', function(){
                 
                 var start = this.responseText.indexOf("<gml:posList>"),
                     end = this.responseText.indexOf("</gml:posList>"),
-                    lineString = this.responseText.substring(start,end);
+                    lineString = this.responseText.substring(start, end);
                 
-                    newLineString = reformLineString(lineString);
+                    if(fuente1){
+                        waypointsCallback(lineString);
+                    }
+                    else {
+                        var newLineString = reformLineString(lineString);
+                        waypointsCallback(newLineString);
+                    }
             }
             
-            waypointsCallback(newLineString);
         }
 
         waypointsRequest.open("POST","http://www.cartociudad.es/wps/WebProcessingService",true);
@@ -345,6 +420,7 @@ $(document).bind('pageinit', function(){
 
         dWithinRouteRequest.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200){
+                
                 var features = (new ol.format.GML3()).readFeatures(this.responseText);
                 
                 var fuente1 = features[0].values_.fuente_geom,
@@ -352,7 +428,7 @@ $(document).bind('pageinit', function(){
                     fuente2 = features[1].values_.fuente_geom,
                     fuente2Coord = fuente2.getCoordinates();
                 
-                dWithinRouteCallback(fuente1Coord,fuente2Coord);
+                dWithinRouteCallback(fuente1Coord, fuente2Coord);
             }
         }
 
