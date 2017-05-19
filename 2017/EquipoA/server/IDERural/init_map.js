@@ -209,9 +209,11 @@ function initmap() {
             hasFeature = true;
         });
         if (!hasFeature) {
+            var d_riesgos = parseInt(document.getElementById("d_riesgos_control").value);
+            var d_maxima = parseInt(document.getElementById("d_maxima_control").value);
             var coordinates = map.getEventCoordinate(evt.originalEvent);
             markerFeature.setGeometry(coordinates ?
-                addWFSFeatureProvincia(coordinates,1,9) : null);
+                addWFSFeatureProvincia(coordinates,d_riesgos,d_maxima) : null);
         }
     });
     /**
@@ -324,7 +326,29 @@ function initmap() {
         viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, ' +
             'maximum-scale=1.0, user-scalable=0,target-densitydpi=medium-dpi');
     }
+
+
+/*AÑADOOOOOO ESTO ----------------------------------------------------------------------------------------------------------------------------------*/
+	 var wms =new ol.layer.Image({
+          //extent: [-13884991, 2870341, -7455066, 6338219],
+          name: 'Provincias',
+          source: new ol.source.ImageWMS({
+            url: 'http://localhost:8081/geoserver/wms',
+            params: {
+                'LAYERS': 'p_casas_rurales:provincias',
+                //'BBOX':'-1854056.5580852332 3287403.7124888604,334913.7975275074 5217666.045753082' 
+                
+            },
+            serverType: 'geoserver'
+          })
+        });
+    map.addLayer(wms);
+    add_layer_to_list(wms);
+    /*var polygon = new ol.geom.Polygon([[-1854056.5580852332, 3287403.7124888604],[-1854056.5580852332, 5217666.045753082],[334913.7975275074, 5217666.045753082],[334913.7975275074, 3287403.7124888604],[-1854056.5580852332, 3287403.7124888604]],'EPSG:3857');
+    map.getView().fit(polygon);  */
+
 }
+    
 /*-------------------------------Functions-----------------------------------*/
 function style_function(feature, resolution) {
     // Get the income level from the feature properties

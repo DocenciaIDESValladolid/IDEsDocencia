@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/styles.css" type="text/css">
     <link rel="stylesheet" href="css/introjs.css" type="text/css">
     <link rel="stylesheet" href="css/ol.css" type="text/css">
+	<!--<link rel="stylesheet" href="css/estilo.css" type="text/css">-->
     <script src="js/jquery2/jquery-2.1.4.min.js"></script>
     <script src="js/jquery-mobile/jquerymobile.js"></script>
     <script src="js/jquery-ui.min.js"></script>
@@ -22,9 +23,50 @@
     <!-- CARGA DE SIMPLE FACEBOOK GRAPH -->
     <script src="js/facebook.js"></script>
 
+	<script>
+		function capturarDatos(){
+			
+			<!--Datos extraidos del formulario
+			var d_maxima = parseInt(document.getElementById("d_maxima_control").value);
+			var d_riesgos = parseInt(document.getElementById("d_riesgos_control").value);
+			var valoracion_distancias = parseInt(document.getElementById("valoraciones_control").value);
+			
+			
+			 var n1 = valoracion_distancias; <!--valoracion de incendios
+			 var n2 = 0; <!--/valoracion de distancia
+			 var n3 = 0; <!--/numero de incendios (DATO DE LA FEATURE)
+			 var n4 = 0; <!--/valor de la distancia (DATO DE LA FEATURE)
+			 var v_dist = 0; <!--Nota ponderada distancia
+			 var v_ince = 0; <!--Nota ponderada incendio
+			 var res = 0;<!--Suma de las notas ponderadas
+		
+			
+			if (n3 < 1000){
+			
+				n3 = (1000 - n3) / 100; 	<!-- Reduce el numero de incendios al intervalo [0,10]-->		
+			}
+			else {
+			
+				n3 = 0;
+			}
+			
+			n2 = 10 - n1;	<!-- Valoración de incendios
+			
+			n4 = n4;		<!-- Reduce el numero de distancia al intervalo [0,11]-->
+			
+			v_dist = (n2/10) * n4;	<!-- Valoracion de la distancia en intervalo [0-11]-->
+			v_ince = (n1/10) * n3;	<!-- Valoracion del riesgo incendio en intervalo [0-12]-->
+			
+			res = Math.round(v_dist + v_ince);		
+				
+			
+			}
+	</script>
+	
+	
 </head>
 
-<body id="page-main" onload="addWMSLayerInit()">
+<body id="page-main">
 
     <div data-role="page" id="mappage" data-quicklinks="true" data-theme="b">
         <div data-role="panel" data-position="left" data-position-fixed="true" data-display="overlay" id="infopanel">
@@ -51,11 +93,25 @@
                             
                         </ul>
                     </div>
-                </div>
-                <h3>Instrucciones.</h3>
+                </div id="formulario">
+				<br />
+				<br />
+                <h3>Rellene el formulario.</h3>
                 <div id="welcomingInfo">
-                    <p>Instrucciones de uso de este panel inicial.</p>
-                    <a href="#dosomething" id="dosmething_button" class="ui-btn ui-btn-a ui-shadow ui-corner-all ui-btn-inline ui_mini">Haz esto</a>
+					<form id="form" >
+						Distancia máxima: <input type="number" name="d_maxima_control" id="d_maxima_control" autofocus required />
+						<br />
+						Riesgos Máximos: <input type="number" name="d_riesgos_control" id="d_riesgos_control" placeholder="(0-1500)"  required />
+						<br />
+						Valoración Distancias: <input type="range" id="valoraciones_control"name="points" min="0" max="10" step="1" value="5">
+						<br />
+						<br />
+						Provincia: <input type="text" name="provincia_control" id="provincia_control" placeholder="Introduce Provincia o haz click en el Mapa" />
+						<br />
+						<input type="button" value="Enviar" onclick="capturarDatos()">
+						<br />
+						<br />
+					</form>
                 </div>
                 <div id="instructions2">
                     <p>Instrucciones adicionales.</p>
@@ -84,7 +140,7 @@
                 <h1>¿Estás seguro de que deseas enviar esta ubicación?</h1>
             </div>
             <div role="content" id="popup_content" class="ui-content ui-overlay-b">
-                <p>Esta acción no se puede deshacer.</p>
+                z<p>Esta acción no se puede deshacer.</p>
                 <fieldset class="ui-grid-a">
                     <div class="ui-block-a">
                         <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b">
@@ -122,7 +178,8 @@
                 Historial
             </a>
             <a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-location ui-btn-icon-notext" id="autolocate"></a>
-            <a href="#authors" data-transition="fade" data-role="button" class="ui-btn">About Us</a>
+            <a href="#authors" data-transition="fade" data-role="button" class="ui-btn">About Us</a> 
+			
             <!--div id="navigation"></div-->
         </div>
     </div>
@@ -188,6 +245,7 @@
             <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
         </div>
     </div>
+	
 
     <!--
 		Página de "About us": Director

@@ -232,13 +232,6 @@ setTimeout(function() {
           var the_geom=features[0].getGeometry();
           
           addWFSFeatureRiesgos(riesgoMax,cod_prov,distMax,the_geom);
-           //var featuresDistancia=addWFSFeatureDistancias(distMax,the_geom);
-          //console.log(featuresDistancia);
-          //var feautureIntersect=WPSIntersect(featuresRiesgo,featuresDistancia);
-          //var geometry=WPSGeometry(feautureIntersect);
-          //var feturesSuelo=WFSSuelo(geometry);
-          //WPSIntersect(feturesSuelo,feautureIntersect);
-
         });
         
   }
@@ -280,9 +273,9 @@ setTimeout(function() {
           return response.json();
         }).then(function(json) {
           featuresRiesgo= new ol.format.GeoJSON().readFeatures(json);
-          vectorSource.addFeatures(featuresRiesgo);
+          /*vectorSource.addFeatures(featuresRiesgo);
           map.addLayer(vector);
-          add_layer_to_list(vector);
+          add_layer_to_list(vector);*/
           return featuresRiesgo;
         }).then(function(featuresRiesgo) {
           addWFSFeatureDistancias(distMax,the_geom);
@@ -325,7 +318,6 @@ setTimeout(function() {
           return response.json();
         }).then(function(json) {
           var features = new ol.format.GeoJSON().readFeatures(json);
-
           vectorSource.addFeatures(features);
           map.addLayer(vector);
           add_layer_to_list(vector);
@@ -344,10 +336,6 @@ setTimeout(function() {
   data: getWPSRequest(feature1,feature2),
   contentType:'application/json; charset=utf-8',
   success:function(response, status, xhr){
-          /*var features = new ol.format.GeoJSON().readFeatures(response);
-          vectorSource.addFeatures(features);
-          map.addLayer(vector);
-          add_layer_to_list(vector);*/
           WPSGeometry(response); 
   }});
   
@@ -378,21 +366,8 @@ setTimeout(function() {
           data: getWFSSuelorequest(geometry),
           contentType:'application/json; charset=utf-8',
           success:function(response, status, xhr){       
-          //console.log(featuresIntersect);
-          //console.log(response);
           WPSReproject(featuresIntersect,response);
-         //WPSIntersect2(featuresIntersect,response);
          }});
-          /*console.log(response);
-          return response.json();
-        }).then(function(json) {
-          var features = new ol.format.GeoJSON().readFeatures(json);
-          vectorSource.addFeatures(features);
-          map.addLayer(vector);
-          add_layer_to_list(vector);
-          console.log(response);
-          console.log(features);
-        });*/
         
   }
 
@@ -408,13 +383,29 @@ setTimeout(function() {
   }
 
   function  WPSIntersect2(featuresIntersect,featuresSuelo){
+    
+      var vectorSource = new ol.source.Vector();
+          var vector = new ol.layer.Vector({
+              name: 'Result',
+              source: vectorSource,
+              style: new ol.style.Style({
+              stroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 255, 1.0)',
+                width: 2
+              })
+            })
+          });
      $.ajax({url:'http://localhost:8081/geoserver/wps',
-    dataType:'text',
-    type:'post',
-    data: getWPSRequest2(featuresIntersect,featuresSuelo),
-    contentType:'application/json; charset=utf-8',
-    success:function(response, status, xhr){
-      
+        dataType:'text',
+        type:'post',
+        data: getWPSRequest2(featuresIntersect,featuresSuelo),
+        contentType:'application/json',
+        success:function(response, status, xhr){
+          features=new ol.format.GML3().readFeatures(response);
+          vectorSource.addFeatures(features);
+          map.addLayer(vector);
+          add_layer_to_list(vector);
+          map.getView().fit(vectorSource.getExtent());     
 
     }});
   }
@@ -550,7 +541,7 @@ function getWPSRequest2(feature1,feature2){
     </wps:Input>
   </wps:DataInputs>
   <wps:ResponseForm>
-    <wps:RawDataOutput mimeType="text/xml; subtype=wfs-collection/1.0">
+    <wps:RawDataOutput mimeType="text/xml; subtype=wfs-collection/1.1">
       <ows:Identifier>result</ows:Identifier>
     </wps:RawDataOutput>
   </wps:ResponseForm>
