@@ -211,7 +211,7 @@ function initmap() {
         if (!hasFeature) {
             var coordinates = map.getEventCoordinate(evt.originalEvent);
             markerFeature.setGeometry(coordinates ?
-                addWFSFeatureProvincia(coordinates,5,9) : null);
+                addWFSFeatureProvincia(coordinates,1,9) : null);
         }
     });
     /**

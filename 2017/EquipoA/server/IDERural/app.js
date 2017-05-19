@@ -380,7 +380,8 @@ setTimeout(function() {
           success:function(response, status, xhr){       
           //console.log(featuresIntersect);
           //console.log(response);
-         WPSIntersect2(featuresIntersect,response);
+          WPSReproject(featuresIntersect,response);
+         //WPSIntersect2(featuresIntersect,response);
          }});
           /*console.log(response);
           return response.json();
@@ -394,6 +395,18 @@ setTimeout(function() {
         });*/
         
   }
+
+  function WPSReproject(featuresIntersect,featuresSuelo){
+    $.ajax({url:'http://localhost:8081/geoserver/wps',
+      dataType:'text',
+      type:'post',
+      data: getWPSReproject(featuresSuelo),
+      contentType:"application/json; charset=utf-8",
+      success:function(response, status, xhr){ 
+        WPSIntersect2(featuresIntersect,response);
+      }});
+  }
+
   function  WPSIntersect2(featuresIntersect,featuresSuelo){
      $.ajax({url:'http://localhost:8081/geoserver/wps',
     dataType:'text',
@@ -401,6 +414,7 @@ setTimeout(function() {
     data: getWPSRequest2(featuresIntersect,featuresSuelo),
     contentType:'application/json; charset=utf-8',
     success:function(response, status, xhr){
+      
 
     }});
   }
@@ -482,21 +496,50 @@ function getWFSSuelorequest(geometry){
 			</And>
 		</Filter>   
 	</wfs:Query>
-</wfs:GetFeature>`
+</wfs:GetFeature>`;
 }
+
+function getWPSReproject(featuresSuelo){
+  return `<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
+  <ows:Identifier>gs:Reproject</ows:Identifier>
+  <wps:DataInputs>
+    <wps:Input>
+      <ows:Identifier>features</ows:Identifier>
+      <wps:Data>
+        <wps:ComplexData mimeType="text/xml; subtype=wfs-collection/1.1"><![CDATA[`+featuresSuelo+`]]></wps:ComplexData>
+      </wps:Data>
+    </wps:Input>
+    <wps:Input>
+      <ows:Identifier>forcedCRS</ows:Identifier>
+      <wps:Data>
+        <wps:LiteralData>EPSG:25830</wps:LiteralData>
+      </wps:Data>
+    </wps:Input>
+    <wps:Input>
+      <ows:Identifier>targetCRS</ows:Identifier>
+      <wps:Data>
+        <wps:LiteralData>EPSG:3857</wps:LiteralData>
+      </wps:Data>
+    </wps:Input>
+  </wps:DataInputs>
+  <wps:ResponseForm>
+    <wps:RawDataOutput mimeType="text/xml; subtype=wfs-collection/1.1">
+      <ows:Identifier>result</ows:Identifier>
+    </wps:RawDataOutput>
+  </wps:ResponseForm>
+</wps:Execute>`;
+}
+
 
 function getWPSRequest2(feature1,feature2){
 
-    //feature1=feature1.replace(/<?xml version="1.0" encoding="UTF-8"?>/g,'');
-    //var featurecoll2 = new ol.format.GML3({featureType:'feat2',featureNS:'IDEs',srsName:'EPSG:3857'}).writeFeatures(feature2);
-    //console.log(featurecoll2);
     return `<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
   <ows:Identifier>vec:IntersectionFeatureCollection</ows:Identifier>
   <wps:DataInputs>
     <wps:Input>
       <ows:Identifier>first feature collection</ows:Identifier>
       <wps:Data>
-        <wps:ComplexData mimeType="text/xml; subtype=wfs-collection/1.1"><![CDATA[`+feature1+`]]></wps:ComplexData>
+        <wps:ComplexData mimeType="text/xml; subtype=wfs-collection/1.0"><![CDATA[`+feature1+`]]></wps:ComplexData>
       </wps:Data>
     </wps:Input>
     <wps:Input>
