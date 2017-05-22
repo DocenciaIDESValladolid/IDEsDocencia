@@ -350,13 +350,7 @@ function initmap() {
       var vectorSource = new ol.source.Vector();
         var vector = new ol.layer.Vector({
             name: 'Provincias',
-          source: vectorSource,
-          style: new ol.style.Style({
-            stroke: new ol.style.Stroke({
-              color: 'rgba(0, 0, 0, 1.0)',
-              width: 2
-            })
-          })
+          source: vectorSource
         });
         // generate a GetFeature request
         var featureRequest = new ol.format.WFS().writeGetFeature({

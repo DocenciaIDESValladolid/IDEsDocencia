@@ -5,12 +5,12 @@ setTimeout(function() {
 
   var demoFunctions=[
   //mostar las capas con los distintos tipos de zonas
-  {title:'Paisajes Protegidos',function:'addWMSLayer(\'p_casas_rurales:paisajes_protegidos_esp,paisajes_protegidos_canarias\')'},
-	{title:'Monumentos Naturales',function:'addWMSLayer(\'p_casas_rurales:monumentos_naturales_esp,monumentos_naturales_canarias\')'},
-	{title:'Parques Nacionales',function:'addWMSLayer(\'p_casas_rurales:parques_nacionales_esp,parques_nacionales_canarias\')'},
-	{title:'Parques Naturales',function:'addWMSLayer(\'p_casas_rurales:parques_naturales_esp,parques_naturales_canarias\')'},
-	{title:'Reservas Naturales',function:'addWMSLayer(\'p_casas_rurales:reservas_naturales_esp,reservas_naturales_canarias\')'},
-	{title:'Otros',function:'addWMSLayer(\'p_casas_rurales:otros_esp\')'},
+  {title:'Paisajes Protegidos',function:'addWMSLayer(\'paisajes_protegidos\')'},
+	{title:'Monumentos Naturales',function:'addWMSLayer(\'monumentos_naturales\')'},
+	{title:'Parques Nacionales',function:'addWMSLayer(\'parques_nacionales\')'},
+	{title:'Parques Naturales',function:'addWMSLayer(\'parques_naturales\')'},
+	{title:'Reservas Naturales',function:'addWMSLayer(\'reservas_naturales\')'},
+	{title:'Otros',function:'addWMSLayer(\'otros\')'},
   ];
 
   //Para poder trabajar con el SRS EPSG:4258
@@ -29,21 +29,31 @@ setTimeout(function() {
   }, 100);
 
   
-  //WMs para añadir las capas a la lista de capas.
+  //WMS para añadir las capas a la lista de capas.
   function addWMSLayer(nombre){
       var wms =new ol.layer.Image({
             //extent: [-13884991, 2870341, -7455066, 6338219],
-            name: 'Provincias',
+            name: nombre+' de la península',
             source: new ol.source.ImageWMS({
               url: 'http://localhost:8081/geoserver/wms',
-              params: {'LAYERS': nombre},
+              params: {'LAYERS': 'p_casas_rurales:'+nombre+'_esp','STYLES':'parques_naturales'},
               serverType: 'geoserver'
             })
           });
       map.addLayer(wms);
       add_layer_to_list(wms);
-
-     
+      var wms =new ol.layer.Image({
+            //extent: [-13884991, 2870341, -7455066, 6338219],
+            name: nombre+' de las Islas Canarias',
+            source: new ol.source.ImageWMS({
+              url: 'http://localhost:8081/geoserver/wms',
+              params: {'STYLES':'parques_naturales','LAYERS': 'p_casas_rurales:'+nombre+'_canarias'},
+              serverType: 'geoserver'
+            })
+          });
+      map.addLayer(wms);
+      add_layer_to_list(wms);
+      
   }
 
 
@@ -281,10 +291,7 @@ setTimeout(function() {
                 stroke: new ol.style.Stroke({
                   color: 'rgba(0, 0, 0, 1.0)',
                   width: 1
-                }),
-                  fill: new ol.style.Fill({
-                  color: 'rgba(0, 0, 255, 1.0)'
-                })
+                })                  
               })
           });
      $.ajax({url:'http://localhost:8081/geoserver/wps',
@@ -295,13 +302,11 @@ setTimeout(function() {
         success:function(response, status, xhr){    
           var features = new ol.format.WFS().readFeatures(response);
             for(var i=0; i<features.length; i++) {
-                 vectorSourceResult.addFeature(features[i]);
-                 var riesgo=features[i].get('feat1_feat1_total');
-                 var distancia=features[i].get('feat1_INTERSECTION_ID');
+                vectorSourceResult.addFeature(features[i]);
+                var riesgo=features[i].get('feat1_feat1_total');
+                var distancia=features[i].get('feat1_INTERSECTION_ID');
                 var valor=capturarDatos(riesgo,distancia);
-                               
                 features[i].setStyle(stylefunction(valor));
-
             }  
           map.addLayer(vectorResult);
           add_layer_to_list(vectorResult);
@@ -314,7 +319,8 @@ setTimeout(function() {
             var municipio= feature.get('feat1_feat1_texto');
             var riesgo= feature.get('feat1_feat1_total');
             var distancia= feature.get('feat1_INTERSECTION_ID');
-            create_popup('info','Información de zona seleccionada','Municipio:'+municipio+'<br>Riesgo de incendio:'+riesgo+'<br>Distancia a la zona natural:'+distancia);
+            var rango_distancia= '['+(90-(distancia*10))+'-'+(100-(distancia*10))+']';
+            create_popup('info','Información de zona seleccionada','Municipio:'+municipio+'<br>Riesgo de incendio:'+riesgo+'<br>Distancia a la zona natural:'+rango_distancia+'Km');
           }
         });
       });
