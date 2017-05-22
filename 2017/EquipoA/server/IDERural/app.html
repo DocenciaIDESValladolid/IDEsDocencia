@@ -24,40 +24,40 @@
     <script src="js/facebook.js"></script>
 
 	<script>
-		function capturarDatos(){
+		function capturarDatos(n3,n4){
 			
-			<!--Datos extraidos del formulario
-			var d_maxima = parseInt(document.getElementById("d_maxima_control").value);
-			var d_riesgos = parseInt(document.getElementById("d_riesgos_control").value);
+			//Datos extraidos del formulario
+			//var d_maxima = parseInt(document.getElementById("d_maxima_control").value);
+			//var d_riesgos = parseInt(document.getElementById("d_riesgos_control").value);
 			var valoracion_distancias = parseInt(document.getElementById("valoraciones_control").value);
 			
 			
-			 var n1 = valoracion_distancias; <!--valoracion de incendios
-			 var n2 = 0; <!--/valoracion de distancia
-			 var n3 = 0; <!--/numero de incendios (DATO DE LA FEATURE)
-			 var n4 = 0; <!--/valor de la distancia (DATO DE LA FEATURE)
-			 var v_dist = 0; <!--Nota ponderada distancia
-			 var v_ince = 0; <!--Nota ponderada incendio
-			 var res = 0;<!--Suma de las notas ponderadas
+			 var n1 = valoracion_distancias; //valoracion de incendios
+			 var n2 = 0; //valoracion de distancia
+			 var n3 = 0; //numero de incendios (DATO DE LA FEATURE)
+			 var n4 = 0; //valor de la distancia (DATO DE LA FEATURE)
+			 var v_dist = 0; //Nota ponderada distancia
+			 var v_ince = 0; //Nota ponderada incendio
+			 var res = 0;//Suma de las notas ponderadas
 		
 			
 			if (n3 < 1000){
 			
-				n3 = (1000 - n3) / 100; 	<!-- Reduce el numero de incendios al intervalo [0,10]-->		
+				n3 = (1000 - n3) / 100; 	// Reduce el numero de incendios al intervalo [0,10]	
 			}
 			else {
 			
 				n3 = 0;
 			}
 			
-			n2 = 10 - n1;	<!-- Valoración de incendios
+			n2 = 10 - n1;	// Valoración de incendios
 			
-			n4 = n4;		<!-- Reduce el numero de distancia al intervalo [0,11]-->
+			n4 = n4;		// Reduce el numero de distancia al intervalo [0,11]
 			
-			v_dist = (n2/10) * n4;	<!-- Valoracion de la distancia en intervalo [0-11]-->
-			v_ince = (n1/10) * n3;	<!-- Valoracion del riesgo incendio en intervalo [0-12]-->
+			v_dist = (n2/10) * n4;	// Valoracion de la distancia en intervalo [0-11]
+			v_ince = (n1/10) * n3;	// Valoracion del riesgo incendio en intervalo [0-12]
 			
-			res = Math.round(v_dist + v_ince);		
+			return res = Math.round(v_dist + v_ince);		
 				
 			
 			}
@@ -96,19 +96,35 @@
                 </div id="formulario">
 				<br />
 				<br />
+				<br />---------------------------------------
+				<br />
                 <h3>Rellene el formulario.</h3>
                 <div id="welcomingInfo">
 					<form id="form" >
-						Distancia máxima: <input type="number" name="d_maxima_control" id="d_maxima_control" autofocus required />
+						Distancia máxima(Km): 
+                        <!--<input list="d_maxima_control" name=d_maxima_control>
+                            <datalist id="d_maxima_control">
+                                <option value="10">
+                                <option value="20">
+                                <option value="30">
+                                <option value="40">
+                                <option value="50">
+                                <option value="60">
+                                <option value="70">
+                                <option value="80">
+                                <option value="90">
+                                <option value="100">
+                            </datalist>-->
+                        <input type="number" name="d_maxima_control" id="d_maxima_control" placeholder="En Kilómetros"  min="0" step="10" value="0" max="1000" autofocus required />
 						<br />
 						Riesgos Máximos: <input type="number" name="d_riesgos_control" id="d_riesgos_control" placeholder="(0-1500)"  required />
 						<br />
 						Valoración Distancias: <input type="range" id="valoraciones_control"name="points" min="0" max="10" step="1" value="5">
 						<br />
 						<br />
-						Provincia: <input type="text" name="provincia_control" id="provincia_control" placeholder="Introduce Provincia o haz click en el Mapa" />
-						<br />
 						<input type="button" value="Enviar" onclick="capturarDatos()">
+						<br />
+						<br />---------------------------------------
 						<br />
 						<br />
 					</form>

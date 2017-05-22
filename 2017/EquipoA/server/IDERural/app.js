@@ -11,31 +11,6 @@ setTimeout(function() {
 	{title:'Parques Naturales',function:'addWMSLayer(\'p_casas_rurales:parques_naturales_esp,parques_naturales_canarias\')'},
 	{title:'Reservas Naturales',function:'addWMSLayer(\'p_casas_rurales:reservas_naturales_esp,reservas_naturales_canarias\')'},
 	{title:'Otros',function:'addWMSLayer(\'p_casas_rurales:otros_esp\')'},
-
-  //{title:'GetFeature Provincia',function:'peticionPrueba(\'-4.83386,38.08648\')'},//NO FUNCIONA
-
-  //WFS(0):Obtener la Feature de la provincia a partir de unas coordenadas(falta cogerlas con la banderita)
-  {title:'GetFeature Provincia 2',function:'addWFSFeatureProvincia(-4.83386,41.58648)'},
-
-  //WFS(1), hay que pasarle el riesgo máximo, usuario, y el codigo de la provincia, WFS(0)
-   {title:'WFS Riesgos',function:'addWFSFeatureRiesgos(3,47)'},
-  
-   //WFS(2), hay que pasarle la distancia máxima, usuario, y la geometría de la provincia, WFS(0)
-	{title:'WFS Distancias',function:'addWFSFeatureDistancias(9)'},
-
-   //WPS(3), Intersect WFS(1) y WFS(2)
-	{title:'WPS Intersect',function:'WPSIntersect(null)'},
-
-  //WPS(4), pasar una features collection a geometry
-  {title:'WPS Geometry',function:'WPSGeometry()'},
-  
-
-  //Muestra las provincias en el mapa de España(Estilo mal y no hace el zoom a la capa añadida) 
-  {title:'Provincias',function:"addWMSLayer('p_casas_rurales:provincias')"},
-
-  //Pruebas Hector
-    //{title:'Estados',function:'addWMSLayer(\'prueba:Provincias_ETRS89_30N\')'},
-    //{title:'add Editable layer',function:'addEditableLayer()'},
   ];
 
   //Para poder trabajar con el SRS EPSG:4258
@@ -53,88 +28,8 @@ setTimeout(function() {
   list.trigger('create');
   }, 100);
 
-  //Ejemplo profesor
-  function addEditableLayer(){
-        var features = new ol.Collection();
-        var featureOverlay = new ol.layer.Vector({
-          source: new ol.source.Vector({features: features}),
-          style: new ol.style.Style({
-            fill: new ol.style.Fill({
-              color: 'rgba(255, 255, 255, 0.2)'
-            }),
-            stroke: new ol.style.Stroke({
-              color: '#ffcc33',
-              width: 2
-            }),
-            image: new ol.style.Circle({
-              radius: 7,
-              fill: new ol.style.Fill({
-                color: '#ffcc33'
-              })
-            })
-          })
-        });
-        featureOverlay.setMap(map);
-
-        var modify = new ol.interaction.Modify({
-          features: features,
-          // the SHIFT key must be pressed to delete vertices, so
-          // that new vertices can be drawn at the same position
-          // of existing vertices
-          deleteCondition: function(event) {
-            return ol.events.condition.shiftKeyOnly(event) &&
-                ol.events.condition.singleClick(event);
-          }
-        });
-        map.addInteraction(modify);
-
-        var draw; // global so we can remove it later
-        //TODO: use globals draw
-        function activateDraw() {
-          draw = new ol.interaction.Draw({
-            features: features,
-            type: /** @type {ol.geom.GeometryType} */ 'Polygon'
-          });
-          map.addInteraction(draw);
-        }
-
-        /**
-         * Handle change event.
-         */
-        function deactivateDraw() {
-          map.removeInteraction(draw);
-        };   
-        activateDraw();
-  }
-
-  //Ejemplo profesor
-  function addWFSLayer() {
-      var vectorSource = new ol.source.Vector({
-          format: new ol.format.GeoJSON(),
-          url: function (extent) {
-              return 'https://ahocevar.com/geoserver/wfs?service=WFS&' +
-                  'version=1.1.0&request=GetFeature&typename=osm:water_areas&' +
-                  'outputFormat=application/json&srsname=EPSG:3857&' +
-                  'bbox=' + extent.join(',') + ',EPSG:3857';
-          },
-          strategy: ol.loadingstrategy.bbox
-      });
-      var vector = new ol.layer.Vector({
-          name: 'WFS example layer',
-          source: vectorSource,
-          style: new ol.style.Style({
-              stroke: new ol.style.Stroke({
-                  color: 'rgba(0, 0, 255, 1.0)',
-                  width: 2
-              })
-          })
-      });
-      map.addLayer(vector);
-      add_layer_to_list(vector);
-  }
-
-
-  //Para añadir las capas a la lista de capas.
+  
+  //WMs para añadir las capas a la lista de capas.
   function addWMSLayer(nombre){
       var wms =new ol.layer.Image({
             //extent: [-13884991, 2870341, -7455066, 6338219],
@@ -148,51 +43,15 @@ setTimeout(function() {
       map.addLayer(wms);
       add_layer_to_list(wms);
 
-      // GetFeatureInfo
-      map.on('singleclick', function(evt) {
-          var view = map.getView();
-          var viewResolution = /** @type {number} */ (view.getResolution());
-          var url = wms.getSource().getGetFeatureInfoUrl(
-              evt.coordinate, viewResolution, 'EPSG:4258',
-              {'INFO_FORMAT': 'text/plain'});
-          if (url) {
-              $.get(url,function(data){
-                  create_popup('info','GetFeatureInfo',data);
-              });
-          }
-        });
-  }
-
-  //Para añadir el mapa al inicio.
-  function addWMSLayerInit(){
-      var wms =new ol.layer.Image({
-            //extent: [-13884991, 2870341, -7455066, 6338219],
-            name: 'Provincias',
-            source: new ol.source.ImageWMS({
-              url: 'http://localhost:8081/geoserver/wms',
-              params: {'LAYERS': 'p_casas_rurales:provincias',
-                        'SRSName': 'EPSG:4258' },
-              serverType: 'geoserver'
-            })
-          });
-      map.addLayer(wms);
-      add_layer_to_list(wms);
+     
   }
 
 
-
-
-
-
-
-
-  /***************************************************************/
-
-  //WFS(0):Obtener la Feature de la provincia a partir de unas coordenadas
+  //WFS par obtener la Feature de la provincia a partir de unas coordenadas
   function addWFSFeatureProvincia(coord,riesgoMax,distMax){
       var vectorSource = new ol.source.Vector();
         var vector = new ol.layer.Vector({
-            name: 'GetFeature result',
+            name: 'GetFeature Provincia',
           source: vectorSource,
           style: new ol.style.Style({
             stroke: new ol.style.Stroke({
@@ -230,16 +89,17 @@ setTimeout(function() {
        }).then(function(features) {
          var cod_prov=features[0].get('codigo');
           var the_geom=features[0].getGeometry();
-          
+          console.log('DIST-MAX:'+distMax);
           addWFSFeatureRiesgos(riesgoMax,cod_prov,distMax,the_geom);
         });
         
   }
 
+//WFS para obtener los municipios de la provincia seleccionada con menor riesgo de incendio del introduccido por el usuario 
   function addWFSFeatureRiesgos(riesgo,cod_prov,distMax,the_geom){
       var vectorSource = new ol.source.Vector();
         var vector = new ol.layer.Vector({
-            name: 'GetFeature riesgos',
+            name: 'GetFeature Riesgos',
           source: vectorSource,
           style: new ol.style.Style({
             stroke: new ol.style.Stroke({
@@ -251,38 +111,58 @@ setTimeout(function() {
             })
           })
         });
-        // generate a GetFeature request
-        var featureRequest = new ol.format.WFS().writeGetFeature({
-          srsName: 'EPSG:3857',
-          featureNS: 'p_casas_rurales',
-          featurePrefix: 'p_casas_rurales',
-          featureTypes: ['incendios_por_municipios'],
-          outputFormat: 'application/json',
-          filter: ol.format.filter.and(
-            ol.format.filter.like('cod_prov', cod_prov),
-            ol.format.filter.lessThan('total', riesgo)
-          )
-        });
-
-        // then post the request and add the received features to a layer
-        
+       
+        //Provincias sin datos de incendios
+        if(cod_prov==6 || cod_prov==4 ||cod_prov==3 ||cod_prov==8 ||cod_prov==1 ||cod_prov==9 ||cod_prov==2 ||cod_prov==7 ||cod_prov==5){
+             // generate a GetFeature request
+            var featureRequest = new ol.format.WFS().writeGetFeature({
+              srsName: 'EPSG:3857',
+              featureNS: 'p_casas_rurales',
+              featurePrefix: 'p_casas_rurales',
+              featureTypes: ['incendios_por_municipios'],
+              outputFormat: 'application/json',
+              filter: ol.format.filter.like('cod_prov', cod_prov)
+            });
+          }
+       //Provincias con datos de incendios 
+        else{
+           // generate a GetFeature request
+          var featureRequest = new ol.format.WFS().writeGetFeature({
+            srsName: 'EPSG:3857',
+            featureNS: 'p_casas_rurales',
+            featurePrefix: 'p_casas_rurales',
+            featureTypes: ['incendios_por_municipios'],
+            outputFormat: 'application/json',
+            filter: ol.format.filter.and(
+              ol.format.filter.like('cod_prov', cod_prov),
+              ol.format.filter.lessThan('total', riesgo)
+            )
+          });
+        }
+          // then post the request and add the received features to a layer
           fetch('http://localhost:8081/geoserver/wfs', {
-          method: 'POST',
-          body: new XMLSerializer().serializeToString(featureRequest)
-        }).then(function(response) {
-          return response.json();
-        }).then(function(json) {
-          featuresRiesgo= new ol.format.GeoJSON().readFeatures(json);
-          /*vectorSource.addFeatures(featuresRiesgo);
-          map.addLayer(vector);
-          add_layer_to_list(vector);*/
-          return featuresRiesgo;
-        }).then(function(featuresRiesgo) {
-          addWFSFeatureDistancias(distMax,the_geom);
-        });
-        
+            method: 'POST',
+            body: new XMLSerializer().serializeToString(featureRequest)
+          }).then(function(response) {
+            return response.json();
+          }).then(function(json) {
+            featuresRiesgo= new ol.format.GeoJSON().readFeatures(json);
+            
+            vectorSource.addFeatures(featuresRiesgo);
+            map.addLayer(vector);
+            add_layer_to_list(vector);
+            return featuresRiesgo;
+          }).then(function(featuresRiesgo) {
+            if(featuresRiesgo.length<1){
+              create_popup('error','Riesgo máximo demasiado bajo','Dentro de la provincia seleccionada no existe ningún municipio con un riesgo menor al introduccido como máximo')
+            }
+            else{
+            addWFSFeatureDistancias(distMax,the_geom);
+            }
+        });    
   }
 
+//WFS para obtener los polígonos, dentro de la provincia seleccionada, con una distancia máxima a las zonas naturales introduccida por el usario 
   function addWFSFeatureDistancias(distMax,the_geom){
       var vectorSource = new ol.source.Vector();
         var vector = new ol.layer.Vector({
@@ -323,54 +203,63 @@ setTimeout(function() {
           add_layer_to_list(vector);
           return features;
          }).then(function(features) {
-           WPSIntersect(featuresRiesgo,features);
+           if(features.length<1){
+              create_popup('error','Distancia máxima demasiado baja','Dentro de la provincia seleccionada no existe ningún municipio con una distancia tan baja a ninguna zona natural')
+            }
+            else{
+              WPSIntersect(featuresRiesgo,features);
+            }
         });
 
   }
 
+  //WPS para obtener los municipios que cumplen las restricciones impuestas por el usuario, distancia máxima y riesgo máximo.
   function WPSIntersect(feature1,feature2){
-
-  $.ajax({url:'http://localhost:8081/geoserver/wps',
-  dataType:'text',
-  type:'post',
-  data: getWPSRequest(feature1,feature2),
-  contentType:'application/json; charset=utf-8',
-  success:function(response, status, xhr){
-          WPSGeometry(response); 
-  }});
-  
-}
-
- function WPSGeometry(feauturesIntersect){
-
-  $.ajax({url:'http://localhost:8081/geoserver/wps',
-  dataType:'text',
-  type:'post',
-  data: getWPSTransform(feauturesIntersect),
-  contentType:"application/json; charset=utf-8",
-  success:function(response, status, xhr){ 
-    var start=response.indexOf("<gml:MultiPolygon");
-    var end=response.indexOf("</gml:MultiPolygon>");
-    var geomStr = response.substring(start,end+19);
-    var geomStr=geomStr.replace(/NaN/gi, '');
-    WFSSuelo(geomStr,feauturesIntersect);
-  }});
-      
+    $.ajax({url:'http://localhost:8081/geoserver/wps',
+    dataType:'text',
+    type:'post',
+    data: getWPSRequest(feature1,feature2),
+    contentType:'application/json; charset=utf-8',
+    success:function(response, status, xhr){
+            WPSGeometry(response); 
+    }});
   }
 
-  function WFSSuelo(geometry,featuresIntersect){
+//WPS para transformar una colección de features en una geometría
+ function WPSGeometry(feauturesIntersect){
+    $.ajax({url:'http://localhost:8081/geoserver/wps',
+    dataType:'text',
+    type:'post',
+    data: getWPSTransform(feauturesIntersect),
+    contentType:"application/json; charset=utf-8",
+    success:function(response, status, xhr){ 
+      var start=response.indexOf("<gml:MultiPolygon");
+      var end=response.indexOf("</gml:MultiPolygon>");
+      var geomStr = response.substring(start,end+19);
+      var geomStr=geomStr.replace(/NaN/gi, '');
+      WFSSuelo(geomStr,feauturesIntersect);
+    }});  
+  }
 
+  //WFS para obtener el suelo urbanizable que cumple las condiciones impuestas por el usuario
+  function WFSSuelo(geometry,featuresIntersect){
     $.ajax({url:'http://visorsiu.fomento.es/geoserver/wfs',
           dataType:'text',
           type:'post',
           data: getWFSSuelorequest(geometry),
           contentType:'application/json; charset=utf-8',
-          success:function(response, status, xhr){       
-          WPSReproject(featuresIntersect,response);
-         }});
-        
+          success:function(response, status, xhr){
+            /*var responseStr=response.toString();
+            if(responseStr.indeOf('numberOfFeatures="0"')!=-1){
+              create_popup('error','','')
+            }
+            else{*/       
+              WPSReproject(featuresIntersect,response);
+            /*}*/
+        }});
   }
 
+  //WPS para transformar la geometría de las features de suelo urbanizable devueltas por la petición anterior
   function WPSReproject(featuresIntersect,featuresSuelo){
     $.ajax({url:'http://localhost:8081/geoserver/wps',
       dataType:'text',
@@ -382,9 +271,9 @@ setTimeout(function() {
       }});
   }
 
+  //WPS para poder asociar a cada feature de suelo urbanizable un valor de riesgo de incendio y de distancia a la zona natural más cercana
   function  WPSIntersect2(featuresIntersect,featuresSuelo){
-    
-      var vectorSource = new ol.source.Vector();
+       var vectorSource = new ol.source.Vector();
           var vector = new ol.layer.Vector({
               name: 'Result',
               source: vectorSource,
@@ -400,19 +289,24 @@ setTimeout(function() {
         type:'post',
         data: getWPSRequest2(featuresIntersect,featuresSuelo),
         contentType:'application/json',
-        success:function(response, status, xhr){
-          features=new ol.format.GML3().readFeatures(response);
-          vectorSource.addFeatures(features);
+        success:function(response, status, xhr){    
+          var features = new ol.format.GML3().readFeatures(response);
+            for(var i=0; i<features.length; i++) {
+                 vectorSource.addFeature(features[i]);
+                 var riesgo=features[0].get('feat1_feat1_total');
+                 var distancia=features[0].get('feat1_INTERSECTION_ID');
+                var valor=capturarDatos(riesgo,distancia);
+                console.log(valor);
+                features[0].set('feat1_feat1_total',valor); 
+            }  
           map.addLayer(vector);
           add_layer_to_list(vector);
-          map.getView().fit(vectorSource.getExtent());     
-
+          map.getView().fit(vectorSource.getExtent());
     }});
   }
 
-
+  //Petición de interseción
   function getWPSRequest(feature1,feature2){
-
     var featurecoll1 = new ol.format.GML3({featureType:'feat1',featureNS:'IDEs',srsName:'EPSG:3857'}).writeFeatures(feature1);
     var featurecoll2 = new ol.format.GML3({featureType:'feat2',featureNS:'IDEs',srsName:'EPSG:3857'}).writeFeatures(feature2);
     return `<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
@@ -441,9 +335,8 @@ setTimeout(function() {
 </wps:Execute>`;
   }
 
-
+//Petición de la geometría de una colección de features
 function getWPSTransform(feature){
-    
     return `<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
   <ows:Identifier>gs:CollectGeometries</ows:Identifier>
   <wps:DataInputs>
@@ -462,9 +355,8 @@ function getWPSTransform(feature){
 </wps:Execute>`;
 }
 
-
+//Petición del suelo urbanizable en una geometría
 function getWFSSuelorequest(geometry){
-
   return `<wfs:GetFeature service="WFS" version="1.1.0"
   xmlns:wfs="http://www.opengis.net/wfs"
   xmlns:s="http://visorsiu.fomento.es"
@@ -490,6 +382,7 @@ function getWFSSuelorequest(geometry){
 </wfs:GetFeature>`;
 }
 
+//Petición para cambiar el SRS de una colección de features
 function getWPSReproject(featuresSuelo){
   return `<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
   <ows:Identifier>gs:Reproject</ows:Identifier>
@@ -521,9 +414,8 @@ function getWPSReproject(featuresSuelo){
 </wps:Execute>`;
 }
 
-
+//Petción de intersección
 function getWPSRequest2(feature1,feature2){
-
     return `<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
   <ows:Identifier>vec:IntersectionFeatureCollection</ows:Identifier>
   <wps:DataInputs>
