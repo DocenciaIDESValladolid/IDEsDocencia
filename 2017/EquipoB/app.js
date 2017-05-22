@@ -181,31 +181,26 @@ $(document).bind('pageinit', function(){
         dWithin(waypoints.origin, distance, dWithinReturn); // http://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
         
         function dWithinReturn(result){
-            console.log("dWithinReturn1");console.log(result);
-            waypoints.destination = { x: result[0], y: result[1] }; // Coordinates of destination parc
+            waypoints.destination = { x: result[1], y: result[0] }; // Coordinates of destination parc
             waypointsCalc(waypoints.origin, waypoints.destination, null, null, waypointsReturn); 
         }
         
         function waypointsReturn(result){
-            console.log("waypointsReturn2");console.log(result);
             dWithinRoute(result, distance, dWithinRouteReturn);
         }
         
         function dWithinRouteReturn(result1, result2){
-            console.log("dWithinRouteReturn3");console.log(result1);console.log(result2);
-            waypoints.fuente1 = { x: result1[0], y: result1[1] };
-            waypoints.fuente2 = { x: result2[0], y: result2[1] };
+            waypoints.fuente1 = { x: result1[1], y: result1[0] };
+            waypoints.fuente2 = { x: result2[1], y: result2[0] };
             
             waypointsCalc(waypoints.origin, waypoints.fuente1, waypoints.fuente2, waypoints.destination, waypointsReturnBis);
         }
         
         function waypointsReturnBis(result){
-            console.log("waypointsReturnBis4");console.log(result);
             
             var onlyNumbers = result.substring(13), // <gml:posList>
                 fullCoordinates = onlyNumbers.split(' ');
         
-            // lol
             var rutaCompleta = new ol.geom.LineString();
             
             for(i=0; i<fullCoordinates.length; i=i+2){
@@ -271,8 +266,8 @@ $(document).bind('pageinit', function(){
 
         dWithinRequest.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200){
-                var features = (new ol.format.GML3()).readFeatures(this.responseText); // https://github.com/openlayers/openlayers/issues/2999
-                var chosenParc = features[0].values_.parque_geom;
+                var features = (new ol.format.GML3()).readFeatures(this.responseText, 'EPSG:4326'); // https://github.com/openlayers/openlayers/issues/2999
+                var chosenParc = features[1].values_.parque_geom;
                 var coordinates = chosenParc.getCoordinates();
 
                 dWithinCallback(coordinates);
@@ -311,7 +306,7 @@ $(document).bind('pageinit', function(){
                                     '<wp:geom>'+
                                         '<gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">'+
                                         '<gml:pos>'+
-                                            fuente1.y+' '+fuente1.x+
+                                            fuente1.x+' '+fuente1.y+
                                         '</gml:pos>'+ 
                                     '</gml:Point>'+
                                 '</wp:geom>'+
@@ -333,7 +328,7 @@ $(document).bind('pageinit', function(){
                                 '<wp:geom>'+
                                     '<gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">'+
                                     '<gml:pos>'+
-                                        destination.y+' '+destination.x+
+                                        destination.x+' '+destination.y+
                                     '</gml:pos>'+ 
                                 '</gml:Point>'+
                             '</wp:geom>'+
