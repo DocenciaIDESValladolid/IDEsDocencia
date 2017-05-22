@@ -124,7 +124,8 @@ setTimeout(function() {
        
         //Provincias sin datos de incendios
         if(cod_prov==6 || cod_prov==4 ||cod_prov==3 ||cod_prov==8 ||cod_prov==1 ||cod_prov==9 ||cod_prov==2 ||cod_prov==7 ||cod_prov==5){
-             // generate a GetFeature request
+            create_popup('info','No existen datos del riesgo de incendio','No se tendrá en cuenta el riesgo de incendio de las zonas obtenidas.');
+            // generate a GetFeature request
             var featureRequest = new ol.format.WFS().writeGetFeature({
               srsName: 'EPSG:3857',
               featureNS: 'p_casas_rurales',
@@ -231,7 +232,7 @@ setTimeout(function() {
     data: getWPSRequest(feature1,feature2),
     contentType:'application/json; charset=utf-8',
     success:function(response, status, xhr){
-            WPSGeometry(response); 
+      WPSGeometry(response);
     }});
   }
 
@@ -242,12 +243,18 @@ setTimeout(function() {
     type:'post',
     data: getWPSTransform(feauturesIntersect),
     contentType:"application/json; charset=utf-8",
-    success:function(response, status, xhr){ 
-      var start=response.indexOf("<gml:MultiPolygon");
-      var end=response.indexOf("</gml:MultiPolygon>");
-      var geomStr = response.substring(start,end+19);
-      var geomStr=geomStr.replace(/NaN/gi, '');
-      WFSSuelo(geomStr,feauturesIntersect);
+    success:function(response, status, xhr){
+      var responseStr = response.toString();
+      if(responseStr.indexOf('size=0')!=-1){
+        create_popup('error','Valores demasiado bajos','No existe ninguna zona que cumpla los valores introduccidos en el formulario, por favor introduzca valores mayores.');
+      }
+      else{
+        var start=response.indexOf("<gml:MultiPolygon");
+        var end=response.indexOf("</gml:MultiPolygon>");
+        var geomStr = response.substring(start,end+19);
+        var geomStr=geomStr.replace(/NaN/gi, '');
+        WFSSuelo(geomStr,feauturesIntersect);
+      }
     }});  
   }
 
@@ -259,13 +266,16 @@ setTimeout(function() {
           data: getWFSSuelorequest(geometry),
           contentType:'application/json; charset=utf-8',
           success:function(response, status, xhr){
-            /*var responseStr=response.toString();
-            if(responseStr.indeOf('numberOfFeatures="0"')!=-1){
-              create_popup('error','','')
+            var responseStr=response.toString();
+            if(responseStr.indexOf('Exception')!=-1){
+              create_popup('error','Problema con el servidor','El servidor no puede procesar tantos datos, por favor introduce unos valores más restrictivos en el formulario.')
             }
-            else{*/       
+            else if(responseStr.indexOf('numberOfFeatures="0"')!=-1){
+              create_popup('error','Valores demasiado bajos','No existe ningun zona con suelo urbanizable que cumpla los valores introduccidos en el formulario, por favor introduzca valores mayores.')
+            }
+            else{       
               WPSReproject(featuresIntersect,response);
-            /*}*/
+            }
         }});
   }
 
@@ -299,18 +309,30 @@ setTimeout(function() {
         type:'post',
         data: getWPSRequest2(featuresIntersect,featuresSuelo),
         contentType:'application/json',
-        success:function(response, status, xhr){    
-          var features = new ol.format.WFS().readFeatures(response);
-            for(var i=0; i<features.length; i++) {
-                vectorSourceResult.addFeature(features[i]);
-                var riesgo=features[i].get('feat1_feat1_total');
-                var distancia=features[i].get('feat1_INTERSECTION_ID');
-                var valor=capturarDatos(riesgo,distancia);
-                features[i].setStyle(stylefunction(valor));
-            }  
-          map.addLayer(vectorResult);
-          add_layer_to_list(vectorResult);
-          map.getView().fit(vectorSourceResult.getExtent());  
+        success:function(response, status, xhr){   
+          var responseStr = response.toString();
+          if(responseStr.indexOf('Exception')!=-1){
+            create_popup('error','Valores demasiado bajos','No existe ninguna zona urbanizable que cumpla los valores introduccidos en el formulario, por favor introduzca valores mayores.');
+          }
+          else{ 
+            var features = new ol.format.WFS().readFeatures(response);
+              for(var i=0; i<features.length; i++) {
+                  vectorSourceResult.addFeature(features[i]);
+                  var riesgo=features[i].get('feat1_feat1_total');
+                  var distancia=features[i].get('feat1_INTERSECTION_ID');
+                  var cod_prov=features[i].get('feat1_feat1_cod_prov');
+                  var sinRiesgo=false;
+                  if(cod_prov==6 || cod_prov==4 ||cod_prov==3 ||cod_prov==8 ||cod_prov==1 ||cod_prov==9 ||cod_prov==2 ||cod_prov==7 ||cod_prov==5){
+                    var sinRiesgo=true;
+                  }
+                  var valor=capturarDatos(riesgo,distancia,sinRiesgo);
+                  features[i].set('feat1_feat1_gid',valor);
+                  features[i].setStyle(stylefunction(valor));
+              }  
+            map.addLayer(vectorResult);
+            add_layer_to_list(vectorResult);
+            map.getView().fit(vectorSourceResult.getExtent()); 
+          } 
     }});
     // GetFeatureInfo
       map.on('singleclick', function(evt) {
@@ -319,8 +341,18 @@ setTimeout(function() {
             var municipio= feature.get('feat1_feat1_texto');
             var riesgo= feature.get('feat1_feat1_total');
             var distancia= feature.get('feat1_INTERSECTION_ID');
-            var rango_distancia= '['+(90-(distancia*10))+'-'+(100-(distancia*10))+']';
-            create_popup('info','Información de zona seleccionada','Municipio:'+municipio+'<br>Riesgo de incendio:'+riesgo+'<br>Distancia a la zona natural:'+rango_distancia+'Km');
+             var valoracion= feature.get('feat1_feat1_gid');
+             var cod_prov=feature.get('feat1_feat1_cod_prov');
+             if(cod_prov==6 || cod_prov==4 ||cod_prov==3 ||cod_prov==8 ||cod_prov==1 ||cod_prov==9 ||cod_prov==2 ||cod_prov==7 ||cod_prov==5){
+               riesgo='(Sin información)';
+             }
+            if(distancia==11){
+              var rango_distancia='0';
+            }
+            else{
+            var rango_distancia= '['+(100-(distancia*10))+'-'+(110-(distancia*10))+']';
+            }
+            create_popup('info','Información de zona seleccionada','Municipio:'+municipio+'<br>Riesgo de incendio:'+riesgo+'<br>Distancia a la zona natural:'+rango_distancia+'Km<br>VALORACIÓN:'+valoracion);
           }
         });
       });
@@ -335,7 +367,7 @@ function stylefunction(valor){
                   width: 1
                 }),
                   fill: new ol.style.Fill({
-                  color: 'rgba('+(410-(valor*40))+','+(410-(valor*40))+',255 , 1.0)'
+                  color: 'rgba('+(440-(valor*40))+','+(440-(valor*40))+',255 , 1.0)'
                 })
               })  
 
@@ -427,12 +459,6 @@ function getWPSReproject(featuresSuelo){
       <ows:Identifier>features</ows:Identifier>
       <wps:Data>
         <wps:ComplexData mimeType="text/xml; subtype=wfs-collection/1.1"><![CDATA[`+featuresSuelo+`]]></wps:ComplexData>
-      </wps:Data>
-    </wps:Input>
-    <wps:Input>
-      <ows:Identifier>forcedCRS</ows:Identifier>
-      <wps:Data>
-        <wps:LiteralData>EPSG:25830</wps:LiteralData>
       </wps:Data>
     </wps:Input>
     <wps:Input>
