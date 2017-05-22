@@ -209,11 +209,17 @@ function initmap() {
             hasFeature = true;
         });
         if (!hasFeature) {
-            var d_riesgos = parseInt(document.getElementById("d_riesgos_control").value);
-            var d_maxima = parseInt(document.getElementById("d_maxima_control").value);
-            var coordinates = map.getEventCoordinate(evt.originalEvent);
-            markerFeature.setGeometry(coordinates ?
-                addWFSFeatureProvincia(coordinates,d_riesgos,d_maxima) : null);
+            var d_riesgos = document.getElementById("d_riesgos_control").value;
+            var d_maxima = document.getElementById("d_maxima_control").value;
+            if(d_riesgos && d_maxima) {
+                d_maxima = (100-parseInt(document.getElementById("d_maxima_control").value))/10;
+                var coordinates = map.getEventCoordinate(evt.originalEvent);
+                markerFeature.setGeometry(coordinates ?
+                    addWFSFeatureProvincia(coordinates,d_riesgos,d_maxima) : null);
+            }
+            else{
+                create_popup('infostage','Rellene los datos','Antes de seleccionar la provincia debe introducir todos los datos en el formulario del menú lateral.');
+            }
         }
     });
     /**
@@ -328,24 +334,50 @@ function initmap() {
     }
 
 
-/*AÑADOOOOOO ESTO ----------------------------------------------------------------------------------------------------------------------------------*/
-	 var wms =new ol.layer.Image({
-          //extent: [-13884991, 2870341, -7455066, 6338219],
-          name: 'Provincias',
-          source: new ol.source.ImageWMS({
+/*Cargar el mapa inicial*/
+    var wms =new ol.layer.Image({
+        name: 'Provincias',
+        source: new ol.source.ImageWMS({
             url: 'http://localhost:8081/geoserver/wms',
             params: {
-                'LAYERS': 'p_casas_rurales:provincias',
-                //'BBOX':'-1854056.5580852332 3287403.7124888604,334913.7975275074 5217666.045753082' 
-                
+                'LAYERS': 'p_casas_rurales:provincias'             
             },
             serverType: 'geoserver'
-          })
-        });
+        })
+    });
     map.addLayer(wms);
     add_layer_to_list(wms);
-    /*var polygon = new ol.geom.Polygon([[-1854056.5580852332, 3287403.7124888604],[-1854056.5580852332, 5217666.045753082],[334913.7975275074, 5217666.045753082],[334913.7975275074, 3287403.7124888604],[-1854056.5580852332, 3287403.7124888604]],'EPSG:3857');
-    map.getView().fit(polygon);  */
+      var vectorSource = new ol.source.Vector();
+        var vector = new ol.layer.Vector({
+            name: 'Provincias',
+          source: vectorSource,
+          style: new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: 'rgba(0, 0, 0, 1.0)',
+              width: 2
+            })
+          })
+        });
+        // generate a GetFeature request
+        var featureRequest = new ol.format.WFS().writeGetFeature({
+          srsName: 'EPSG:3857',
+          featureNS: 'p_casas_rurales',
+          featurePrefix: 'p_casas_rurales',
+          featureTypes: ['provincias'],
+          outputFormat: 'application/json',//'text/xml; subtype=gml/3.1.1',
+        });
+        // then post the request and add the received features to a layer
+        fetch('http://localhost:8081/geoserver/wfs', {
+          method: 'POST',
+          body: new XMLSerializer().serializeToString(featureRequest)
+        })
+        .then(function(response) {
+        return response.json();
+      }).then(function(json) {
+        var features = new ol.format.GeoJSON().readFeatures(json);    
+          vectorSource.addFeatures(features);
+          map.getView().fit(vectorSource.getExtent());
+        });
 
 }
     
