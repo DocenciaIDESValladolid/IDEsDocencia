@@ -182,7 +182,7 @@ $(document).bind('pageinit', function(){
         
         function dWithinReturn(result){
             waypoints.destination = { x: result[1], y: result[0] }; // Coordinates of destination parc
-            waypointsCalc(waypoints.origin, waypoints.destination, null, null, waypointsReturn); 
+            waypointsCalc(waypoints, waypointsReturn); 
         }
         
         function waypointsReturn(result){
@@ -193,32 +193,82 @@ $(document).bind('pageinit', function(){
             waypoints.fuente1 = { x: result1[1], y: result1[0] };
             waypoints.fuente2 = { x: result2[1], y: result2[0] };
             
-            waypointsCalc(waypoints.origin, waypoints.fuente1, waypoints.fuente2, waypoints.destination, waypointsReturnBis);
+            waypointsCalc(waypoints, waypointsReturnBis);
         }
         
         function waypointsReturnBis(result){
             
+            // Se añade el parque destino
+            var parqueDestino = new ol.layer.Vector({
+                name:"Parque Destino",
+                source: new ol.source.Vector({ features: [new ol.Feature({ geometry: new ol.geom.Point([waypoints.destination.x, waypoints.destination.y])})] }),
+                style: new ol.style.Style({
+                      image: new ol.style.Circle({
+                        fill: new ol.style.Fill({
+                          color: 'rgba(0,255,0,1)'
+                        }),
+                        radius: 10,
+                        stroke: new ol.style.Stroke({
+                          color: 'rgba(0,255,255,1)',
+                          width: 2
+                        })
+                      })
+                    })
+            });
+            
+            map.addLayer(parqueDestino);
+            add_layer_to_list(parqueDestino);
+            
             var onlyNumbers = result.substring(13), // <gml:posList>
                 fullCoordinates = onlyNumbers.split(' ');
-        
-            var rutaCompleta = new ol.geom.LineString();
             
+            var source = new ol.source.Vector();
+            
+            var pointlayer = new ol.layer.Vector({
+                name: "pointLayer",
+                style: selectedpointStyle,
+                source: source
+            });
+            
+            var coords=[];
             for(i=0; i<fullCoordinates.length; i=i+2){
                 
                 var coord = [];
                 
                 coord.push(fullCoordinates[i]);
                 coord.push(fullCoordinates[i+1]);
-    
-                rutaCompleta.appendCoordinate(coord);
+                coords.push(coord);
+                
+                var feature = new ol.Feature({
+                  geometry: new ol.geom.Point(coord),
+                  name: 'My points'
+                });
+                
+                source.addFeature(feature);
             }
             
+           var rutaCompleta = new ol.geom.LineString(coords);
+                
+            
             var selectedStyle = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: 'rgba(255,30,100,1)',
-                    width: 10
-                })
-        });
+                    stroke: new ol.style.Stroke({
+                      color: 'rgba(255,0,0,0.4)',
+                      width: 3
+                    })
+                });
+            
+            var selectedpointStyle = new ol.style.Style({
+                  image: new ol.style.Circle({
+                    fill: new ol.style.Fill({
+                      color: 'rgba(255,255,0,0.4)'
+                    }),
+                    radius: 5,
+                    stroke: new ol.style.Stroke({
+                      color: '#ff0',
+                      width: 1
+                    })
+                  })
+                });
 
             var rutaVector = new ol.layer.Vector({
                             name: "Ruta",
@@ -233,6 +283,9 @@ $(document).bind('pageinit', function(){
 
             map.addLayer(rutaVector);
             add_layer_to_list(rutaVector);
+            
+            map.addLayer(pointlayer);
+            add_layer_to_list(pointlayer);
         }
     }
     
@@ -267,7 +320,7 @@ $(document).bind('pageinit', function(){
         dWithinRequest.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200){
                 var features = (new ol.format.GML3()).readFeatures(this.responseText, 'EPSG:4326'); // https://github.com/openlayers/openlayers/issues/2999
-                var chosenParc = features[1].values_.parque_geom;
+                var chosenParc = features[0].values_.parque_geom;
                 var coordinates = chosenParc.getCoordinates();
 
                 dWithinCallback(coordinates);
@@ -279,7 +332,7 @@ $(document).bind('pageinit', function(){
     }
     
     // Get route
-    function waypointsCalc(origin, destination, fuente1, fuente2, waypointsCallback){
+    function waypointsCalc(waypoints, waypointsCallback){
 
         var waypointsXML = `<?xml version="1.0"?>
         <wps:Execute xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="WPS" version="1.0.0" outputFormat="GML3" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
@@ -291,48 +344,26 @@ $(document).bind('pageinit', function(){
                     <wps:ComplexData mimeType="text/xml">
                     <wfs:FeatureCollection xmlns:ogc="http://www.opengis.net/ogc" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ows="http://www.opengis.net/ows" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wp="http://localhost/waypoint" xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://localhost http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd http://www.opengis.net/gml http://schemas.opengis.net/gml/3.1.1/base/feature.xsd http://localhost:8080/wps/schemas/waypoint.xsd">
                     <gml:featureMembers>`;
-            // ORIGIN
-            waypointsXML += '<wp:waypoint gml:id="1">'+
+        
+        var gmlID = 0;
+        for (var key in waypoints) {
+            gmlID++;
+            
+            if (!waypoints.hasOwnProperty(key)) continue; // skip loop if the property is from prototype
+            
+            var obj = waypoints[key];
+
+            waypointsXML += '<wp:waypoint gml:id="'+gmlID+'">'+
                                 '<wp:geom>'+
                                     '<gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">'+
                                         '<gml:pos>'+
-                                            origin.x+' '+origin.y+
+                                            obj.x+' '+obj.y+
                                         '</gml:pos>'+
                                     '</gml:Point>'+
                                 '</wp:geom>'+
                             '</wp:waypoint>';
-            if(fuente1){
-                waypointsXML += '<wp:waypoint gml:id="2">'+
-                                    '<wp:geom>'+
-                                        '<gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">'+
-                                        '<gml:pos>'+
-                                            fuente1.x+' '+fuente1.y+
-                                        '</gml:pos>'+ 
-                                    '</gml:Point>'+
-                                '</wp:geom>'+
-                            '</wp:waypoint>';
-            }
-            if(fuente2){
-                waypointsXML += '<wp:waypoint gml:id="3">'+
-                                    '<wp:geom>'+
-                                        '<gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">'+
-                                        '<gml:pos>'+
-                                            fuente2.y+' '+fuente2.x+
-                                        '</gml:pos>'+ 
-                                    '</gml:Point>'+
-                                '</wp:geom>'+
-                            '</wp:waypoint>';
-            }
-            // DESTINATION
-            waypointsXML += '<wp:waypoint gml:id="'; if(fuente2) waypointsXML += '4'; else waypointsXML += '2'; waypointsXML += '">'+
-                                '<wp:geom>'+
-                                    '<gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">'+
-                                    '<gml:pos>'+
-                                        destination.x+' '+destination.y+
-                                    '</gml:pos>'+ 
-                                '</gml:Point>'+
-                            '</wp:geom>'+
-                        '</wp:waypoint>';
+        }
+        
             waypointsXML += `</gml:featureMembers>
                                 </wfs:FeatureCollection>
                             </wps:ComplexData>
@@ -357,7 +388,7 @@ $(document).bind('pageinit', function(){
                     end = this.responseText.indexOf("</gml:posList>"),
                     lineString = this.responseText.substring(start, end);
                 
-                    if(fuente1){
+                    if(waypoints.fuente1){ // TODO: change this
                         waypointsCallback(lineString);
                     }
                     else {
@@ -378,8 +409,8 @@ $(document).bind('pageinit', function(){
             myarray = string.split(' '),
             reformed = '<gml:LineString srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"><gml:coordinates xmlns:gml="http://www.opengis.net/gml" decimal="." cs="," ts=" ">';
         
-        for(i=0; i<myarray.length; i++){
-            reformed += myarray.slice(i,i+2).join(",")+' ';   
+        for(i=0; i<myarray.length; i=i+2){
+            reformed += myarray.slice(i,i+2).join(",")+' ';
         }
         
         reformed += '</gml:coordinates></gml:LineString>';
