@@ -273,10 +273,10 @@ setTimeout(function() {
 
   //WPS para poder asociar a cada feature de suelo urbanizable un valor de riesgo de incendio y de distancia a la zona natural más cercana
   function  WPSIntersect2(featuresIntersect,featuresSuelo){
-       var vectorSource = new ol.source.Vector();
-          var vector = new ol.layer.Vector({
+       var vectorSourceResult = new ol.source.Vector();
+          var vectorResult = new ol.layer.Vector({
               name: 'Result',
-              source: vectorSource,
+              source: vectorSourceResult,
               style: new ol.style.Style({
                 stroke: new ol.style.Stroke({
                   color: 'rgba(0, 0, 0, 1.0)',
@@ -295,7 +295,7 @@ setTimeout(function() {
         success:function(response, status, xhr){    
           var features = new ol.format.WFS().readFeatures(response);
             for(var i=0; i<features.length; i++) {
-                 vectorSource.addFeature(features[i]);
+                 vectorSourceResult.addFeature(features[i]);
                  var riesgo=features[i].get('feat1_feat1_total');
                  var distancia=features[i].get('feat1_INTERSECTION_ID');
                 var valor=capturarDatos(riesgo,distancia);
@@ -303,10 +303,22 @@ setTimeout(function() {
                 features[i].setStyle(stylefunction(valor));
 
             }  
-          map.addLayer(vector);
-          add_layer_to_list(vector);
-          map.getView().fit(vectorSource.getExtent());
+          map.addLayer(vectorResult);
+          add_layer_to_list(vectorResult);
+          map.getView().fit(vectorSourceResult.getExtent());  
     }});
+    // GetFeatureInfo
+      map.on('singleclick', function(evt) {
+        map.forEachFeatureAtPixel(map.getEventPixel(evt.originalEvent),function(feature,layer){
+          if(layer.get('name')=='Result'){
+            var municipio= feature.get('feat1_feat1_texto');
+            var riesgo= feature.get('feat1_feat1_total');
+            var distancia= feature.get('feat1_INTERSECTION_ID');
+            create_popup('info','Información de zona seleccionada','Municipio:'+municipio+'<br>Riesgo de incendio:'+riesgo+'<br>Distancia a la zona natural:'+distancia);
+          }
+        });
+      });
+   
   }
 
 //Función que devuelve el estilo en función de la valoración
