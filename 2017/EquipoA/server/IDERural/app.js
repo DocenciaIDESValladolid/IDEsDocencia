@@ -278,11 +278,14 @@ setTimeout(function() {
               name: 'Result',
               source: vectorSource,
               style: new ol.style.Style({
-              stroke: new ol.style.Stroke({
-                color: 'rgba(0, 0, 255, 1.0)',
-                width: 2
+                stroke: new ol.style.Stroke({
+                  color: 'rgba(0, 0, 0, 1.0)',
+                  width: 1
+                }),
+                  fill: new ol.style.Fill({
+                  color: 'rgba(0, 0, 255, 1.0)'
+                })
               })
-            })
           });
      $.ajax({url:'http://localhost:8081/geoserver/wps',
         dataType:'text',
@@ -290,20 +293,35 @@ setTimeout(function() {
         data: getWPSRequest2(featuresIntersect,featuresSuelo),
         contentType:'application/json',
         success:function(response, status, xhr){    
-          var features = new ol.format.GML3().readFeatures(response);
+          var features = new ol.format.WFS().readFeatures(response);
             for(var i=0; i<features.length; i++) {
                  vectorSource.addFeature(features[i]);
-                 var riesgo=features[0].get('feat1_feat1_total');
-                 var distancia=features[0].get('feat1_INTERSECTION_ID');
+                 var riesgo=features[i].get('feat1_feat1_total');
+                 var distancia=features[i].get('feat1_INTERSECTION_ID');
                 var valor=capturarDatos(riesgo,distancia);
-                console.log(valor);
-                features[0].set('feat1_feat1_total',valor); 
+                               
+                features[i].setStyle(stylefunction(valor));
+
             }  
           map.addLayer(vector);
           add_layer_to_list(vector);
           map.getView().fit(vectorSource.getExtent());
     }});
   }
+
+//Función que devuelve el estilo en función de la valoración
+function stylefunction(valor){
+  return  new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                  color: 'rgba(0, 0, 0, 1.0)',
+                  width: 1
+                }),
+                  fill: new ol.style.Fill({
+                  color: 'rgba('+(410-(valor*40))+','+(410-(valor*40))+',255 , 1.0)'
+                })
+              })  
+
+}
 
   //Petición de interseción
   function getWPSRequest(feature1,feature2){
