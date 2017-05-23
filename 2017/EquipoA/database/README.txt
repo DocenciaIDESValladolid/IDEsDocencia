@@ -1,3 +1,3 @@
-Scripts de base de datos.
-
-En esta carpeta deben ponerse los scripts de creación del esquema de base de datos, la carga inicial de datos de prototipo y los scripts definitivos.
+Para motar la base de datos en postgres.
+1-Ejecutar el script create_database 
+2-Restore sobre ella el fichero ddbb_completa.backup
