@@ -24,18 +24,16 @@
     <script src="js/facebook.js"></script>
 
 	<script>
-		function capturarDatos(n3,n4){
+		function capturarDatos(n3,n4,sinRiesgo){
 			
 			//Datos extraidos del formulario
-			//var d_maxima = parseInt(document.getElementById("d_maxima_control").value);
-			//var d_riesgos = parseInt(document.getElementById("d_riesgos_control").value);
-			var valoracion_distancias = parseInt(document.getElementById("valoraciones_control").value);
+			var valoracion_incendios = parseInt(document.getElementById("valoraciones_control").value);
+			if(sinRiesgo){
+                valoracion_incendios=0;
+            }
 			
-			
-			 var n1 = valoracion_distancias; //valoracion de incendios
+			 var n1 = valoracion_incendios; //valoracion de incendios
 			 var n2 = 0; //valoracion de distancia
-			 //var n3 = 0; //numero de incendios (DATO DE LA FEATURE)
-			 //var n4 = 0; //valor de la distancia (DATO DE LA FEATURE)
 			 var v_dist = 0; //Nota ponderada distancia
 			 var v_ince = 0; //Nota ponderada incendio
 			 var res = 0;//Suma de las notas ponderadas
@@ -102,24 +100,11 @@
                 <div id="welcomingInfo">
 					<form id="form" >
 						Distancia máxima(Km): 
-                        <!--<input list="d_maxima_control" name=d_maxima_control>
-                            <datalist id="d_maxima_control">
-                                <option value="10">
-                                <option value="20">
-                                <option value="30">
-                                <option value="40">
-                                <option value="50">
-                                <option value="60">
-                                <option value="70">
-                                <option value="80">
-                                <option value="90">
-                                <option value="100">
-                            </datalist>-->
                         <input type="number" name="d_maxima_control" id="d_maxima_control" placeholder="En Kilómetros"  min="0" step="10" value="0" max="1000" autofocus required />
 						<br />
-						Riesgos Máximos: <input type="number" name="d_riesgos_control" id="d_riesgos_control" placeholder="(0-1500)"  required />
+						Riesgos Máximos: <input type="number" name="d_riesgos_control" id="d_riesgos_control" placeholder="(1-1500)" min="1" max="1500" required />
 						<br />
-						Valoración Distancias: <input type="range" id="valoraciones_control"name="points" min="0" max="10" step="1" value="5">
+						Valoración de Riesgos: <input type="range" id="valoraciones_control"name="points" min="0" max="10" step="1" value="5">
 						<br />
 						<br />
 						<input type="button" value="Enviar" onclick="capturarDatos()">
