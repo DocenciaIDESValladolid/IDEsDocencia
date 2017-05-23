@@ -24,7 +24,7 @@
     <script src="js/facebook.js"></script>
 
 	<script>
-		function capturarDatos(n3,n4,sinRiesgo){
+		function capturarDatos(n3,n4,sinRiesgo){ //riesgo, distancia, sinRiesgo
 			
 			//Datos extraidos del formulario
 			var valoracion_incendios = parseInt(document.getElementById("valoraciones_control").value);
@@ -41,23 +41,21 @@
 			
 			if (n3 < 1000){
 			
-				n3 = (1000 - n3) / 100; 	// Reduce el numero de incendios al intervalo [0,10]	
+				n3 = (1000 - n3) / 100; 		
 			}
 			else {
 			
 				n3 = 0;
 			}
 			
-			n2 = 10 - n1;	// Valoración de distancias
+			n2 = 10 - n1;
 			
-			n4 = n4;		// Reduce el numero de distancia al intervalo [0,11]
+			n4 = n4;		
 			
-			v_dist = (n2/10) * n4;	// Valoracion de la distancia en intervalo [0-11]
-			v_ince = (n1/10) * n3;	// Valoracion del riesgo incendio en intervalo [0-12]
+			v_dist = (n2/10) * n4;	
+			v_ince = (n1/10) * n3;	
 			
 			return res = Math.round(v_dist + v_ince);		
-				
-			
 			}
 	</script>
 	
@@ -73,12 +71,16 @@
                    ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
                 <h1>Información</h1>
             </div>
-            <div id="estadoLogin" class="ui-bar ui-bar-b">
-                <a href="#" id="iniciosesionFacebookEstado" class="ui-btn  ui-btn-icon-left ui-icon-fb ui-btn-inline" onclick="login(); return false;">Identificarse</a>
-                <!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
-            </div>
+			<br/>
+			<br/>
             <div id="collapsibleset" data-role="collapsibleset" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b"
                 data-content-theme="b">
+
+				<br/>---------------------------------------
+
+				<br/>
+				<h3>Visualización de Capas:</h3>
+				<br/>
                 <div data-role="collapsible" data-theme="a" data-iconpos="right">
                     <h3>Espacios Naturales</h3>
                     <div>
@@ -93,7 +95,6 @@
                     </div>
                 </div id="formulario">
 				<br />
-				<br />
 				<br />---------------------------------------
 				<br />
                 <h3>Rellene el formulario.</h3>
@@ -107,17 +108,12 @@
 						Valoración de Riesgos: <input type="range" id="valoraciones_control"name="points" min="0" max="10" step="1" value="5">
 						<br />
 						<br />
-						<input type="button" value="Enviar" onclick="capturarDatos()">
-						<br />
 						<br />---------------------------------------
 						<br />
 						<br />
 					</form>
                 </div>
-                <div id="instructions2">
-                    <p>Instrucciones adicionales.</p>
-                    <a href="#" id="aditionalAction" data-role="button">Aditional Action</a>
-                </div>
+               
                 <a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a>
             </div>
         </div>
@@ -141,7 +137,7 @@
                 <h1>¿Estás seguro de que deseas enviar esta ubicación?</h1>
             </div>
             <div role="content" id="popup_content" class="ui-content ui-overlay-b">
-                z<p>Esta acción no se puede deshacer.</p>
+                <p>Esta acción no se puede deshacer.</p>
                 <fieldset class="ui-grid-a">
                     <div class="ui-block-a">
                         <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b">
@@ -168,15 +164,8 @@
             <div id="map"></div>
         </div>
         <div data-role="footer" data-position="fixed" data-tap-toggle="false">
-            <a href="#popupdialog" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-check"
-                id="executeaction">
-                Ejecutar acción
-            </a>
             <a href="#layerspage" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-bullets ui-btn-icon-notext">
                 Capas
-            </a>
-            <a href="#historypage" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-info ui-btn-icon-notext">
-                Historial
             </a>
             <a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-location ui-btn-icon-notext" id="autolocate"></a>
             <a href="#authors" data-transition="fade" data-role="button" class="ui-btn">About Us</a> 
@@ -223,21 +212,21 @@
                 </li>
                 <li>
                     <a href="#creador1" data-prefetch="true">
-                        <h2>Alumno 1</h2>
-                        <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención
+                        <h2>REBECA GARCÍA COCA</h2>
+                        <p>Alumna del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención
                             en Telemática.</p>
                     </a>
                 </li>
                 <li>
                     <a href="#creador2" data-prefetch="true">
-                        <h2>Alumno 2</h2>
+                        <h2>JULIÁN GONZÁLEZ DÍAZ</h2>
                         <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención
                             en Telemática.</p>
                     </a>
                 </li>
                 <li>
                     <a href="#creador3" data-prefetch="true">
-                        <h2>Alumno 3</h2>
+                        <h2>HÉCTOR GONZÁLEZ BELTRÁN</h2>
                         <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención
                             en Telemática.</p>
                     </a>
@@ -271,14 +260,14 @@
 		-->
     <div data-role="page" id="creador1" data-theme="b">
         <div data-role="header">
-            <h1>Miembro del equipo</h1>
+            <h1>Desarrolladora</h1>
         </div>
         <div data-role="content" class="ui-content">
-            <h3 class="ui-bar ui-bar-a ui-corner-all">Nombre estudiante</h3>
+            <h3 class="ui-bar ui-bar-a ui-corner-all">Rebeca García Coca</h3>
             <div class="ui-body ui-body-a ui-corner-all">
                 <p>Escuela Técnica Superior de Ingenieros de Telecomunicaciones. Grado en Ingeniería de Tecnologías Específicas
                     de Telecomunicación, Mención en Telemática</p>
-                <p><a href="mailto:email@gmail.com">email@gmail.com</p>
+                <p><a href="mailto:rebeca.garcia.coca@gmail.com">rebeca.garcia.coca@gmail.com</p>
 				</div>		
 				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
             </div>
@@ -289,14 +278,14 @@
 		-->
         <div data-role="page" id="creador2" data-theme="b">
             <div data-role="header">
-                <h1>Miembro del equipo</h1>
+                <h1>Desarrollador</h1>
             </div>
             <div data-role="content" class="ui-content">
-                <h3 class="ui-bar ui-bar-a ui-corner-all">Nombre estudiante</h3>
+                <h3 class="ui-bar ui-bar-a ui-corner-all">Julián González Díaz</h3>
                 <div class="ui-body ui-body-a ui-corner-all">
                     <p>Escuela Técnica Superior de Ingenieros de Telecomunicaciones. Grado en Ingeniería de Tecnologías Específicas
                         de Telecomunicación, Mención en Telemática</p>
-                    <p><a href="mailto:email@gmail.com">email@gmail.com</p>
+                    <p><a href="mailto:julian4a@gmail.com">julian4a@gmail.com</p>
 				</div>		
 				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
                 </div>
@@ -307,14 +296,14 @@
 		-->
             <div data-role="page" id="creador3" data-theme="b">
                 <div data-role="header">
-                    <h1>Miembro del equipo</h1>
+                    <h1>Desarrollador</h1>
                 </div>
                 <div data-role="content" class="ui-content">
-                    <h3 class="ui-bar ui-bar-a ui-corner-all">Nombre estudiante</h3>
+                    <h3 class="ui-bar ui-bar-a ui-corner-all">Héctor González Beltrán</h3>
                     <div class="ui-body ui-body-a ui-corner-all">
                         <p>Escuela Técnica Superior de Ingenieros de Telecomunicaciones. Grado en Ingeniería de Tecnologías
                             Específicas de Telecomunicación, Mención en Telemática</p>
-                        <p><a href="mailto:email@gmail.com">email@gmail.com</p>
+                        <p><a href="mailto:hector34190@gmail.com">hector34190@gmail.com</p>
 				</div>		
 				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
                     </div>
