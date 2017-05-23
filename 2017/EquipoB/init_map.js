@@ -333,21 +333,11 @@ function initmap() {
         zoom: 12,
         minZoom: 2
     });
-
-    var select = new ol.interaction.Select({
-        layers: [vectorCustomLayer],
-        style: select_style_function,
-        filter: function(feature, layer) {
-            // Do something with marker
-            if (feature.get('attr') === 0) {
-                return false;
-            }
-            return true;
-        }
-    });
+    
     var drag_rotate = ol.interaction.defaults().extend([
         new ol.interaction.DragRotateAndZoom()
     ]);
+    
     geolocation = new ol.Geolocation({
         projection: view.getProjection(),
         trackingOptions: {
@@ -411,7 +401,23 @@ function initmap() {
             /*loadTilesWhileAnimating: true,
              loadTilesWhileInteracting: true*/
     });
+    
+    // http://openlayers.org/en/latest/examples/select-features.html
+    // select interaction working on "singleclick"
+    var select = new ol.interaction.Select();
+
     map.addInteraction(select);
+    select.on('select', function(e){
+        if (e.selected.length === 1){
+            var feature = e.target.getFeatures().getArray(),
+                values = feature[0].values_,
+                coordinates = values.geometry.flatCoordinates;
+            $("#positionCoordinates").html('('+coordinates[0]+', '+coordinates[1]+')');
+        }
+        else $("#positionCoordinates").html('No feature selected.');
+    });
+    
+    
     
     // Initialize the page layers.
     add_layergroup_to_list(layergroup);
@@ -441,35 +447,6 @@ function initmap() {
     /**
      * Customize this function
      */
-    select.on("select", function(features) {
-        if (features.selected.length === 1) {
-            if (lastsuccessfulstage.position === features.selected[0].get('stageposition') &&
-                features.selected[0].get('geometrysolved') && !roadfinished && available) {
-                $("#infopanel").panel("open");
-                $("#lastsuccessfulstage").collapsible("expand");
-            } else {
-                var title, stagename = features.selected[0].get('name'),
-                    stageclue = features.selected[0].get('clue'),
-                    info = features.selected[0].get('info'),
-                    body = '';
-                if (features.selected[0].get('geometrysolved')) {
-                    if (stagename && stageclue) {
-                        title = "stageovercome";
-                        body = get_block_text("stagename", stagename);
-                        body += get_block_text("stageclue", stageclue);
-                    } else {
-                        title = "discoveredlocation";
-                    }
-                } else {
-                    title = "failedlocation";
-                }
-                if (info) {
-                    body += '<p>' + info + '</p>';
-                }
-                create_popup('infostage', title, body);
-            }
-        }
-    });
     map.on('click', function(evt) {
         var hasFeature = false;
         map.forEachFeatureAtPixel(map.getEventPixel(evt.originalEvent), function(feature, layer) {

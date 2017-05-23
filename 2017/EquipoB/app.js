@@ -147,36 +147,20 @@ $(document).bind('pageinit', function(){
             });
         map.addLayer(wms);
         add_layer_to_list(wms);
-
-        // GetFeatureInfo
-        map.on('singleclick', function(evt) {
-            var view = map.getView();
-            var viewResolution = /** @type {number} */ (view.getResolution());
-            var url = wms.getSource().getGetFeatureInfoUrl(
-                evt.coordinate, viewResolution, 'EPSG:3857',
-                {'INFO_FORMAT': 'text/plain'});
-            if (url) {
-                $.get(url,function(data){
-                    create_popup('info','GetFeatureInfo',data);
-                });
-            }
-          });
     }
     
     
-    // Trying to do stuff
-    $("#pruebaMatteo").click(function(){
+    // El calculo de nuestra ruta
+    $("#apptst").click(function(){
         tst();
     });
-    
-    tst();
         
-    function tst(){
+    function tst(){ //TODO: add parameters when called
         
         var waypoints = {
                 origin: { x: -3.703790, y: 40.41675 }
-            };
-        var distance = 0.01;
+            },
+            distance = 0.01;
         
         dWithin(waypoints.origin, distance, dWithinReturn); // http://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
         
@@ -189,7 +173,7 @@ $(document).bind('pageinit', function(){
             dWithinRoute(result, distance, dWithinRouteReturn);
         }
         
-        function dWithinRouteReturn(result1, result2){
+        function dWithinRouteReturn(result1, result2){ // Hay que invertirlas porque .readFeatures no las lee al revez 
             waypoints.fuente1 = { x: result1[1], y: result1[0] };
             waypoints.fuente2 = { x: result2[1], y: result2[0] };
             
@@ -198,10 +182,21 @@ $(document).bind('pageinit', function(){
         
         function waypointsReturnBis(result){
             
-            // Se añade el parque destino
-            var parqueDestino = new ol.layer.Vector({
-                name:"Parque Destino",
-                source: new ol.source.Vector({ features: [new ol.Feature({ geometry: new ol.geom.Point([waypoints.destination.x, waypoints.destination.y])})] }),
+            // Se añaden los waypoints visibles
+            var puntosSource = new ol.source.Vector();
+            
+            for (var key in waypoints){
+                if (!waypoints.hasOwnProperty(key)) continue;
+
+                var punto = waypoints[key],
+                    feature = new ol.Feature({ geometry: new ol.geom.Point([punto.x, punto.y])});
+                
+                puntosSource.addFeature(feature);
+            }
+            
+            var puntosVisibiles = new ol.layer.Vector({
+                name:"Puntos Visibiles",
+                source: puntosSource,
                 style: new ol.style.Style({
                       image: new ol.style.Circle({
                         fill: new ol.style.Fill({
@@ -216,9 +211,10 @@ $(document).bind('pageinit', function(){
                     })
             });
             
-            map.addLayer(parqueDestino);
-            add_layer_to_list(parqueDestino);
+            map.addLayer(puntosVisibiles);
+            add_layer_to_list(puntosVisibiles);
             
+            // Operations for the final route
             var onlyNumbers = result.substring(13), // <gml:posList>
                 fullCoordinates = onlyNumbers.split(' ');
             
@@ -319,14 +315,13 @@ $(document).bind('pageinit', function(){
 
         dWithinRequest.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200){
-                var features = (new ol.format.GML3()).readFeatures(this.responseText, 'EPSG:4326'); // https://github.com/openlayers/openlayers/issues/2999
-                var chosenParc = features[0].values_.parque_geom;
-                var coordinates = chosenParc.getCoordinates();
+                var allFeatures = (new ol.format.GML3()).readFeatures(this.responseText, 'EPSG:4326'), // https://github.com/openlayers/openlayers/issues/2999
+                     chosenParc = allFeatures[0].values_.parque_geom,
+                     coordinates = chosenParc.getCoordinates();
 
                 dWithinCallback(coordinates);
             }
         }
-
         dWithinRequest.open("POST","http://localhost:8080/geoserver/wfs",true);
         dWithinRequest.send(dWithinXML);
     }
@@ -346,9 +341,8 @@ $(document).bind('pageinit', function(){
                     <gml:featureMembers>`;
         
         var gmlID = 0;
-        for (var key in waypoints) {
+        for (var key in waypoints){
             gmlID++;
-            
             if (!waypoints.hasOwnProperty(key)) continue; // skip loop if the property is from prototype
             
             var obj = waypoints[key];
@@ -363,7 +357,6 @@ $(document).bind('pageinit', function(){
                                 '</wp:geom>'+
                             '</wp:waypoint>';
         }
-        
             waypointsXML += `</gml:featureMembers>
                                 </wfs:FeatureCollection>
                             </wps:ComplexData>
@@ -398,7 +391,6 @@ $(document).bind('pageinit', function(){
             }
             
         }
-
         waypointsRequest.open("POST","http://www.cartociudad.es/wps/WebProcessingService",true);
         waypointsRequest.send(waypointsXML);
     }
@@ -449,15 +441,14 @@ $(document).bind('pageinit', function(){
                 
                 var features = (new ol.format.GML3()).readFeatures(this.responseText);
                 
-                var fuente1 = features[0].values_.fuente_geom,
+                var fuente1 = features[2].values_.fuente_geom,
                     fuente1Coord = fuente1.getCoordinates(),
-                    fuente2 = features[1].values_.fuente_geom,
+                    fuente2 = features[3].values_.fuente_geom,
                     fuente2Coord = fuente2.getCoordinates();
                 
                 dWithinRouteCallback(fuente1Coord, fuente2Coord);
             }
         }
-
         dWithinRouteRequest.open("POST","http://localhost:8080/geoserver/wfs",true);
         dWithinRouteRequest.send(dWithinRouteXML);
     }
