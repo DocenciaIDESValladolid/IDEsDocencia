@@ -1,4 +1,2 @@
-En esta carpeta se deben poner los scripts PHP, html y javascript que se vayan a instalar en el servidor.
-Si en el diseño de la aplicación html y php se mezclan en la misma carpeta, todos deben ir aquí.
-
-ficheros aplicacion Nodejs 
+IMPORTANTE:
+El codigo esta preaparado para el servidor de geoserver montado sobre el puerto 8081, no sobre el puesto 8080. Esto se debe a los problemas que hubo por conflicto por el servidor de labView.
