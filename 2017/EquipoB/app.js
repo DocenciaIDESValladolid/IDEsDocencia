@@ -1,5 +1,3 @@
-wfsServerUrl = "http://localhost:8080/geoserver/wfs";
-
 $(document).bind('pageinit', function(){
 
     $( "#slider-3" ).slider(); // jquery ui slider init not working apparently
