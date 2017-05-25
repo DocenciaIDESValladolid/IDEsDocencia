@@ -158,9 +158,9 @@ $(document).bind('pageinit', function(){
     });
         
     function tst(){ //TODO: add parameters when called
-        
+        var pos = geolocation.getPosition();
         var waypoints = {
-                origin: { x: -3.703790, y: 40.41675 }
+                origin: { x: pos[0], y: pos[1] }
             },
             distance = 0.01;
         
@@ -288,6 +288,7 @@ $(document).bind('pageinit', function(){
             
             map.addLayer(pointlayer);
             add_layer_to_list(pointlayer);
+            fly_to(map, null, rutaVector.getSource().getExtent());
         }
     }
     
