@@ -396,7 +396,7 @@ $(document).bind('pageinit', function(){
             }
             
         }
-        waypointsRequest.open("POST","http://www.cartociudad.es/wps/WebProcessingService",true);
+        waypointsRequest.open("POST","https://www.cartociudad.es/wps/WebProcessingService",true);
         waypointsRequest.send(waypointsXML);
     }
     
