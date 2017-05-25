@@ -1,3 +1,5 @@
+wfsServerUrl = "http://localhost:8080/geoserver/wfs";
+
 $(document).bind('pageinit', function(){
 
     $( "#slider-3" ).slider(); // jquery ui slider init not working apparently
@@ -242,7 +244,11 @@ $(document).bind('pageinit', function(){
                 
                 source.addFeature(feature);
             }
-            
+            // JPC: Workarround for a problem with tolerances in this app.
+            // Linestrings are over-simplified (maybe some resolution/pixel ratio issue)
+            // this patch overrides simplification for LineStrings
+          ol.geom.LineString.prototype.getSimplifiedGeometry = function(squaredTolerance) {
+  return this;};   
            var rutaCompleta = new ol.geom.LineString(coords);
                 
             
@@ -322,7 +328,7 @@ $(document).bind('pageinit', function(){
                 dWithinCallback(coordinates);
             }
         }
-        dWithinRequest.open("POST","http://localhost:8080/geoserver/wfs",true);
+        dWithinRequest.open("POST",wfsServerUrl,true);
         dWithinRequest.send(dWithinXML);
     }
     
@@ -449,7 +455,7 @@ $(document).bind('pageinit', function(){
                 dWithinRouteCallback(fuente1Coord, fuente2Coord);
             }
         }
-        dWithinRouteRequest.open("POST","http://localhost:8080/geoserver/wfs",true);
+        dWithinRouteRequest.open("POST",wfsServerUrl,true);
         dWithinRouteRequest.send(dWithinRouteXML);
     }
 
