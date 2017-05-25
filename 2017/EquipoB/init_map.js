@@ -344,7 +344,7 @@ function initmap() {
             enableHighAccuracy: true,
             maximumAge: 0
         },
-        tracking: false
+        tracking: true
     });
     var accuracyFeature = new ol.Feature();
     accuracyFeature.setStyle(accuracyFeatureStyle);
