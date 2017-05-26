@@ -29,7 +29,7 @@ $(document).bind('pageinit', function(){
         }
         
         function getOriginCoordinates(position){
-            waypoints.push({ x: position.coords.latitude, y: position.coords.longitude });
+            waypoints.push({ x: position.coords.longitude, y: position.coords.latitude });
             dWithin(waypoints[0], distance, dWithinReturn); // http://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
         }
         // Requests callbacks start here
@@ -151,7 +151,7 @@ $(document).bind('pageinit', function(){
           xmlns:gml="http://www.opengis.net/gml"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">
-          <wfs:Query typeName="prototype:parques">
+          <wfs:Query typeName="IDES_B17:parques">
             <ogc:Filter>
               <ogc:DWithin>
                     <ogc:PropertyName>parque_geom</ogc:PropertyName>
@@ -255,7 +255,7 @@ $(document).bind('pageinit', function(){
           xmlns:gml="http://www.opengis.net/gml"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">
-          <wfs:Query typeName="prototype:fuentes">
+          <wfs:Query typeName="IDES_B17:fuentes">
             <ogc:Filter>
               <ogc:DWithin>
                     <ogc:PropertyName>fuente_geom</ogc:PropertyName>
