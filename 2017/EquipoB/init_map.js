@@ -134,7 +134,7 @@ function initmap() {
                 offset: [52, 0],
                 opacity: 1,
                 scale: 0.08,
-                src: '../pix/fuentes.png'
+                src: './pix/fuentes.png'
             })
         });
     }
@@ -211,7 +211,7 @@ function initmap() {
         source: new ol.source.Cluster({
             distance: 40,
             source: new ol.source.Vector({
-                url: 'http://localhost:8080/geoserver/wfs?&service=wfs&version=1.1.0&request=GetFeature&typeNames=Prototype:fuentes',
+                url: wfsServerUrl+'?&service=wfs&version=1.1.0&request=GetFeature&typeNames=IDES_B17:fuentes',
                 format: new ol.format.WFS({
                 })
             })
@@ -233,7 +233,7 @@ function initmap() {
                 offset: [0, 0],
                 opacity: 1,
                 scale: 0.15,
-                src: '../pix/parques.png'
+                src: './pix/parques.png'
             })
         });
     }
@@ -310,7 +310,7 @@ function initmap() {
         source: new ol.source.Cluster({
             distance: 40,
             source: new ol.source.Vector({
-                url: 'http://localhost:8080/geoserver/wfs?&service=wfs&version=1.1.0&request=GetFeature&typeNames=Prototype:parques',
+                url: wfsServerUrl+'?&service=wfs&version=1.1.0&request=GetFeature&typeNames=IDES_B17:parques',
                 format: new ol.format.WFS({
                 })
             })
