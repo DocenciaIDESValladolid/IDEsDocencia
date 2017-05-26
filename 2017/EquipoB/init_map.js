@@ -206,24 +206,17 @@ function initmap() {
         return styles;
     }
 
-    fuentesVector = new ol.layer.Vector({
-        name: "Fuentes",
+    var fuentesVector = new ol.layer.Vector({
+        title: 'Fuentes',
         source: new ol.source.Cluster({
             distance: 40,
             source: new ol.source.Vector({
-                url: 'fuentes.kml',
-                format: new ol.format.KML({
-                    extractStyles: false
+                url: 'http://localhost:8080/geoserver/wfs?&service=wfs&version=1.1.0&request=GetFeature&typeNames=Prototype:fuentes',
+                format: new ol.format.WFS({
                 })
             })
         }),
         style: styleFunction
-    });
-
-    var raster = new ol.layer.Tile({
-        source: new ol.source.Stamen({
-            layer: 'watercolor'
-        })
     });
 
     function createEarthquakeStyle1(feature) {
@@ -311,15 +304,14 @@ function initmap() {
         }
         return styles;
     }
-
-    parquesVector = new ol.layer.Vector({
-        name: "Parques",
+    
+    var parquesVector = new ol.layer.Vector({
+        title: 'Parques',
         source: new ol.source.Cluster({
             distance: 40,
             source: new ol.source.Vector({
-                url: 'parques.kml',
-                format: new ol.format.KML({
-                    extractStyles: false
+                url: 'http://localhost:8080/geoserver/wfs?&service=wfs&version=1.1.0&request=GetFeature&typeNames=Prototype:parques',
+                format: new ol.format.WFS({
                 })
             })
         }),
@@ -330,7 +322,7 @@ function initmap() {
     var view = new ol.View({
         projection: 'EPSG:4326',
         center: [-3.703790, 40.416775], //https://epsg.io/
-        zoom: 12,
+        zoom: 14,
         minZoom: 2
     });
     
