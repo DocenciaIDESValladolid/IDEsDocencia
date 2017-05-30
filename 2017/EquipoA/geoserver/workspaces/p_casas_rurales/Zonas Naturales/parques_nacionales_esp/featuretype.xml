@@ -1,0 +1,65 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-7316c441:15bcf20ee73:-5f9a</id>
+  <name>parques_nacionales_esp</name>
+  <nativeName>parques_nacionales_esp</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-7316c441:15bcf20ee73:-7fff</id>
+  </namespace>
+  <title>parques_nacionales_esp</title>
+  <keywords>
+    <string>features</string>
+    <string>parques_nacionales_esp</string>
+  </keywords>
+  <nativeCRS class="projected">PROJCS[&quot;ETRS89 / UTM zone 30N (N-E)&quot;, &#xd;
+  GEOGCS[&quot;ETRS89&quot;, &#xd;
+    DATUM[&quot;European Terrestrial Reference System 1989&quot;, &#xd;
+      SPHEROID[&quot;GRS 1980&quot;, 6378137.0, 298.257222101, AUTHORITY[&quot;EPSG&quot;,&quot;7019&quot;]], &#xd;
+      TOWGS84[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], &#xd;
+      AUTHORITY[&quot;EPSG&quot;,&quot;6258&quot;]], &#xd;
+    PRIMEM[&quot;Greenwich&quot;, 0.0, AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]], &#xd;
+    UNIT[&quot;degree&quot;, 0.017453292519943295], &#xd;
+    AXIS[&quot;Geodetic longitude&quot;, EAST], &#xd;
+    AXIS[&quot;Geodetic latitude&quot;, NORTH], &#xd;
+    AUTHORITY[&quot;EPSG&quot;,&quot;4258&quot;]], &#xd;
+  PROJECTION[&quot;Transverse_Mercator&quot;, AUTHORITY[&quot;EPSG&quot;,&quot;9807&quot;]], &#xd;
+  PARAMETER[&quot;central_meridian&quot;, -3.0], &#xd;
+  PARAMETER[&quot;latitude_of_origin&quot;, 0.0], &#xd;
+  PARAMETER[&quot;scale_factor&quot;, 0.9996], &#xd;
+  PARAMETER[&quot;false_easting&quot;, 500000.0], &#xd;
+  PARAMETER[&quot;false_northing&quot;, 0.0], &#xd;
+  UNIT[&quot;m&quot;, 1.0], &#xd;
+  AXIS[&quot;Easting&quot;, EAST], &#xd;
+  AXIS[&quot;Northing&quot;, NORTH], &#xd;
+  AUTHORITY[&quot;EPSG&quot;,&quot;3042&quot;]]</nativeCRS>
+  <srs>EPSG:3042</srs>
+  <nativeBoundingBox>
+    <minx>1599.05769999977</minx>
+    <maxx>1018866.0427</maxx>
+    <miny>4077408.8635</miny>
+    <maxy>4797924.998</maxy>
+    <crs class="projected">EPSG:3042</crs>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-9.13086072855444</minx>
+    <maxx>3.3811037552100895</maxx>
+    <miny>36.70066005212686</miny>
+    <maxy>43.33410128649155</maxy>
+    <crs>GEOGCS[&quot;WGS84(DD)&quot;, &#xd;
+  DATUM[&quot;WGS84&quot;, &#xd;
+    SPHEROID[&quot;WGS84&quot;, 6378137.0, 298.257223563]], &#xd;
+  PRIMEM[&quot;Greenwich&quot;, 0.0], &#xd;
+  UNIT[&quot;degree&quot;, 0.017453292519943295], &#xd;
+  AXIS[&quot;Geodetic longitude&quot;, EAST], &#xd;
+  AXIS[&quot;Geodetic latitude&quot;, NORTH]]</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-7316c441:15bcf20ee73:-7ff8</id>
+  </store>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

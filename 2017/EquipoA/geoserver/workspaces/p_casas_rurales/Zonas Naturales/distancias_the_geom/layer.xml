@@ -1,0 +1,15 @@
+<layer>
+  <name>distancias_the_geom</name>
+  <id>LayerInfoImpl-7454c98f:15bf1d27cc0:-a40</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--570ae188:124761b8d78:-7fe0</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-7454c98f:15bf1d27cc0:-a41</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

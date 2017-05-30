@@ -1,0 +1,15 @@
+<layer>
+  <name>incendios_por_municipios</name>
+  <id>LayerInfoImpl-7316c441:15bcf20ee73:-7ff2</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--3c0d3921:15ac7fbc371:-8000</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-7316c441:15bcf20ee73:-7ff3</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

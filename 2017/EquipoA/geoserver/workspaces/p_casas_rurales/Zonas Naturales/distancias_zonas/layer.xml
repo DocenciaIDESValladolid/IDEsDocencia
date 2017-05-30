@@ -1,0 +1,15 @@
+<layer>
+  <name>distancias_zonas</name>
+  <id>LayerInfoImpl-7454c98f:15c010d3d1f:-48f4</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--570ae188:124761b8d78:-7fe0</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-7454c98f:15c010d3d1f:-48f5</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

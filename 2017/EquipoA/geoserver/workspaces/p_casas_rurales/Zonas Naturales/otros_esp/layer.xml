@@ -1,0 +1,15 @@
+<layer>
+  <name>otros_esp</name>
+  <id>LayerInfoImpl-7316c441:15bcf20ee73:-5fa3</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--570ae188:124761b8d78:-7fe0</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-7316c441:15bcf20ee73:-5fa4</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

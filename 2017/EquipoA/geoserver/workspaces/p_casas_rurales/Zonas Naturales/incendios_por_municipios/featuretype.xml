@@ -1,0 +1,69 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-7316c441:15bcf20ee73:-7ff3</id>
+  <name>incendios_por_municipios</name>
+  <nativeName>incendios</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-7316c441:15bcf20ee73:-7fff</id>
+  </namespace>
+  <title>incendios_por_municipios</title>
+  <keywords>
+    <string>incendios</string>
+    <string>features</string>
+  </keywords>
+  <nativeCRS>GEOGCS[&quot;ETRS89&quot;, &#xd;
+  DATUM[&quot;European Terrestrial Reference System 1989&quot;, &#xd;
+    SPHEROID[&quot;GRS 1980&quot;, 6378137.0, 298.257222101, AUTHORITY[&quot;EPSG&quot;,&quot;7019&quot;]], &#xd;
+    TOWGS84[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], &#xd;
+    AUTHORITY[&quot;EPSG&quot;,&quot;6258&quot;]], &#xd;
+  PRIMEM[&quot;Greenwich&quot;, 0.0, AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]], &#xd;
+  UNIT[&quot;degree&quot;, 0.017453292519943295], &#xd;
+  AXIS[&quot;Geodetic longitude&quot;, EAST], &#xd;
+  AXIS[&quot;Geodetic latitude&quot;, NORTH], &#xd;
+  AUTHORITY[&quot;EPSG&quot;,&quot;4258&quot;]]</nativeCRS>
+  <srs>EPSG:4258</srs>
+  <nativeBoundingBox>
+    <minx>-18.1607988553454</minx>
+    <maxx>4.32788956760036</maxx>
+    <miny>27.6377403381251</miny>
+    <maxy>43.7899940008481</maxy>
+    <crs>EPSG:4258</crs>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-18.1607988553454</minx>
+    <maxx>4.32788956760036</maxx>
+    <miny>27.637740337349122</miny>
+    <maxy>43.78999399990564</maxy>
+    <crs>GEOGCS[&quot;WGS84(DD)&quot;, &#xd;
+  DATUM[&quot;WGS84&quot;, &#xd;
+    SPHEROID[&quot;WGS84&quot;, 6378137.0, 298.257223563]], &#xd;
+  PRIMEM[&quot;Greenwich&quot;, 0.0], &#xd;
+  UNIT[&quot;degree&quot;, 0.017453292519943295], &#xd;
+  AXIS[&quot;Geodetic longitude&quot;, EAST], &#xd;
+  AXIS[&quot;Geodetic latitude&quot;, NORTH]]</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="JDBC_VIRTUAL_TABLE">
+      <virtualTable>
+        <name>incendios</name>
+        <sql>select gid,ine,texto,total,cod_prov,geom as the_geom from municipios left join incendios on (municipios.codigo = incendios.ine)
+</sql>
+        <escapeSql>false</escapeSql>
+        <geometry>
+          <name>the_geom</name>
+          <type>MultiPolygon</type>
+          <srid>4258</srid>
+        </geometry>
+      </virtualTable>
+    </entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-7316c441:15bcf20ee73:-7ff8</id>
+  </store>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

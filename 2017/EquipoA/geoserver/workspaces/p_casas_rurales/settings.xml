@@ -1,0 +1,35 @@
+<settings>
+  <id>SettingsInfoImpl-7316c441:15bcf20ee73:-7ffe</id>
+  <workspace>
+    <id>WorkspaceInfoImpl-7316c441:15bcf20ee73:-8000</id>
+    <name>p_casas_rurales</name>
+  </workspace>
+  <contact>
+    <id>contact</id>
+    <address>Valladolid</address>
+    <addressCity>Valladolid</addressCity>
+    <addressCountry>España</addressCountry>
+    <addressElectronicMailAddress>rebeca.garcia.coca@gmail.com</addressElectronicMailAddress>
+    <addressState>Castilla y Leon</addressState>
+    <addressType>Estudiante</addressType>
+    <contactEmail>rebeca.garcia.coca@gmail.com</contactEmail>
+    <contactOrganization>UVa</contactOrganization>
+    <contactPerson>Rebeca</contactPerson>
+    <contactPosition>Estudiante</contactPosition>
+    <onlineResource>http://boundlessgeo.com/about/contact-us/customer-support/</onlineResource>
+  </contact>
+  <charset>UTF-8</charset>
+  <numDecimals>8</numDecimals>
+  <onlineResource>http://boundlessgeo.com/solutions/solutions-software/geoserver/</onlineResource>
+  <verbose>false</verbose>
+  <verboseExceptions>false</verboseExceptions>
+  <metadata>
+    <map>
+      <entry>
+        <string>quietOnNotFound</string>
+        <boolean>false</boolean>
+      </entry>
+    </map>
+  </metadata>
+  <localWorkspaceIncludesPrefix>false</localWorkspaceIncludesPrefix>
+</settings>
