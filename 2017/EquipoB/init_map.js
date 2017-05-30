@@ -134,7 +134,7 @@ function initmap() {
                 offset: [52, 0],
                 opacity: 1,
                 scale: 0.08,
-                src: '../pix/fuentes.png'
+                src: './pix/fuentes.png'
             })
         });
     }
@@ -206,24 +206,17 @@ function initmap() {
         return styles;
     }
 
-    fuentesVector = new ol.layer.Vector({
-        name: "Fuentes",
+    var fuentesVector = new ol.layer.Vector({
+        title: 'Fuentes',
         source: new ol.source.Cluster({
             distance: 40,
             source: new ol.source.Vector({
-                url: 'fuentes.kml',
-                format: new ol.format.KML({
-                    extractStyles: false
+                url: wfsServerUrl+'?&service=wfs&version=1.1.0&request=GetFeature&typeNames=IDES_B17:fuentes',
+                format: new ol.format.WFS({
                 })
             })
         }),
         style: styleFunction
-    });
-
-    var raster = new ol.layer.Tile({
-        source: new ol.source.Stamen({
-            layer: 'watercolor'
-        })
     });
 
     function createEarthquakeStyle1(feature) {
@@ -240,7 +233,7 @@ function initmap() {
                 offset: [0, 0],
                 opacity: 1,
                 scale: 0.15,
-                src: '../pix/parques.png'
+                src: './pix/parques.png'
             })
         });
     }
@@ -311,15 +304,14 @@ function initmap() {
         }
         return styles;
     }
-
-    parquesVector = new ol.layer.Vector({
-        name: "Parques",
+    
+    var parquesVector = new ol.layer.Vector({
+        title: 'Parques',
         source: new ol.source.Cluster({
             distance: 40,
             source: new ol.source.Vector({
-                url: 'parques.kml',
-                format: new ol.format.KML({
-                    extractStyles: false
+                url: wfsServerUrl+'?&service=wfs&version=1.1.0&request=GetFeature&typeNames=IDES_B17:parques',
+                format: new ol.format.WFS({
                 })
             })
         }),
@@ -330,31 +322,21 @@ function initmap() {
     var view = new ol.View({
         projection: 'EPSG:4326',
         center: [-3.703790, 40.416775], //https://epsg.io/
-        zoom: 12,
+        zoom: 14,
         minZoom: 2
     });
-
-    var select = new ol.interaction.Select({
-        layers: [vectorCustomLayer],
-        style: select_style_function,
-        filter: function(feature, layer) {
-            // Do something with marker
-            if (feature.get('attr') === 0) {
-                return false;
-            }
-            return true;
-        }
-    });
+    
     var drag_rotate = ol.interaction.defaults().extend([
         new ol.interaction.DragRotateAndZoom()
     ]);
+    
     geolocation = new ol.Geolocation({
         projection: view.getProjection(),
         trackingOptions: {
             enableHighAccuracy: true,
             maximumAge: 0
         },
-        tracking: false
+        tracking: true
     });
     var accuracyFeature = new ol.Feature();
     accuracyFeature.setStyle(accuracyFeatureStyle);
@@ -411,7 +393,23 @@ function initmap() {
             /*loadTilesWhileAnimating: true,
              loadTilesWhileInteracting: true*/
     });
+    
+    // http://openlayers.org/en/latest/examples/select-features.html
+    // select interaction working on "singleclick"
+    var select = new ol.interaction.Select();
+
     map.addInteraction(select);
+    select.on('select', function(e){
+        if (e.selected.length === 1){
+            var feature = e.target.getFeatures().getArray(),
+                values = feature[0].values_,
+                coordinates = values.geometry.flatCoordinates;
+            $("#positionCoordinates").html('('+coordinates[0]+', '+coordinates[1]+')');
+        }
+        else $("#positionCoordinates").html('No feature selected.');
+    });
+    
+    
     
     // Initialize the page layers.
     add_layergroup_to_list(layergroup);
@@ -441,35 +439,6 @@ function initmap() {
     /**
      * Customize this function
      */
-    select.on("select", function(features) {
-        if (features.selected.length === 1) {
-            if (lastsuccessfulstage.position === features.selected[0].get('stageposition') &&
-                features.selected[0].get('geometrysolved') && !roadfinished && available) {
-                $("#infopanel").panel("open");
-                $("#lastsuccessfulstage").collapsible("expand");
-            } else {
-                var title, stagename = features.selected[0].get('name'),
-                    stageclue = features.selected[0].get('clue'),
-                    info = features.selected[0].get('info'),
-                    body = '';
-                if (features.selected[0].get('geometrysolved')) {
-                    if (stagename && stageclue) {
-                        title = "stageovercome";
-                        body = get_block_text("stagename", stagename);
-                        body += get_block_text("stageclue", stageclue);
-                    } else {
-                        title = "discoveredlocation";
-                    }
-                } else {
-                    title = "failedlocation";
-                }
-                if (info) {
-                    body += '<p>' + info + '</p>';
-                }
-                create_popup('infostage', title, body);
-            }
-        }
-    });
     map.on('click', function(evt) {
         var hasFeature = false;
         map.forEachFeatureAtPixel(map.getEventPixel(evt.originalEvent), function(feature, layer) {

@@ -15,6 +15,7 @@
     <script src="js/jquery-mobile/jquery.mobile-config.js"></script>
     <script src="js/openlayers/dist/ol-debug.js"></script>
     <script src="js/geocoder/geocoder.js"></script>
+    <script src="configurelocalvars.js"></script>
     <script src="init_map.js"></script>
     <script src="app.js"></script>
 </head>
@@ -35,7 +36,7 @@
                 </div>
                 <h3>Instrucciones.</h3>
                 <div>
-                    <a href="#" id="pruebaMatteo" data-role="button">Prueba Matteo</a>
+                    <a href="#" id="apptst" data-role="button">Calcular Ruta</a>
                 </div>
             </div>
         </div>
@@ -133,6 +134,7 @@
         </div>
         <div data-role="content" id="content">
             <div id="map"></div>
+            <div id="positionCoordinates" style="font-weight: normal; font-size: 16px; position: absolute; top: 100px; right: 50px; text-shadow: 3px 2px 5px rgba(0, 0, 0, 1);"></div>
         </div>
         <div data-role="footer" data-position="fixed" data-tap-toggle="false">
             <!-- New Training button -->
