@@ -11,3 +11,4 @@ La estructura de carpetas para cada equipo es la siguiente:
 
 Hector Gonzalez 
 Rebeca Garcia
+Julián González 
