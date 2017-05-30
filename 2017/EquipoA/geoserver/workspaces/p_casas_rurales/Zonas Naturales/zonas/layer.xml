@@ -1,0 +1,20 @@
+<layer>
+  <name>zonas</name>
+  <id>LayerInfoImpl-7316c441:15bcf20ee73:-5fa9</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--3c0d3921:15ac7fbc371:-8000</id>
+  </defaultStyle>
+  <styles class="linked-hash-set">
+    <style>
+      <id>StyleInfoImpl--49219871:15c311dcecf:-14fc</id>
+    </style>
+  </styles>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-7316c441:15bcf20ee73:-5faa</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

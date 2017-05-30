@@ -1,0 +1,32 @@
+<layerGroup>
+  <id>LayerGroupInfoImpl--49219871:15c2f69d34c:25a8</id>
+  <name>incendios_provincias</name>
+  <mode>SINGLE</mode>
+  <title>incendios_provincias</title>
+  <workspace>
+    <id>WorkspaceInfoImpl-7316c441:15bcf20ee73:-8000</id>
+  </workspace>
+  <publishables>
+    <published type="layer">
+      <id>LayerInfoImpl-7316c441:15bcf20ee73:-7ff2</id>
+    </published>
+    <published type="layer">
+      <id>LayerInfoImpl-7454c98f:15bf1d27cc0:-7fff</id>
+    </published>
+  </publishables>
+  <styles>
+    <style>
+      <id>StyleInfoImpl--3c0d3921:15ac7fbc371:-8000</id>
+    </style>
+    <style>
+      <id>StyleInfoImpl--570ae188:124761b8d78:-7fe0</id>
+    </style>
+  </styles>
+  <bounds>
+    <minx>-18.1607988553454</minx>
+    <maxx>4.42870140075684</maxx>
+    <miny>27.6377403381251</miny>
+    <maxy>43.87027359008789</maxy>
+    <crs>EPSG:4258</crs>
+  </bounds>
+</layerGroup>

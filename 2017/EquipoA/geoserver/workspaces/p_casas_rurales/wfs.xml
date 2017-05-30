@@ -1,7 +1,7 @@
 <wfs>
-  <id>WFSInfoImpl-44792afb:154e3e09862:-8000</id>
+  <id>WFSInfoImpl-7316c441:15bcf20ee73:-7ffb</id>
   <workspace>
-    <id>WorkspaceInfoImpl-6a21d76:15477edadb2:-8000</id>
+    <id>WorkspaceInfoImpl-7316c441:15bcf20ee73:-8000</id>
   </workspace>
   <enabled>true</enabled>
   <name>WFS</name>
@@ -36,13 +36,6 @@
   </metadata>
   <gml>
     <entry>
-      <version>V_20</version>
-      <gml>
-        <srsNameStyle>URN2</srsNameStyle>
-        <overrideGMLAttributes>false</overrideGMLAttributes>
-      </gml>
-    </entry>
-    <entry>
       <version>V_10</version>
       <gml>
         <srsNameStyle>XML</srsNameStyle>
@@ -56,8 +49,15 @@
         <overrideGMLAttributes>false</overrideGMLAttributes>
       </gml>
     </entry>
+    <entry>
+      <version>V_20</version>
+      <gml>
+        <srsNameStyle>URN2</srsNameStyle>
+        <overrideGMLAttributes>false</overrideGMLAttributes>
+      </gml>
+    </entry>
   </gml>
-  <serviceLevel>TRANSACTIONAL</serviceLevel>
+  <serviceLevel>COMPLETE</serviceLevel>
   <maxFeatures>1000000</maxFeatures>
   <featureBounding>false</featureBounding>
   <canonicalSchemaLocation>false</canonicalSchemaLocation>
