@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<title>Caza del Tesoro</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+
+	<link rel="stylesheet" href="css/jquerymobile.css" type="text/css">
+	<link rel="stylesheet" href="css/introjs.css" type="text/css">
+	<link rel="stylesheet" href="css/ol.css" type="text/css">
+
+	<script src="js/jquery2/jquery-2.1.4.min.js"></script>
+	<script src="js/jquery-mobile/jquerymobile.js"></script>
+	<script src="js/jquery-mobile/jquery.mobile-config.js"></script>
+
+	<script src="js/openlayers/dist/ol-debug.js"></script>
+	<script src="js/geocoder/geocoder.js"></script>
+	<script src="init_map.js"></script>
+	<!-- CARGA DE SIMPLE FACEBOOK GRAPH -->
+	<script src="js/facebook.js"></script>
+
+
+	<!--
+	<script src="upload_photo.js"></script>
+	<script src="AnimatedCluster.js"></script>
+	<script src="thematicLayers.js"></script>
+	<script src="reportingLayers.js"></script>
+	<script src="mobile-base.js"></script>
+	<script src="mobile-jq.js"></script>
+-->
+
+</head>
+
+<body>
+	<h1 id="title">Aplicación de prueba</h1>
+	<!--<div class="ui-loader ui-corner-all ui-body-b ui-loader-verbose" id="loader" style="display:block">
+		<span class="ui-icon-loading"></span>
+		<h1>Cargando...</h1>
+	</div>-->
+	<div id="container" class="ui-mobile-viewport ui-overlay-b">
+		<!-- Página principal de la aplicación-->
+		<div data-role="page" id="mappage" data-quicklinks="true" data-theme="b">
+			<!--	Cabecera y barra de herramientas.	-->
+			<div data-role="header" data-position="fixed" data-tap-toggle="false">
+				<a href="#infopanel" data-rel="panel" data-dismissible="true" class="ui-btn ui-btn-left ui-btn-inline ui-icon-bars ui-btn-icon-notext">Información</a>
+ <a href="#searchpanel" data-transition="none" class="ui-btn  ui-btn-right ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-search">
+                Buscar
+            </a>
+			<a href="#authors" data-prefetch="true" data-role="button" class="ui-btn" >About Us</a>
+				<h1><img src="pix/app-icon.png" class="smallicon" height="24"/>App final IDEs</h1>
+			</div>
+			<div data-role="content" class="ui-content" id="content">
+				<div id="map"></div>
+			</div>
+			<div id="main_footer" data-role="footer" data-position="fixed" data-tap-toggle="false">
+				<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-geolocation ui-btn-icon-notext"
+				 onclick="autolocate();return false;">Locate</a>
+				<a href="#layerspage" data-transition="fade" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-bullets">Capas</a>
+				<a href="#" id="iniciosesionFacebook" class="ui-btn  ui-btn-icon-right ui-icon-fb ui-btn-icon-notext ui-btn-inline " onclick="login(); return false;">Login</a>
+			</div>
+			<!--	<div id="navigation" data-role="controlgroup" data-type="vertical">
+				<a href="#" data-role="button" data-icon="plus" id="plus" data-iconpos="notext" onclick="map.zoomIn();return false;"></a>
+				<a href="#" data-role="button" data-icon="minus" id="minus" data-iconpos="notext" onclick="map.zoomOut();return false;"></a>
+			</div>
+	-->
+	<!--
+	Panel principal de información
+	-->
+			<div data-role="panel" data-position="left" data-position-fixed="true" data-display="overlay" id="infopanel">
+				<div id="estadoLogin">
+					<a href="#" id="iniciosesionFacebookEstado" class="ui-btn  ui-btn-icon-left ui-icon-fb ui-btn-inline" onclick="login(); return false;">Identificarse</a>
+					<!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
+				</div>
+				<h3>Instrucciones.</h3>
+				<div id="welcomingInfo">
+					<p>Instrucciones de uso de este panel inicial.</p>
+					<a href="#dosomething" id="dosmething_button" class="ui-btn ui-btn-a ui-shadow ui-corner-all ui-btn-inline ui_mini">Haz esto</a>
+					</div>
+				<div id="instructions2">
+					<p>Instrucciones adicionales.</p>
+					<a href="#" id="aditionalAction" data-role="button">Aditional Action</a>
+				</div>
+				<a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a>
+			</div>
+			<!-- Panel de búsqueda -->
+			<div data-role="panel" data-position="right" data-position-fixed="true" data-display="overlay" id="searchpanel">
+				<div data-role="header" data-position="fixed" data-tap-toggle="false">
+					<a href="#" data-role="button" data-rel="close" class="ui-btn-right ui-nodisc-icon ui-btn 
+                   ui-icon-carat-r ui-btn-icon-notext ui-corner-all"></a>
+					<h1>Buscar lugares</h1>
+					<div class="ui-bar ui-bar-b">
+						<form class="ui-filterable">
+							<input id="autocomplete-input" data-type="search" placeholder="Lugares...">
+						</form>
+					</div>
+				</div>
+				<ul id="autocomplete" data-role="listview" data-inset="true" data-filter="true" data-input="#autocomplete-input"></ul>
+			</div>
+			<!--Popup de aviso de envío-->
+
+			<div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;">
+				<div role="main" class="ui-content">
+					<h3 class="ui-title">¿Estás seguro de que deseas enviar esta ubicación?</h3>
+					<p>Esta acción no se puede deshacer.</p>
+					<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Cancelar</a>
+					<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow" onclick="sendLocation();">Enviar</a>
+				</div>
+			</div>
+			<!--Fin de Popup de aviso de envío.-->
+		</div>
+		
+		<!--
+		Página de "About us"
+		-->
+		<div data-role="page" id="authors" data-theme="b">
+			<div data-role="header">
+				<h1>About Us</h1>
+			</div>
+			<div role="content">
+				<ul data-role="listview" data-inset="true">
+					<li>
+						<a href="#director" data-prefetch="true">
+							<h2>JUAN PABLO DE CASTRO</h2>
+							<p>Profesor de la Escuela Técnica Superior de Ingenieros de Telecomunicación, en la Universidad de Valladolid.</p>
+						</a>
+					</li>
+					<li>
+						<a href="#creador1" data-prefetch="true">
+							<h2>Alumno 1</h2>
+							<p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p>
+						</a>
+					</li>
+					<li>
+						<a href="#creador2" data-prefetch="true">
+							<h2>Alumno 2</h2>
+							<p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p>
+						</a>
+					</li>
+					<li>
+						<a href="#creador3" data-prefetch="true">
+							<h2>Alumno 3</h2>
+							<p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención en Telemática.</p>
+						</a>
+					</li>
+				</ul>
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+			</div>
+		</div>
+
+		<!--
+		Página de "About us": Director
+		-->
+		<div data-role="page" id="director" data-theme="b">
+			<div data-role="header" data-position="fixed">
+				<h1>Director del trabajo</h1>
+			</div>
+			<div data-role="content" class="ui-content">
+				<h3 class="ui-bar ui-bar-a ui-corner-all">Juan Pablo De Castro</h3>
+
+				<div class="ui-body ui-body-a ui-corner-all">
+					<p>Profesor de la asignatura "Infraestructuras de Datos Espaciales" de la E.T.S.I.Telecomunicación de Valladolid</p>
+					<p><a href="mailto:jpdecastro@tel.uva.es">jpdecastro@tel.uva.es</a></p>
+				</div>
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+			</div>
+		</div>
+
+		<!--
+		Página de "About us": Creador 1
+		-->
+		<div data-role="page" id="creador1" data-theme="b">
+			<div data-role="header">
+				<h1>Miembro del equipo</h1>
+			</div>
+			<div data-role="content" class="ui-content">
+				<h3 class="ui-bar ui-bar-a ui-corner-all">Nombre estudiante</h3>
+				<div class="ui-body ui-body-a ui-corner-all">
+					<p>Escuela Técnica Superior de Ingenieros de Telecomunicaciones. Grado en Ingeniería de Tecnologías Específicas de Telecomunicación,
+						Mención en Telemática</p>
+					<p><a href="mailto:email@gmail.com">email@gmail.com</p>
+				</div>		
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+				</div>
+			</div>
+
+			<!--
+		Página de "About us": Creador 2
+		-->
+			<div data-role="page" id="creador2" data-theme="b">
+				<div data-role="header">
+					<h1>Miembro del equipo</h1>
+				</div>
+				<div data-role="content" class="ui-content">
+					<h3 class="ui-bar ui-bar-a ui-corner-all">Nombre estudiante</h3>
+					<div class="ui-body ui-body-a ui-corner-all">
+						<p>Escuela Técnica Superior de Ingenieros de Telecomunicaciones. Grado en Ingeniería de Tecnologías Específicas de Telecomunicación,
+							Mención en Telemática</p>
+						<p><a href="mailto:email@gmail.com">email@gmail.com</p>
+				</div>		
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+					</div>
+				</div>
+
+				<!--
+		Página de "About us": Creador 3
+		-->
+				<div data-role="page" id="creador3" data-theme="b">
+					<div data-role="header">
+						<h1>Miembro del equipo</h1>
+					</div>
+					<div data-role="content" class="ui-content">
+						<h3 class="ui-bar ui-bar-a ui-corner-all">Nombre estudiante</h3>
+						<div class="ui-body ui-body-a ui-corner-all">
+							<p>Escuela Técnica Superior de Ingenieros de Telecomunicaciones. Grado en Ingeniería de Tecnologías Específicas de Telecomunicación,
+								Mención en Telemática</p>
+							<p><a href="mailto:email@gmail.com">email@gmail.com</p>
+				</div>		
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+						</div>
+					</div>
+
+
+
+					<!--
+		Página de capas.
+		-->
+					<div data-role="page" id="layerspage" data-theme="b">
+						<div data-role="header" data-position="fixed" data-tap-toggle="false">
+							<a href="#mappage" data-role="button" class="ui-btn-left  ui-nodisc-icon ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
+							<h1>Layers</h1>
+						</div>
+						<div data-role="content">
+							<ul data-role="listview" data-inset="true" data-theme="d" data-dividertheme="c" id="layerslist">
+								<li data-role="list-divider" id="baseLayer">Capa base</li>
+							</ul>
+						</div>
+					</div>
+					<!--Fin de página de capas.
+		-->
+
+
+					<!--
+		Zona de detalles.
+		-->
+					<div id="popup" data-role="dialog">
+						<div data-position="inline" data-theme="d" data-role="header">
+							<h1>Details</h1>
+						</div>
+						<div data-theme="c" data-role="content">
+							<ul id="details-list" data-role="listview">
+							</ul>
+						</div>
+					</div>
+					<!--Fin de zona de detalles.-->
+
+
+</body>
+
+</html>
