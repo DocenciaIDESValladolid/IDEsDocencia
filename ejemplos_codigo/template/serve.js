@@ -1,4 +1,5 @@
 var express = require('express');
+const proxy = require('http-proxy-middleware');
 var fs = require('fs');
 var app = express();
 var pg = require('pg');
@@ -15,6 +16,10 @@ app.get('/', function (req, res) {
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end(html);
 });
+// Proxy for local geoserver.
+var geoserverProxy = proxy('/geoserver', {target: 'http://localhost:8080'});
+app.use(geoserverProxy);
+
 /**
  * Ejemplo para obtener las tablas de la base de datos
  */

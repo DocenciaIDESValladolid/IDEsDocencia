@@ -6,6 +6,7 @@
   "main": "serve.js",
   "dependencies": {
     "express": "^4.15.2",
+	"http-proxy-middleware": "",
     "jquery": "",
     "openlayers": "",
     "pg": "^6.1.5",
