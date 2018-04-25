@@ -2,6 +2,7 @@ var map = {
   width: 100,
   height: 100,
   grid: [],
+  layers: [],
 
   generate: function(w, h, array) {
     /*

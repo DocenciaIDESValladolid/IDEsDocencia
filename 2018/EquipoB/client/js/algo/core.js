@@ -107,5 +107,4 @@ function updateMap() {
     map.grid[mouseState.y * map.width + mouseState.x].unit.push(new Zombie());
     mouseState.used = true;
   }
-  console.log(map.grid);
 }
