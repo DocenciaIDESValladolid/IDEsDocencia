@@ -1,0 +1,37 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-43e8f562:162ec9aeabf:-7fff</id>
+  <name>Population</name>
+  <nativeName>Population</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-2a24c1d2:162aafec798:-7ffe</id>
+  </namespace>
+  <title>Population</title>
+  <keywords>
+    <string>features</string>
+    <string>Population</string>
+  </keywords>
+  <srs>EPSG:404000</srs>
+  <nativeBoundingBox>
+    <minx>735521.6723999977</minx>
+    <maxx>796171.5420999974</maxx>
+    <miny>6245286.445</miny>
+    <maxy>6309461.390000001</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>735521.6723999977</minx>
+    <maxx>796171.5420999974</maxx>
+    <miny>6245286.445</miny>
+    <maxy>6309461.390000001</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-2a24c1d2:162aafec798:-7ff9</id>
+  </store>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

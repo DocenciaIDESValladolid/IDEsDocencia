@@ -1,0 +1,37 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-43e8f562:162ec9aeabf:-7ffd</id>
+  <name>Cours_eau</name>
+  <nativeName>Cours_eau</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-2a24c1d2:162aafec798:-7ffe</id>
+  </namespace>
+  <title>Cours_eau</title>
+  <keywords>
+    <string>features</string>
+    <string>Cours_eau</string>
+  </keywords>
+  <srs>EPSG:404000</srs>
+  <nativeBoundingBox>
+    <minx>753290.0953999981</minx>
+    <maxx>785841.1700000018</maxx>
+    <miny>6260918.502799999</miny>
+    <maxy>6296948.140000001</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>753290.0953999981</minx>
+    <maxx>785841.1700000018</maxx>
+    <miny>6260918.502799999</miny>
+    <maxy>6296948.140000001</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-2a24c1d2:162aafec798:-7ff9</id>
+  </store>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>
