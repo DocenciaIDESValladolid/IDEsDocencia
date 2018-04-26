@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/ol.css" type="text/css">
     <script src="js/jquery2/jquery-2.1.4.min.js"></script>
     <script src="js/jquery-mobile/jquerymobile.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
+    <!--script src="js/jquery-ui.min.js"></script-->
     <script src="js/jquery-mobile/jquery.mobile-config.js"></script>
     <script src="js/openlayers/dist/ol-debug.js"></script>
     <script src="js/geocoder/geocoder.js"></script>
@@ -86,10 +86,34 @@
 
         <div data-role="popup" id="popupdialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
             <div data-role="header" data-theme="b">
-                <h1>Personaliza tu ivasion</h1>
+                <h1>Personaliza tu invasion</h1>
             </div>
             <div role="content" id="popup_content" class="ui-content ui-overlay-b">
-                
+                <form>
+					    <label for="slider">Slider:</label>
+					<fieldset data-role="controlgroup">
+					    <legend>Layers included:</legend>
+					    <input type="checkbox" name="checkbox-1a" id="checkbox-1a" checked="">
+					    <label for="checkbox-1a">Saint placemarks</label>
+					    <input type="checkbox" name="checkbox-2a" id="checkbox-2a">
+					    <label for="checkbox-2a">Health facilities</label>
+					    <input type="checkbox" name="checkbox-3a" id="checkbox-3a">
+					    <label for="checkbox-3a">Police stations</label>
+					    <input type="checkbox" name="checkbox-4a" id="checkbox-4a">
+					    <label for="checkbox-4a">Water areas</label>
+					</fieldset>
+					
+					<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+					    <legend>Select type of pandemy:</legend>
+					        <input type="radio" name="radio-choice-b" id="radio-choice-c" value="virus" checked="checked">
+					        <label for="radio-choice-c">Virus</label>
+					        <input type="radio" name="radio-choice-b" id="radio-choice-d" value="zombie">
+					        <label for="radio-choice-d">Zombie</label>
+					        <input type="radio" name="radio-choice-b" id="radio-choice-e" value="vampire">
+					        <label for="radio-choice-e">Vampire</label>
+					</fieldset>
+					<input type="range" name="slider" id="slider" value="50" min="0" max="100">
+				</form>
                 <fieldset class="ui-grid-a">
                     <div class="ui-block-a">
                         <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b">
@@ -123,7 +147,7 @@
             <a href="#layerspage" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-bullets ui-btn-icon-notext">
                 Capas
             </a>
-            <a href="#historypage" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-info ui-btn-icon-notext">
+            <a href="#configpage" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-info ui-btn-icon-notext">
                 Historial
             </a>
             <a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-location ui-btn-icon-notext" id="autolocate"></a>
@@ -142,15 +166,51 @@
             </ul>	
         </div>
     </div>
-    <div data-role="page" id="historypage" data-theme="b">
+    <div data-role="page" id="configpage" data-theme="b">
         <div data-role="header" data-position="fixed" data-tap-toggle="false">
             <a href="#mappage" data-role="button" class="ui-btn-left  ui-nodisc-icon ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
             <h1>Historial</h1>
         </div>
         <div data-role="content">
-            <ol data-role="listview" data-inset="true" data-theme="b" id="historylist">
-                <li>No has realizado ningún intento</li>
-            </ol>
+             <form>
+				    <label for="slider">Slider:</label>
+				<fieldset data-role="controlgroup">
+				    <legend>Layers included:</legend>
+				    <input type="checkbox" name="checkbox-1a" id="checkbox-1a" checked="">
+				    <label for="checkbox-1a">Saint placemarks</label>
+				    <input type="checkbox" name="checkbox-2a" id="checkbox-2a">
+				    <label for="checkbox-2a">Health facilities</label>
+				    <input type="checkbox" name="checkbox-3a" id="checkbox-3a">
+				    <label for="checkbox-3a">Police stations</label>
+				    <input type="checkbox" name="checkbox-4a" id="checkbox-4a">
+				    <label for="checkbox-4a">Water areas</label>
+				</fieldset>
+				<label for="select-choice-8" class="select">Layers included:</label>
+				<select name="select-choice-8" id="select-choice-8" multiple="multiple" data-native-menu="false" data-icon="grid" data-iconpos="left">
+				    <option>Infection vectors:</option>
+				    <optgroup label="pandemy">
+				        <option value="cementary" selected="">Cementary</option>
+				        <option value="population">Population density</option>
+				        <option value="other">other</option>
+				        <option value="more">other more</option>
+				    </optgroup>
+				    <optgroup label="countermeasures">
+				        <option value="health">Health facilities</option>
+				        <option value="police">Security forces</option>
+				        <option value="water">Water masses</option>
+				    </optgroup>
+				</select>
+				<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+				    <legend>Select type of pandemy:</legend>
+				        <input type="radio" name="radio-choice-b" id="radio-choice-c" value="virus" checked="checked">
+				        <label for="radio-choice-c">Virus</label>
+				        <input type="radio" name="radio-choice-b" id="radio-choice-d" value="zombie">
+				        <label for="radio-choice-d">Zombie</label>
+				        <input type="radio" name="radio-choice-b" id="radio-choice-e" value="vampire">
+				        <label for="radio-choice-e">Vampire</label>
+				</fieldset>
+				<input type="range" name="slider" id="slider" value="50" min="0" max="100">
+			</form>
         </div>
     </div>
     <!--
