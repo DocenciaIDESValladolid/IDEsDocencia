@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,106 +9,57 @@
     <script src="js/lib/geotiff.browserify.min.js"></script>
     <script src="js/lib/jquery-3.3.1.min.js"></script>
 </head>
+
 <body>
     <div>
         <canvas id="canvas" width="1000" height="1000"></canvas>
     </div>
-    <script src="js/algo/unit.js"></script>
+    <div>
+        <select name="layer" id="layer">
+            <option value="population">Population</option>
+            <option value="graveyard">Graveyard</option>
+            <option value="hospital">Hospital</option>
+            <option value="waste">Waste disposal</option>
+            <option value="pension">Pension</option>
+            <option value="monument">Monument</option>
+        </select>
+    </div>
+    <div>
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+    </div>
+    <script src="config/layers.js"></script>
     <script src="js/algo/cell.js"></script>
+    <script src="js/algo/layer.js"></script>
     <script src="js/algo/map.js"></script>
     <script src="js/algo/core.js"></script>
     <script>
-        var xmlPop =
-            '<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">' +
-            '<ows:Identifier>vec:VectorToRaster</ows:Identifier>' +
-            '<wps:DataInputs>' +
-            '<wps:Input>' +
-            '<ows:Identifier>features</ows:Identifier>' +
-            '<wps:Reference mimeType="text/xml" xlink:href="http://geoserver/wfs" method="POST">' +
-            '<wps:Body>' +
-            '<wfs:GetFeature service="WFS" version="1.0.0" outputFormat="GML2" xmlns:invasionx="invasionx">' +
-            '<wfs:Query typeName="invasionx:PopMontpellier"/>' +
-            '</wfs:GetFeature>' +
-            '</wps:Body>' +
-            '</wps:Reference>' +
-            '</wps:Input>' +
-            '<wps:Input>' +
-            '<ows:Identifier>rasterWidth</ows:Identifier>' +
-            '<wps:Data>' +
-            '<wps:LiteralData>100</wps:LiteralData>' +
-            '</wps:Data>' +
-            '</wps:Input>' +
-            '<wps:Input>' +
-            '<ows:Identifier>rasterHeight</ows:Identifier>' +
-            '<wps:Data>' +
-            '<wps:LiteralData>100</wps:LiteralData>' +
-            '</wps:Data>' +
-            '</wps:Input>' +
-            '<wps:Input>' +
-            '<ows:Identifier>attribute</ows:Identifier>' +
-            '<wps:Data>' +
-            '<wps:LiteralData>population</wps:LiteralData>' +
-            '</wps:Data>' +
-            '</wps:Input>' +
-            '<wps:Input>' +
-            '<ows:Identifier>bounds</ows:Identifier>' +
-            '<wps:Data>' +
-            '<wps:BoundingBoxData crs="EPSG:404000" dimensions="2">' +
-            '<ows:LowerCorner>735521.6723999977 6245286.445</ows:LowerCorner>' +
-            '<ows:UpperCorner>796171.5420999974 6309461.390000001</ows:UpperCorner>' +
-            '</wps:BoundingBoxData>' +
-            '</wps:Data>' +
-            '</wps:Input>' +
-            '</wps:DataInputs>' +
-            '<wps:ResponseForm>' +
-            '<wps:RawDataOutput mimeType="image/tiff">' +
-            '<ows:Identifier>result</ows:Identifier>' +
-            '</wps:RawDataOutput>' +
-            '</wps:ResponseForm>' +
-            '</wps:Execute>';
-
-        function fetchGeoserverWPS(xml) {
-            return fetch('http://localhost/geoserver/wps', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/xml; charset=UTF-8'
-                },
-                body: xml
-            }).then(function (response) {
-                return response.arrayBuffer();
-            }).then(function (tiff) {
-                return readTiff(tiff);
-            }).then(function (array) {
-                setupInvasionX(array);
-            }).catch(function (error) {
-                console.log(error);
-            })
-        }
-
-        function readTiff(file) {
-            var result;
-            var tiff = GeoTIFF.parse(file);
-            var image = tiff.getImage();
-            image.readRGB(function () {
-                var rasters = image.readRasters();
-                result = rasters[0];
-                //var row = '';
-                //console.log(raster);
-                /*
-                for (var i = 0; i < raster.length; i++) {
-                    row += '<td>' + raster[i] + '</td>';
-                    if (i % image.getWidth() == image.getWidth() - 1) {
-                        $('.output').append($('<tr>' + row + '</tr>'));
-                        row = '';
-                    }
-
-                }
-                */
-            })
-            return result;
-        }
-
-        fetchGeoserverWPS(xmlPop);
+        $("#layer").on('change', function () {
+            colorCellInLayer(this.value);
+            //requestAnimationFrame();
+        })
+        /*
+        var globalID;
+        
+        globalID = requestAnimationFrame(updateMap());
+        
+        $("#stop").on("click", function () {
+            cancelAnimationFrame(globalID);
+        });
+        $("#start").on("click", function () {
+            globalID = requestAnimationFrame(updateMap());
+        });
+        */
+        var timerId = 0;
+        $("#start").on("click", function () {
+            timerId = setInterval(function () {
+                requestAnimationFrame(updateMap);
+            }, 1000);
+        })
+        $("#stop").on("click", function () {
+            clearInterval(timerId);
+        });
     </script>
 </body>
+
 </html>

@@ -1,27 +1,21 @@
 var map = {
   width: 100,
   height: 100,
-  grid: [],
   layers: [],
+  layerInvader:null,
 
-  generate: function(w, h, array) {
-    /*
-    this.width = w;
-    this.height = h;
-    this.grid = [];
-    for (var y = 0; y < h; y++) {
-      for (var x = 0; x < w; x++) {
-        this.grid.push(new Cell(x, y));
-      }
+  generate: function(layersData, layerInvader) {
+    //TODO: See about launch multiple fetch at same time
+    //https://stackoverflow.com/questions/38150791/making-multiple-fetch-api-calls-how-to-check-if-all-calls-have-finished/38151731?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+    for(var i in layersData) {
+      fetchLayerFromGeoserver(layersData[i]);
     }
-    */
-   for (var x in array) {
-     var newCell = new Cell(x%100, Math.floor(x/100));
-     if(array[x]>0) {
-      newCell.unit.push(new Civil(100,array[x]));
-     }
-     this.grid.push(newCell);
-   }
+    map.layerInvader = new LayerInvader(100,100,layerInvader.name,layerInvader.color);
   }
 };
 
+setupInvasionX();
+
+function setupInvasionX() {
+  map.generate([layerPopulation, layerGraveyard, layerHospital, layerWaste, layerPension, layerMonument], layerZombie);
+}

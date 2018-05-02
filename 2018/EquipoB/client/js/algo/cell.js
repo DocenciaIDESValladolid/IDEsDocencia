@@ -1,11 +1,10 @@
 var contaminedCells = [];
 
 class Cell {
-    constructor(cx, cy) {
+    constructor(cx, cy, active) {
         this.x = cx;
         this.y = cy;
-		this.unit = []
-		this.contamined = false;
+		this.active = active;
     }
 
     getNeighbours()	{
