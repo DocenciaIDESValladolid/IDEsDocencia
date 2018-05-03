@@ -56,7 +56,7 @@ class LayerData extends Layer {
 }
 
 function fetchLayerFromGeoserver(layer) {
-    fetch("http://localhost/geoserver/wps", {
+    fetch("/geoserver/wps", {
     method: "POST",
     headers: {
       "Content-Type": "application/xml; charset=UTF-8"
