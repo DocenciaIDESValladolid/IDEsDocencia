@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>InvasionX</title>
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="css/ol.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="js/lib/jquery.min.js"></script>
+    <script src="js/lib/jquery.mobile-1.4.5.min.js"></script>
+    <script src="js/lib/ol-debug.js"></script>
+    <script src="js/lib/geotiff.browserify.min.js"></script>
+
+</head>
+
+<body>
+    <!-- /MainPage -->
+    <div data-role="page" data-theme="b" id="page__main">
+        <!-- /header -->
+        <div data-role="header">
+            <h1>InvasionX</h1>
+        </div>
+        <div data-role="tabs" id="tabs">
+            <div data-role="navbar">
+                <ul>
+                    <li>
+                        <a href="#content__map" data-ajax="false" class="ui-btn-active">Map</a>
+                    </li>
+                    <li>
+                        <a href="#content__openlayers" data-ajax="false">Openlayers</a>
+                    </li>
+                    <li>
+                        <a href="#content__historic" data-ajax="false">Historic</a>
+                    </li>
+                    <li>
+                        <a href="#content__authors" data-ajax="false">Authors</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="content__map">
+                <div id="map"></div>
+            </div>
+            <div class="ui-content" id="content__openlayers">
+                <h1>Configuration of Openlayers</h1>
+                <ul data-role="listview" data-inset="true">
+                    <li data-role="list-divider">Views of the map</li>
+                </ul>
+            </div>
+            <div class="ui-content" id="content__historic">
+                <h1>Historic</h1>
+                <ol data-role="listview" data-inset="true">
+                    <li>None</li>
+                </ol>
+            </div>
+            <div class="ui-content" id="content__authors">
+                <h1>About us</h1>
+                <ul data-role="listview">
+                    <li>
+                        <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+                            <h2>JUAN PABLO DE CASTRO</h2>
+                            <p>Profesor de la Escuela Técnica Superior de Ingenieros de Telecomunicación, en la Universidad
+                                de Valladolid.</p>
+                            <a href="mailto:jpdecastro@tel.uva.es" class="ui-link">jpdecastro@tel.uva.es</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+                            <h2>SIMON DESNOE</h2>
+                            <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación,
+                                mención en Telemática.</p>
+                            <a href="mailto:sdesnoe.ir2019@esaip.org" class="ui-link">sdesnoe.ir2019@esaip.org</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+                            <h2>GUILLAUME DRILLAUD</h2>
+                            <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación,
+                                mención en Telemática.</p>
+                            <a href="mailto:gdrillaud.ir2019@esaip.org" class="ui-link">gdrillaud.ir2019@esaip.org</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+                            <h2>MARIE KRINITZKY</h2>
+                            <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación,
+                                mención en Telemática.</p>
+                            <a href="mailto:mkrinitzky.ir2019@esaip.org" class="ui-link">mkrinitzky.ir2019@esaip.org</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+                            <h2>PAUL LAMY</h2>
+                            <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación,
+                                mención en Telemática.</p>
+                            <a href="mailto:plamy.ir2019@esaip.org" class="ui-link">plamy.ir2019@esaip.org</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+                            <h2>JEAN BAPTISTE LECLERC</h2>
+                            <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación,
+                                mención en Telemática.</p>
+                            <a href="mailto:jleclerc.ing2019@esaip.org" class="ui-link">jleclerc.ing2019@esaip.org</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div data-role="popup" data-theme="b" data-history="false" id="popup__options">
+            <div class="ui-content">
+                <h1>Personaliza tu invasion</h1>
+                <form>
+                    <fieldset data-role="controlgroup" data-iconpos="right" id="Layers_data">
+                        <legend>Layers</legend>
+                        <label for="population">Population</label>
+                        <input name="population" id="population" type="checkbox" disabled checked>
+                        <label for="water">Water</label>
+                        <input name="water" id="water" type="checkbox">
+                        <label for="health">Healthcare buildings</label>
+                        <input name="health" id="health" type="checkbox">
+                        <label for="military">Military zone</label>
+                        <input name="military" id="military" type="checkbox">
+                        <label for="religious">Religious buildings</label>
+                        <input name="religious" id="religious" type="checkbox">
+                        <label for="graveyard">Graveyard</label>
+                        <input name="graveyard" id="graveyard" type="checkbox">
+                    </fieldset>
+                    <fieldset data-role="controlgroup" data-type="horizontal" id="Layer_invader">
+                        <legend>Type of invasion</legend>
+                        <label for="zombie">Zombie</label>
+                        <input type="radio" name="typeInvasion" id="zombie" value="zombie" checked>
+                        <label for="vampire">Vampire</label>
+                        <input type="radio" name="typeInvasion" id="vampire" value="vampire">
+                    </fieldset>
+                    <fieldset data-role="controlgroup">
+                        <legend>Number of infected people</legend>
+                        <input name="numberInfected" id="numberInfected" value="50" min="0" max="100" type="range">
+                    </fieldset>
+                </form>
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="" data-rel="back" class="ui-btn ui-icon-delete ui-btn-icon-left" id="Cancel_option">Cancel</a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="" data-rel="back" class="ui-btn ui-icon-check ui-btn-icon-left" id="Accept_option">Accept</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /footer -->
+        <div data-role="footer" data-position="fixed">
+            <a href="#popup__launch" class="ui-btn" id="Launch_app">Launch</a>
+            <a href="#" class="ui-btn" id="Play_app">Play</a>
+            <a href="#" class="ui-btn" id="Pause_app">Pause</a>
+            <a href="#popup__options" data-rel="popup" data-position-to="window" data-transition="slide" class="ui-btn ui-icon-gear ui-btn-icon-left">Options</a>
+            <a id="Step_app" class="ui-btn">Step</a>
+        </div>
+    </div>
+
+
+
+    </div>
+    <script src="config/config.js"></script>
+    <script src="js/algorithm.js"></script>
+    <script src="js/openlayers.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+
+</html>
