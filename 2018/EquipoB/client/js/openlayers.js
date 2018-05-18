@@ -39,15 +39,14 @@ function setupOpenLayers() {
         })
     });
     mapOpenlayers.on("click", function (e) {
-        mapOpenlayers.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
-            var coord = ol.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326');
-            var lon = coord[0];
-            var lat = coord[1];
-            var x = Math.floor((lon - minLon) / sizeCellx);
-            var y = Math.floor((maxLat - lat) / sizeCelly);
-            map.layerInvader.grid[y * map.width + x].active = 1;
-            launch = true;
-        })
+        var coord = ol.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326');
+        var lon = coord[0];
+        var lat = coord[1];
+        var x = Math.floor((lon - minLon) / sizeCellx);
+        var y = Math.floor((maxLat - lat) / sizeCelly);
+        map.layerInvader.grid[y * map.width + x].active = 1;
+        launch = true;
+
     });
     //displayInvaders(map.layerInvader.grid);
 }
@@ -56,7 +55,6 @@ function setupOpenLayers() {
  * @param {*} invaders 
  */
 function displayInvaders(invaders) {
-    gridInvaderSource.clear();
     for (var i in invaders) {
         var x = minLon + invaders[i].x * sizeCellx;
         var y = maxLat - invaders[i].y * sizeCelly;

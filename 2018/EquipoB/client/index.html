@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
     <link rel="stylesheet" href="css/ol.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <script src="js/lib/jquery.min.js"></script>
     <script src="js/lib/jquery.mobile-1.4.5.min.js"></script>
@@ -21,7 +22,7 @@
     <!-- /MainPage -->
     <div data-role="page" data-theme="b" id="page__main">
         <!-- /header -->
-        <div data-role="header" data-position="fixed">
+        <div data-role="header">
             <h1>InvasionX</h1>
         </div>
         <div data-role="tabs" id="tabs">
@@ -41,7 +42,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="ui-content" id="content__map">
+            <div id="content__map">
                 <div id="map"></div>
             </div>
             <div class="ui-content" id="content__openlayers">
@@ -110,13 +111,6 @@
                 </ul>
             </div>
         </div>
-        <div data-role="popup" data-theme="b" id="popup__launch">
-            <div class="ui-content">
-                <p>You need to select the zone which the invasion will begin</p>
-                
-                <a href="#" class="ui-btn" data-rel="back">OK</a>
-            </div>
-        </div>
         <div data-role="popup" data-theme="b" data-history="false" id="popup__options">
             <div class="ui-content">
                 <h1>Personaliza tu invasion</h1>
@@ -161,6 +155,8 @@
         <!-- /footer -->
         <div data-role="footer" data-position="fixed">
             <a href="#popup__launch" class="ui-btn" id="Launch_app">Launch</a>
+            <a href="#" class="ui-btn" id="Play_app">Play</a>
+            <a href="#" class="ui-btn" id="Pause_app">Pause</a>
             <a href="#popup__options" data-rel="popup" data-position-to="window" data-transition="slide" class="ui-btn ui-icon-gear ui-btn-icon-left">Options</a>
             <a id="Step_app" class="ui-btn">Step</a>
         </div>
