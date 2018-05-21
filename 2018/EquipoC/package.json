@@ -1,0 +1,37 @@
+{
+  "name": "ides_app_template",
+  "version": "1.0.0",
+  "description": "Template for map application for IDEs course",
+  "private": true,
+  "main": "serve.js",
+  "dependencies": {
+    "express": "^4.15.2",
+    "jquery": "",
+    "openlayers": "",
+    "pg": "^6.1.5",
+    "postgeo": "^0.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node serve.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juacas/IDEsDocencia.git"
+  },
+  "keywords": [
+    "IDEs",
+    "course",
+    "ETSIT",
+    "University",
+    "of",
+    "Valladolid"
+  ],
+  "author": "Juan Pablo de Castro",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/juacas/IDEsDocencia/issues"
+  },
+  "homepage": "https://github.com/juacas/IDEsDocencia#readme"
+}
