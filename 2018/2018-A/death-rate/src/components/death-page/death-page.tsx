@@ -40,6 +40,7 @@ export class DeathPage {
       domain: [min, max],
       colorScale: "greys"
     });
+    
     render.render();
     this.score = Math.floor(media);
     console.log(media);
