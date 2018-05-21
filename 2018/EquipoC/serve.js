@@ -23,7 +23,8 @@ var mirameProxy = proxy('/mirame', {target: 'http://www.mirame.chduero.es',
 									pathRewrite: {
 													'^/mirame' : '/geoserver/ows',     // rewrite path
 												},
-									changeOrigin: true,     
+									changeOrigin: true,
+									debug: true,
 									});
 app.use(mirameProxy);
 

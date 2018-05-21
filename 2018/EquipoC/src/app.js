@@ -2,14 +2,17 @@
  * Demo functions
  */
 		function algoritmo() {
-			var url ='src/Estado_Rios_Global_2016Line.shp';
+			var url ='/mirame/wfs';
 			var source = new ol.source.Vector();
 			var olformat= new ol.format.WFS();
 			var features;
 			fetch(url, {  
-				method: 'POST',  
+				method: 'post',
+				headers: {
+					"Content-Type": "application/xml"
+				  },
 				body: `<wfs:GetFeature service="WFS" version="1.1.0" 
-				xmlns:mirame="mirame
+				xmlns:mirame="mirame"
 				xmlns:wfs="http://www.opengis.net/wfs"
 				xmlns:ogc="http://www.opengis.net/ogc"
 				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
