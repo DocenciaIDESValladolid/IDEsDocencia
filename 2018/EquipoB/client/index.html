@@ -111,9 +111,9 @@
                 </ul>
             </div>
         </div>
-        <div data-role="popup" data-theme="b" data-history="false" id="popup__options">
+        <div data-role="popup" data-theme="b" data-history="false" id="popup__launch">
             <div class="ui-content">
-                <h1>Personaliza tu invasion</h1>
+                <h1>Personalize your invasion</h1>
                 <form>
                     <fieldset data-role="controlgroup" data-iconpos="right" id="Layers_data">
                         <legend>Layers</legend>
@@ -123,11 +123,11 @@
                         <input name="water" id="water" type="checkbox">
                         <label for="health">Healthcare buildings</label>
                         <input name="health" id="health" type="checkbox">
-                        <label for="military">Military zone</label>
+                        <label for="military">Military zones</label>
                         <input name="military" id="military" type="checkbox">
                         <label for="religious">Religious buildings</label>
                         <input name="religious" id="religious" type="checkbox">
-                        <label for="graveyard">Graveyard</label>
+                        <label for="graveyard">Graveyards</label>
                         <input name="graveyard" id="graveyard" type="checkbox">
                     </fieldset>
                     <fieldset data-role="controlgroup" data-type="horizontal" id="Layer_invader">
@@ -152,12 +152,23 @@
                 </div>
             </div>
         </div>
+        <div data-role="popup" data-theme="b" data-history="false" data-position-to="window" id="popup__error">
+            <div class="ui-content">
+                <h1>Error</h1>
+                <p id="error__text"></p>
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="" data-rel="back" class="ui-btn ui-icon-check ui-btn-icon-left">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- /footer -->
         <div data-role="footer" data-position="fixed">
-            <a href="#popup__launch" class="ui-btn" id="Launch_app">Launch</a>
+            
+            <a href="#popup__launch" data-rel="popup" data-position-to="window" data-transition="slide" class="ui-btn ui-icon-gear ui-btn-icon-left">Launch</a>
             <a href="#" class="ui-btn" id="Play_app">Play</a>
             <a href="#" class="ui-btn" id="Pause_app">Pause</a>
-            <a href="#popup__options" data-rel="popup" data-position-to="window" data-transition="slide" class="ui-btn ui-icon-gear ui-btn-icon-left">Options</a>
             <a id="Step_app" class="ui-btn">Step</a>
         </div>
     </div>

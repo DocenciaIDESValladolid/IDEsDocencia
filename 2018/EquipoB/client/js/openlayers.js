@@ -42,11 +42,15 @@ function setupOpenLayers() {
         var coord = ol.proj.transform(e.coordinate, 'EPSG:3857', 'EPSG:4326');
         var lon = coord[0];
         var lat = coord[1];
-        var x = Math.floor((lon - minLon) / sizeCellx);
-        var y = Math.floor((maxLat - lat) / sizeCelly);
-        map.layerInvader.grid[y * map.width + x].active = 1;
-        launch = true;
-
+        var sizeCell = map.getSizeCells();
+        var x = Math.floor((lon - map.minLon) / sizeCell[0]);
+        var y = Math.floor((map.maxLat - lat) / sizeCell[1]);
+        try {
+            map.layerInvader.grid[y * map.width + x].active = 1;    
+            launch = true;
+        } catch (error) {
+            displayError("You need to click on the launch button first");
+        }
     });
     //displayInvaders(map.layerInvader.grid);
 }
@@ -55,14 +59,15 @@ function setupOpenLayers() {
  * @param {*} invaders 
  */
 function displayInvaders(invaders) {
+    var sizeCell = map.getSizeCells();
     for (var i in invaders) {
-        var x = minLon + invaders[i].x * sizeCellx;
-        var y = maxLat - invaders[i].y * sizeCelly;
+        var x = map.minLon + (invaders[i].x) * sizeCell[0];
+        var y = map.maxLat - (invaders[i].y) * sizeCell[1];
         var coordinateCell = [
             [x, y],
-            [x + sizeCellx, y],
-            [x + sizeCellx, y + sizeCelly],
-            [x, y + sizeCelly],
+            [x + sizeCell[0], y],
+            [x + sizeCell[0], y + sizeCell[1]],
+            [x, y + sizeCell[1]],
             [x, y]
         ];
         var rect = new ol.geom.Polygon([coordinateCell]);
@@ -83,4 +88,17 @@ function displayInvaders(invaders) {
         }
         gridInvaderSource.addFeature(cell);
     }
+}
+
+function displayBoundingBox() {
+    var boundingBox = mapOpenlayers.getView().calculateExtent(mapOpenlayers.getSize());
+    var extent = ol.proj.transformExtent(boundingBox, 'EPSG:3857', 'EPSG:4326');
+    map.setCoordinates(extent);
+    var rect = [
+        [map.minLon,map.minLat], [map.minLon,map.maxLat],[map.maxLon,map.maxLat],[map.maxLon,map.minLat],[map.minLon,map.minLat]
+    ]
+    var polygon = new ol.geom.Polygon([rect]);
+    polygon.transform('EPSG:4326', 'EPSG:3857');
+    var feature = new ol.Feature(polygon);
+    gridInvaderSource.addFeature(feature);
 }

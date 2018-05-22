@@ -11,44 +11,18 @@ var launch = false;
 var map = {
     width: 100,
     height: 100,
+
+    minLon: limMinLon,
+    minLat: limMinLat,
+    maxLon: limMaxLon,
+    maxLat: limMaxLat,
+
     layers: [],
     layerInvader: null,
+
     nbStep: 0,
 
     async generate(layersData, layerInvader) {
-        //TODO: look about launch multiple fetch at same time
-        //https://stackoverflow.com/questions/38150791/making-multiple-fetch-api-calls-how-to-check-if-all-calls-have-finished/38151731?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-        /*
-        for (var i in layersData) {
-            this.fetchLayerData(layersData[i]);
-        }
-        */
-
-        /*
-        var requests = layersData.map(layer => fetch("/geoserver/wps", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/xml; charset=UTF-8"
-            },
-            body: layer.xml
-        }))
-        */
-        /*
-        Promise.all(requests)
-            .then(responses => {
-                var tiffs = [];
-                responses.map(response => {
-                    tiffs.push(response.arrayBuffer());
-                })
-                return tiffs;
-            })
-            .then(tiffs => {
-                Promise.all(tiffs)
-            })
-            .then(data => {
-                console.log(data);
-            });
-            */
         $.mobile.loading("show", {
             text: "Loading layers",
             textVisible: true,
@@ -62,7 +36,7 @@ var map = {
                     headers: {
                         "Content-Type": "application/xml; charset=UTF-8"
                     },
-                    body: layer.xml
+                    body: layer.getXML(this.minLon, this.minLat, this.maxLon, this.maxLat)
                 })));
             var arrayBuffers = await Promise.all(responses.map(response => response.arrayBuffer()));
             var tiffs = await Promise.all(arrayBuffers.map(arrayBuffer => readTiff(arrayBuffer)));
@@ -81,7 +55,7 @@ var map = {
             map.layerInvader = new LayerInvader(100, 100, layerInvader.name, layerInvader.color, layerInvader.infectionRate);
 
         } catch (error) {
-            console.error(error);
+            displayError("Impossible to download layers from the geoserver");
         } finally {
             $.mobile.loading("hide");
         }
@@ -94,33 +68,17 @@ var map = {
         gridInvaderSource.clear();
         nbStep = 0;
     },
-    /*
-    fetchLayerData(layer) {
-        fetch("/geoserver/wps", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/xml; charset=UTF-8"
-                },
-                body: layer.xml
-            })
-            .then(function (res) {
-                return res.arrayBuffer();
-            })
-            .then(function (data) {
-                layer.data = readTiff(data);
-                map.layers.push(
-                    new LayerData(
-                        map.width,
-                        map.height,
-                        layer.name,
-                        layer.color,
-                        layer.data,
-                        layer.infectionProbability
-                    )
-                );
-            });
+
+    getSizeCells() {
+        return [(this.maxLon - this.minLon) / this.width, (this.maxLat - this.minLat) / this.height];
+    },
+
+    setCoordinates(extent) {
+        this.minLon = (limMinLon <= extent[0] && extent[0] <= extent[2]) ? extent[0] : limMinLon;
+        this.minLat = (limMinLat <= extent[1] && extent[1] <= extent[3]) ? extent[1] : limMinLat;
+        this.maxLon = (extent[0] <= extent[2] && extent[2] <= limMaxLon) ? extent[2] : limMaxLon;
+        this.maxLat = (extent[1] <= extent[3] && extent[3] <= limMaxLat) ? extent[3] : limMaxLat;
     }
-    */
 };
 ////////////////////////////////////////////////////////////////
 //
@@ -173,31 +131,9 @@ class LayerData extends Layer {
 ////////////////////////////////////////////////////////////////
 /**
  * 
- * @param {*} layer 
- */
-/*
-function fetchLayerFromGeoserver(layer) {
-    fetch("/geoserver/wps", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/xml; charset=UTF-8"
-            },
-            body: layer.xml
-        })
-        .then(function (res) {
-            return res.arrayBuffer();
-        })
-        .then(function (data) {
-            layer.data = readTiff(data);
-        });
-}
-*/
-/**
- * 
  * Read the .tiff file we receive from request to Geoserver
  */
 function readTiff(data) {
-    console.log(data);
     var tiff = GeoTIFF.parse(data);
     var image = tiff.getImage();
     var result;
@@ -253,37 +189,45 @@ class Cell {
  */
 function updateInvaders() {
     if (launch) {
-        for (var i in map.layerInvader.grid) {
-            if (map.layerInvader.grid[i].active > 0) {
-                contaminedCells.push(map.layerInvader.grid[i]);
+        try {
+            for (var i in map.layerInvader.grid) {
+                if (map.layerInvader.grid[i].active > 0) {
+                    contaminedCells.push(map.layerInvader.grid[i]);
+                }
             }
-        }
-        for (var i in contaminedCells) {
-            var neighbours = contaminedCells[i].getNeighbours();
-            for (var j in neighbours) {
-                //Verify if the cell in the layer invader is not contamined
-                var cellInvader = map.layerInvader.grid[neighbours[j]];
-                if (cellInvader.active === 0) {
-                    //Rate infection of the invaders
-                    var rate = map.layerInvader.infectionRate;
-                    //For each layerData, if there is an information in the cell -> modify the rateInfection
-                    for (var h in map.layers) {
-                        var cellData = map.layers[h].grid[neighbours[j]];
-                        if (cellData.active > 0) {
-                            rate *= map.layers[h].infectionProbability;
+            for (var i in contaminedCells) {
+                var neighbours = contaminedCells[i].getNeighbours();
+                for (var j in neighbours) {
+                    //Verify if the cell in the layer invader is not contamined
+                    var cellInvader = map.layerInvader.grid[neighbours[j]];
+                    if (cellInvader.active === 0) {
+                        //Rate infection of the invaders
+                        var rate = map.layerInvader.infectionRate;
+                        //For each layerData, if there is an information in the cell -> modify the rateInfection
+                        for (var h in map.layers) {
+                            var cellData = map.layers[h].grid[neighbours[j]];
+                            if (cellData.active > 0) {
+                                rate *= map.layers[h].infectionProbability;
+                            }
                         }
-                    }
-                    if (Math.random() < rate) {
-                        map.layerInvader.grid[neighbours[j]].active = 1;
-                        //insert all new contamined cells to be displayed in openlayers
-                        newContaminedCells.push(map.layerInvader.grid[neighbours[j]]);
+                        if (Math.random() < rate) {
+                            map.layerInvader.grid[neighbours[j]].active = 1;
+                            //insert all new contamined cells to be displayed in openlayers
+                            newContaminedCells.push(map.layerInvader.grid[neighbours[j]]);
+                        }
                     }
                 }
             }
+        } catch (error) {
+            displayError(error.message);
         }
         map.nbStep += 1;
+
+        displayInvaders(newContaminedCells);
+        contaminedCells.splice(0, contaminedCells.length);
+        newContaminedCells.splice(0, newContaminedCells.length);
+    } else {
+        stopLoop();
+        displayError("Select a cell in the bounding box");
     }
-    displayInvaders(newContaminedCells);
-    contaminedCells.splice(0, contaminedCells.length);
-    newContaminedCells.splice(0, newContaminedCells.length);
 }
