@@ -3,7 +3,13 @@
   <wps:DataInputs>
     <wps:Input>
       <ows:Identifier>features</ows:Identifier>
-      <wps:Reference mimeType="application/wfs-collection-1.0" xlink:href="https://wxs.ign.fr/k3p0n69vbaaonaamhydsqw3f/geoportail/wfs?REQUEST=GetFeature&amp;VERSION=1.0.0&amp;TYPENAME=BDTOPO_BDD_WLD_WGS84G:troncon_cours_eau&amp;bbox=3.438721,43.344156,4.262695,43.858297&amp;srs=EPSG:4326" method="GET"/>
+      <wps:Reference mimeType="text/xml" xlink:href="http://geoserver/wfs" method="POST">
+        <wps:Body>
+          <wfs:GetFeature service="WFS" version="1.0.0" outputFormat="GML2" xmlns:grupo2018B="grupo2018B">
+            <wfs:Query typeName="grupo2018B:water"/>
+          </wfs:GetFeature>
+        </wps:Body>
+      </wps:Reference>
     </wps:Input>
     <wps:Input>
       <ows:Identifier>rasterWidth</ows:Identifier>
@@ -39,3 +45,4 @@
     </wps:RawDataOutput>
   </wps:ResponseForm>
 </wps:Execute>
+
