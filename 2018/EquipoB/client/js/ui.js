@@ -53,6 +53,7 @@ function setupUI() {
         }
         displayBoundingBox();
         map.generate(optionsLayersData, optionsLayerInvader);
+        stopLoop();
     });
 }
 
