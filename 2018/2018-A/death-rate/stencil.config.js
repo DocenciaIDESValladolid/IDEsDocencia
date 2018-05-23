@@ -1,15 +1,13 @@
 const sass = require('@stencil/sass');
 
 exports.config = {
-  outputTarget: [
-    {
-      type: 'www',
-      serviceWorker: {
-        swSrc: 'src/sw.js'
-      }
-    }
-  ],
+  outputTargets: [{
+    type: 'www',
+    inlineLoaderScript: false,
+    prerenderFilter: () => false
+  }],
   globalStyle: 'src/global/app.css',
+  enableCache: false,
   plugins: [
     sass()
   ]
