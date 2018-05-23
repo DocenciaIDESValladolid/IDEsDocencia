@@ -16,8 +16,8 @@
             <wps:Reference mimeType="text/xml" xlink:href="http://geoserver/wfs" method="POST">
                 <wps:Body>
                     <wfs:GetFeature service="WFS" version="1.0.0" outputFormat="GML2" 
-                        xmlns:grupo2018B="grupo2018B">
-                        <wfs:Query typeName="grupo2018B:pop4326"/>
+                        xmlns:ide2018b="ide2018b">
+                        <wfs:Query typeName="ide2018b:pop4326"/>
                     </wfs:GetFeature>
                 </wps:Body>
             </wps:Reference>
