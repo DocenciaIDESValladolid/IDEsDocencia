@@ -15,10 +15,35 @@
     <script src="js/lib/jquery.mobile-1.4.5.min.js"></script>
     <script src="js/lib/ol-debug.js"></script>
     <script src="js/lib/geotiff.browserify.min.js"></script>
+    <style type="text/css">
+        .page__welcome {
+            background: url(img/invasionZombie.gif);
+            background-repeat: repeat-y;
+            background-position: center center;
+            background-attachment: scroll;
+            background-size: 100% 100%;
+        }
 
+        .welcome__content {
+            background: transparent;
+        }
+    </style>
 </head>
 
 <body>
+    <audio id="soundZombie" src="snd/Thriller-End-Laugh.mp3" preload="auto"></audio>
+    <div data-role="page" data-theme="b" class="page__welcome">
+        <div data-role="header">
+            <h1>InvasionX</h1>
+        </div>
+        <div role="main" class="ui-content welcome__content">
+            <a id="playSoundZombie" href="#page__main" data-transition="pop" class="ui-btn" onclick="document.getElementById('soundZombie').play();">Ir a la aplicación</a>
+        </div>
+        <div data-role="footer" data-position="fixed" style="padding: 3px;text-align: center;">
+            <p>Nuestro proyecto es ofrecer un servicio web donde el cliente pueda elegir un lugar de contaminación en Montpellier
+                y ver la propagación de zombies / vampiros de acuerdo a los diferentes parámetros ambientales de la ciudad.</p>
+        </div>
+    </div>
     <!-- /MainPage -->
     <div data-role="page" data-theme="b" id="page__main">
         <!-- /header -->
@@ -31,20 +56,23 @@
                     <li>
                         <a href="#content__map" data-ajax="false" class="ui-btn-active">Map</a>
                     </li>
+                    <!--
                     <li>
                         <a href="#content__openlayers" data-ajax="false">Openlayers</a>
                     </li>
                     <li>
                         <a href="#content__historic" data-ajax="false">Historic</a>
                     </li>
+                    -->
                     <li>
-                        <a href="#content__authors" data-ajax="false">About us</a>
+                        <a href="#content__authors" data-ajax="false">Sobre nosotros</a>
                     </li>
                 </ul>
             </div>
             <div id="content__map">
                 <div id="map"></div>
             </div>
+            <!--
             <div class="ui-content" id="content__openlayers">
                 <h1>Configuration of Openlayers</h1>
                 <ul data-role="listview" data-inset="true">
@@ -57,12 +85,12 @@
                     <li>None</li>
                 </ol>
             </div>
+            -->
             <div class="ui-content" id="content__authors">
                 <h1>Descripción del proyecto</h1>
-                <p>Nuestro proyecto es ofrecer un servicio web donde el cliente pueda elegir un lugar
-                    de contaminación en Montpellier y ver la propagación de zombis / vampiros de acuerdo a los diferentes
-                    parámetros ambientales de la ciudad.</p>
-                <h1>About us</h1>
+                <p>Nuestro proyecto es ofrecer un servicio web donde el cliente pueda elegir un lugar de contaminación en Montpellier
+                    y ver la propagación de zombis / vampiros de acuerdo a los diferentes parámetros ambientales de la ciudad.</p>
+                <h1>Sobre nosotros</h1>
                 <ul data-role="listview">
                     <li>
                         <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
@@ -117,28 +145,28 @@
         </div>
         <div data-role="popup" data-theme="b" data-history="false" id="popup__launch">
             <div class="ui-content">
-                <h1>Personalize your invasion</h1>
+                <h1>Personaliza tu invasión</h1>
                 <form>
                     <fieldset data-role="controlgroup" data-iconpos="right" id="Layers_data">
-                        <legend>Layers</legend>
-                        <label for="population">Population</label>
+                        <legend>Capas</legend>
+                        <label for="population">Población</label>
                         <input name="population" id="population" type="checkbox" disabled checked>
-                        <label for="water">Water</label>
+                        <label for="water">Agua</label>
                         <input name="water" id="water" type="checkbox" disabled checked>
-                        <label for="health">Healthcare buildings</label>
+                        <label for="health">Edificios sanitarios</label>
                         <input name="health" id="health" type="checkbox">
-                        <label for="military">Military zones</label>
+                        <label for="military">Zonas militares</label>
                         <input name="military" id="military" type="checkbox">
-                        <label for="religious">Religious buildings</label>
+                        <label for="religious">Edificios religiosos</label>
                         <input name="religious" id="religious" type="checkbox">
-                        <label for="graveyard">Graveyards</label>
+                        <label for="graveyard">Cementerios</label>
                         <input name="graveyard" id="graveyard" type="checkbox">
                     </fieldset>
                     <fieldset data-role="controlgroup" data-type="horizontal" id="Layer_invader">
-                        <legend>Type of invasion</legend>
+                        <legend>Tipo de invasión</legend>
                         <label for="zombie">Zombie</label>
                         <input type="radio" name="typeInvasion" id="zombie" value="zombie" checked>
-                        <label for="vampire">Vampire</label>
+                        <label for="vampire">Vampiro</label>
                         <input type="radio" name="typeInvasion" id="vampire" value="vampire">
                     </fieldset>
                     <!--
@@ -150,10 +178,10 @@
                 </form>
                 <div class="ui-grid-a">
                     <div class="ui-block-a">
-                        <a href="" data-rel="back" class="ui-btn ui-icon-delete ui-btn-icon-left" id="Cancel_option">Cancel</a>
+                        <a href="" data-rel="back" class="ui-btn ui-icon-delete ui-btn-icon-left" id="Cancel_option">Cancelar</a>
                     </div>
                     <div class="ui-block-b">
-                        <a href="" data-rel="back" class="ui-btn ui-icon-check ui-btn-icon-left" id="Accept_option">Accept</a>
+                        <a href="" data-rel="back" class="ui-btn ui-icon-check ui-btn-icon-left" id="Accept_option">Aceptar</a>
                     </div>
                 </div>
             </div>
@@ -172,15 +200,11 @@
         <!-- /footer -->
         <div data-role="footer" data-position="fixed">
 
-            <a href="#popup__launch" data-rel="popup" data-position-to="window" data-transition="slide" class="ui-btn ui-icon-gear ui-btn-icon-left">Launch</a>
-            <a href="#" class="ui-btn" id="Play_app">Play</a>
-            <a href="#" class="ui-btn" id="Pause_app">Pause</a>
-            <a id="Step_app" class="ui-btn">Step</a>
+            <a href="#popup__launch" data-rel="popup" data-position-to="window" data-transition="slide" class="ui-btn ui-icon-gear ui-btn-icon-left">Iniciar</a>
+            <a href="#" class="ui-btn" id="Play_app">Reproducir</a>
+            <a href="#" class="ui-btn" id="Pause_app">Pausar</a>
+            <a id="Step_app" class="ui-btn">Etapa</a>
         </div>
-    </div>
-
-
-
     </div>
     <script src="config/config.js"></script>
     <script src="js/algorithm.js"></script>

@@ -24,7 +24,7 @@ var map = {
 
     async generate(layersData, layerInvader) {
         $.mobile.loading("show", {
-            text: "Loading layers",
+            text: "Carga de las capas",
             textVisible: true,
             theme: "b",
             html: ""
@@ -55,7 +55,7 @@ var map = {
             map.layerInvader = new LayerInvader(100, 100, layerInvader.name, layerInvader.color, layerInvader.infectionRate);
 
         } catch (error) {
-            displayError("Impossible to download layers from the geoserver");
+            displayError("Imposible descargar capas desde el geoserver");
         } finally {
             $.mobile.loading("hide");
         }
@@ -228,6 +228,6 @@ function updateInvaders() {
         newContaminedCells.splice(0, newContaminedCells.length);
     } else {
         stopLoop();
-        displayError("Select a cell in the bounding box");
+        displayError("Seleccionar una celda en el cuadro delimitador");
     }
 }

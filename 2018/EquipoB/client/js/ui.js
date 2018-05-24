@@ -11,7 +11,12 @@ setupUI();
  * 
  */
 function setupUI() {
+    /**
     $(document).ready(function () {
+        setupOpenLayers();
+    });
+    */
+    $("#page__main").on("pageshow", function () {
         setupOpenLayers();
     });
     $("#Step_app").click(function () {

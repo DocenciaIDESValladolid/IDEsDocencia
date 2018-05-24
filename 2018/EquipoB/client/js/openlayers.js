@@ -24,13 +24,32 @@ function setupOpenLayers() {
         source: gridInvaderSource
     });
 
+    var zombieFeatureStyle = new ol.style.Style({
+        image: new ol.style.Icon({
+            anchor: [0.5, 1],
+            opacity: 1,
+            scale: 0.1,
+            src: '../img/zombie.png'
+        })
+    });
+    var zombieFeature = new ol.Feature();
+    zombieFeature.setGeometry(null);
+    zombieFeature.setStyle(zombieFeatureStyle);
+    var zombieVector = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            features: [zombieFeature]
+        })
+    });
+
+
     mapOpenlayers = new ol.Map({
         target: 'map',
         layers: [
             new ol.layer.Tile({
                 source: new ol.source.OSM()
             }),
-            gridInvaderLayer
+            gridInvaderLayer,
+            zombieVector
         ],
 
         view: new ol.View({
@@ -46,10 +65,13 @@ function setupOpenLayers() {
         var x = Math.floor((lon - map.minLon) / sizeCell[0]);
         var y = Math.floor((map.maxLat - lat) / sizeCell[1]);
         try {
-            map.layerInvader.grid[y * map.width + x].active = 1;    
+            map.layerInvader.grid[y * map.width + x].active = 1;
+            var coordinates = mapOpenlayers.getEventCoordinate(e.originalEvent);
+            zombieFeature.setGeometry(coordinates ?
+                new ol.geom.Point(coordinates) : null);
             launch = true;
         } catch (error) {
-            displayError("You need to click on the launch button first");
+            displayError("Primero tienes que hacer clic en el botón de lanzamiento");
         }
     });
     //displayInvaders(map.layerInvader.grid);
@@ -95,7 +117,11 @@ function displayBoundingBox() {
     var extent = ol.proj.transformExtent(boundingBox, 'EPSG:3857', 'EPSG:4326');
     map.setCoordinates(extent);
     var rect = [
-        [map.minLon,map.minLat], [map.minLon,map.maxLat],[map.maxLon,map.maxLat],[map.maxLon,map.minLat],[map.minLon,map.minLat]
+        [map.minLon, map.minLat],
+        [map.minLon, map.maxLat],
+        [map.maxLon, map.maxLat],
+        [map.maxLon, map.minLat],
+        [map.minLon, map.minLat]
     ]
     var polygon = new ol.geom.Polygon([rect]);
     polygon.transform('EPSG:4326', 'EPSG:3857');
