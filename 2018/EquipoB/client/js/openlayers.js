@@ -17,6 +17,10 @@ var gridInvaderSource;
 /**
  * 
  */
+var dataLayersWFS = [];
+/**
+ * 
+ */
 function setupOpenLayers() {
     gridInvaderSource = new ol.source.Vector();
 
@@ -54,6 +58,7 @@ function setupOpenLayers() {
 
         view: new ol.View({
             center: ol.proj.fromLonLat([3.80, 43.55]),
+            //projection: 'EPSG:4326',
             zoom: 10
         })
     });
@@ -98,7 +103,7 @@ function displayInvaders(invaders) {
         if (invaders[i].active === 0) {
             cell.setStyle(new ol.style.Style({
                 fill: new ol.style.Fill({
-                    color: 'rgba(0,0,0,0.2)'
+                    color: 'rgba(0,0,0,0.5)'
                 })
             }))
         } else {
@@ -127,4 +132,47 @@ function displayBoundingBox() {
     polygon.transform('EPSG:4326', 'EPSG:3857');
     var feature = new ol.Feature(polygon);
     gridInvaderSource.addFeature(feature);
+}
+
+function displayWFS(layer) {
+    //var bbox = ol.proj.transformExtent([map.minLon, map.minLat, map.maxLon, map.maxLat], 'EPSG:4326', 'EPSG:3857'),
+    var vectorSource = new ol.source.Vector({
+        format: new ol.format.GeoJSON({featureProjection:'EPSG:4326'}),
+        url: layer.getWFS(map.minLon, map.minLat, map.maxLon, map.maxLat),
+    })
+    var vector = new ol.layer.Vector({
+        source: vectorSource,
+        style: layer.style,
+    });
+    dataLayersWFS.push(vector);
+    mapOpenlayers.addLayer(vector);
+    //mapOpenlayers.getView().fit(vectorSource.getExtent());
+    /*
+    var featureRequest = new ol.format.WFS().writeGetFeature({
+        srsName: 'EPSG:3857',
+        featureNS: 'invasionx',
+        featurePrefix: 'invasionx',
+        featureTypes: ['pop4326', 'water'],
+        geometryName: 'the_geom',
+        bbox: ol.proj.transformExtent([map.minLon, map.minLat, map.maxLon, map.maxLat], 'EPSG:4326', 'EPSG:3857'),
+        outputFormat: 'application/json'
+    });
+    fetch('http://localhost/geoserver/wfs', {
+        method: 'POST',
+        body: new XMLSerializer().serializeToString(featureRequest)
+    }).then(function (response) {
+        return response.json();
+    }).then(function (json) {
+        var features = new ol.format.GeoJSON().readFeatures(json);
+        var vectorData = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: features
+            }),
+            style: layer.style
+        });
+        dataLayersWFS.push(vectorData);
+        mapOpenlayers.addLayer(vectorData);
+        mapOpenlayers.getView().fit(vectorData.getSource().getExtent());
+    });
+    */
 }

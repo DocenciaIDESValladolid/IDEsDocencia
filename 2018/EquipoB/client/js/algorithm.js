@@ -22,7 +22,7 @@ var map = {
 
     nbStep: 0,
 
-    async generate(layersData, layerInvader) {
+    async generate(layersData, layerInvader, wfs = false) {
         $.mobile.loading("show", {
             text: "Carga de las capas",
             textVisible: true,
@@ -53,9 +53,18 @@ var map = {
                 );
             }
             map.layerInvader = new LayerInvader(100, 100, layerInvader.name, layerInvader.color, layerInvader.infectionRate);
-
+            if (wfs) {
+                await Promise.all(
+                    layersData.map(layer => {
+                            if (layer.name === 'population' || layer.name === 'water') {
+                                displayWFS(layer);
+                            }
+                    }
+                )
+            )}
         } catch (error) {
             displayError("Imposible descargar capas desde el geoserver");
+            console.error(error);
         } finally {
             $.mobile.loading("hide");
         }
@@ -66,6 +75,10 @@ var map = {
         this.layers = [];
         this.layerInvader = null;
         gridInvaderSource.clear();
+        for (var layer of dataLayersWFS) {
+            mapOpenlayers.removeLayer(layer);
+        }
+        dataLayersWFS.splice(0, dataLayersWFS.length);
         nbStep = 0;
     },
 

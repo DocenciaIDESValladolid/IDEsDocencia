@@ -57,7 +57,8 @@ function setupUI() {
             }
         }
         displayBoundingBox();
-        map.generate(optionsLayersData, optionsLayerInvader);
+        var activateWFS = $('#wfs').is(':checked') ? true : false;
+        map.generate(optionsLayersData, optionsLayerInvader, activateWFS);
         stopLoop();
     });
 }
