@@ -5,21 +5,9 @@ var limMinLat = 43.344156;
 var limMaxLat = 43.858297;
 
 var workspace = 'ide2018b';
-
-/*
-var minLon = limMinLon;
-var maxLon = limMaxLon;
-
-var minLat = limMinLat;
-var maxLat = limMaxLat;
-
-var sizeCellx = (function (maxLon,minLon) {
-  return (maxLon - minLon) / 100;
-})
-var sizeCelly = (function (maxLat,minLat) {
-  return (maxLat - minLat) / 100;
-})
-*/
+/**
+ * Array with all informations about layers we use
+ */
 var configLayersData = [
   layerPopulation = {
     name: 'population',

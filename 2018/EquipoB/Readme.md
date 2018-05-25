@@ -1,15 +1,4 @@
 # InvasionX
 
-## Algoritmo
+Nuestro proyecto es ofrecer un servicio web donde el cliente pueda elegir un lugar de contaminación en Montpellier y ver la propagación de zombis / vampiros de acuerdo a los diferentes parámetros ambientales de la ciudad.
 
-On a une map d'une grande taille (Montpellier et ses environs)
-
-La map est constitué de cellules.
-
-Les cellules contiennent plusieurs informations :
-- Type de cellule (Bâtiment, route, eau)
-- Infecté ou non
-
-Propagation de cellule en cellule de l'infection dépendant du type de la cellule
-
-Un point de départ

@@ -56,12 +56,12 @@ var map = {
             if (wfs) {
                 await Promise.all(
                     layersData.map(layer => {
-                            if (layer.name === 'population' || layer.name === 'water') {
-                                displayWFS(layer);
-                            }
-                    }
+                        if (layer.name === 'population' || layer.name === 'water') {
+                            displayWFS(layer);
+                        }
+                    })
                 )
-            )}
+            }
         } catch (error) {
             displayError("Imposible descargar capas desde el geoserver");
             console.error(error);

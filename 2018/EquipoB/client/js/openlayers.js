@@ -116,7 +116,9 @@ function displayInvaders(invaders) {
         gridInvaderSource.addFeature(cell);
     }
 }
-
+/**
+ * Display the bbox where the simulation will happen
+ */
 function displayBoundingBox() {
     var boundingBox = mapOpenlayers.getView().calculateExtent(mapOpenlayers.getSize());
     var extent = ol.proj.transformExtent(boundingBox, 'EPSG:3857', 'EPSG:4326');
@@ -133,11 +135,14 @@ function displayBoundingBox() {
     var feature = new ol.Feature(polygon);
     gridInvaderSource.addFeature(feature);
 }
-
+/**
+ * Display WFS result for each layer
+ * But from the IGN WFS, the GeoJSON cannot be read correctly by OpenLayers
+ * https://openlayers.org/en/v4.6.5/doc/errors/#36 
+ */
 function displayWFS(layer) {
-    //var bbox = ol.proj.transformExtent([map.minLon, map.minLat, map.maxLon, map.maxLat], 'EPSG:4326', 'EPSG:3857'),
     var vectorSource = new ol.source.Vector({
-        format: new ol.format.GeoJSON({featureProjection:'EPSG:4326'}),
+        format: new ol.format.GeoJSON({defaultDataProjection:'EPSG:4326',featureProjection:'EPSG:4326'}),
         url: layer.getWFS(map.minLon, map.minLat, map.maxLon, map.maxLat),
     })
     var vector = new ol.layer.Vector({
@@ -146,33 +151,4 @@ function displayWFS(layer) {
     });
     dataLayersWFS.push(vector);
     mapOpenlayers.addLayer(vector);
-    //mapOpenlayers.getView().fit(vectorSource.getExtent());
-    /*
-    var featureRequest = new ol.format.WFS().writeGetFeature({
-        srsName: 'EPSG:3857',
-        featureNS: 'invasionx',
-        featurePrefix: 'invasionx',
-        featureTypes: ['pop4326', 'water'],
-        geometryName: 'the_geom',
-        bbox: ol.proj.transformExtent([map.minLon, map.minLat, map.maxLon, map.maxLat], 'EPSG:4326', 'EPSG:3857'),
-        outputFormat: 'application/json'
-    });
-    fetch('http://localhost/geoserver/wfs', {
-        method: 'POST',
-        body: new XMLSerializer().serializeToString(featureRequest)
-    }).then(function (response) {
-        return response.json();
-    }).then(function (json) {
-        var features = new ol.format.GeoJSON().readFeatures(json);
-        var vectorData = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                features: features
-            }),
-            style: layer.style
-        });
-        dataLayersWFS.push(vectorData);
-        mapOpenlayers.addLayer(vectorData);
-        mapOpenlayers.getView().fit(vectorData.getSource().getExtent());
-    });
-    */
 }
