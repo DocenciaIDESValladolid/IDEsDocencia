@@ -1,0 +1,2 @@
+/*! Built with http://stenciljs.com */
+const{h:n}=window.App;function o(n,o){o.read(()=>{const t=n.innerWidth,e=n.innerWidth,i=n.document.elementFromPoint(t/2,e/2);if(!i)return;const r=i.closest("ion-scroll");r&&r.componentOnReady().then(()=>{o.write(()=>{r.scrollToTop(300)})})})}export{o as startStatusTap};

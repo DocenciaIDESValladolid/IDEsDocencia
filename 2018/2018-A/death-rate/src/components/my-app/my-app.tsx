@@ -2,29 +2,41 @@ import '@ionic/core';
 import '@pro-webcomponents/core';
 
 import { Component } from '@stencil/core';
+import { getSetting } from '../../helpers/model';
 
 @Component({
   tag: 'my-app',
-  styleUrl: 'my-app.scss'
 })
 export class MyApp {
 
   render() {
+    const loggedIn = !!getSetting('logged_in');
     return (
       <ion-app>
         <ion-router useHash={true}>
-          <ion-route-redirect from='/' to='/death'></ion-route-redirect>
+          { loggedIn
+            ? [
+              <ion-route-redirect from="/intro" to="/mapa"/>,
+              <ion-route-redirect from="/" to="/mapa"/>
+            ]
+            : [
+              <ion-route-redirect from="/" to="intro"/>,
+              <ion-route-redirect from="/*" to="intro"/>
+            ]
+          }
           <ion-route url='/death' component='death-page'></ion-route>
           <ion-route url='/mapa' component='map-page'></ion-route>
           <ion-route url='/quienes-somos' component='whoare-page'></ion-route>
           <ion-route url='/open-source' component='oss-page'></ion-route>
           <ion-route url='/ajustes' component='settings-page'></ion-route>
+          <ion-route url='/intro' component='landing-page'></ion-route>
+          <ion-route url='/data' component='settings-page'></ion-route>
         </ion-router>
 
         <ion-split-pane>
-          <ion-menu>
+          <ion-menu type="overlay" disabled={!loggedIn}>
             <ion-header>
-              <ion-toolbar color="danger">
+              <ion-toolbar color='dark'>
                 <ion-title>Death Rate</ion-title>
               </ion-toolbar>
             </ion-header>
@@ -32,7 +44,7 @@ export class MyApp {
             <ion-content main>
               <ion-list>
                 <ion-menu-toggle autoHide={false}>
-                  <ion-item href="#/death">Death Rate</ion-item>
+                  <ion-item href="#/death">Mi localización</ion-item>
                 </ion-menu-toggle>
 
                 <ion-menu-toggle autoHide={false}>
@@ -44,19 +56,6 @@ export class MyApp {
                 </ion-menu-toggle>
               </ion-list>
 
-              <ion-list>
-                <ion-item-divider>
-                  Para saber más
-                </ion-item-divider>
-                <ion-menu-toggle autoHide={false}>
-                  <ion-item href="#/quienes-somos">Quienes somos</ion-item>
-                </ion-menu-toggle>
-
-                <ion-menu-toggle autoHide={false}>
-                  <ion-item href="#/open-source">Open Source</ion-item>
-                </ion-menu-toggle>
-
-              </ion-list>
             </ion-content>
           </ion-menu>
 

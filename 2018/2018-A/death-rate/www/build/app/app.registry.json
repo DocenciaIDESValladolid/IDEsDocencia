@@ -3,233 +3,224 @@
   "fsNamespace": "app",
   "loader": "../app.js",
   "global": "app.global.js",
-  "core": "app.nopsyte5.js",
-  "corePolyfilled": "app.kfp9dtmi.js",
+  "core": "app.x2ira63b.js",
+  "corePolyfilled": "app.htler9xj.js",
   "components": {
     "death-page": {
-      "$": "i6nydh99"
+      "$": "6xf7ywxd"
     },
     "ion-action-sheet": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-action-sheet-controller": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-alert": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-alert-controller": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-animation-controller": {
       "$": "9237bzg1"
     },
     "ion-app": {
-      "ios": "rml1a0ew",
-      "md": "lbxwbdux"
+      "ios": "dmjkchcj",
+      "md": "kmzme16g"
     },
     "ion-backdrop": {
-      "ios": "rjsinfbk",
-      "md": "lonmph5x"
+      "ios": "z2puyvcn",
+      "md": "gkilujpf"
     },
     "ion-button": {
-      "ios": "7nhwsdcj",
-      "md": "k7pmuem1"
+      "ios": "ure7vswy",
+      "md": "zjziukwz"
     },
     "ion-buttons": {
-      "ios": "7nhwsdcj",
-      "md": "k7pmuem1"
+      "ios": "ure7vswy",
+      "md": "zjziukwz"
     },
     "ion-content": {
-      "ios": "7nhwsdcj",
-      "md": "k7pmuem1"
+      "ios": "5e4v3psa",
+      "md": "0zci5z91"
     },
     "ion-datetime": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-fab": {
-      "ios": "a9f9shsv",
-      "md": "jmvgx0lu"
+      "ios": "eznl0dug",
+      "md": "pjs49vyt"
     },
     "ion-fab-button": {
-      "ios": "a9f9shsv",
-      "md": "jmvgx0lu"
+      "ios": "eznl0dug",
+      "md": "pjs49vyt"
     },
     "ion-gesture": {
-      "$": "oekhztxe"
+      "$": "ftv3fztw"
     },
     "ion-gesture-controller": {
-      "$": "oekhztxe"
+      "$": "ftv3fztw"
     },
     "ion-header": {
-      "ios": "7nhwsdcj",
-      "md": "k7pmuem1"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-icon": {
       "$": "xvby5zy2"
     },
     "ion-input": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-item": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
-    },
-    "ion-item-divider": {
-      "ios": "rml1a0ew",
-      "md": "lbxwbdux"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-label": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-list": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-loading": {
-      "ios": "kk1ic5fz",
-      "md": "nsvwlmm0"
+      "ios": "lzt7bn6c",
+      "md": "pk80geic"
     },
     "ion-loading-controller": {
-      "ios": "a9f9shsv",
-      "md": "jmvgx0lu"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-menu": {
-      "ios": "rml1a0ew",
-      "md": "lbxwbdux"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
+    },
+    "ion-menu-button": {
+      "ios": "dmbc1owl",
+      "md": "56avvlx1"
     },
     "ion-menu-controller": {
-      "ios": "rml1a0ew",
-      "md": "lbxwbdux"
+      "$": "h3j22ci1"
     },
     "ion-menu-toggle": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "$": "33jl92yy"
     },
     "ion-picker": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-picker-column": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-picker-controller": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-popover": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-popover-controller": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-range": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-range-knob": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-ripple-effect": {
-      "$": "fdyiewok"
+      "$": "gtbxvuya"
     },
     "ion-route": {
-      "ios": "rml1a0ew",
-      "md": "lbxwbdux"
+      "ios": "dmjkchcj",
+      "md": "kmzme16g"
     },
     "ion-route-redirect": {
-      "ios": "rml1a0ew",
-      "md": "lbxwbdux"
+      "ios": "dmjkchcj",
+      "md": "kmzme16g"
     },
     "ion-router": {
-      "ios": "rml1a0ew",
-      "md": "lbxwbdux"
+      "ios": "dmjkchcj",
+      "md": "kmzme16g"
     },
     "ion-router-outlet": {
-      "ios": "rml1a0ew",
-      "md": "lbxwbdux"
+      "ios": "dmjkchcj",
+      "md": "kmzme16g"
     },
     "ion-scroll": {
-      "ios": "7nhwsdcj",
-      "md": "k7pmuem1"
+      "ios": "5e4v3psa",
+      "md": "0zci5z91"
     },
     "ion-searchbar": {
-      "ios": "a9f9shsv",
-      "md": "jmvgx0lu"
+      "ios": "eznl0dug",
+      "md": "pjs49vyt"
     },
     "ion-select": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-select-option": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-spinner": {
-      "ios": "kk1ic5fz",
-      "md": "nsvwlmm0"
+      "ios": "lzt7bn6c",
+      "md": "pk80geic"
     },
     "ion-split-pane": {
-      "ios": "rml1a0ew",
-      "md": "lbxwbdux"
-    },
-    "ion-status-tap": {
-      "ios": "rml1a0ew",
-      "md": "lbxwbdux"
+      "ios": "dmjkchcj",
+      "md": "kmzme16g"
     },
     "ion-tap-click": {
-      "ios": "rml1a0ew",
-      "md": "lbxwbdux"
+      "ios": "dmjkchcj",
+      "md": "kmzme16g"
     },
     "ion-title": {
-      "ios": "7nhwsdcj",
-      "md": "k7pmuem1"
-    },
-    "ion-toggle": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "ion-toolbar": {
-      "ios": "7nhwsdcj",
-      "md": "k7pmuem1"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "landing-page": {
-      "$": "tzfculsz"
+      "ios": "dmbc1owl",
+      "md": "56avvlx1"
     },
     "login-page": {
-      "$": "w1ynhh8h"
+      "$": "djurwxjy"
     },
     "map-page": {
-      "ios": "a9f9shsv",
-      "md": "jmvgx0lu"
+      "ios": "eznl0dug",
+      "md": "pjs49vyt"
     },
     "my-app": {
-      "ios": "rml1a0ew",
-      "md": "lbxwbdux"
+      "ios": "dmjkchcj",
+      "md": "kmzme16g"
     },
     "oss-page": {
-      "$": "afujm04x"
+      "$": "nnx77zdj"
     },
     "pro-glshader": {
-      "$": "i6nydh99"
+      "$": "6xf7ywxd"
     },
     "settings-page": {
-      "ios": "vkvhtoiz",
-      "md": "u8hijslw"
+      "ios": "khj4p3rj",
+      "md": "oizrnsmi"
     },
     "whoare-page": {
-      "$": "zvmxe5ca"
+      "$": "jpuzy0ar"
     }
   }
 }
