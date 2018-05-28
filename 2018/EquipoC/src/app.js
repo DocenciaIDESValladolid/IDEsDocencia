@@ -1,6 +1,7 @@
 /**
  * Demo functions
  */
+		//import jsts from 'jsts';
 		function algoritmo() {//VERTIDOS
 			//var url ='?FILTER=&request=GetFeature&version=1.1.0&outputFormat=GML2&typeName=Estado_Rios_Global_2016';
 			var urlestadorios = new URL('http://localhost:4000/mirame/wfs');
@@ -8,8 +9,8 @@
 			var params = {FILTER: filterxmlestado, request: 'GetFeature', version: '1.1.0',outputFormat:'GML2',typeName:'Estado_Rios_Global_2016'};
 			urlestadorios.search = new URLSearchParams(params)
 
-			var urlvertidos ='http://localhost:4000/mirame/wfs ';
-			var filterxmlvertidos = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">  		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4258" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">-4.67314,41.626066</gml:coordinates> 			</gml:Point> 			<Distance units="meter">0.5</Distance> 		</DWithin></Filter>';
+			var urlvertidos = new URL('http://localhost:4000/mirame/wfs ');
+			var filterxmlvertidos = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">  		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4258" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">-4.67314,41.626066</gml:coordinates> 			</gml:Point> 		<Distance units="meter">0.5</Distance> 		</DWithin></Filter>';
 			params = {FILTER: filterxmlvertidos, request: 'GetFeature', version: '1.1.0',outputFormat:'GML2',typeName:'Vertidos'};
 			urlvertidos.search = new URLSearchParams(params)
 			
@@ -18,7 +19,7 @@
 			var features;
 			var featuresvertidos;
 			
-			//	var parser = new OL3Parser();
+			var parser = new jsts.io.OL3Parser();
 			
 			fetch(urlvertidos, {  
 				method: 'get',  
