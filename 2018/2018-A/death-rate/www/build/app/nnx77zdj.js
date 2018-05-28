@@ -1,2 +1,0 @@
-/*! Built with http://stenciljs.com */
-const{h:e}=window.App;class t{render(){return[e("ion-header",null,e("ion-toolbar",{color:"dark"},e("ion-buttons",{slot:"start"},e("ion-menu-toggle",null,e("ion-button",null,e("ion-icon",{name:"menu",slot:"icon-only"})))),e("ion-title",null,"Open Source"))),e("ion-content",null)]}static get is(){return"oss-page"}static get properties(){return{el:{elementRef:!0}}}static get style(){return"app-home ion-scroll{padding:15px}"}}export{t as OssPage};

@@ -16,8 +16,8 @@ export class MyApp {
         <ion-router useHash={true}>
           { loggedIn
             ? [
-              <ion-route-redirect from="/intro" to="/mapa"/>,
-              <ion-route-redirect from="/" to="/mapa"/>
+              <ion-route-redirect from="/intro" to="/ajustes"/>,
+              <ion-route-redirect from="/" to="/death"/>
             ]
             : [
               <ion-route-redirect from="/" to="intro"/>,
@@ -27,10 +27,8 @@ export class MyApp {
           <ion-route url='/death' component='death-page'></ion-route>
           <ion-route url='/mapa' component='map-page'></ion-route>
           <ion-route url='/quienes-somos' component='whoare-page'></ion-route>
-          <ion-route url='/open-source' component='oss-page'></ion-route>
           <ion-route url='/ajustes' component='settings-page'></ion-route>
           <ion-route url='/intro' component='landing-page'></ion-route>
-          <ion-route url='/data' component='settings-page'></ion-route>
         </ion-router>
 
         <ion-split-pane>
@@ -41,7 +39,7 @@ export class MyApp {
               </ion-toolbar>
             </ion-header>
 
-            <ion-content main>
+            <ion-content main scrollEnabled={false}>
               <ion-list>
                 <ion-menu-toggle autoHide={false}>
                   <ion-item href="#/death">Mi localización</ion-item>
@@ -53,6 +51,10 @@ export class MyApp {
 
                 <ion-menu-toggle autoHide={false}>
                   <ion-item href="#/ajustes">Ajustes</ion-item>
+                </ion-menu-toggle>
+
+                <ion-menu-toggle autoHide={false}>
+                  <ion-item href="#/quienes-somos">Equipo</ion-item>
                 </ion-menu-toggle>
               </ion-list>
 
