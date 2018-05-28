@@ -33,7 +33,7 @@ function setupOpenLayers() {
             anchor: [0.5, 1],
             opacity: 1,
             scale: 0.1,
-            src: '../img/zombie.png'
+            src: './img/zombie.png'
         })
     });
     var zombieFeature = new ol.Feature();
@@ -142,7 +142,7 @@ function displayBoundingBox() {
  */
 function displayWFS(layer) {
     var vectorSource = new ol.source.Vector({
-        format: new ol.format.GeoJSON({defaultDataProjection:'EPSG:4326',featureProjection:'EPSG:4326'}),
+        format: new ol.format.WFS(),
         url: layer.getWFS(map.minLon, map.minLat, map.maxLon, map.maxLat),
     })
     var vector = new ol.layer.Vector({

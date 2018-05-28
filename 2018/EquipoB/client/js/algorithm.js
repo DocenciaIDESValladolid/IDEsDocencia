@@ -56,7 +56,8 @@ var map = {
             if (wfs) {
                 await Promise.all(
                     layersData.map(layer => {
-                        if (layer.name === 'population' || layer.name === 'water') {
+                        if (layer.name !== 'population' 
+				&& layer.name !== 'water') {
                             displayWFS(layer);
                         }
                     })
