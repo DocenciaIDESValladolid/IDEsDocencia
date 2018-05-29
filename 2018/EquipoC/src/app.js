@@ -32,7 +32,7 @@
 					var featurevertidos = featuresvertidos[i];
 					// convert the OpenLayers geometry to a JSTS geometry
 					var jstsGeomvertido = parser.read(featurevertidos.getGeometry());
-					var buffered = jstsGeomvertido.buffer(1000);//en el momento de recibir los vertidos
+					var buffered = jstsGeomvertido.buffer(0.01);//en el momento de recibir los vertidos
 					featurevertidos.setGeometry(parser.write(buffered));
 				}
 				return featuresvertidos;
