@@ -5,12 +5,12 @@
 		function algoritmo() {//VERTIDOS
 			//var url ='?FILTER=&request=GetFeature&version=1.1.0&outputFormat=GML2&typeName=Estado_Rios_Global_2016';
 			var urlestadorios = new URL('http://localhost:4000/mirame/wfs');
-			var filterxmlestado = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"> 	<And> 		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4258" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">-3.4238977,41.44604432</gml:coordinates> 			</gml:Point> 			<Distance units="meter">0.1</Distance> 		</DWithin> 		<PropertyIsEqualTo> 			<PropertyName>state</PropertyName> 			<Literal>Bueno</Literal> 		</PropertyIsEqualTo> 	</And> </Filter>';
+			var filterxmlestado = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"> 	<And> 		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">-3.4238977,41.44604432</gml:coordinates> 			</gml:Point> 			<Distance units="meter">0.1</Distance> 		</DWithin> 		<PropertyIsEqualTo> 			<PropertyName>state</PropertyName> 			<Literal>Bueno</Literal> 		</PropertyIsEqualTo> 	</And> </Filter>';
 			var params = {FILTER: filterxmlestado, request: 'GetFeature', version: '1.1.0',outputFormat:'json',typeName:'Estado_Rios_Global_2016'};
 			urlestadorios.search = new URLSearchParams(params)
 						
 			var urlvertidos = new URL('http://localhost:4000/mirame/wfs ');
-			var filterxmlvertidos = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">  		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4258" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">-4.67314,41.626066</gml:coordinates> 			</gml:Point> 		<Distance units="meter">0.5</Distance> 		</DWithin></Filter>';
+			var filterxmlvertidos = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">  		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">-4.67314,41.626066</gml:coordinates> 			</gml:Point> 		<Distance units="meter">0.5</Distance> 		</DWithin></Filter>';
 			params = {FILTER: filterxmlvertidos, request: 'GetFeature', version: '1.1.0',outputFormat:'json',typeName:'Vertidos'};
 			urlvertidos.search = new URLSearchParams(params)
 			
@@ -26,7 +26,7 @@
 			.then(function (response) {
 				var olformat= new ol.format.GeoJSON();
 				var i;
-				var featuresvertidos= olformat.readFeatures(response, {featureProjection: 'EPSG:4258'});			
+				var featuresvertidos= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});			
 				var parser = new jsts.io.OL3Parser();
 				for(i = 0; i < featuresvertidos.length; i++){
 					var featurevertidos = featuresvertidos[i];
@@ -55,7 +55,7 @@
 				.then(function (response) {
 					var olformat= new ol.format.GeoJSON();
 					var i;
-					features= olformat.readFeatures(response, {featureProjection: 'EPSG:4258'});	
+					features= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});	
 					var parser = new jsts.io.OL3Parser();
 					for(i = 0; i < features.length; i++)
 					{
@@ -118,7 +118,7 @@ function initApp() {
                               extent[1] = parseFloat(place.boundingbox[0]);
                               extent[2] = parseFloat(place.boundingbox[3]);
                               extent[3] = parseFloat(place.boundingbox[1]);
-                              extent = ol.proj.transformExtent(extent, 'EPSG:4258', 'EPSG:3857');
+                              extent = ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857');
                               fly_to(map, null, extent);
                               $('#searchpanel').panel("close");
                           }).show();
