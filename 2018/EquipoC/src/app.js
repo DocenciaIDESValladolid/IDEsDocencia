@@ -15,7 +15,7 @@
 			urlvertidos.search = new URLSearchParams(params)
 			
 			var source = new ol.source.Vector();
-			var olformat= new ol.format.WFS({gmlFormat: ol.format.GML2 });
+			var olformat= new ol.format.GeoJSON();
 			var features;
 			var featuresvertidos;
 			
@@ -25,11 +25,11 @@
 				method: 'get',  
 			})
 			.then(function(response){
-				return response.text();
+			return response.json();
 			})
 			.then(function (response) {
 				var i;
-				featuresvertidos= olformat.readFeatures(response);			
+				featuresvertidos= olformat.readFeatures(json, {featureProjection: 'EPSG:4326'});;			
 				for(i = 0; i < featuresvertidos.length; i++){
 					var featurevertidos = featuresvertidos[i];
 					// convert the OpenLayers geometry to a JSTS geometry
@@ -46,39 +46,40 @@
 				map.addLayer(bufferLayer);
 		
 			})
-	
 			.then(function(){
-			fetch(urlestadorios, {  
-				method: 'get',  
-			})
-				.then(function (response) {
-					var i;
-					features= olformat.readFeatures(response);	
-					for(i = 0; i < features.length; i++)
-					{
-						var feature = features[i];
-						// convert the OpenLayers geometry to a JSTS geometry
-						var jstsGeomestado = parser.read(feature.getGeometry());
-
-						/* create a buffer of 40 meters around each line
-						var buffered = jstsGeom.buffer(100);*/
-						
-						for(i = 0; i < featuresvertidos.length; i++){
-							var featurevertidos = featuresvertidos[i];
-							// convert the OpenLayers geometry to a JSTS geometry
-							var jstsGeomvertido = parser.read(featurevertidos.getGeometry());
-	
-							jstsGeomvertido = parser.read(featurevertidos.getGeometry());
-										
-							var difference = jstsGeomestado.difference(jstsGeomvertido);
-							feature.setGeometry(parser.write(difference)); 
-						}
-
-						// convert back from JSTS and replace the geometry on the feature
-					}
-					source.addFeatures(features);
+				fetch(urlestadorios, {  
+					method: 'get',  
 				})
+				return response;
 			})
+			.then(function (response) {
+				var i;
+				features= olformat.readFeatures(response);	
+				for(i = 0; i < features.length; i++)
+				{
+					var feature = features[i];
+					// convert the OpenLayers geometry to a JSTS geometry
+					var jstsGeomestado = parser.read(feature.getGeometry());
+
+					/* create a buffer of 40 meters around each line
+					var buffered = jstsGeom.buffer(100);*/
+					
+					for(i = 0; i < featuresvertidos.length; i++){
+						var featurevertidos = featuresvertidos[i];
+						// convert the OpenLayers geometry to a JSTS geometry
+						var jstsGeomvertido = parser.read(featurevertidos.getGeometry());
+	
+						jstsGeomvertido = parser.read(featurevertidos.getGeometry());
+										
+						var difference = jstsGeomestado.difference(jstsGeomvertido);
+						feature.setGeometry(parser.write(difference)); 
+					}
+
+					// convert back from JSTS and replace the geometry on the feature
+				}
+				source.addFeatures(features);
+			})
+			
 		}
 		
 $('#mappage').on("pageinit", function(){
