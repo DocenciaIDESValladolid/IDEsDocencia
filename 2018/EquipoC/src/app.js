@@ -5,7 +5,8 @@
 		function algoritmo() {//VERTIDOS
 			//var url ='?FILTER=&request=GetFeature&version=1.1.0&outputFormat=GML2&typeName=Estado_Rios_Global_2016';
 			var urlestadorios = new URL('/proxymirame.php', location.href);
-			var filterxmlestado = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"> 	<And> 		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">-3.4238977,41.44604432</gml:coordinates> 			</gml:Point> 			<Distance units="meter">0.1</Distance> 		</DWithin> 		<PropertyIsEqualTo> 			<PropertyName>state</PropertyName> 			<Literal>Bueno</Literal> 		</PropertyIsEqualTo> 	</And> </Filter>';
+			
+			var filterxmlestado = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"> 	<And> 		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">-4.67314,41.626066</gml:coordinates> 			</gml:Point> 			<Distance units="meter">0.5</Distance> 		</DWithin> 		<PropertyIsEqualTo> 			<PropertyName>state</PropertyName> 			<Literal>Bueno</Literal> 		</PropertyIsEqualTo> 	</And> </Filter>';
 			var params = {FILTER: filterxmlestado, request: 'GetFeature', version: '1.1.0',outputFormat:'json',typeName:'Estado_Rios_Global_2016'};
 			urlestadorios.search = new URLSearchParams(params)
 						
@@ -14,7 +15,6 @@
 			params = {FILTER: filterxmlvertidos, request: 'GetFeature', version: '1.1.0',outputFormat:'json',typeName:'Vertidos'};
 			urlvertidos.search = new URLSearchParams(params)
 			
-			var source = new ol.source.Vector();
 			var features;
 			
 			fetch(urlvertidos, {  
@@ -38,11 +38,23 @@
 				return featuresvertidos;
 			})	
 			.then(function(featuresvertidos){
+				var source = new ol.source.Vector();
+				/*var estilobuffer = new ol.style.Style({
+				  image: new ol.style.Icon( ({
+					anchor: [0.5, 46],
+					anchorXUnits: 'fraction',
+					anchorYUnits: 'pixels',
+					src: 'https://openlayers.org/en/v4.6.5/examples/data/icon.png'
+				  }))
+				});*/
 				source.addFeatures(featuresvertidos);
 				var bufferLayer = new ol.layer.Vector({
+					name: 'buffer',
 					source: source
+					//style:estilobuffer
 				});
 				map.addLayer(bufferLayer);
+				add_layer_to_list(bufferLayer);
 				return featuresvertidos;
 			})
 			.then(function(featuresvertidos){
@@ -51,6 +63,20 @@
 				})
 				.then(function(response){
 					return response.json();
+				})
+				.then(function(response){
+					var olformat= new ol.format.GeoJSON();
+					var i;
+					features= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});	
+					var source = new ol.source.Vector();
+					source.addFeatures(features);
+					var estadosLayer = new ol.layer.Vector({
+					name: 'estados',
+					source: source
+				});
+				map.addLayer(estadosLayer);
+				add_layer_to_list(estadosLayer);
+					return response
 				})
 				.then(function (response) {
 					var olformat= new ol.format.GeoJSON();
@@ -70,16 +96,24 @@
 							var featurevertidos = featuresvertidos[i];
 							// convert the OpenLayers geometry to a JSTS geometry
 							var jstsGeomvertido = parser.read(featurevertidos.getGeometry());
-		
-							jstsGeomvertido = parser.read(featurevertidos.getGeometry());
-											
+													
 							var difference = jstsGeomestado.difference(jstsGeomvertido);
-							feature.setGeometry(parser.write(difference)); 
+							feature.setGeometry(parser.write(difference));
 						}
-
+						
 						// convert back from JSTS and replace the geometry on the feature
 					}
+					return features;
+				})
+				.then(function(features){
+					var source = new ol.source.Vector();
 					source.addFeatures(features);
+					var aptosLayer = new ol.layer.Vector({
+						name: 'aptos',
+						source: source
+					});
+					map.addLayer(aptosLayer);
+					add_layer_to_list(aptosLayer);
 				})
 			})
 		}
