@@ -1,59 +1,86 @@
 /**
  * Demo functions
  */
-		function algoritmo() {
-			var url ='/mirame/wfs';
+		//import jsts from 'jsts';
+		function algoritmo() {//VERTIDOS
+			//var url ='?FILTER=&request=GetFeature&version=1.1.0&outputFormat=GML2&typeName=Estado_Rios_Global_2016';
+			var urlestadorios = new URL('http://localhost:4000/mirame/wfs');
+			var filterxmlestado = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"> 	<And> 		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4258" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">-3.4238977,41.44604432</gml:coordinates> 			</gml:Point> 			<Distance units="meter">0.1</Distance> 		</DWithin> 		<PropertyIsEqualTo> 			<PropertyName>state</PropertyName> 			<Literal>Bueno</Literal> 		</PropertyIsEqualTo> 	</And> </Filter>';
+			var params = {FILTER: filterxmlestado, request: 'GetFeature', version: '1.1.0',outputFormat:'json',typeName:'Estado_Rios_Global_2016'};
+			urlestadorios.search = new URLSearchParams(params)
+						
+			var urlvertidos = new URL('http://localhost:4000/mirame/wfs ');
+			var filterxmlvertidos = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">  		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4258" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">-4.67314,41.626066</gml:coordinates> 			</gml:Point> 		<Distance units="meter">0.5</Distance> 		</DWithin></Filter>';
+			params = {FILTER: filterxmlvertidos, request: 'GetFeature', version: '1.1.0',outputFormat:'json',typeName:'Vertidos'};
+			urlvertidos.search = new URLSearchParams(params)
+			
 			var source = new ol.source.Vector();
-			var olformat= new ol.format.WFS();
+			var olformat= new ol.format.GeoJSON();
 			var features;
-			fetch(url, {  
-				method: 'post',
-				headers: {
-					"Content-Type": "application/xml"
-				  },
-				body: `<wfs:GetFeature service="WFS" version="1.1.0" 
-				xmlns:mirame="mirame"
-				xmlns:wfs="http://www.opengis.net/wfs"
-				xmlns:ogc="http://www.opengis.net/ogc"
-				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-				xsi:schemaLocation="http://www.opengis.net/wfs
-				http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-					<wfs:Query typeName="mirame:Estado_Rios_Global_2016">
-						<ogc:Filter>
-							<ogc:And>
-								<ogc:DWithin>
-									<ogc:PropertyName>geometry</ogc:PropertyName>
-									<ogc:Distance units="meter">0.1</ogc:Distance>
-									<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4258" xmlns:gml="http://www.opengis.net/gml">
-										<gml:coordinates decimal="." cs="," ts=" ">-3.4238977,41.44604432</gml:coordinates>
-									</gml:Point>
-								</ogc:DWithin>
-								<ogc:PropertyIsEqualTo>
-									<ogc:PropertyName>state</ogc:PropertyName>
-									<ogc:Literal>Bueno</ogc:Literal>
-								</ogc:PropertyIsEqualTo>
-							</ogc:And>
-						</ogc:Filter>
-					</wfs:Query> 
-			</wfs:GetFeature>`
+			var featuresvertidos;
+			
+			var parser = new jsts.io.OL3Parser();
+			
+			fetch(urlvertidos, {  
+				method: 'get',  
 			})
+			.then(function(response){
+			return response.json();
+			})
+			.then(function (response) {
+				var i;
+				featuresvertidos= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});			
+				for(i = 0; i < featuresvertidos.length; i++){
+					var featurevertidos = featuresvertidos[i];
+					// convert the OpenLayers geometry to a JSTS geometry
+					var jstsGeomvertido = parser.read(featurevertidos.getGeometry());
+					var buffered = jstsGeomvertido.buffer(1000);//en el momento de recibir los vertidos
+					featurevertidos.setGeometry(parser.write(buffered));
+				}
+			})	
+			.then(function(){
+				source.addFeatures(featuresvertidos);
+				var bufferLayer = new ol.layer.Vector({
+				source: source
+				});
+				map.addLayer(bufferLayer);
+		
+			})
+			.then(function(){
+				fetch(urlestadorios, {  
+					method: 'get',  
+				})
+				.then(function(response){
+					return response.json();
+				})
 				.then(function (response) {
 					var i;
-					features= olformat.read(response);	
+					features= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});	
 					for(i = 0; i < features.length; i++)
 					{
 						var feature = features[i];
 						// convert the OpenLayers geometry to a JSTS geometry
-						var jstsGeom = parser.read(feature.getGeometry());
+						var jstsGeomestado = parser.read(feature.getGeometry());
 
-						// create a buffer of 40 meters around each line
-						var buffered = jstsGeom.buffer(100);
+						/* create a buffer of 40 meters around each line
+						var buffered = jstsGeom.buffer(100);*/
+						
+						for(i = 0; i < featuresvertidos.length; i++){
+							var featurevertidos = featuresvertidos[i];
+							// convert the OpenLayers geometry to a JSTS geometry
+							var jstsGeomvertido = parser.read(featurevertidos.getGeometry());
+		
+							jstsGeomvertido = parser.read(featurevertidos.getGeometry());
+											
+							var difference = jstsGeomestado.difference(jstsGeomvertido);
+							feature.setGeometry(parser.write(difference)); 
+						}
 
 						// convert back from JSTS and replace the geometry on the feature
-						feature.setGeometry(parser.write(buffered)); 
 					}
 					source.addFeatures(features);
 				})
+			})
 		}
 		
 $('#mappage').on("pageinit", function(){

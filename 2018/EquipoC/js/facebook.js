@@ -3,8 +3,8 @@ var fb = {
   // CONFIG VARS: 
 
   // Copy this file as facebook.js and fill-in the Facebook App Id
-    app_id : '408450839360647', //
-	
+    app_id : '408450839360647', // CazaDelTesoro Test App
+ 
     use_xfbml : true,
 
     extendPermissions : 'email',  //'publish_stream' , 

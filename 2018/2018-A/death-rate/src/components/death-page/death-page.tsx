@@ -1,114 +1,127 @@
-import { Component, Element, State } from '@stencil/core';
-import { process, getCurrentCoord, insertQuery, Coord } from '../../helpers/model';
-// @ts-ignore
-import plotty from 'plotty';
+import { Component, Element, State, Prop } from '@stencil/core';
+import { calculateCoverage, getCurrentCoord, insertQuery, Coord, average, getUser } from '../../helpers/model';
 import { SOURCES } from '../../helpers/sources';
-import { setGoogleMaps } from '../../helpers/google-maps';
 import { reduce } from '../../helpers/formula';
-import { User } from '../../helpers/model';
-// declare var google: any;
+import { WAVE_SHADER } from '../../helpers/shader';
 
 @Component({
   tag: 'death-page',
   styleUrl: 'death-page.scss'
 })
-
-
-
-
-
 export class DeathPage {
+  private map: any;
+  private proj: any;
+
   @Element() el: HTMLElement;
 
   @State() time = 0;
-  @State() y = 350;
+  @State() y = 10;
   @State() score = 0;
+  @State() address: any;
+
+  @Prop({connect: 'ion-loading-controller'}) loadingCtrl: HTMLIonLoadingControllerElement;
 
   async componentDidLoad() {
-    const coord = await getCurrentCoord(20, 2);
-    setGoogleMaps(this.el.querySelector('.map-canvas'), coord);
-
-    const raster = await process(SOURCES, coord, reduce);
-    const media = average(raster);
-    const min = Math.min(...raster);
-    const max = Math.max(...raster);
-
-    const render = new plotty.plot({
-      canvas: this.el.querySelector('canvas'),
-      data: raster,
-      width: 2, height: 2,
-      domain: [min, max],
-      colorScale: "greys"
+    const loading = await this.loadingCtrl.create({
+      content: 'localizando...'
     });
-    
-    render.render();
-    this.score = Math.floor(media);
-    console.log(media);
+
+    await loading.present();
+
+    const {Map, Tile, OSM, View, proj} = await import('../../helpers/maps');
+    this.proj = proj;
+    this.map = new Map({
+      layers: [
+        new Tile({
+          source: new OSM()
+        })
+      ],
+      controls: [],
+      target: this.el.querySelector('.mapa'),
+      view: new View({
+        center: proj.fromLonLat([
+          -4.7061376,
+          41.662351099999995
+        ]),
+        zoom: 15
+      })
+    });
+
+    const coord = await getCurrentCoord(0.1, 2);
+    const raster = await calculateCoverage(SOURCES, coord, reduce);
+    const media = average(raster);
+    this.setScore(media);
     this.insertDeathRate(coord, media);
+    this.updateAddress(coord);
+
+    await loading.dismiss();
   }
 
-  async insertDeathRate(coord : Coord, deathRate : number){
-    const USER: User = {
-      name: 'prueba',
-      deathRate: deathRate,
-      coord: coord
-    }
-    insertQuery("https://itastdevserver.tel.uva.es/geoserver/", USER);
+  async updateAddress(coord: Coord) {
+    const res = await fetch(`https://nominatim.openstreetmap.org/reverse.php?format=json&lat=${coord.lat}&lon=${coord.log}&zoom=18`);
+    const json = await res.json();
+    this.address = json.address;
+    const view = this.map.getView();
+    view.setCenter(this.proj.fromLonLat([
+      coord.log,
+      coord.lat
+    ]));
+  }
+
+  setScore(score: number) {
+    this.y = this.score = Math.floor(score);
+  }
+
+  async insertDeathRate(coord : Coord, deathRate : number) {
+    return insertQuery(getUser(deathRate, coord));
   }
 
   render() {
-    requestAnimationFrame((t) => {
-      this.time = t;
-    });
+    if(this.score > 0) {
+      requestAnimationFrame((t) => {
+        this.time = t;
+      });
+    }
+
+    const a = Math.sin(this.time*0.001)*20.0 + this.y;
+
     return [
       <ion-header>
-        <ion-toolbar color='danger'>
+        <ion-toolbar color='dark'>
+          <ion-buttons slot="start">
+            <ion-menu-toggle>
+              <ion-button>
+                <ion-icon name="menu" slot="icon-only"></ion-icon>
+              </ion-button>
+            </ion-menu-toggle>
+          </ion-buttons>
           <ion-title>Tu localización</ion-title>
         </ion-toolbar>
-        <ion-toolbar color='danger'>
+        {this.address && <ion-toolbar color='dark'>
           <div class='address'>
-              <p>Paseo del Cauce</p>
-              <p>Valladoid, 47003</p>
-              <p>España</p>
+              <p>{this.address.road}</p>
+              <p>{this.address.county}, {this.address.postcode}</p>
+              <p>{this.address.country}</p>
           </div>
-        </ion-toolbar>
+        </ion-toolbar>}
       </ion-header>,
 
       <ion-content scrollEnabled={false}>
-        <div class="map-canvas"></div>
-        <pro-glshader
-          class="blood-shader"
-          frag={WAVE_SHADER}
-          uniforms={{
-              '1f:u_time': this.time,
-              '1f:u_y': this.y
-          }}>
-          <div class='rate'>
-            <div class="line"></div>
-            <div class="score">{this.score}</div>
-            <div class="line"></div>
-          </div>
-        </pro-glshader>
+        <div class="mapa"></div>
+        {this.score > 0 &&
+          <pro-glshader
+            class="blood-shader"
+            frag={WAVE_SHADER}
+            uniforms={{
+                '1f:u_time': this.time,
+                '1f:u_y': this.y
+            }}>
+            <div class='rate' style={{transform: `translateY(-${a}px`}}>
+              <div class="line"></div>
+              <div class="score">{this.score}</div>
+            </div>
+          </pro-glshader>}
       </ion-content>
     ];
   }
 }
-
-export function average(raster: Float32Array) {
-  return raster.reduce((v, acum) => acum + v, 0) / raster.length
-}
-
-const WAVE_SHADER = `
-precision highp float;
-uniform float u_time;
-uniform float u_y;
-
-void main() {
-    float a = sin(u_time*0.001 + gl_FragCoord.x * 0.004)*20.0 + u_y;
-    if(gl_FragCoord.y < a) {
-      gl_FragColor = vec4(0.945, 0.255, 0.251, 0.8);
-    } else {
-      gl_FragColor = vec4(0.6, 0, 0, 0);
-    }
-}
-`;

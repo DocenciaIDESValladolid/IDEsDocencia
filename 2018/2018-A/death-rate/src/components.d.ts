@@ -23,8 +23,8 @@ declare global {
   interface HTMLAttributes {}
 }
 
-import 'ionicons';
 import '@ionic/core';
+import 'ionicons';
 import '@pro-webcomponents/core';
 
 
@@ -97,39 +97,6 @@ declare global {
 declare global {
 
   namespace StencilComponents {
-    interface LoginPage {
-
-    }
-  }
-
-  interface HTMLLoginPageElement extends StencilComponents.LoginPage, HTMLStencilElement {}
-
-  var HTMLLoginPageElement: {
-    prototype: HTMLLoginPageElement;
-    new (): HTMLLoginPageElement;
-  };
-  interface HTMLElementTagNameMap {
-    'login-page': HTMLLoginPageElement;
-  }
-  interface ElementTagNameMap {
-    'login-page': HTMLLoginPageElement;
-  }
-  namespace JSX {
-    interface IntrinsicElements {
-      'login-page': JSXElements.LoginPageAttributes;
-    }
-  }
-  namespace JSXElements {
-    export interface LoginPageAttributes extends HTMLAttributes {
-
-    }
-  }
-}
-
-
-declare global {
-
-  namespace StencilComponents {
     interface MapPage {
 
     }
@@ -187,6 +154,72 @@ declare global {
   }
   namespace JSXElements {
     export interface MyAppAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface SettingsPage {
+
+    }
+  }
+
+  interface HTMLSettingsPageElement extends StencilComponents.SettingsPage, HTMLStencilElement {}
+
+  var HTMLSettingsPageElement: {
+    prototype: HTMLSettingsPageElement;
+    new (): HTMLSettingsPageElement;
+  };
+  interface HTMLElementTagNameMap {
+    'settings-page': HTMLSettingsPageElement;
+  }
+  interface ElementTagNameMap {
+    'settings-page': HTMLSettingsPageElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'settings-page': JSXElements.SettingsPageAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface SettingsPageAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface WhoarePage {
+
+    }
+  }
+
+  interface HTMLWhoarePageElement extends StencilComponents.WhoarePage, HTMLStencilElement {}
+
+  var HTMLWhoarePageElement: {
+    prototype: HTMLWhoarePageElement;
+    new (): HTMLWhoarePageElement;
+  };
+  interface HTMLElementTagNameMap {
+    'whoare-page': HTMLWhoarePageElement;
+  }
+  interface ElementTagNameMap {
+    'whoare-page': HTMLWhoarePageElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'whoare-page': JSXElements.WhoarePageAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface WhoarePageAttributes extends HTMLAttributes {
 
     }
   }

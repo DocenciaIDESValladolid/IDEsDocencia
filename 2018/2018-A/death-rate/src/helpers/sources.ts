@@ -1,54 +1,47 @@
 import { Source } from "./model";
 
+// const SRC = 'http://sedac.ciesin.org/geoserver/ows';
+const SRC = '/proxysedac.php';
+
 export const SOURCES: Source[] = [
   {
     name: 'volcanes',
-    url: 'http://sedac.ciesin.org/geoserver/ows',
+    url: SRC,
     coverage: 'ndh:ndh-volcano-mortality-risks-distribution'
   },
   {
     name: 'corrimiento',
-    url: 'http://sedac.ciesin.org/geoserver/ows',
+    url: SRC,
     coverage: 'ndh:ndh-landslide-mortality-risks-distribution'
   },
   {
     name: 'Inundaciones',
-    url: 'http://sedac.ciesin.org/geoserver/ows',
+    url: SRC,
     coverage: 'ndh:ndh-flood-mortality-risks-distribution',
   },
   {
     name: 'Terremotos',
-    url: 'http://sedac.ciesin.org/geoserver/ows',
+    url: SRC,
     coverage: 'ndh:ndh-earthquake-mortality-risks-distribution'
   },
   {
     name: 'Sequías',
-    url: 'http://sedac.ciesin.org/geoserver/ows',
+    url: SRC,
     coverage: 'ndh:ndh-drought-mortality-risks-distribution'
   },
   {
     name: 'Ciclones',
-    url: 'http://sedac.ciesin.org/geoserver/ows',
+    url: SRC,
     coverage: 'ndh:ndh-cyclone-mortality-risks-distribution'
   },
   {
     name: 'Malnutricion infantil',
-    url: 'http://sedac.ciesin.org/geoserver/ows',
+    url: SRC,
     coverage: 'povmap:povmap-global-subnational-prevalence-child-malnutrition'
   },
   {
     name: 'Mortalidad infantil',
-    url: 'http://sedac.ciesin.org/geoserver/ows',
+    url: SRC,
     coverage: 'povmap:povmap-global-subnational-infant-mortality-rates_2000'
   }
-  //{
-  //   name: 'Temp Max',
-  //   url: 'http://sedac.ciesin.org/geoserver/ows',
-  //   coverage: 'sdei:sdei-global-summer-lst-2013_day-max-global'
-  // },
-  // {
-  //   name: 'Temp Min',
-  //   url: 'http://sedac.ciesin.org/geoserver/ows',
-  //   coverage: 'sdei:sdei-global-summer-lst-2013_night-min-global'
-  // }
 ];

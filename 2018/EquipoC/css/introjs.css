@@ -255,10 +255,6 @@ tr.introjs-showElement > th {
   box-shadow: 0px 1px 1px #e3e3e3;
 }
 
-.botonZona{
-	
-}
-
 .introjs-button:focus,
 .introjs-button:active {
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ececec), to(#f4f4f4));
