@@ -15,11 +15,7 @@
 			urlvertidos.search = new URLSearchParams(params)
 			
 			var source = new ol.source.Vector();
-			var olformat= new ol.format.GeoJSON();
 			var features;
-			var featuresvertidos;
-			
-			var parser = new jsts.io.OL3Parser();
 			
 			fetch(urlvertidos, {  
 				method: 'get',  
@@ -28,8 +24,10 @@
 			return response.json();
 			})
 			.then(function (response) {
+				var olformat= new ol.format.GeoJSON();
 				var i;
-				featuresvertidos= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});			
+				var featuresvertidos= olformat.readFeatures(response, {featureProjection: 'EPSG:4258'});			
+				var parser = new jsts.io.OL3Parser();
 				for(i = 0; i < featuresvertidos.length; i++){
 					var featurevertidos = featuresvertidos[i];
 					// convert the OpenLayers geometry to a JSTS geometry
@@ -37,16 +35,17 @@
 					var buffered = jstsGeomvertido.buffer(1000);//en el momento de recibir los vertidos
 					featurevertidos.setGeometry(parser.write(buffered));
 				}
+				return featuresvertidos;
 			})	
-			.then(function(){
+			.then(function(featuresvertidos){
 				source.addFeatures(featuresvertidos);
 				var bufferLayer = new ol.layer.Vector({
-				source: source
+					source: source
 				});
 				map.addLayer(bufferLayer);
-		
+				return featuresvertidos;
 			})
-			.then(function(){
+			.then(function(featuresvertidos){
 				fetch(urlestadorios, {  
 					method: 'get',  
 				})
@@ -54,8 +53,10 @@
 					return response.json();
 				})
 				.then(function (response) {
+					var olformat= new ol.format.GeoJSON();
 					var i;
-					features= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});	
+					features= olformat.readFeatures(response, {featureProjection: 'EPSG:4258'});	
+					var parser = new jsts.io.OL3Parser();
 					for(i = 0; i < features.length; i++)
 					{
 						var feature = features[i];
@@ -117,7 +118,7 @@ function initApp() {
                               extent[1] = parseFloat(place.boundingbox[0]);
                               extent[2] = parseFloat(place.boundingbox[3]);
                               extent[3] = parseFloat(place.boundingbox[1]);
-                              extent = ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857');
+                              extent = ol.proj.transformExtent(extent, 'EPSG:4258', 'EPSG:3857');
                               fly_to(map, null, extent);
                               $('#searchpanel').panel("close");
                           }).show();
