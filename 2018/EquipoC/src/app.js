@@ -15,7 +15,7 @@
 			urlvertidos.search = new URLSearchParams(params)
 			
 			var source = new ol.source.Vector();
-			var olformat= new ol.format.WFS();
+			var olformat= new ol.format.WFS({gmlFormat: ol.format.GML2 });
 			var features;
 			var featuresvertidos;
 			
@@ -23,6 +23,9 @@
 			
 			fetch(urlvertidos, {  
 				method: 'get',  
+			})
+			.then(function(response){
+				return response.text();
 			})
 			.then(function (response) {
 				var i;
