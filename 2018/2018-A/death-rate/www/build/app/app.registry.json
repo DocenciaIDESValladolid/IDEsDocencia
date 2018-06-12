@@ -3,8 +3,8 @@
   "fsNamespace": "app",
   "loader": "../app.js",
   "global": "app.global.js",
-  "core": "app.x2ira63b.js",
-  "corePolyfilled": "app.htler9xj.js",
+  "core": "app.0jzf7doq.js",
+  "corePolyfilled": "app.xhoxb0hh.js",
   "components": {
     "death-page": {
       "$": "fkm2z7bp"
@@ -53,12 +53,12 @@
       "md": "39nkbjtc"
     },
     "ion-fab": {
-      "ios": "zpcfnpog",
-      "md": "bojul9jg"
+      "ios": "xlw25ffh",
+      "md": "1latqrqn"
     },
     "ion-fab-button": {
-      "ios": "zpcfnpog",
-      "md": "bojul9jg"
+      "ios": "xlw25ffh",
+      "md": "1latqrqn"
     },
     "ion-gesture": {
       "$": "ftv3fztw"
@@ -164,8 +164,8 @@
       "md": "9wwvp6tj"
     },
     "ion-searchbar": {
-      "ios": "zpcfnpog",
-      "md": "bojul9jg"
+      "ios": "xlw25ffh",
+      "md": "1latqrqn"
     },
     "ion-select": {
       "ios": "3dtdxuuz",
@@ -200,8 +200,8 @@
       "md": "sg1pw8xb"
     },
     "map-page": {
-      "ios": "zpcfnpog",
-      "md": "bojul9jg"
+      "ios": "xlw25ffh",
+      "md": "1latqrqn"
     },
     "my-app": {
       "ios": "6jlyffuh",
