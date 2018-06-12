@@ -1,3 +1,4 @@
+var markerFeature = new ol.Feature();
 function initmap() {
 
     openStreetMapGeocoder = GeocoderJS.createGeocoder('openstreetmap');
@@ -114,7 +115,7 @@ function initmap() {
             features: [accuracyFeature, positionFeature]
         })
     });
-    var markerFeature = new ol.Feature();
+//markerfeature
     markerFeature.setGeometry(null);
     markerFeature.setStyle(markerFeatureStyle);
     var markerVector = new ol.layer.Vector({
