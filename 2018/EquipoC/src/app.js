@@ -4,17 +4,31 @@
 		//import jsts from 'jsts';
 		function algoritmo() {//VERTIDOS
 			//var url ='?FILTER=&request=GetFeature&version=1.1.0&outputFormat=GML2&typeName=Estado_Rios_Global_2016';
-			var urlestadorios = new URL('http://localhost:4000/mirame/wfs');
+			var urlestadorios = new URL('/proxymirame.php', location.href);
+			
 			var filterxmlestado = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"> 	<And> 		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">-4.67314,41.626066</gml:coordinates> 			</gml:Point> 			<Distance units="meter">0.5</Distance> 		</DWithin> 		<PropertyIsEqualTo> 			<PropertyName>state</PropertyName> 			<Literal>Bueno</Literal> 		</PropertyIsEqualTo> 	</And> </Filter>';
-			var params = {FILTER: filterxmlestado, request: 'GetFeature', version: '1.1.0',outputFormat:'json',typeName:'Estado_Rios_Global_2016'};
+			var params = {
+				FILTER: filterxmlestado, 
+				request: 'GetFeature', 
+				version: '1.1.0',
+				outputFormat:'json',
+				typeName:'Estado_Rios_Global_2016',
+				service: 'WFS'
+				};
 			urlestadorios.search = new URLSearchParams(params)
 						
-			var urlvertidos = new URL('http://localhost:4000/mirame/wfs ');
+			var urlvertidos = new URL('/proxymirame.php', location.href);
 			var filterxmlvertidos = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">  		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">-4.67314,41.626066</gml:coordinates> 			</gml:Point> 		<Distance units="meter">0.5</Distance> 		</DWithin></Filter>';
-			params = {FILTER: filterxmlvertidos, request: 'GetFeature', version: '1.1.0',outputFormat:'json',typeName:'Vertidos'};
+			params = {
+				FILTER: filterxmlvertidos, 
+				request: 'GetFeature', 
+				version: '1.1.0',
+				outputFormat:'json',
+				typeName:'Vertidos',
+				service: 'WFS'
+				};
 			urlvertidos.search = new URLSearchParams(params)
 			
-			var features;
 			
 			fetch(urlvertidos, {  
 				method: 'get',  
@@ -65,12 +79,11 @@
 				})
 				.then(function(response){
 					var olformat= new ol.format.GeoJSON();
-					var i;
-					features= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});	
+					var features= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});	
 					var source = new ol.source.Vector();
 					source.addFeatures(features);
 					var estadosLayer = new ol.layer.Vector({
-					name: 'estados',
+					name: 'buenos',
 					source: source
 				});
 				map.addLayer(estadosLayer);
@@ -80,26 +93,31 @@
 				.then(function (response) {
 					var olformat= new ol.format.GeoJSON();
 					var i;
-					features= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});	
+					var features= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});	
 					var parser = new jsts.io.OL3Parser();
+					var vertidosgeoms = [];
+					for (i=0; i < featuresvertidos.length; i++) {
+						var jstsGeomvertido = parser.read(featuresvertidos[i].getGeometry());
+						vertidosgeoms.push(jstsGeomvertido);
+					}
+						
 					for(i = 0; i < features.length; i++)
 					{
 						var feature = features[i];
 						// convert the OpenLayers geometry to a JSTS geometry
 						var jstsGeomestado = parser.read(feature.getGeometry());
-
-						/* create a buffer of 40 meters around each line
-						var buffered = jstsGeom.buffer(100);*/
+						//var buffered = jstsGeomestado.buffer(0.011)
+						//feature.setGeometry(parser.write(buffered));
+						//jstsGeomestado = buffered;
 						
-						for(i = 0; i < featuresvertidos.length; i++){
-							var featurevertidos = featuresvertidos[i];
-							// convert the OpenLayers geometry to a JSTS geometry
-							var jstsGeomvertido = parser.read(featurevertidos.getGeometry());
-													
-							var difference = jstsGeomestado.difference(jstsGeomvertido);
-							feature.setGeometry(parser.write(difference));
+						for(j = 0; j < vertidosgeoms.length; j++){
+							var jstsGeomvertido = vertidosgeoms[j];
+							if (jstsGeomvertido.intersects(jstsGeomestado)) {
+								jstsGeomestado = jstsGeomestado.difference(jstsGeomvertido);
+							}
+							
 						}
-						
+						feature.setGeometry(parser.write(jstsGeomestado));
 						// convert back from JSTS and replace the geometry on the feature
 					}
 					return features;
