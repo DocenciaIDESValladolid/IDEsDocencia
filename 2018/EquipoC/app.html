@@ -63,7 +63,7 @@
 						<div class="no-overflow">
 						<form name="formulario" method="get" action="ejemploGet.php">
 						<p>Distancia</p>
-                                <input id="autocomplete-input" placeholder="metros">
+                                <input id="distancia" name="distancia" placeholder="metros">
                             </div>
 						<div class="no-overflow">
 						<a href="#popupdialog" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-check"
@@ -77,7 +77,7 @@
 				<div data-role="collapsible" data-theme="a" data-iconpos="right">
                     <h3>Buscador de zonas visitadas</h3>
 					<div class="no-overflow">
-						<a href="#popupdialog" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-check"
+						<a href="#popupdialog2" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-check"
 						id="executeaction">
 						Ejecutar acción
 						</a>
@@ -87,7 +87,7 @@
 				<div data-role="collapsible" data-theme="a" data-iconpos="right">
                     <h3>Buscador de playas</h3>
 					<div class="no-overflow">
-						<a href="#popupdialog" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-check"
+						<a href="#popupdialog3" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-check"
 						id="executeaction">
 						Ejecutar acción
 						</a>
@@ -125,7 +125,7 @@
 
         <div data-role="popup" id="popupdialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
             <div data-role="header" data-theme="b">
-                <h1>¿Estás seguro de que deseas enviar esta ubicación?</h1>
+                <h1>¿Estás seguro de que deseas ver los ríos aptos en esa ubicación?</h1>
             </div>
             <div role="content" id="popup_content" class="ui-content ui-overlay-b">
                 <p>Esta acción no se puede deshacer.</p>
@@ -142,6 +142,56 @@
 						
                     </div>
                 </fieldset>
+				
+				
+            </div>
+        </div>
+		
+		<div data-role="popup" id="popupdialog2" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+            <div data-role="header" data-theme="b">
+                <h1>¿Seguro que quiere ver las zonas visitadas?</h1>
+            </div>
+            <div role="content" id="popup_content" class="ui-content ui-overlay-b">
+                <p>Esta acción no se puede deshacer.</p>
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b">
+                            Cancelar
+                        </a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a onclick="algoritmo()" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-transition="flow" id="sendLocation">
+                            Enviar
+                        </a>
+						
+                    </div>
+                </fieldset>
+				
+				
+            </div>
+        </div>
+		
+		<div data-role="popup" id="popupdialog3" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+            <div data-role="header" data-theme="b">
+                <h1>¿Seguro que quiere ver las playas?</h1>
+            </div>
+            <div role="content" id="popup_content" class="ui-content ui-overlay-b">
+                <p>Esta acción no se puede deshacer.</p>
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b">
+                            Cancelar
+                        </a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a onclick="algoritmo()" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-transition="flow" id="sendLocation">
+                            Enviar
+                        </a>
+						
+                    </div>
+                </fieldset>
+				
+				
             </div>
         </div>
 
@@ -156,10 +206,12 @@
             <div id="map"></div>
         </div>
         <div data-role="footer" data-position="fixed" data-tap-toggle="false">
-            <a href="#popupdialog" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-check"
+            <!--
+			<a href="#popupdialog" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-check"
                 id="executeaction">
                 Ejecutar acción
             </a>
+			-->
             <a href="#layerspage" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-bullets ui-btn-icon-notext">
                 Capas
             </a>

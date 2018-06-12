@@ -7,10 +7,13 @@
 			//var url ='?FILTER=&request=GetFeature&version=1.1.0&outputFormat=GML2&typeName=Estado_Rios_Global_2016';
 
 			micontador=1;
+			var divisorGrados = 83179.0496; // (Cos(41.6522966)*40076000)/360 Latitud Valladolid
+			var distancia = document.formulario.distancia.value;
+			var distanciaGrados = distancia/divisorGrados; //Convertimos los metros introducidos en grados para realizar la consulta
 			var urlestadorios = new URL('/proxymirame.php', location.href);
 			var localizacion = markerFeature.getGeometry();
 			var cordenada = localizacion.getLastCoordinate();
-			var filterxmlestado = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"> 	<And> 		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">'+cordenada[0]+','+cordenada[1]+'</gml:coordinates> 			</gml:Point> 			<Distance units="meter">0.5</Distance> 		</DWithin> 		<PropertyIsEqualTo> 			<PropertyName>state</PropertyName> 			<Literal>Bueno</Literal> 		</PropertyIsEqualTo> 	</And> </Filter>';
+			var filterxmlestado = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"> 	<And> 		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">'+cordenada[0]+','+cordenada[1]+'</gml:coordinates> 			</gml:Point> 			<Distance units="meter">'+distanciaGrados+'</Distance> 		</DWithin> 		<PropertyIsEqualTo> 			<PropertyName>state</PropertyName> 			<Literal>Bueno</Literal> 		</PropertyIsEqualTo> 	</And> </Filter>';
 			var params = {
 				FILTER: filterxmlestado, 
 				request: 'GetFeature', 
@@ -22,7 +25,7 @@
 			urlestadorios.search = new URLSearchParams(params)
 						
 			var urlvertidos = new URL('/proxymirame.php', location.href);
-			var filterxmlvertidos = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">  		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">'+cordenada[0]+','+cordenada[1]+'</gml:coordinates> 			</gml:Point> 		<Distance units="meter">0.5</Distance> 		</DWithin></Filter>';
+			var filterxmlvertidos = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">  		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">'+cordenada[0]+','+cordenada[1]+'</gml:coordinates> 			</gml:Point> 		<Distance units="meter">'+distanciaGrados+'</Distance> 		</DWithin></Filter>';
 			params = {
 				FILTER: filterxmlvertidos, 
 				request: 'GetFeature', 
