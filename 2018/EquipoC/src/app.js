@@ -1,12 +1,16 @@
 /**
  * Demo functions
  */
+		var micontador=0;
 		//import jsts from 'jsts';
 		function algoritmo() {//VERTIDOS
 			//var url ='?FILTER=&request=GetFeature&version=1.1.0&outputFormat=GML2&typeName=Estado_Rios_Global_2016';
+
+			micontador=1;
 			var urlestadorios = new URL('/proxymirame.php', location.href);
-			
-			var filterxmlestado = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"> 	<And> 		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">-4.67314,41.626066</gml:coordinates> 			</gml:Point> 			<Distance units="meter">0.5</Distance> 		</DWithin> 		<PropertyIsEqualTo> 			<PropertyName>state</PropertyName> 			<Literal>Bueno</Literal> 		</PropertyIsEqualTo> 	</And> </Filter>';
+			var localizacion = markerFeature.getGeometry();
+			var cordenada = localizacion.getLastCoordinate();
+			var filterxmlestado = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"> 	<And> 		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">'+cordenada[0]+','+cordenada[1]+'</gml:coordinates> 			</gml:Point> 			<Distance units="meter">0.5</Distance> 		</DWithin> 		<PropertyIsEqualTo> 			<PropertyName>state</PropertyName> 			<Literal>Bueno</Literal> 		</PropertyIsEqualTo> 	</And> </Filter>';
 			var params = {
 				FILTER: filterxmlestado, 
 				request: 'GetFeature', 
@@ -18,7 +22,7 @@
 			urlestadorios.search = new URLSearchParams(params)
 						
 			var urlvertidos = new URL('/proxymirame.php', location.href);
-			var filterxmlvertidos = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">  		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">-4.67314,41.626066</gml:coordinates> 			</gml:Point> 		<Distance units="meter">0.5</Distance> 		</DWithin></Filter>';
+			var filterxmlvertidos = '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">  		<DWithin> 			<PropertyName>geometry</PropertyName> 			<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326" xmlns:gml="http://www.opengis.net/gml"> 				<gml:coordinates decimal="." cs="," ts=" ">'+cordenada[0]+','+cordenada[1]+'</gml:coordinates> 			</gml:Point> 		<Distance units="meter">0.5</Distance> 		</DWithin></Filter>';
 			params = {
 				FILTER: filterxmlvertidos, 
 				request: 'GetFeature', 
@@ -61,7 +65,7 @@
 				  }))
 				});*/
 				source.addFeatures(featuresvertidos);
-				var bufferLayer = new ol.layer.Vector({
+				bufferLayer = new ol.layer.Vector({
 					name: 'buffer',
 					source: source
 					//style:estilobuffer
@@ -86,6 +90,7 @@
 					name: 'buenos',
 					source: source
 				});
+				map.removeLayer(estadosLayer);
 				map.addLayer(estadosLayer);
 				add_layer_to_list(estadosLayer);
 					return response
@@ -125,7 +130,7 @@
 				.then(function(features){
 					var source = new ol.source.Vector();
 					source.addFeatures(features);
-					var aptosLayer = new ol.layer.Vector({
+					aptosLayer = new ol.layer.Vector({
 						name: 'aptos',
 						source: source
 					});
