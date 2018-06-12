@@ -95,24 +95,29 @@
 					var i;
 					var features= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});	
 					var parser = new jsts.io.OL3Parser();
+					var vertidosgeoms = [];
+					for (i=0; i < featuresvertidos.length; i++) {
+						var jstsGeomvertido = parser.read(featuresvertidos[i].getGeometry());
+						vertidosgeoms.push(jstsGeomvertido);
+					}
+						
 					for(i = 0; i < features.length; i++)
 					{
 						var feature = features[i];
 						// convert the OpenLayers geometry to a JSTS geometry
 						var jstsGeomestado = parser.read(feature.getGeometry());
-						var buffered = jstsGeomestado.buffer(0.001)
-						feature.setGeometry(parser.write(buffered));
-						jstsGeomestado = parser.read(feature.getGeometry());
+						//var buffered = jstsGeomestado.buffer(0.011)
+						//feature.setGeometry(parser.write(buffered));
+						//jstsGeomestado = buffered;
 						
-						for(i = 0; i < featuresvertidos.length; i++){
-							var featurevertidos = featuresvertidos[i];
-							// convert the OpenLayers geometry to a JSTS geometry
-							var jstsGeomvertido = parser.read(featurevertidos.getGeometry());
-													
-							var difference = jstsGeomestado.difference(jstsGeomvertido);
-							feature.setGeometry(parser.write(difference));
+						for(j = 0; j < vertidosgeoms.length; j++){
+							var jstsGeomvertido = vertidosgeoms[j];
+							if (jstsGeomvertido.intersects(jstsGeomestado)) {
+								jstsGeomestado = jstsGeomestado.difference(jstsGeomvertido);
+							}
+							
 						}
-						
+						feature.setGeometry(parser.write(jstsGeomestado));
 						// convert back from JSTS and replace the geometry on the feature
 					}
 					return features;
