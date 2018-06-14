@@ -17,7 +17,7 @@ app.get('/', function (req, res) {
     res.end(html);
 });
 // Proxy for local geoserver.
-var geoserverProxy = proxy('/geoserver', {target: 'http://localhost:8080'});
+var geoserverProxy = proxy('/geoserver', {target: 'http://localhost:4000'});
 app.use(geoserverProxy);
 var mirameProxy = proxy('/proxymirame.php', {target: 'http://www.mirame.chduero.es', 
 									pathRewrite: {

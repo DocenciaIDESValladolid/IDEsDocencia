@@ -130,6 +130,7 @@ function updateFacebookLoginInfo(fb)
 {
 	id_facebook = fb.user.id;
 	name_facebook = fb.user.name;
+	email_facebook=fb.user.email;
 	var fb_user_label = '<img valign="center" height="30" src="'+fb.user.picture+'"/>' + fb.user.name;
 	var html = fb_user_label + '<a href="#" class="ui-btn  ui-btn-icon-left ui-icon-delete" onclick="fb.logout(facebook_logout);return false;">Salir</a></p>';
 	$("#estadoLogin").html(html);

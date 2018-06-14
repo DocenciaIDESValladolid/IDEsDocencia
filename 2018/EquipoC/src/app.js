@@ -2,10 +2,10 @@
  * Demo functions
  */
 		function recuperar(){
-	 var url =" https://itastdevserver.tel.uva.es/geoserver/wfs";
+	 var url ="/geoserver";
 	 fetch(url, {  
 				method: 'post',
-				body: `<wfs:GetFeature service="WFS" version="1.1.0"
+				body: `<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="application/json"
 				  xmlns:wfs="http://www.opengis.net/wfs"
 				  xmlns:ide2018c="ide2018c"
 				  xmlns:lugares_visitados="lugares_visitados"
@@ -20,7 +20,7 @@
 							
 							<ogc:PropertyName>email</ogc:PropertyName>
 							
-							<ogc:Literal>carlos@gmail.com</ogc:Literal>
+							<ogc:Literal>`+email_facebook+`</ogc:Literal>
 							
 						</ogc:PropertyIsEqualTo>
 						
@@ -35,14 +35,13 @@
 			})
 			.then(function (response) {
 				var olformat= new ol.format.GeoJSON();
-				var i;
 				var featureslugares= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});			
 				return featureslugares;
 			})
 				.then(function(featureslugares){
 				var source = new ol.source.Vector();
 				
-				source.addFeatures(features);
+				source.addFeatures(featureslugares);
 				visitadosLayer = new ol.layer.Vector({
 					name: 'lugaresVisitados',
 					source: source
@@ -52,28 +51,70 @@
 		})
 		}	
 		
+		function playas(){
+
+	 var urlplaya = new URL('/proxymirame.php', location.href);
+	 
+	 var filterxmlplaya= '<Filter xmlns="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"> <PropertyIsLike  wildCard="*" singleChar="." escape="!"> <PropertyName>feature_name</PropertyName> <Literal>*Play*</Literal> </PropertyIsLike> </Filter>';
+			var params = {
+				FILTER: filterxmlplaya, 
+				request: 'GetFeature', 
+				version: '1.1.0',
+				outputFormat:'json',
+				typeName:'Presas',
+				service: 'WFS'
+				};
+				
+			urlplaya.search = new URLSearchParams(params)
+			fetch(urlplaya, {  
+				method: 'get',  
+			})
+			.then(function(response){
+			return response.json();
+			})
+			.then(function (response) {
+				var olformat= new ol.format.GeoJSON();
+				var featuresplaya= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});			
+				return featuresplaya;
+			})
+				.then(function(featuresplaya){
+				var source = new ol.source.Vector();
+				
+				source.addFeatures(featuresplaya);
+				playaLayer = new ol.layer.Vector({
+					name: 'playas',
+					source: source
+				});
+				map.addLayer(playaLayer);
+				add_layer_to_list(playaLayer);
+		})
+		}
+		
 		function anadir(){
+			
+			var localizacion = markerFeature.getGeometry();
+			var cordenada = localizacion.getLastCoordinate();
 			
 	 var url ="/geoserver";
 	 fetch(url, {  
 				method: 'post',
 				body: `<wfs:Transaction service="WFS" version="1.0.0"
   xmlns:wfs="http://www.opengis.net/wfs"
-  xmlns:chduero="chduero"
+  xmlns:ide2018c="ide2018c"
   xmlns:lugares_visitados="lugares_visitados"
   xmlns:gml="http://www.opengis.net/gml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-transaction.xsd http://www.openplans.org/topp http://localhost:8080/geoserver/wfs/DescribeFeatureType?typename=topp:tasmania_roads">
   <wfs:Insert>
-    <chduero:lugares_visitados>
+    <ide2018c:lugares_visitados>
       <lugares_visitados:geom>
             <gml:Point srsName="urn:x-ogc:def:crs:EPSG:4326">
                  <gml:coordinates decimal="." cs="," ts=" ">
-        			-3.4238977,41.44604432
+        			`+cordenada[0]+`,`+cordenada[1]+`
        			 </gml:coordinates>
   		    </gml:Point>
       </lugares_visitados:geom>
-      <lugares_visitados:email>rodrigo</lugares_visitados:email>
+      <lugares_visitados:email>`+email_facebook+`</lugares_visitados:email>
     </chduero:lugares_visitados>
   </wfs:Insert>
 </wfs:Transaction>`
