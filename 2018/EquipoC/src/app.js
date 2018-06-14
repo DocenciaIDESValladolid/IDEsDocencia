@@ -1,6 +1,10 @@
 /**
  * Demo functions
  */
+ var estadosLayer;
+ var bufferLayer;
+ var aptosLayer;
+ 
 		function recuperar(){
 	 var url ="/geoserver";
 	 fetch(url, {  
@@ -125,8 +129,7 @@
 		//import jsts from 'jsts';
 		function algoritmo() {//VERTIDOS
 			//var url ='?FILTER=&request=GetFeature&version=1.1.0&outputFormat=GML2&typeName=Estado_Rios_Global_2016';
-
-			micontador=1;
+			
 			var divisorGrados = 83179.0496; // (Cos(41.6522966)*40076000)/360 Latitud Valladolid
 			var distancia = document.formulario.distancia.value;
 			var distanciaGrados = distancia/divisorGrados; //Convertimos los metros introducidos en grados para realizar la consulta
@@ -161,9 +164,19 @@
 				method: 'get',  
 			})
 			.then(function(response){
+			if(micontador==1)
+			{
+				map.removeLayer(aptosLayer);
+				map.removeLayer(estadosLayer);
+				map.removeLayer(bufferLayer);
+			}
+			
 			return response.json();
 			})
 			.then(function (response) {
+				
+				micontador=1;
+				
 				var olformat= new ol.format.GeoJSON();
 				var i;
 				var featuresvertidos= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});			
@@ -199,7 +212,7 @@
 			})
 			.then(function(featuresvertidos){
 				fetch(urlestadorios, {  
-					method: 'get',  
+				method: 'get',  
 				})
 				.then(function(response){
 					return response.json();
@@ -209,7 +222,7 @@
 					var features= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});	
 					var source = new ol.source.Vector();
 					source.addFeatures(features);
-					var estadosLayer = new ol.layer.Vector({
+					estadosLayer = new ol.layer.Vector({
 					name: 'buenos',
 					source: source
 				});
