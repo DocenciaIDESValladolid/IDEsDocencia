@@ -94,6 +94,12 @@
 						</div>
 					
 				</div>
+				<div class="no-overflow">
+						<a href="#popupdialog4" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-check"
+						id="executeaction">
+						Guardar selección
+						</a>
+						</div>
 				<!--
                 <h3>Instrucciones.</h3>
                 <div id="welcomingInfo">
@@ -160,7 +166,7 @@
                         </a>
                     </div>
                     <div class="ui-block-b">
-                        <a onclick="algoritmo()" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-transition="flow" id="sendLocation">
+                        <a onclick="recuperar()" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-transition="flow" id="sendLocation">
                             Enviar
                         </a>
 						
@@ -185,6 +191,30 @@
                     </div>
                     <div class="ui-block-b">
                         <a onclick="algoritmo()" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-transition="flow" id="sendLocation">
+                            Enviar
+                        </a>
+						
+                    </div>
+                </fieldset>
+				
+				
+            </div>
+        </div>
+		
+		<div data-role="popup" id="popupdialog4" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+            <div data-role="header" data-theme="b">
+                <h1>¿Seguro que quiere guardar esta selección?</h1>
+            </div>
+            <div role="content" id="popup_content" class="ui-content ui-overlay-b">
+                <p>Esta acción no se puede deshacer.</p>
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b">
+                            Cancelar
+                        </a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a onclick="anadir()" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-transition="flow" id="sendLocation">
                             Enviar
                         </a>
 						

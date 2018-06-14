@@ -1,6 +1,85 @@
 /**
  * Demo functions
  */
+		function recuperar(){
+	 var url =" https://itastdevserver.tel.uva.es/geoserver/wfs";
+	 fetch(url, {  
+				method: 'post',
+				body: `<wfs:GetFeature service="WFS" version="1.1.0"
+				  xmlns:wfs="http://www.opengis.net/wfs"
+				  xmlns:ide2018c="ide2018c"
+				  xmlns:lugares_visitados="lugares_visitados"
+				  xmlns:gml="http://www.opengis.net/gml"
+				  xmlns:ogc="http://www.opengis.net/ogc"
+				  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				  xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+				<wfs:Query typeName="ide2018c:lugares_visitados">  
+				<ogc:Filter>
+						
+						<ogc:PropertyIsEqualTo>
+							
+							<ogc:PropertyName>email</ogc:PropertyName>
+							
+							<ogc:Literal>carlos@gmail.com</ogc:Literal>
+							
+						</ogc:PropertyIsEqualTo>
+						
+					
+					</ogc:Filter>
+
+					</wfs:Query>
+				</wfs:GetFeature>`
+			})
+			.then(function(response){
+			return response.json();
+			})
+			.then(function (response) {
+				var olformat= new ol.format.GeoJSON();
+				var i;
+				var featureslugares= olformat.readFeatures(response, {featureProjection: 'EPSG:4326'});			
+				return featureslugares;
+			})
+				.then(function(featureslugares){
+				var source = new ol.source.Vector();
+				
+				source.addFeatures(features);
+				visitadosLayer = new ol.layer.Vector({
+					name: 'lugaresVisitados',
+					source: source
+				});
+				map.addLayer(visitadosLayer);
+				add_layer_to_list(visitadosLayer);
+		})
+		}	
+		
+		function anadir(){
+			
+	 var url ="/geoserver";
+	 fetch(url, {  
+				method: 'post',
+				body: `<wfs:Transaction service="WFS" version="1.0.0"
+  xmlns:wfs="http://www.opengis.net/wfs"
+  xmlns:chduero="chduero"
+  xmlns:lugares_visitados="lugares_visitados"
+  xmlns:gml="http://www.opengis.net/gml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-transaction.xsd http://www.openplans.org/topp http://localhost:8080/geoserver/wfs/DescribeFeatureType?typename=topp:tasmania_roads">
+  <wfs:Insert>
+    <chduero:lugares_visitados>
+      <lugares_visitados:geom>
+            <gml:Point srsName="urn:x-ogc:def:crs:EPSG:4326">
+                 <gml:coordinates decimal="." cs="," ts=" ">
+        			-3.4238977,41.44604432
+       			 </gml:coordinates>
+  		    </gml:Point>
+      </lugares_visitados:geom>
+      <lugares_visitados:email>rodrigo</lugares_visitados:email>
+    </chduero:lugares_visitados>
+  </wfs:Insert>
+</wfs:Transaction>`
+			})
+			
+ }
 		var micontador=0;
 		//import jsts from 'jsts';
 		function algoritmo() {//VERTIDOS
