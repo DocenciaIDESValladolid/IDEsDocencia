@@ -10,7 +10,7 @@ CREATE TABLE precarga
   geom geometry(POINT,4326)
   )
 
-COPY persons("AddressInfo/Latitude","AddressInfo/Longitude") 
+COPY precarga("AddressInfo/Latitude","AddressInfo/Longitude") 
 FROM 'C:\tmp\puntosderecarga.csv' DELIMITER ',' CSV HEADER;
 
 
