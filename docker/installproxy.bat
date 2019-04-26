@@ -1,0 +1,1 @@
+ docker cp  .\proxyapp\ geoserverjetty:/usr/share/geoserver/webapps/
