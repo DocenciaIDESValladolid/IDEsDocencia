@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+    <display-name>Proxys</display-name>
+	<servlet>
+	<!-- http://localhost:8080/proxyapp/cartociudadwps/WebProcessingService?SERVICE=WPS&REQUEST=GetCapabilities -->
+	  <servlet-name>CartociudadProxy</servlet-name>
+	  <servlet-class>org.eclipse.jetty.proxy.ProxyServlet$Transparent</servlet-class>
+	  <init-param>
+		<param-name>proxyTo</param-name>
+		<param-value>http://www.cartociudad.es/wps</param-value>
+	  </init-param>
+	  <init-param>
+		<param-name>prefix</param-name>
+		<param-value>/cartociudadwps</param-value>
+	  </init-param>
+	  <load-on-startup>1</load-on-startup>
+	  <async-supported>true</async-supported>
+	</servlet>
+	<servlet-mapping>
+	  <servlet-name>CartociudadProxy</servlet-name>
+	  <url-pattern>/cartociudadwps/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	<!-- 
+	http://www.ign.es/wfs-inspire/unidades-administrativas?request=GetCapabilities&service=wfs
+	http://localhost:8080/proxyapp/ignwfs/unidades-administrativas?request=GetCapabilities&service=wfs -->
+	  <servlet-name>IGNProxy</servlet-name>
+	  <servlet-class>org.eclipse.jetty.proxy.ProxyServlet$Transparent</servlet-class>
+	  <init-param>
+		<param-name>proxyTo</param-name>
+		<param-value>http://www.ign.es/wfs-inspire</param-value>
+	  </init-param>
+	  <init-param>
+		<param-name>prefix</param-name>
+		<param-value>/ignwfs</param-value>
+	  </init-param>
+	  <load-on-startup>1</load-on-startup>
+	  <async-supported>true</async-supported>
+	</servlet>
+	<servlet-mapping>
+	  <servlet-name>IGNProxy</servlet-name>
+	  <url-pattern>/ignwfs/*</url-pattern>
+	</servlet-mapping>
+	<!-- 
+	http://localhost:8080/geoserver/ows?request=GetCapabilities&service=wfs
+	http://localhost:8080/proxyapp/loopback/ows?request=GetCapabilities&service=wfs -->
+	<!--servlet>
+	<servlet-name>testLocal</servlet-name>
+	  <servlet-class>org.eclipse.jetty.proxy.ProxyServlet$Transparent</servlet-class>
+	  <init-param>
+		<param-name>proxyTo</param-name>
+		<param-value>http://localhost:8080/geoserver/ows</param-value>
+	  </init-param>
+	  <init-param>
+		<param-name>prefix</param-name>
+		<param-value>/loopback</param-value>
+	  </init-param>
+	  <load-on-startup>1</load-on-startup>
+	  <async-supported>true</async-supported>
+	</servlet>
+	<servlet-mapping>
+	  <servlet-name>testLocal</servlet-name>
+	  <url-pattern>/loopback/*</url-pattern>
+	</servlet-mapping -->
+</web-app>
