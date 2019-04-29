@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+    <style>
+      .map {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+    <title>OpenLayers example</title>
+  </head>
+  <body>
+    <h2>My Map</h2>
+    <div id="map" class="map"></div>
+	 <form class="form-inline">
+      <label>Geometry type &nbsp;</label>
+      <select id="type">
+        <option value="Point">Point</option>
+        <option value="LineString">LineString</option>
+        <option value="Polygon">Polygon</option>
+        <option value="Circle">Circle</option>
+        <option value="None">None</option>
+      </select>
+    </form>
+    <script type="text/javascript">
+	 import Draw from 'js/ol/interaction/draw.js';
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          })
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([0.41, 40.82]),
+          zoom: 5
+        })
+      });
+	  var typeSelect = document.getElementById('type');
+
+       // global so we can remove it later
+      function addInteraction() {
+        var value = typeSelect.value;
+        if (value !== 'None') {
+          draw = new ol.interaction.Draw({
+            source: new ol.VectorSource(),
+            type: typeSelect.value
+          });
+          map.addInteraction(draw);
+        }
+      }
+	  typeSelect.onchange = function() {
+        map.removeInteraction(draw);
+        addInteraction();
+      };
+
+      addInteraction();
+    </script>
+	<script>
+      import Map from 'ol/map.js';
+      import View from 'ol/view.js';
+      import Draw from 'ol/interaction/draw.js';
+      import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
+      import {OSM, Vector as VectorSource} from 'ol/source.js';
+
+      var raster = new TileLayer({
+        source: new OSM()
+      });
+
+      var source = new VectorSource({wrapX: false});
+
+      var vector = new VectorLayer({
+        source: source
+      });
+
+      var map = new Map({
+        layers: [raster, vector],
+        target: 'map',
+        view: new View({
+          center: [-11000000, 4600000],
+          zoom: 4
+        })
+      });
+
+      var typeSelect = document.getElementById('type');
+
+      var draw; // global so we can remove it later
+      function addInteraction() {
+        var value = typeSelect.value;
+        if (value !== 'None') {
+          draw = new Draw({
+            source: source,
+            type: typeSelect.value
+          });
+          map.addInteraction(draw);
+        }
+      }
+
+
+      /**
+       * Handle change event.
+       */
+      typeSelect.onchange = function() {
+        map.removeInteraction(draw);
+        addInteraction();
+      };
+
+      addInteraction();
+    </script>
+  </body>
+</html>
