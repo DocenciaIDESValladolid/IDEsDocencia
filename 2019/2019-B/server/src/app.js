@@ -102,6 +102,9 @@ function initApp() {
   $('#autolocate').on('click', function () {
       autolocate(true);
   });
+  $('#dibujar').on('click', function () {
+      dibujar(true);
+  });
   $('#infopanel').panel({
       beforeclose: function () {
           select.getFeatures().clear();

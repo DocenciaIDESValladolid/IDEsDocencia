@@ -63,9 +63,6 @@ function initmap() {
     });
     var vectorCustomLayer = new ol.layer.Vector({
         source: sourceLayer,
-        style: style_function
-        /*updateWhileAnimating: true,
-         updateWhileInteracting: true*/
     });
     var aeriallayer = new ol.layer.Tile({
         visible: false,
@@ -113,15 +110,11 @@ function initmap() {
             features: [accuracyFeature, positionFeature]
         })
     });
-    var markerFeature = new ol.Feature();
-    markerFeature.setGeometry(null);
-    markerFeature.setStyle(markerFeatureStyle);
-    var markerVector = new ol.layer.Vector({
-        source: new ol.source.Vector({
-            features: [markerFeature]
-        })
-    });
-    layers = [layergroup, userPosition, markerVector];
+   
+	//variable para las interacciones de dibujo
+	var draw;
+
+    layers = [layergroup, userPosition,vectorCustomLayer];
     // New Custom zoom.
     var zoom = new ol.control.Zoom({ target: "navigation", className: "custom-zoom" });
     map = new ol.Map({
@@ -133,7 +126,7 @@ function initmap() {
         /*loadTilesWhileAnimating: true,
          loadTilesWhileInteracting: true*/
     });
-    map.addInteraction(select);
+
 
     // Initialize the page layers.
     add_layergroup_to_list(layergroup);
@@ -192,20 +185,7 @@ function initmap() {
             }
         }
     });
-    map.on('click', function (evt) {
-        var hasFeature = false;
-        map.forEachFeatureAtPixel(map.getEventPixel(evt.originalEvent), function (feature, layer) {
-            if (feature.get('stageposition') === 0) {
-                return false;
-            }
-            hasFeature = true;
-        });
-        if (!hasFeature) {
-            var coordinates = map.getEventCoordinate(evt.originalEvent);
-            markerFeature.setGeometry(coordinates ?
-                new ol.geom.Point(coordinates) : null);
-        }
-    });
+
 }
 /*-------------------------------Functions-----------------------------------*/
 function style_function(feature, resolution) {
@@ -268,6 +248,21 @@ function autolocate(center, validate) {
     var position= geolocation.getPosition();
     $.mobile.loading("hide");
     fly_to(map, position);
+}
+
+function dibujar(){
+	if (typeof(draw) !='undefined') {
+		map.removeInteraction(draw);
+	}
+	//FUNCION PARA DIBUJAR
+	     draw = new ol.interaction.Draw({
+            source: sourceLayer,
+            type: "LineString"
+          });
+		  draw.on("drawend", function(event){
+			  map.removeInteraction(draw);
+		  });
+     map.addInteraction(draw);
 }
 function fly_to(map, point, extent) {
     var duration = 700;
