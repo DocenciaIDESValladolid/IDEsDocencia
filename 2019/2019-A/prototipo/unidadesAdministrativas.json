@@ -1,0 +1,48 @@
+{
+  "front-version": "2.19.1",
+  "version": 3,
+  "nodes": [
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "<wfs:GetFeature service=\"WFS\" version=\"1.1.0\"\n  xmlns:topp=\"http://www.openplans.org/topp\"\n  xmlns:wfs=\"http://www.opengis.net/wfs\"\n  xmlns=\"http://www.opengis.net/ogc\"\n  xmlns:gml=\"http://www.opengis.net/gml\"\n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n  xsi:schemaLocation=\"http://www.opengis.net/wfs\n                      http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">\n  <wfs:Query typeName=\"au:AdministrativeUnit\">\n    <Filter>\n      <And>\n        <PropertyIsEqualTo>\n            <PropertyName>nationalLevelName</PropertyName>\n            <Literal>Municipio</Literal>\n         </PropertyIsEqualTo>\n        <Intersects>\n          <PropertyName>geometry</PropertyName>\n            <gml:Point srsName=\"http://www.opengis.net/gml/srs/epsg.xml#4326\">\n              <gml:coordinates>41.528587,-4.747623</gml:coordinates>\n            </gml:Point>\n          </Intersects>\n        </And>\n      </Filter>\n  </wfs:Query>\n</wfs:GetFeature>\n "
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "www.ign.es",
+        "path": "/wfs-inspire/unidades-administrativas"
+      },
+      "id": "ad12af4f-7ce0-4d5b-a961-321791935862",
+      "lastModified": "2019-04-08T17:48:39.807+02:00",
+      "name": "unidadesAdministrativas",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/xml"
+        }
+      ],
+      "metaInfo": {}
+    }
+  ]
+}
