@@ -260,7 +260,10 @@ function dibujar(){
 	if (typeof(draw) !='undefined') {
 		map.removeInteraction(draw);
 	}
-	
+	//map.removeInteraction(modify);
+	if (typeof(modify) !='undefined') {
+		map.removeInteraction(modify);
+	}
 	
 	     draw = new ol.interaction.Draw({
             source: sourceLayer,
