@@ -105,6 +105,9 @@ function initApp() {
   $('#dibujar').on('click', function () {
       dibujar(true);
   });
+  $('#editar').on('click', function () {
+      editar(true);
+  });
   $('#infopanel').panel({
       beforeclose: function () {
           select.getFeatures().clear();

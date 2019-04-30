@@ -61,7 +61,8 @@ function initmap() {
     sourceLayer = new ol.source.Vector({
         projection: 'EPSG:3857'
     });
-    var vectorCustomLayer = new ol.layer.Vector({
+	var vectorCustomLayer;
+    vectorCustomLayer = new ol.layer.Vector({
         source: sourceLayer,
     });
     var aeriallayer = new ol.layer.Tile({
@@ -113,6 +114,10 @@ function initmap() {
    
 	//variable para las interacciones de dibujo
 	var draw;
+	var modify;
+	var typeSelect;
+	var snap;
+	var selectInteraction;
 
     layers = [layergroup, userPosition,vectorCustomLayer];
     // New Custom zoom.
@@ -250,11 +255,13 @@ function autolocate(center, validate) {
     fly_to(map, position);
 }
 
+//FUNCION PARA DIBUJAR RUTA
 function dibujar(){
 	if (typeof(draw) !='undefined') {
 		map.removeInteraction(draw);
 	}
-	//FUNCION PARA DIBUJAR
+	
+	
 	     draw = new ol.interaction.Draw({
             source: sourceLayer,
             type: "LineString"
@@ -263,7 +270,39 @@ function dibujar(){
 			  map.removeInteraction(draw);
 		  });
      map.addInteraction(draw);
+	 
+	 
 }
+
+//FUNCION PARA EDITAR RUTA
+function editar(){
+	
+	 var selectInteraction = new ol.interaction.Select({
+        condition: ol.events.condition.singleClick,
+        toggleCondition: ol.events.condition.shiftKeyOnly
+        //layers: function (vectorCustomLayer) {
+          //return layer.get('id') == 'europa';
+        //},
+        //style: selectEuropa
+      });
+	
+	 modify = new ol.interaction.Modify({
+		 source: sourceLayer,
+		 features: selectInteraction.getFeatures()
+		 });
+     
+ 
+	  
+	 modify.on('modifyend',function(e){
+		map.removeInteraction(modify);
+	});
+	  
+	map.addInteraction(modify);
+	  
+	map.getInteractions().extend([selectInteraction, modify]);  
+	  
+}
+
 function fly_to(map, point, extent) {
     var duration = 700;
     var view = map.getView();

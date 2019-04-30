@@ -57,16 +57,24 @@
                         </ul>
                     </div>
                 </div>
-                <h3>Instrucciones.</h3>
-                <div id="welcomingInfo">
-                    <p>Instrucciones de uso de este panel inicial.</p>
-                    <a href="#dosomething" id="dosmething_button" class="ui-btn ui-btn-a ui-shadow ui-corner-all ui-btn-inline ui_mini">Haz esto</a>
-                </div>
-                <div id="instructions2">
-                    <p>Instrucciones adicionales.</p>
-                    <a href="#" id="aditionalAction" data-role="button">Aditional Action</a>
-                </div>
-                <a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a>
+				 <div data-role="collapsible" data-theme="a" data-iconpos="right">
+					<h3>Instrucciones.</h3>
+					<div id="welcomingInfo">
+						<p>Instrucciones de uso de la aplicación.</p>
+							<ul>
+								<li>Dibuja la ruta por la que quieres volar el dron mediante el botón "Dibujar"</li>
+								<li>En caso de ser necesario puedes editar la ruta mediante el botón "Editar"</li>
+								<li>Para realizar el cálculo de la ruta pulsa el botoón "Calcular ruta"</li>
+							</ul>
+					</div>
+					<div id="instructions2">
+						<p>Instrucciones adicionales.</p>
+							<ul>
+								<li>En caso de tener algún problema al utilzar la aplicación contacte con nosotros.</li>
+							</ul>
+					</div>
+					<a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a>
+				</div>
             </div>
         </div>
         <div data-role="panel" data-position="right" data-position-fixed="true" data-display="overlay" id="searchpanel">
@@ -116,10 +124,13 @@
             <div id="map"></div>
         </div>
         <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+			<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus" id="dibujar">Dibujar</a>
+			<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-edit" id="editar">Editar</a>
             <a href="#popupdialog" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-check"
                 id="executeaction">
-                Ejecutar acción
+                Calcular ruta
             </a>
+			
             <a href="#layerspage" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-bullets ui-btn-icon-notext">
                 Capas
             </a>
@@ -130,7 +141,7 @@
             <a href="#authors" data-transition="fade" data-role="button" class="ui-btn">About Us</a>
             <!--div id="navigation"></div-->
 			
-			<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-inline" id="dibujar">Dibujar</a>
+			
 
         </div>
     </div>
