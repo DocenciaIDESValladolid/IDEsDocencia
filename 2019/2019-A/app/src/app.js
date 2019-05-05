@@ -6,6 +6,19 @@ $('#mappage').on("pageinit", function(){
   initmap();
   initApp();
 });
+
+// El calculo de nuestra ruta
+$("#apptst").click(function(){
+     tst()});
+    
+    tst();
+	
+	
+function tst(){
+	
+	
+}
+
 function initApp() {
      /**
      * Location searching panel
@@ -96,13 +109,13 @@ function initApp() {
               }
           }
       }
-var coords = feature.getGeometry().getCoordinates()
+
   });
+  var prueba="Tus cordenadas son: "
   //Buttons events
   $('#autolocate').on('click', function () {
       autolocate(true)
-	  
-	  toast("Tus coordenadas son: ");
+	  toast(prueba);
   });
   $('#infopanel').panel({
       beforeclose: function () {
