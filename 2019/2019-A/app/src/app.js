@@ -96,11 +96,13 @@ function initApp() {
               }
           }
       }
-
+var coords = feature.getGeometry().getCoordinates()
   });
   //Buttons events
   $('#autolocate').on('click', function () {
-      autolocate(true);
+      autolocate(true)
+	  
+	  toast("Tus coordenadas son: ");
   });
   $('#infopanel').panel({
       beforeclose: function () {
@@ -159,9 +161,9 @@ function toast(msg) {
           "<p>" + msg + "</p></div>")
           .css({
               left: ($(window).width() - 284) / 2,
-              top: $(window).height() / 2
+              top: $(window).height() / 8
           })
-          .appendTo($.mobile.pageContainer).delay(2000)
+          .appendTo($.mobile.pageContainer).delay(3000)
           .fadeOut(400, function () {
               $(this).remove();
           });
