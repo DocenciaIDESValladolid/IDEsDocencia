@@ -108,6 +108,9 @@ function initApp() {
   $('#editar').on('click', function () {
       editar(true);
   });
+  $('#getCoord').on('click', function () {
+      getCoord(true);
+  });
   $('#infopanel').panel({
       beforeclose: function () {
           select.getFeatures().clear();

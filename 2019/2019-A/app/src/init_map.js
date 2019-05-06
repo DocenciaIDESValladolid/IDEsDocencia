@@ -205,6 +205,7 @@ function initmap() {
             markerFeature.setGeometry(coordinates ?
                 new ol.geom.Point(coordinates) : null);
         }
+		toast("Las coordenadas son: "+ markerFeature.getGeometry().getCoordinates());
     });
 }
 /*-------------------------------Functions-----------------------------------*/
@@ -342,4 +343,6 @@ function add_layer_to_list(layer) {
     });
     item.insertAfter('#baseLayer');
 }
+
+
 
