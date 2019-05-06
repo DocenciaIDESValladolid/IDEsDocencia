@@ -112,12 +112,14 @@ function initmap() {
         })
     });
    
-	//variable para las interacciones de dibujo
+	//variables para las interacciones de ruta
 	var draw;
 	var modify;
 	var typeSelect;
 	var snap;
 	var selectInteraction;
+	//var gg = new OpenLayers.Projection("EPSG:4326");
+	
 
     layers = [layergroup, userPosition,vectorCustomLayer];
     // New Custom zoom.
@@ -280,6 +282,10 @@ function dibujar(){
 //FUNCION PARA EDITAR RUTA
 function editar(){
 	
+	if (typeof(modify) !='undefined') {
+		map.removeInteraction(modify);
+	}
+	
 	 var selectInteraction = new ol.interaction.Select({
         condition: ol.events.condition.singleClick,
         toggleCondition: ol.events.condition.shiftKeyOnly
@@ -294,17 +300,56 @@ function editar(){
 		 features: selectInteraction.getFeatures()
 		 });
      
- 
-	  
 	 modify.on('modifyend',function(e){
 		map.removeInteraction(modify);
 	});
 	  
-	map.addInteraction(modify);
-	  
+	map.addInteraction(modify);	  
 	map.getInteractions().extend([selectInteraction, modify]);  
 	  
 }
+
+
+//OBTENER LA GEOMETRIA DE LA RUTA DIBUJADA
+/*
+var point=feature.geometry.getBounds().getCenterLonLat();
+
+var pointProj=new OpenLayers.LonLat(point.lon,point.lat);
+pointProj.transform(map.getProjectionObject(), gg);
+var latlonString = formatDegrees(pointProj.lat, pointProj.lon);
+
+
+//TRASNFORMACION DE LAS COORDEANADAS A GRADOS
+function formatDegrees(lonDecimal, latDecimal){
+		var signlat=1;
+		var signlon=1;
+	
+	 if(lonDecimal < 0)  { signlon = -1; }
+      var lonAbs = Math.abs(Math.round(lonDecimal * 1000000.));
+
+	 //Math.round is used to eliminate the small error caused by rounding in the computer:
+	 //e.g. 0.2 is not the same as 0.20000000000284
+
+     //Error checks
+     if(lonAbs > (180 * 1000000)) {  alert(' Degrees Longitude must be in the range of -180 to 180. '); lonDecimal='';  lonAbs=0; }
+
+	 if(latDecimal < 0)  { signlat = -1; }
+      var latAbs = Math.abs( Math.round(latDecimal * 1000000.));
+
+	 //Math.round is used to eliminate the small error caused by rounding in the computer:
+	 //e.g. 0.2 is not the same as 0.20000000000284
+
+     //Error checks
+     if(latAbs > (90 * 1000000)) { alert(' Degrees Latitude must be in the range of -90. to 90. '); latDecimal = '';  latAbs=0; }
+	
+	var latvalue = ((Math.floor(latAbs / 1000000) * signlat) + '&deg; ' + Math.floor(  ((latAbs/1000000) - Math.floor(latAbs/1000000)) * 60)  + '\' ' +  ( Math.floor(((((latAbs/1000000) - Math.floor(latAbs/1000000)) * 60) - Math.floor(((latAbs/1000000) - Math.floor(latAbs/1000000)) * 60)) * 100000) *60/100000 ) + '&quot;'  );
+	var lonvalue = ((Math.floor(lonAbs / 1000000) * signlon) + '&deg; ' + Math.floor(  ((lonAbs/1000000) - Math.floor(lonAbs/1000000)) * 60)  + '\' ' +  ( Math.floor(((((lonAbs/1000000) - Math.floor(lonAbs/1000000)) * 60) - Math.floor(((lonAbs/1000000) - Math.floor(lonAbs/1000000)) * 60)) * 100000) *60/100000 ) + '&quot;'  );
+
+	return latvalue+' , '+lonvalue;
+}
+
+*/
+
 
 function fly_to(map, point, extent) {
     var duration = 700;
