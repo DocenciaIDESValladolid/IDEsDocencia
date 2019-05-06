@@ -6,6 +6,19 @@ $('#mappage').on("pageinit", function(){
   initmap();
   initApp();
 });
+
+// El calculo de nuestra ruta
+$("#apptst").click(function(){
+     tst()});
+    
+    tst();
+	
+	
+function tst(){
+	
+	
+}
+
 function initApp() {
      /**
      * Location searching panel
@@ -98,9 +111,11 @@ function initApp() {
       }
 
   });
+  var prueba="Tus cordenadas son: "
   //Buttons events
   $('#autolocate').on('click', function () {
-      autolocate(true);
+      autolocate(true)
+	  toast(prueba);
   });
   $('#infopanel').panel({
       beforeclose: function () {
@@ -159,9 +174,9 @@ function toast(msg) {
           "<p>" + msg + "</p></div>")
           .css({
               left: ($(window).width() - 284) / 2,
-              top: $(window).height() / 2
+              top: $(window).height() / 8
           })
-          .appendTo($.mobile.pageContainer).delay(2000)
+          .appendTo($.mobile.pageContainer).delay(3000)
           .fadeOut(400, function () {
               $(this).remove();
           });

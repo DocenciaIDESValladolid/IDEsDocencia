@@ -290,7 +290,7 @@ function editar(){
         condition: ol.events.condition.singleClick,
         toggleCondition: ol.events.condition.shiftKeyOnly
         //layers: function (vectorCustomLayer) {
-          //return layer.get('id') == 'europa';
+        //return layer.get('id') == 'europa';
         //},
         //style: selectEuropa
       });
@@ -308,6 +308,75 @@ function editar(){
 	map.getInteractions().extend([selectInteraction, modify]);  
 	  
 }
+//Funcion obtener coordenadas
+function getCoord(){
+
+var vectorSource = new ol.source.Vector();
+var vectorLayer = new ol.layer.Vector({	
+
+			source: vectorSource });
+			
+map.addLayer(vectorLayer);
+
+var coords_length = 0;
+var num = 0;
+
+/*Genero nuevo lineString, acumulo los puntos con las coordenadas en 4326 y las muestro con alert. Todas las coordenadas de los puntos están en lnsPoinst[].
+
+Problemas: 
+-No consigo "finalizar" el lineString
+- Consulta php INSERT INTO public.rutasdron( name, geom)
+	VALUES (pointNameCount, st_GeomFromText('LINESTRING(-4.7512 41.6045, -4.5894 41.7836)', 4326)); Al ser String con más de dos puntos no funcionaría.
+	
+	
+*/
+var draw = new ol.interaction.Draw({
+    source: vectorSource,
+    type: "LineString",
+    geometryFunction: function(coords, geom) {
+        if (!geom) {
+            geom = new ol.geom.LineString(null);
+        }        
+        geom.setCoordinates(coords);
+        
+        
+        if(coords.length !== coords_length){
+        	coords_length = coords.length;
+            var Coordactual = $(coords).get(-1);
+            var coordTrans = ol.proj.transform(Coordactual, 'EPSG:3857', 'EPSG:4326');
+			//Vector de puntos del LineString
+            var lnsPoints = [];     
+					//Metemos la coordenada al final del vector
+            lnsPoints.push(coordTrans);
+            for (var i = 0; lnsPoints.length > i; i++) {
+                
+            // Creamos los nombres: Punto 1, 2...
+            function nameGen() {
+                pointName = "Point ";
+                function counter() {
+                    num++;
+                }
+                counter();
+                pointNameCount = pointName + num;
+                return pointNameCount;
+            }
+                var pointCoor = lnsPoints[i];
+                var lon = pointCoor[1];
+                var lat = pointCoor[0];
+                var name = nameGen();
+				alert(name + ':' + lat + ', ' + lon);	
+				
+            }
+        }
+        return geom;
+    }
+});
+draw.on("drawend", function(event){
+			  map.removeInteraction(draw);
+		  });
+map.addInteraction(draw);
+}
+
 
 
 //OBTENER LA GEOMETRIA DE LA RUTA DIBUJADA
