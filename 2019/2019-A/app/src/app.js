@@ -16,6 +16,16 @@ $("#apptst").click(function(){
 	
 function tst(){
 	
+	/*var vectorLayer = new ol.layer.Vector(){
+			source: new ol.source.GeoJSON({
+				url: 'RUTA AL FICHERO JSON'
+				
+			})
+	});
+	//Añadir capa vectorial al mapa
+	map.addLayer(vectorLayer);
+	*/
+	
 	
 }
 
@@ -111,11 +121,10 @@ function initApp() {
       }
 
   });
-  var prueba="Tus cordenadas son: "
+  
   //Buttons events
   $('#autolocate').on('click', function () {
-      autolocate(true)
-	  toast(prueba);
+      autolocate(true);
   });
   $('#infopanel').panel({
       beforeclose: function () {
