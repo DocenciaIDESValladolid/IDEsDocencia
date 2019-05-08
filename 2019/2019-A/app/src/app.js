@@ -16,15 +16,7 @@ $("#apptst").click(function(){
 	
 function tst(){
 	
-	/*var vectorLayer = new ol.layer.Vector(){
-			source: new ol.source.GeoJSON({
-				url: 'RUTA AL FICHERO JSON'
-				
-			})
-	});
-	//Añadir capa vectorial al mapa
-	map.addLayer(vectorLayer);
-	*/
+	
 	
 	
 }
