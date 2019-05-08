@@ -89,10 +89,12 @@
 		var geometria = gml.substring(posInicial,posFinal+14);<!-- 14 es el numero de caracteres de </au:geometry> -->
 		
 		<!-- dibuja los puntos de recarga (INCOMPLETO))-->
-		var capa = new ol.Feature();
-		var pto = new ol.geom.Point(coordenadas);
-		capa.setGeometry(pto);
-		map.addLayer(capa);
+		var sourcePoints = new ol.source.Vector();
+		feature = new ol.Feature({ geometry: new ol.geom.Point([4622941.16, -529108.81])});           
+		sourcePoints.addFeature(feature);
+		var visibilePoints = new ol.layer.Vector();
+		map.addLayer(visibilePoints);
+        add_layer_to_list(visibilePoints);
 		
 		<!--var features = new ol.format.WFS().readFeatures(gml);-->
         <!--vectorSource.addFeatures(features);-->

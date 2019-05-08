@@ -8,7 +8,7 @@ $('#mappage').on("pageinit", function(){
 // El calculo de nuestra ruta
 $("#apptst").click(function(){
      tst();
-	 });
+});
     
 	
 function tst(){
@@ -37,6 +37,69 @@ function tst(){
             add_layer_to_list(visibilePoints);
 	
 	
+}
+
+// Obtencio de los puntos de recarga por municipio
+$("#ptosMunicipio").click(function(){
+     obtenerPtosRecargaMunicipio();
+});
+
+function obtenerPtosRecargaMunicipio(){ 
+      // peticion a ign para obtener el municipio en el que se encuentra el usuario
+      var bodyMunicipiosWFS = `<wfs:GetFeature service="WFS" version="1.1.0"
+		  xmlns:topp="http://www.openplans.org/topp"
+		  xmlns:wfs="http://www.opengis.net/wfs"
+		  xmlns="http://www.opengis.net/ogc"
+		  xmlns:gml="http://www.opengis.net/gml"
+		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xsi:schemaLocation="http://www.opengis.net/wfs
+							  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+		  <wfs:Query typeName="au:AdministrativeUnit">
+			<Filter>
+			  <And>
+				<PropertyIsEqualTo>
+					<PropertyName>nationalLevelName</PropertyName>
+					<Literal>Municipio</Literal>
+				 </PropertyIsEqualTo>
+				<Intersects>
+				  <PropertyName>geometry</PropertyName>
+					<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
+					  <gml:coordinates>41.528587,-4.747623</gml:coordinates>
+					</gml:Point>
+				  </Intersects>
+				</And>
+			  </Filter>
+		  </wfs:Query>
+		</wfs:GetFeature>`;
+
+      // then post the request and add the received features to a layer
+      fetch("http://www.ign.es/wfs-inspire/unidades-administrativas", {
+           method: "POST",
+           headers: {
+               "Content-Type": "application/xml; charset=UTF-8"
+           },
+           body: bodyMunicipiosWFS
+	  }).then(function(response) {
+        return response.text();
+      }).then(function(gml) {
+		//Se divide la respuesta gml para quedarnos con el nodo <au:geometry> con la geomtría del municipio-->
+		var posInicial = gml.search("<au:geometry>");
+		var posFinal = gml.search("</au:geometry>");
+		var geometria = gml.substring(posInicial,posFinal+14);<!-- 14 es el numero de caracteres de </au:geometry> -->
+		
+		//dibuja los puntos de recarga (INCOMPLETO))-->
+		var sourcePoints = new ol.source.Vector();
+		feature = new ol.Feature({ geometry: new ol.geom.Point([4622941.16, -529108.81])});           
+		sourcePoints.addFeature(feature);
+		var visibilePoints = new ol.layer.Vector();
+		map.addLayer(visibilePoints);
+        add_layer_to_list(visibilePoints);
+		
+		//var features = new ol.format.WFS().readFeatures(gml);
+        //vectorSource.addFeatures(features);
+        //map.getView().fit(vectorSource.getExtent());
+		
+      });
 }
 
 function initApp() {
