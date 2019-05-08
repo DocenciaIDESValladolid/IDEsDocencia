@@ -12,9 +12,30 @@ $("#apptst").click(function(){
     
 	
 function tst(){
-	toast("Hola");
+	toast("Ejemplo de calculo de ruta");
+	
+
+	var origen=new ol.geom.Point([-524447.14,4637888.47]);
+	var destino=new ol.geom.Point([-410927.12,4503102.50]);
+	
+	origen.transform("EPSG:3857","EPSG:4258");
+	destino.transform("EPSG:3857","EPSG:4258");
+	
+	
+	
+	var ruta = CalculoRuta(origen, destino);
+	
+	ruta.transform("EPSG:4258","EPSG:3857");
+	
 	var sourcePoints = new ol.source.Vector();
-	feature = new ol.Feature({ geometry: new ol.geom.Point([4622941.16, -529108])});           
+	
+	 for (i=0; i<ruta.length; i++){
+                var points = ruta[i],
+                    feature = new ol.Feature({ geometry: new ol.geom.Point([points.x, points.y])});
+                
+                sourcePoints.addFeature(feature);
+            }
+	        
     sourcePoints.addFeature(feature);
 	            var visibilePoints = new ol.layer.Vector({
                 name:"Puntos Visibiles",
@@ -24,7 +45,7 @@ function tst(){
                         fill: new ol.style.Fill({
                           color: 'rgba(0,255,0,1)'
                         }),
-                        radius: 10,
+                        radius:2,
                         stroke: new ol.style.Stroke({
                           color: 'rgba(0,255,255,1)',
                           width: 2
@@ -37,6 +58,76 @@ function tst(){
             add_layer_to_list(visibilePoints);
 	
 	
+}
+
+
+function CalculoRuta(from, to){
+var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
+    <ows:Identifier>org.cnig.cartociudad.wps.RouteFinder</ows:Identifier>
+    <wps:DataInputs>
+        <wps:Input>
+            <ows:Identifier>waypoints</ows:Identifier>
+    <wps:Data>
+                <wps:ComplexData mimeType="text/xml">        
+      <wfs:FeatureCollection xmlns:ogc="http://www.opengis.net/ogc" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ows="http://www.opengis.net/ows" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wp="http://localhost/waypoint" xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://localhost http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd http://www.opengis.net/gml http://schemas.opengis.net/gml/3.1.1/base/feature.xsd http://localhost:8080/wps/schemas/waypoint.xsd">
+        <gml:featureMembers>
+          <wp:waypoint gml:id="1">
+            <wp:geom>
+              <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
+                <gml:pos>
+				${from.x} ${from.y}
+				</gml:pos>
+              </gml:Point>
+            </wp:geom>
+          </wp:waypoint>
+          <wp:waypoint gml:id="2">
+            <wp:geom>
+              <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
+                <gml:pos>
+				${to.x} ${to.y}
+				</gml:pos>
+              </gml:Point>
+            </wp:geom> 
+          </wp:waypoint>
+        </gml:featureMembers>
+      </wfs:FeatureCollection>
+    </wps:ComplexData>
+        </wps:Data>
+        </wps:Input>
+    </wps:DataInputs>
+  <wps:ResponseForm>
+    <wps:ResponseDocument>
+      <wps:Output schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" mimeType="text/xml" encoding="UTF-8">
+        <ows:Identifier>routeResult</ows:Identifier>
+      </wps:Output>
+      <wps:Output schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" mimeType="text/xml" encoding="UTF-8">
+        <ows:Identifier>instructionsResult</ows:Identifier>
+      </wps:Output>
+    </wps:ResponseDocument>
+  </wps:ResponseForm>
+</wps:Execute>
+`;
+    
+fetch("http://www.cartociudad.es/wps/WebProcessingService", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/xml"
+                    },
+                    body: layerWPS
+                }).then(function(response){
+					return response.text();
+				}).then(function(gml){
+					var posInicial = gml.search("<n52:GEOMETRY>");
+					var posFinal = gml.search("</n52:GEOMETRY>");
+					var ruta = gml.substring(posInicial,posFinal+15);
+					console.log(ruta);
+				});
+				
+return ruta;
+	
+				
+				
 }
 
 function initApp() {
