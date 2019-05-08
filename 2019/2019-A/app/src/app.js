@@ -1,6 +1,4 @@
-/**
- * Demo functions
- */
+
 $('#mappage').on("pageinit", function(){
   add_demo_functions();
   initmap();
@@ -9,14 +7,34 @@ $('#mappage').on("pageinit", function(){
 
 // El calculo de nuestra ruta
 $("#apptst").click(function(){
-     tst()});
+     tst();
+	 });
     
-    tst();
-	
 	
 function tst(){
-	
-	
+	toast("Hola");
+	var sourcePoints = new ol.source.Vector();
+	feature = new ol.Feature({ geometry: new ol.geom.Point([4622941.16, -529108])});           
+    sourcePoints.addFeature(feature);
+	            var visibilePoints = new ol.layer.Vector({
+                name:"Puntos Visibiles",
+                source: sourcePoints,
+                style: new ol.style.Style({
+                      image: new ol.style.Circle({
+                        fill: new ol.style.Fill({
+                          color: 'rgba(0,255,0,1)'
+                        }),
+                        radius: 10,
+                        stroke: new ol.style.Stroke({
+                          color: 'rgba(0,255,255,1)',
+                          width: 2
+                        })
+                      })
+                    })
+            });
+            
+            map.addLayer(visibilePoints);
+            add_layer_to_list(visibilePoints);
 	
 	
 }
