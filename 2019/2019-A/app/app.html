@@ -18,10 +18,9 @@
     <script src="js/geocoder/geocoder.js"></script>
     <script src="src/demos/demos.js"></script>
     <script src="src/init_map.js"></script>
+	 <script src="variables_locales.js"></script>
 
 
-    <!-- CARGA DE SIMPLE FACEBOOK GRAPH -->
-    <script src="js/facebook.js"></script>
 </head>
 
 <body id="page-main">
@@ -33,10 +32,8 @@
                    ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
                 <h1>Información</h1>
             </div>
-            <div id="estadoLogin" class="ui-bar ui-bar-b">
-                <a href="#" id="iniciosesionFacebookEstado" class="ui-btn  ui-btn-icon-left ui-icon-fb ui-btn-inline" onclick="login(); return false;">Identificarse</a>
-                <!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
-            </div>
+            <div><br></div>
+			
             <div id="collapsibleset" data-role="collapsibleset" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b"
                 data-content-theme="b">
                 <div data-role="collapsible" data-theme="a" data-iconpos="right">
@@ -45,7 +42,8 @@
                         <div class="no-overflow">
                         <form name="formulario" method="get" action="ejemploGet.php">
 
-                                <input id="direccion" name="Dirección" placeholder="Direccion">
+                                <input id="direccion" name="Dirección" placeholder="Dirección">
+                                 <input id="direccion" name="Dirección" placeholder="Autonomía">
                             </div>
                         <div class="no-overflow">
                         <a href="#popupdialog" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-check"
@@ -65,13 +63,13 @@
                         </ul> -->
                     </div>
                 </div>
-                               <div data-role="collapsible" data-theme="a" data-iconpos="right">
+                <div data-role="collapsible" data-theme="a" data-iconpos="right">
                     <h3>Modelo vehículo</h3>
                     <div>
                         <div class="no-overflow">
                         <form name="vehiculo" method="get" action="ejemploGet.php">
 
-                                <input id="vehiculo" name="vehiculo" placeholder="vehiculo">
+                                <input id="vehiculo" name="vehiculo" placeholder="Vehículo">
                             </div>
 
                          </form>
@@ -79,9 +77,29 @@
                     </div>
 					
                 </div>
-				 <div>
+				 
+
+                <div data-role="collapsible" data-theme="a" data-iconpos="right">
+                    <h3>Puntos de recarga cercanos</h3>
+                    <div>
+                        <div class="no-overflow">
+                        <form name="formulario" method="get" action="ejemploGet.php">
+                            </div>
+                        <div class="no-overflow">
+                        <a href="#popupdialog" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-check"
+                        id="executeaction">
+                        <a href="#" id="ptosMunicipio" data-role="button">
+						Mostrar</a>
+                        </a>
+                        </div>
+                         </form>
+                    </div>
+                </div>
+				
+				<div>
                     <a href="#" id="apptst" data-role="button">Calcular Ruta</a>
                 </div>
+
                 <a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a>
             </div>
         </div>

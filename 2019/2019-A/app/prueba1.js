@@ -1,3 +1,6 @@
+
+
+function CalculoRuta(from, to){
 var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
     <ows:Identifier>org.cnig.cartociudad.wps.RouteFinder</ows:Identifier>
@@ -11,14 +14,18 @@ var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
           <wp:waypoint gml:id="1">
             <wp:geom>
               <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-                <gml:pos>-4.70598875 41.66220001</gml:pos>
+                <gml:pos>
+				${from.x} ${from.y}
+				</gml:pos>
               </gml:Point>
             </wp:geom>
           </wp:waypoint>
           <wp:waypoint gml:id="2">
             <wp:geom>
               <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-                <gml:pos>-4.94308276 41.51596499</gml:pos>
+                <gml:pos>
+				${to.x} ${to.y}
+				</gml:pos>
               </gml:Point>
             </wp:geom> 
           </wp:waypoint>
@@ -47,6 +54,17 @@ fetch("http://www.cartociudad.es/wps/WebProcessingService", {
                         "Content-Type": "application/xml"
                     },
                     body: layerWPS
-                }).then(function(response1){
-					console.log(response1);
+                }).then(function(response){
+					return response.text();
+				}).then(function(gml){
+					var posInicial = gml.search("<n52:GEOMETRY>");
+					var posFinal = gml.search("</n52:GEOMETRY>");
+					var ruta = gml.substring(posInicial,posFinal+15);
+					console.log(ruta);
 				});
+				
+return ruta;
+	
+				
+				
+}

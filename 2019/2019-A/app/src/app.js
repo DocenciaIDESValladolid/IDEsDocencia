@@ -1,6 +1,4 @@
-/**
- * Demo functions
- */
+
 $('#mappage').on("pageinit", function(){
   add_demo_functions();
   initmap();
@@ -9,14 +7,191 @@ $('#mappage').on("pageinit", function(){
 
 // El calculo de nuestra ruta
 $("#apptst").click(function(){
-     tst()});
+     tst();
+});
     
-    tst();
-	
 	
 function tst(){
+	toast("Ejemplo de calculo de ruta");
+	
+
+	var origen=new ol.geom.Point([-524447.14,4637888.47]);
+	var destino=new ol.geom.Point([-410927.12,4503102.50]);
+	
+	origen.transform("EPSG:3857","EPSG:4258");
+	destino.transform("EPSG:3857","EPSG:4258");
 	
 	
+	
+	var ruta = CalculoRuta(origen, destino);
+	
+	ruta.transform("EPSG:4258","EPSG:3857");
+	
+	var sourcePoints = new ol.source.Vector();
+	
+	 for (i=0; i<ruta.length; i++){
+                var points = ruta[i],
+                    feature = new ol.Feature({ geometry: new ol.geom.Point([points.x, points.y])});
+                
+                sourcePoints.addFeature(feature);
+            }
+	        
+    sourcePoints.addFeature(feature);
+	            var visibilePoints = new ol.layer.Vector({
+                name:"Puntos Visibiles",
+                source: sourcePoints,
+                style: new ol.style.Style({
+                      image: new ol.style.Circle({
+                        fill: new ol.style.Fill({
+                          color: 'rgba(0,255,0,1)'
+                        }),
+                        radius:2,
+                        stroke: new ol.style.Stroke({
+                          color: 'rgba(0,255,255,1)',
+                          width: 2
+                        })
+                      })
+                    })
+            });
+            
+            map.addLayer(visibilePoints);
+            add_layer_to_list(visibilePoints);
+	
+	
+}
+
+<<<<<<< HEAD
+
+function CalculoRuta(from, to){
+var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
+    <ows:Identifier>org.cnig.cartociudad.wps.RouteFinder</ows:Identifier>
+    <wps:DataInputs>
+        <wps:Input>
+            <ows:Identifier>waypoints</ows:Identifier>
+    <wps:Data>
+                <wps:ComplexData mimeType="text/xml">        
+      <wfs:FeatureCollection xmlns:ogc="http://www.opengis.net/ogc" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ows="http://www.opengis.net/ows" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wp="http://localhost/waypoint" xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://localhost http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd http://www.opengis.net/gml http://schemas.opengis.net/gml/3.1.1/base/feature.xsd http://localhost:8080/wps/schemas/waypoint.xsd">
+        <gml:featureMembers>
+          <wp:waypoint gml:id="1">
+            <wp:geom>
+              <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
+                <gml:pos>
+				${from.x} ${from.y}
+				</gml:pos>
+              </gml:Point>
+            </wp:geom>
+          </wp:waypoint>
+          <wp:waypoint gml:id="2">
+            <wp:geom>
+              <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
+                <gml:pos>
+				${to.x} ${to.y}
+				</gml:pos>
+              </gml:Point>
+            </wp:geom> 
+          </wp:waypoint>
+        </gml:featureMembers>
+      </wfs:FeatureCollection>
+    </wps:ComplexData>
+        </wps:Data>
+        </wps:Input>
+    </wps:DataInputs>
+  <wps:ResponseForm>
+    <wps:ResponseDocument>
+      <wps:Output schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" mimeType="text/xml" encoding="UTF-8">
+        <ows:Identifier>routeResult</ows:Identifier>
+      </wps:Output>
+      <wps:Output schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" mimeType="text/xml" encoding="UTF-8">
+        <ows:Identifier>instructionsResult</ows:Identifier>
+      </wps:Output>
+    </wps:ResponseDocument>
+  </wps:ResponseForm>
+</wps:Execute>
+`;
+    
+fetch("http://www.cartociudad.es/wps/WebProcessingService", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/xml"
+                    },
+                    body: layerWPS
+                }).then(function(response){
+					return response.text();
+				}).then(function(gml){
+					var posInicial = gml.search("<n52:GEOMETRY>");
+					var posFinal = gml.search("</n52:GEOMETRY>");
+					var ruta = gml.substring(posInicial,posFinal+15);
+					console.log(ruta);
+				});
+				
+return ruta;
+	
+				
+				
+=======
+// Obtencio de los puntos de recarga por municipio
+$("#ptosMunicipio").click(function(){
+     obtenerPtosRecargaMunicipio();
+});
+
+function obtenerPtosRecargaMunicipio(){ 
+      // peticion a ign para obtener el municipio en el que se encuentra el usuario
+      var bodyMunicipiosWFS = `<wfs:GetFeature service="WFS" version="1.1.0"
+		  xmlns:topp="http://www.openplans.org/topp"
+		  xmlns:wfs="http://www.opengis.net/wfs"
+		  xmlns="http://www.opengis.net/ogc"
+		  xmlns:gml="http://www.opengis.net/gml"
+		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xsi:schemaLocation="http://www.opengis.net/wfs
+							  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+		  <wfs:Query typeName="au:AdministrativeUnit">
+			<Filter>
+			  <And>
+				<PropertyIsEqualTo>
+					<PropertyName>nationalLevelName</PropertyName>
+					<Literal>Municipio</Literal>
+				 </PropertyIsEqualTo>
+				<Intersects>
+				  <PropertyName>geometry</PropertyName>
+					<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
+					  <gml:coordinates>41.528587,-4.747623</gml:coordinates>
+					</gml:Point>
+				  </Intersects>
+				</And>
+			  </Filter>
+		  </wfs:Query>
+		</wfs:GetFeature>`;
+
+      // then post the request and add the received features to a layer
+      fetch("http://www.ign.es/wfs-inspire/unidades-administrativas", {
+           method: "POST",
+           headers: {
+               "Content-Type": "application/xml; charset=UTF-8"
+           },
+           body: bodyMunicipiosWFS
+	  }).then(function(response) {
+        return response.text();
+      }).then(function(gml) {
+		//Se divide la respuesta gml para quedarnos con el nodo <au:geometry> con la geomtría del municipio-->
+		var posInicial = gml.search("<au:geometry>");
+		var posFinal = gml.search("</au:geometry>");
+		var geometria = gml.substring(posInicial,posFinal+14);<!-- 14 es el numero de caracteres de </au:geometry> -->
+		
+		//dibuja los puntos de recarga (INCOMPLETO))-->
+		var sourcePoints = new ol.source.Vector();
+		feature = new ol.Feature({ geometry: new ol.geom.Point([4622941.16, -529108.81])});           
+		sourcePoints.addFeature(feature);
+		var visibilePoints = new ol.layer.Vector();
+		map.addLayer(visibilePoints);
+        add_layer_to_list(visibilePoints);
+		
+		//var features = new ol.format.WFS().readFeatures(gml);
+        //vectorSource.addFeatures(features);
+        //map.getView().fit(vectorSource.getExtent());
+		
+      });
+>>>>>>> 1e668b57fd90786f2cd725587a2ff07f2101f1d3
 }
 
 function initApp() {
@@ -111,11 +286,10 @@ function initApp() {
       }
 
   });
-  var prueba="Tus cordenadas son: "
+  
   //Buttons events
   $('#autolocate').on('click', function () {
-      autolocate(true)
-	  toast(prueba);
+      autolocate(true);
   });
   $('#infopanel').panel({
       beforeclose: function () {
