@@ -1,3 +1,6 @@
+var dibujo = 0;
+var calculo = 0;
+var geometria;
 function initmap() {
 
     openStreetMapGeocoder = GeocoderJS.createGeocoder('openstreetmap');
@@ -59,7 +62,7 @@ function initmap() {
     var layers = [];
     var geoJSONFormat = new ol.format.GeoJSON();
     sourceLayer = new ol.source.Vector({
-        projection: 'EPSG:3857'
+        projection: 'EPSG:3857'//Anterior 3857
     });
 	var vectorCustomLayer;
     vectorCustomLayer = new ol.layer.Vector({
@@ -118,6 +121,7 @@ function initmap() {
 	var typeSelect;
 	var snap;
 	var selectInteraction;
+
 	//var gg = new OpenLayers.Projection("EPSG:4326");
 	
 
@@ -257,26 +261,50 @@ function autolocate(center, validate) {
     fly_to(map, position);
 }
 
+
 //FUNCION PARA DIBUJAR RUTA
 function dibujar(){
-	if (typeof(draw) !='undefined') {
-		map.removeInteraction(draw);
+	
+	
+	var collection = new ol.Collection();
+	
+	
+	if(dibujo == 0){
+		if (typeof(draw) !='undefined') {
+			map.removeInteraction(draw);
+		}
+		
+		if (typeof(modify) !='undefined') {
+			map.removeInteraction(modify);
+		}
+		
+		
+			 draw = new ol.interaction.Draw({
+				features: collection,
+				source: sourceLayer,
+				type: "LineString"
+			  });
+			  draw.on("drawend", function(event){
+				  map.removeInteraction(draw);
+				  geometria=event.feature;
+				  //calcular(event.feature);
+			  });
+		 map.addInteraction(draw);
+	
+	dibujo=dibujo+1;
 	}
-	//map.removeInteraction(modify);
-	if (typeof(modify) !='undefined') {
-		map.removeInteraction(modify);
+	else{
+		var opcion=confirm('Ya hay una ruta dibujada. ¿Desea empezar de nuevo?');
+		if (opcion == true){
+			location.reload();
+		}
+		else{
+			
+		}
+		
 	}
 	
-	     draw = new ol.interaction.Draw({
-            source: sourceLayer,
-            type: "LineString"
-          });
-		  draw.on("drawend", function(event){
-			  map.removeInteraction(draw);
-		  });
-     map.addInteraction(draw);
-	 
-	 
+	
 }
 
 //FUNCION PARA EDITAR RUTA
@@ -289,10 +317,7 @@ function editar(){
 	 var selectInteraction = new ol.interaction.Select({
         condition: ol.events.condition.singleClick,
         toggleCondition: ol.events.condition.shiftKeyOnly
-        //layers: function (vectorCustomLayer) {
-        //return layer.get('id') == 'europa';
-        //},
-        //style: selectEuropa
+       
       });
 	
 	 modify = new ol.interaction.Modify({
@@ -300,124 +325,64 @@ function editar(){
 		 features: selectInteraction.getFeatures()
 		 });
      
-	 modify.on('modifyend',function(e){
+	 modify.on('modifyend',function(event){
 		map.removeInteraction(modify);
+		
 	});
 	  
 	map.addInteraction(modify);	  
 	map.getInteractions().extend([selectInteraction, modify]);  
+	
+	
 	  
 }
-//Funcion obtener coordenadas
-function getCoord(){
 
-var vectorSource = new ol.source.Vector();
-var vectorLayer = new ol.layer.Vector({	
-
-			source: vectorSource });
-			
-map.addLayer(vectorLayer);
-
-var coords_length = 0;
-var num = 0;
-
-/*Genero nuevo lineString, acumulo los puntos con las coordenadas en 4326 y las muestro con alert. Todas las coordenadas de los puntos estÃ¡n en lnsPoinst[].
-
-Problemas: 
--No consigo "finalizar" el lineString
-- Consulta php INSERT INTO public.rutasdron( name, geom)
-	VALUES (pointNameCount, st_GeomFromText('LINESTRING(-4.7512 41.6045, -4.5894 41.7836)', 4326)); Al ser String con mÃ¡s de dos puntos no funcionarÃ­a.
+//FUNCION PARA REALIZAR EL PROCESAMIENTO
+function calcular(){
 	
 	
-*/
-var draw = new ol.interaction.Draw({
-    source: vectorSource,
-    type: "LineString",
-    geometryFunction: function(coords, geom) {
-        if (!geom) {
-            geom = new ol.geom.LineString(null);
-        }        
-        geom.setCoordinates(coords);
-        
-        
-        if(coords.length !== coords_length){
-        	coords_length = coords.length;
-            var Coordactual = $(coords).get(-1);
-            var coordTrans = ol.proj.transform(Coordactual, 'EPSG:3857', 'EPSG:4326');
-			//Vector de puntos del LineString
-            var lnsPoints = [];     
-					//Metemos la coordenada al final del vector
-            lnsPoints.push(coordTrans);
-            for (var i = 0; lnsPoints.length > i; i++) {
-                
-            // Creamos los nombres: Punto 1, 2...
-            function nameGen() {
-                pointName = "Point ";
-                function counter() {
-                    num++;
-                }
-                counter();
-                pointNameCount = pointName + num;
-                return pointNameCount;
-            }
-                var pointCoor = lnsPoints[i];
-                var lon = pointCoor[1];
-                var lat = pointCoor[0];
-                var name = nameGen();
-				alert(name + ':' + lat + ', ' + lon);	
+	
+	if(calculo==0){
+		//wfs transaccional
+		var WFS = new ol.format.WFS();
+		var options={
+		srsName: "EPSG:3857", //proyeccion de openlayers
+		featureNS: 'http://dron',//poner el necesario en cada caso
+		featurePrefix: 'DronFree',
+		featureType: 'dron'
+		 }
+
+		 var node= WFS.writeTransaction([geometria],null,null,options);
+		
+
+		
+		s = new XMLSerializer();
+		str = s.serializeToString(node);
+		fetch('/geoserver/DronFree/wfs',{
+		method: 'POST',
+		body: str
+		}).then(function (node){
+			return node.text();
+		}).then(function(res){
+				var resultado=WFS.readTransactionResponse(res);
 				
-            }
-        }
-        return geom;
-    }
-});
-draw.on("drawend", function(event){
-			  map.removeInteraction(draw);
-		  });
-map.addInteraction(draw);
+
+		});
+		calculo=calculo+1;
+	}
+	else{
+		var opcion=confirm('La ruta ya se ha calulado o esta en proceso. ¿Desea empezar de nuevo?');
+		if (opcion == true){
+			location.reload();
+		}
+		else{
+			
+		}
+	}
+	
+	
 }
 
-
-
-//OBTENER LA GEOMETRIA DE LA RUTA DIBUJADA
-/*
-var point=feature.geometry.getBounds().getCenterLonLat();
-
-var pointProj=new OpenLayers.LonLat(point.lon,point.lat);
-pointProj.transform(map.getProjectionObject(), gg);
-var latlonString = formatDegrees(pointProj.lat, pointProj.lon);
-
-
-//TRASNFORMACION DE LAS COORDEANADAS A GRADOS
-function formatDegrees(lonDecimal, latDecimal){
-		var signlat=1;
-		var signlon=1;
-	
-	 if(lonDecimal < 0)  { signlon = -1; }
-      var lonAbs = Math.abs(Math.round(lonDecimal * 1000000.));
-
-	 //Math.round is used to eliminate the small error caused by rounding in the computer:
-	 //e.g. 0.2 is not the same as 0.20000000000284
-
-     //Error checks
-     if(lonAbs > (180 * 1000000)) {  alert(' Degrees Longitude must be in the range of -180 to 180. '); lonDecimal='';  lonAbs=0; }
-
-	 if(latDecimal < 0)  { signlat = -1; }
-      var latAbs = Math.abs( Math.round(latDecimal * 1000000.));
-
-	 //Math.round is used to eliminate the small error caused by rounding in the computer:
-	 //e.g. 0.2 is not the same as 0.20000000000284
-
-     //Error checks
-     if(latAbs > (90 * 1000000)) { alert(' Degrees Latitude must be in the range of -90. to 90. '); latDecimal = '';  latAbs=0; }
-	
-	var latvalue = ((Math.floor(latAbs / 1000000) * signlat) + '&deg; ' + Math.floor(  ((latAbs/1000000) - Math.floor(latAbs/1000000)) * 60)  + '\' ' +  ( Math.floor(((((latAbs/1000000) - Math.floor(latAbs/1000000)) * 60) - Math.floor(((latAbs/1000000) - Math.floor(latAbs/1000000)) * 60)) * 100000) *60/100000 ) + '&quot;'  );
-	var lonvalue = ((Math.floor(lonAbs / 1000000) * signlon) + '&deg; ' + Math.floor(  ((lonAbs/1000000) - Math.floor(lonAbs/1000000)) * 60)  + '\' ' +  ( Math.floor(((((lonAbs/1000000) - Math.floor(lonAbs/1000000)) * 60) - Math.floor(((lonAbs/1000000) - Math.floor(lonAbs/1000000)) * 60)) * 100000) *60/100000 ) + '&quot;'  );
-
-	return latvalue+' , '+lonvalue;
-}
-
-*/
 
 
 function fly_to(map, point, extent) {

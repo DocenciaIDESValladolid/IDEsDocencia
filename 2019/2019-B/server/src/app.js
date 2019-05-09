@@ -85,7 +85,7 @@ function initApp() {
           }
       } else if (pageId === 'historypage') {
           if (event.type === 'pagecontainershow') {
-              alert("show something");
+              //alert("show something");
           }
       } else if (pageId === 'questionpage') {
           if (event.type === 'pagecontainershow') {
@@ -108,8 +108,8 @@ function initApp() {
   $('#editar').on('click', function () {
       editar(true);
   });
-  $('#getCoord').on('click', function () {
-      getCoord(true);
+  $('#calcular').on('click', function () {
+      calcular(true);
   });
   $('#infopanel').panel({
       beforeclose: function () {

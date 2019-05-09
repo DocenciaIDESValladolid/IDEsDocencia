@@ -40,7 +40,7 @@
             <div id="collapsibleset" data-role="collapsibleset" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b"
                 data-content-theme="b">
                 <div data-role="collapsible" data-theme="a" data-iconpos="right">
-                    <h3>Ejemplo de app IDEs</h3>
+                    <!--<h3>Ejemplo de app IDEs</h3>
                     <div>
                         <p>
                             <div class="no-overflow">
@@ -55,7 +55,7 @@
                             <li data-role="list-divider">WPS</li>
                             <li><a href="#" onclick="addWPSLayer()">Añade capa WPS</a></li>
                         </ul>
-                    </div>
+                    </div>-->
                 </div>
 				 <div data-role="collapsible" data-theme="a" data-iconpos="right">
 					<h3>Instrucciones.</h3>
@@ -94,19 +94,14 @@
 
         <div data-role="popup" id="popupdialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
             <div data-role="header" data-theme="b">
-                <h1>¿Estás seguro de que deseas enviar esta esta ruta?</h1>
+                <h1>La ruta ha sido enviada.</h1>
             </div>
             <div role="content" id="popup_content" class="ui-content ui-overlay-b">
-                <p>Esta acción no se puede deshacer.</p>
+                <p>En breve se mostrará el resultado.</p>
                 <fieldset class="ui-grid-a">
-                    <div class="ui-block-a">
-                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b">
-                            Cancelar
-                        </a>
-                    </div>
-                    <div class="ui-block-b">
+                    <div class="ui-block-b" style="margin:0 9vh">
                         <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-transition="flow" id="sendLocation">
-                            Enviar
+                            Aceptar
                         </a>
                     </div>
                 </fieldset>
@@ -129,9 +124,8 @@
         <div data-role="footer" data-position="fixed" data-tap-toggle="false">
 			<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus" id="dibujar">Dibujar</a>
 			<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-edit" id="editar">Editar</a>
-			<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-check" id="getCoord">ObtenerCoor</a>
             <a href="#popupdialog" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-check"
-                id="executeaction">
+                id="calcular">
                 Calcular ruta
             </a>
 			
@@ -142,7 +136,7 @@
                 Historial
             </a>
             <a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-location ui-btn-icon-notext" id="autolocate"></a>
-            <a href="#authors" data-transition="fade" data-role="button" class="ui-btn">About Us</a>
+            <a href="#authors" data-transition="fade" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-inline">About Us</a>
             <!--div id="navigation"></div-->
 			
 			
@@ -278,7 +272,7 @@
                     <div class="ui-body ui-body-a ui-corner-all">
                         <p>Escuela Técnica Superior de Ingenieros de Telecomunicaciones. Grado en Ingeniería de Tecnologías
                             Específicas de Telecomunicación, Mención en Telemática</p>
-                        <p><a href="mailto:email@gmail.com">email@gmail.com</p>
+                        <p><a href="mailto:email@gmail.com">jmoizar@gmail.com</p>
 				</div>		
 				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
                     </div>
