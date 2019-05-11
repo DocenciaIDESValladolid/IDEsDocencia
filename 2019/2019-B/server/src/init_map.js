@@ -381,6 +381,13 @@ function calcular(){
 	}
 	
 	
+	//CONSULTAR EL ID DE LA ULTIMA RUTA PARA REALIZAR LOS CALCULOS CON ELLA
+	
+	var coordenadas = geometria.values_.geometry.extent_;
+	
+	
+	
+	
 }
 
 

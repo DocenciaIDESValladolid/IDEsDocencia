@@ -1,0 +1,12 @@
+1. Hacer Bounding Box de las capas a partir de la ruta dibujada
+2. Extraer los aeropuertos de la capa Aeropuertos-3857 -> tip_AreaD=Aeródromo (son las que nos interesan)
+3. Buffer de los aeropuertos de 8km
+4. Extraer los Parques Naturales de la capa ParquesNaturales-3857-Simpl -> FIGURA_LP = Parque Natural
+5. Mezcla de capas
+6. Intersección
+
+
+
+7. Guardar los resultados obtenidos
+8. Obtener información de los datos generados
+9. Mostrar al usuario la información necesaria.
