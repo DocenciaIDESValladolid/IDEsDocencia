@@ -22,9 +22,15 @@ function tst(){
 	destino.transform("EPSG:3857","EPSG:4258");
 	
 	
-	
+	/**
+	JPC: Esto no se puede programar así en Javascript porque todo es asíncrono.
+	Hay que meterlo todo en los métodos then() de los "Promises"
+	*/
 	var ruta = CalculoRuta(origen, destino);
 	
+/**
+JPC: Movido a function procesaruta 
+
 	ruta.transform("EPSG:4258","EPSG:3857");
 	
 	var sourcePoints = new ol.source.Vector();
@@ -56,11 +62,10 @@ function tst(){
             
             map.addLayer(visibilePoints);
             add_layer_to_list(visibilePoints);
-	
+	*/
 	
 }
 
-<<<<<<< HEAD
 
 function CalculoRuta(from, to){
 var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -123,13 +128,48 @@ fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 					var posFinal = gml.search("</n52:GEOMETRY>");
 					var ruta = gml.substring(posInicial,posFinal+15);
 					console.log(ruta);
+					procesaruta(ruta);
 				});
 				
-return ruta;
+}
+/**
+JPC: Hay que meter en una función el procesado para que se pueda hacer asíncronamente */				
+function procesaruta(ruta) {
+	ruta.transform("EPSG:4258","EPSG:3857");
 	
+	var sourcePoints = new ol.source.Vector();
+	
+	 for (i=0; i<ruta.length; i++){
+                var points = ruta[i],
+                    feature = new ol.Feature({ geometry: new ol.geom.Point([points.x, points.y])});
+                
+                sourcePoints.addFeature(feature);
+            }
+	        
+    sourcePoints.addFeature(feature);
+	            var visibilePoints = new ol.layer.Vector({
+                name:"Puntos Visibiles",
+                source: sourcePoints,
+                style: new ol.style.Style({
+                      image: new ol.style.Circle({
+                        fill: new ol.style.Fill({
+                          color: 'rgba(0,255,0,1)'
+                        }),
+                        radius:2,
+                        stroke: new ol.style.Stroke({
+                          color: 'rgba(0,255,255,1)',
+                          width: 2
+                        })
+                      })
+                    })
+            });
+            
+            map.addLayer(visibilePoints);
+            add_layer_to_list(visibilePoints);
+	
+}
 				
-				
-=======
+
 // Obtencio de los puntos de recarga por municipio
 $("#ptosMunicipio").click(function(){
      obtenerPtosRecargaMunicipio();
@@ -191,7 +231,6 @@ function obtenerPtosRecargaMunicipio(){
         //map.getView().fit(vectorSource.getExtent());
 		
       });
->>>>>>> 1e668b57fd90786f2cd725587a2ff07f2101f1d3
 }
 
 function initApp() {

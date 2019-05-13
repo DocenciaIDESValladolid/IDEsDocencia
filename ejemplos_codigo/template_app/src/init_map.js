@@ -1,6 +1,6 @@
 function initmap() {
-
-    openStreetMapGeocoder = GeocoderJS.createGeocoder('openstreetmap');
+  
+  openStreetMapGeocoder = GeocoderJS.createGeocoder('openstreetmap');
     /*-------------------------------Styles-----------------------------------*/
     var text = new ol.style.Text({
         textAlign: 'center',
@@ -13,6 +13,7 @@ function initmap() {
             width: 3.5
         })
     });
+	
     var selectText = new ol.style.Text({
         textAlign: 'center',
         scale: 1.4,
