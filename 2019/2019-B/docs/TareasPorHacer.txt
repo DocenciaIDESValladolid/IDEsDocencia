@@ -1,12 +1,45 @@
 1. Hacer Bounding Box de las capas a partir de la ruta dibujada
-2. Extraer los aeropuertos de la capa Aeropuertos-3857 -> tip_AreaD=Aer骴romo (son las que nos interesan)
+2. Extraer los aeropuertos de la capa Aeropuertos-3857 -> tip_AreaD=Aer贸dromo (son las que nos interesan)
+  
+  <wfs:GetFeature service="WFS" version="1.1.0"
+  xmlns:topp="http://www.openplans.org/topp"
+  xmlns:wfs="http://www.opengis.net/wfs"
+  xmlns:ogc="http://www.opengis.net/ogc"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.opengis.net/wfs
+                      http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+  <wfs:Query typeName="DronFree:aereo">
+    <ogc:Filter>
+       <PropertyIsEqualTo>
+                <PropertyName>tip_areaD</PropertyName>
+                <Literal>Aer贸dromo</Literal>
+          </PropertyIsEqualTo>
+    </ogc:Filter>
+    </wfs:Query>
+</wfs:GetFeature>
+
 3. Buffer de los aeropuertos de 8km
 4. Extraer los Parques Naturales de la capa ParquesNaturales-3857-Simpl -> FIGURA_LP = Parque Natural
+
+  <wfs:GetFeature service="WFS" version="1.1.0"
+  xmlns:topp="http://www.openplans.org/topp"
+  xmlns:wfs="http://www.opengis.net/wfs"
+  xmlns:ogc="http://www.opengis.net/ogc"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.opengis.net/wfs
+                      http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+  <wfs:Query typeName="DronFree:espaciosnaturales">
+    <ogc:Filter>
+       <PropertyIsEqualTo>
+                <PropertyName>FIGURA_LP</PropertyName>
+                <Literal>Parque Natural</Literal>
+          </PropertyIsEqualTo>
+    </ogc:Filter>
+    </wfs:Query>
+</wfs:GetFeature>
+
 5. Mezcla de capas
-6. Intersecci髇
-
-
-
+6. Intersecci贸n
 7. Guardar los resultados obtenidos
-8. Obtener informaci髇 de los datos generados
-9. Mostrar al usuario la informaci髇 necesaria.
+8. Obtener informaci贸n de los datos generados
+9. Mostrar al usuario la informaci贸n necesaria.
