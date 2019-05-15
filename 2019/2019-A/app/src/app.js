@@ -71,6 +71,8 @@ JPC: Movido a function procesaruta
 
 
 function CalculoRuta(from, to){
+	var origen= from.getCoordinates();
+	var destino= to.getCoordinates();
 var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
     <ows:Identifier>org.cnig.cartociudad.wps.RouteFinder</ows:Identifier>
@@ -85,7 +87,7 @@ var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
             <wp:geom>
               <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
                 <gml:pos>
-				`+from +`
+				`+origen[0]+` `+origen[1]+`
 				</gml:pos>
               </gml:Point>
             </wp:geom>
@@ -94,7 +96,7 @@ var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
             <wp:geom>
               <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
                 <gml:pos>
-				`+to+`
+				`+destino[0]+` `+destino[1]+`
 				</gml:pos>
               </gml:Point>
             </wp:geom> 
@@ -127,10 +129,10 @@ fetch("http://www.cartociudad.es/wps/WebProcessingService", {
                 }).then(function(response){
 					return response.text();
 				}).then(function(gml){
-					var posInicial = gml.search("<n52:GEOMETRY>");
-					var posFinal = gml.search("</n52:GEOMETRY>");
-					var ruta = gml.substring(posInicial,posFinal+15);
-					console.log(ruta);
+					var posInicial = gml.search("<gml:FeatureCollection");
+					var posFinal = gml.search("</gml:FeatureCollection");
+					var ruta = gml.substring(posInicial,posFinal+24);
+
 					procesaruta(ruta);
 				});
 				
@@ -138,8 +140,19 @@ fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 /**
 JPC: Hay que meter en una función el procesado para que se pueda hacer asíncronamente */				
 function procesaruta(ruta) {
-	console.log(ruta)
-	ruta.transform("EPSG:4258","EPSG:3857");
+	var options={
+		srsName: "EPSG:4258", //proyeccion de openlayers
+		featureNS: 'http://www.52north.org/15141e38-2899-4654-b92d-73687c0cf6f0',//poner el necesario en cada caso
+		featurePrefix: 'n52',
+		 }
+	var wfsformat = new ol.format.WFS(options);
+	ruta = '<?xml version="1.0"?>' + "\n" + ruta;
+	var rutacoll =wfsformat.readFeatures(ruta);
+	
+	var rutfeat = rutacoll[0];
+	var geom = rutfeat.getGeometry();
+	
+	geom.transform("EPSG:4258","EPSG:3857");
 	
 	var sourcePoints = new ol.source.Vector();
 	
