@@ -21,6 +21,9 @@ function tst(){
 	origen.transform("EPSG:3857","EPSG:4258");
 	destino.transform("EPSG:3857","EPSG:4258");
 	
+	console.log(origen)
+	console.log(destino)
+	
 	
 	/**
 	JPC: Esto no se puede programar así en Javascript porque todo es asíncrono.
@@ -82,7 +85,7 @@ var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
             <wp:geom>
               <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
                 <gml:pos>
-				${from.x} ${from.y}
+				`+from +`
 				</gml:pos>
               </gml:Point>
             </wp:geom>
@@ -91,7 +94,7 @@ var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
             <wp:geom>
               <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
                 <gml:pos>
-				${to.x} ${to.y}
+				`+to+`
 				</gml:pos>
               </gml:Point>
             </wp:geom> 
@@ -135,6 +138,7 @@ fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 /**
 JPC: Hay que meter en una función el procesado para que se pueda hacer asíncronamente */				
 function procesaruta(ruta) {
+	console.log(ruta)
 	ruta.transform("EPSG:4258","EPSG:3857");
 	
 	var sourcePoints = new ol.source.Vector();
