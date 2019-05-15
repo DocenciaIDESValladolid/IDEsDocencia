@@ -176,8 +176,15 @@ $("#ptosMunicipio").click(function(){
 });
 
 function obtenerPtosRecargaMunicipio(){ 
+
+	  //Coordenadas de ejemplo. ELIMINAR por localización actual
+		var aux =new ol.geom.Point([41.634887,-4.743307]);
+		//41.634887, -4.743307 coordenadas valladolid ( tipo multipolygon)
+		//41.528555, -4.750846 coordenadas de municipio tipo polygon
+		var posicionActual = aux.getCoordinates();
+		
       // peticion a ign para obtener el municipio en el que se encuentra el usuario
-      var bodyMunicipiosWFS = `<wfs:GetFeature service="WFS" version="1.1.0"
+      var bodyMunicipiosWFS =`<wfs:GetFeature service="WFS" version="1.1.0"
 		  xmlns:topp="http://www.openplans.org/topp"
 		  xmlns:wfs="http://www.opengis.net/wfs"
 		  xmlns="http://www.opengis.net/ogc"
@@ -195,14 +202,13 @@ function obtenerPtosRecargaMunicipio(){
 				<Intersects>
 				  <PropertyName>geometry</PropertyName>
 					<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
-					  <gml:coordinates>41.528587,-4.747623</gml:coordinates>
+					  <gml:coordinates>` + posicionActual[0] + `,` + posicionActual[1] + `</gml:coordinates>
 					</gml:Point>
 				  </Intersects>
 				</And>
 			  </Filter>
 		  </wfs:Query>
 		</wfs:GetFeature>`;
-
       // then post the request and add the received features to a layer
       fetch("http://www.ign.es/wfs-inspire/unidades-administrativas", {
            method: "POST",
@@ -213,23 +219,32 @@ function obtenerPtosRecargaMunicipio(){
 	  }).then(function(response) {
         return response.text();
       }).then(function(gml) {
-		//Se divide la respuesta gml para quedarnos con el nodo <au:geometry> con la geomtría del municipio-->
+		//Se divide la respuesta gml para quedarnos con el nodo <au:geometry> con la geomtría del municipio
 		var posInicial = gml.search("<au:geometry>");
 		var posFinal = gml.search("</au:geometry>");
-		var geometria = gml.substring(posInicial,posFinal+14);<!-- 14 es el numero de caracteres de </au:geometry> -->
+		var geometria = gml.substring(posInicial,posFinal+14);// 14 es el numero de caracteres de </au:geometry>
+		//A partir de <au:geometry> se obtiene el polígono del municipio (Polygon o Multipolygon)
+		var posFin = geometria.search("</au:geometry>");
+		var geom = geometria.substring(13,posFin);//13 es el numero de caracteres de <au:geometry>
 		
-		//dibuja los puntos de recarga (INCOMPLETO))-->
-		var sourcePoints = new ol.source.Vector();
-		feature = new ol.Feature({ geometry: new ol.geom.Point([4622941.16, -529108.81])});           
-		sourcePoints.addFeature(feature);
-		var visibilePoints = new ol.layer.Vector();
-		map.addLayer(visibilePoints);
-        add_layer_to_list(visibilePoints);
-		
-		//var features = new ol.format.WFS().readFeatures(gml);
-        //vectorSource.addFeatures(features);
-        //map.getView().fit(vectorSource.getExtent());
-		
+		// peticion a la BBDD para obtener los puntos de recarga mediante el municipio en el que se encuentra el usuario
+		  var bodyPtosRecargaWFS =`<wfs:GetFeature service="WFS" version="1.1.0"
+			  xmlns:topp="http://www.openplans.org/topp"
+			  xmlns:wfs="http://www.opengis.net/wfs"
+			  xmlns="http://www.opengis.net/ogc"
+			  xmlns:gml="http://www.opengis.net/gml"
+			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			  xsi:schemaLocation="http://www.opengis.net/wfs
+								  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+			  <wfs:Query typeName="proytectoIDE:puntosrecarga">
+				<Filter>
+				  <Within>
+					<PropertyName>geom</PropertyName>` + geom + `
+					
+					</Within>
+				  </Filter>
+			  </wfs:Query>
+			</wfs:GetFeature>`;
       });
 }
 

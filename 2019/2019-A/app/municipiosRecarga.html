@@ -18,34 +18,6 @@
   <body>
     <div id="map" class="map"></div>
     <script>
-      var vectorSource = new ol.source.Vector();
-      var vector = new ol.layer.Vector({
-        source: vectorSource,
-        style: new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'rgba(0, 0, 255, 1.0)',
-            width: 2
-          })
-        })
-      });
-
-      var raster = new ol.layer.Tile({
-        source: new ol.source.BingMaps({
-          imagerySet: 'Aerial',
-          key: 'Your Bing Maps Key from http://www.bingmapsportal.com/ here'
-        })
-      });
-
-      var map = new ol.Map({
-        layers: [raster, vector],
-        target: document.getElementById('map'),
-        view: new ol.View({
-          center: [-8908887.277395891, 5381918.072437216],
-          maxZoom: 19,
-          zoom: 12
-        })
-      });
-
       // peticion a ign para obtener el municipio en el que se encuentra el usuario
       var bodyMunicipiosWFS = `<wfs:GetFeature service="WFS" version="1.1.0"
 		  xmlns:topp="http://www.openplans.org/topp"
@@ -65,7 +37,7 @@
 				<Intersects>
 				  <PropertyName>geometry</PropertyName>
 					<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
-					  <gml:coordinates>41.528587,-4.747623</gml:coordinates>
+					  <gml:coordinates>41.649224,-4.729826</gml:coordinates>
 					</gml:Point>
 				  </Intersects>
 				</And>
@@ -87,8 +59,9 @@
 		var posInicial = gml.search("<au:geometry>");
 		var posFinal = gml.search("</au:geometry>");
 		var geometria = gml.substring(posInicial,posFinal+14);<!-- 14 es el numero de caracteres de </au:geometry> -->
+		console.log(geometria);
 		
-		<!-- dibuja los puntos de recarga (INCOMPLETO))-->
+		<!--dibuja los puntos de recarga (INCOMPLETO))-->
 		var sourcePoints = new ol.source.Vector();
 		feature = new ol.Feature({ geometry: new ol.geom.Point([4622941.16, -529108.81])});           
 		sourcePoints.addFeature(feature);
