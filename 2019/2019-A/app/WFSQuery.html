@@ -60,8 +60,8 @@ function WFSQueryCoches(){
            },
            body: bodyCochesWFS
 	  }).then(function(response) {
-	    var aux = OpenLayers.Format.GML.read(response);
-		return OpenLayers.Format.GeoJSON.write (aux, false);
+	    var aux = ol.format.GML.readFeatures(response);
+		return ol.format.GeoJSON.writeFeatures(aux, false);
          
       }).then(function(myJson) {
 		console.log(JSON.stringify(myJson));
