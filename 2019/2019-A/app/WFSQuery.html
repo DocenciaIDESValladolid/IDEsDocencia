@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WFS - GetFeature</title>
+    <link rel="stylesheet" href="https://openlayers.org/en/v5.3.0/css/ol.css" type="text/css">
+    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+	<script src="js/jquery2/jquery-2.1.4.min.js"></script>
+    <script src="js/jquery-mobile/jquerymobile.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery-mobile/jquery.mobile-config.js"></script>
+    <script src="js/openlayers/dist/ol-debug.js"></script>
+    <script src="js/geocoder/geocoder.js"></script>
+    <script src="src/demos/demos.js"></script>
+    <script src="src/init_map.js"></script>
+
+</head>
+<body>
+
+<h1 id="demo1">Marca</h1>
+
+<select id="marcas-dropdown" name="marcas">
+</select>
+
+<button type="button" onclick="myFunction()">Click Me!</button>
+
+<p id="demo">This is a demonstration.</p>
+
+<script>
+/**$("marcas-dropdown").click(function(){
+     WFSQueryCoches();
+});*/
+function myFunction() { 
+  document.getElementById("demo").innerHTML = "Hello JavaScript!";
+  WFSQueryCoches();
+}
+
+function WFSQueryCoches(){
+
+// generate a GetFeature request
+  var bodyCochesWFS = `<wfs:GetFeature service="WFS" version="1.1.0" outputFormat= "application/json"
+		xmlns:topp="http://www.openplans.org/topp"
+		xmlns:wfs="http://www.opengis.net/wfs"
+		xmlns:ogc="http://www.opengis.net/ogc"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+			<wfs:Query typeName="estacionesC:coches">
+			</wfs:Query>
+		</wfs:GetFeature>`;
+
+      // then post the request and add the received features to a layer
+      fetch("http://localhost:8080/geoserver/wfs", {
+           
+		   method: 'POST', // *GET, POST, PUT, DELETE, etc.
+			mode: 'no-cors', // no-cors, cors, *same-origin
+			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+			credentials: 'same-origin', // include, *same-origin, omit
+           headers: {
+               "Content-Type": "application/xml; charset=UTF-8"
+           },
+           body: bodyCochesWFS
+	  }).then(function(response) {
+	    var aux = ol.format.GML.readFeatures(response);
+		return ol.format.GeoJSON.writeFeatures(aux, false);
+         
+      }).then(function(myJson) {
+		console.log(myJson);
+		});
+	  //.then(function(json){
+	  //var marca1 =  json[0].properties['marca'];
+	  //document.getElementById("demo1").innerHTML = marca1;
+	  //});
+    
+}
+</script>
+
+</body>
+</html>
