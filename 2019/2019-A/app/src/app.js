@@ -262,7 +262,15 @@ function obtenerPtosRecargaMunicipio(){
 				  </Filter>
 			  </wfs:Query>
 			</wfs:GetFeature>`;
-      });
+			fetch("http://localhost:8081/geoserver/wfs", {
+				   method: "POST",
+				   headers: {
+					   "Content-Type": "application/xml; charset=UTF-8"
+				   },
+				   body: bodyMunicipiosWFS
+			  }).then(function(response) {
+				return response.text();
+			  });
 }
 
 function initApp() {
