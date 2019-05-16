@@ -151,7 +151,7 @@ function obtenerPtosRecargaMunicipio(){
 			  </Filter>
 		  </wfs:Query>
 		</wfs:GetFeature>`;
-      // then post the request and add the received features to a layer
+      // then post the request
       fetch("http://www.ign.es/wfs-inspire/unidades-administrativas", {
            method: "POST",
            headers: {
@@ -187,15 +187,21 @@ function obtenerPtosRecargaMunicipio(){
 				  </Filter>
 			  </wfs:Query>
 			</wfs:GetFeature>`;
+			
+			// then post the request and add the received features to a layer
 			fetch("http://localhost:8081/geoserver/wfs", {
 				   method: "POST",
 				   headers: {
 					   "Content-Type": "application/xml; charset=UTF-8"
 				   },
-				   body: bodyMunicipiosWFS
+				   body: bodyPtosRecargaWFS
 			  }).then(function(response) {
 				return response.text();
+			  }).then(function(gml){
+				  console.log(gml);
+				  
 			  });
+	  });
 }
 
 function initApp() {
