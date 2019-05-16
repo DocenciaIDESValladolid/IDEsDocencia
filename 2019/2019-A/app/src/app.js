@@ -29,7 +29,7 @@ function tst(){
 	JPC: Esto no se puede programar así en Javascript porque todo es asíncrono.
 	Hay que meterlo todo en los métodos then() de los "Promises"
 	*/
-	var ruta = CalculoRuta(origen, destino);
+	CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);
 	
 /**
 JPC: Movido a function procesaruta 
@@ -70,86 +70,11 @@ JPC: Movido a function procesaruta
 }
 
 
-function CalculoRuta(from, to){
-	var origen= from.getCoordinates();
-	var destino= to.getCoordinates();
-var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
-    <ows:Identifier>org.cnig.cartociudad.wps.RouteFinder</ows:Identifier>
-    <wps:DataInputs>
-        <wps:Input>
-            <ows:Identifier>waypoints</ows:Identifier>
-    <wps:Data>
-                <wps:ComplexData mimeType="text/xml">        
-      <wfs:FeatureCollection xmlns:ogc="http://www.opengis.net/ogc" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ows="http://www.opengis.net/ows" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wp="http://localhost/waypoint" xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://localhost http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd http://www.opengis.net/gml http://schemas.opengis.net/gml/3.1.1/base/feature.xsd http://localhost:8080/wps/schemas/waypoint.xsd">
-        <gml:featureMembers>
-          <wp:waypoint gml:id="1">
-            <wp:geom>
-              <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-                <gml:pos>
-				`+origen[0]+` `+origen[1]+`
-				</gml:pos>
-              </gml:Point>
-            </wp:geom>
-          </wp:waypoint>
-          <wp:waypoint gml:id="2">
-            <wp:geom>
-              <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
-                <gml:pos>
-				`+destino[0]+` `+destino[1]+`
-				</gml:pos>
-              </gml:Point>
-            </wp:geom> 
-          </wp:waypoint>
-        </gml:featureMembers>
-      </wfs:FeatureCollection>
-    </wps:ComplexData>
-        </wps:Data>
-        </wps:Input>
-    </wps:DataInputs>
-  <wps:ResponseForm>
-    <wps:ResponseDocument>
-      <wps:Output schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" mimeType="text/xml" encoding="UTF-8">
-        <ows:Identifier>routeResult</ows:Identifier>
-      </wps:Output>
-      <wps:Output schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" mimeType="text/xml" encoding="UTF-8">
-        <ows:Identifier>instructionsResult</ows:Identifier>
-      </wps:Output>
-    </wps:ResponseDocument>
-  </wps:ResponseForm>
-</wps:Execute>
-`;
-    
-fetch("http://www.cartociudad.es/wps/WebProcessingService", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/xml"
-                    },
-                    body: layerWPS
-                }).then(function(response){
-					return response.text();
-				}).then(function(gml){
-					var posInicial = gml.search("<gml:FeatureCollection");
-					var posFinal = gml.search("</gml:FeatureCollection");
-					var ruta = gml.substring(posInicial,posFinal+24);
-
-					procesaruta(ruta);
-				});
-				
-}
 /**
 JPC: Hay que meter en una función el procesado para que se pueda hacer asíncronamente */				
 function procesaruta(ruta) {
-	var options={
-		srsName: "EPSG:4258", //proyeccion de openlayers
-		featureNS: 'http://www.52north.org/15141e38-2899-4654-b92d-73687c0cf6f0',//poner el necesario en cada caso
-		featurePrefix: 'n52',
-		 }
-	var wfsformat = new ol.format.WFS(options);
-	ruta = '<?xml version="1.0"?>' + "\n" + ruta;
-	var rutacoll =wfsformat.readFeatures(ruta);
 	
-	var rutfeat = rutacoll[0];
+	var rutfeat = ruta[0];
 	var geom = rutfeat.getGeometry();
 	
 	geom.transform("EPSG:4258","EPSG:3857");
