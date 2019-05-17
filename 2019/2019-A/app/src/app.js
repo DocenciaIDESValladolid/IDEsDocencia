@@ -242,10 +242,10 @@ function obtenerPtosRecargaMunicipio(){
 		//Se divide la respuesta gml para quedarnos con el nodo <au:geometry> con la geomtría del municipio
 		var posInicial = gml.search("<au:geometry>");
 		var posFinal = gml.search("</au:geometry>");
-		var geometria = gml.substring(posInicial,posFinal+14);// 14 es el numero de caracteres de </au:geometry>
+		var geometria = gml.substring(posInicial,posFinal + "</au:geometry>".length);// 14 es el numero de caracteres de </au:geometry>
 		//A partir de <au:geometry> se obtiene el polígono del municipio (Polygon o Multipolygon)
 		var posFin = geometria.search("</au:geometry>");
-		var geom = geometria.substring(13,posFin);//13 es el numero de caracteres de <au:geometry>
+		var geom = geometria.substring("<au:geometry>".length,posFin);//13 es el numero de caracteres de <au:geometry>
 		
 		// peticion a la BBDD para obtener los puntos de recarga mediante el municipio en el que se encuentra el usuario
 		  var bodyPtosRecargaWFS =`<wfs:GetFeature service="WFS" version="1.1.0"
@@ -276,8 +276,17 @@ function obtenerPtosRecargaMunicipio(){
 			  }).then(function(response) {
 				return response.text();
 			  }).then(function(gml){
-				  console.log(gml);
 				  
+				  var doc = ol.xml.parse(gml);
+				  var wfsformat = new ol.format.GML();
+				  
+				  //var colls = doc.getElementsByTagName("wfs:FeatureCollection");
+				  //var coll = colls[0];
+				  //var features = wfsformat.readFeatures(coll);
+				  
+				  var features = wfsformat.readFeatures(gml);
+				  console.log(gml);
+				  				  
 			  });
 	  });
 }
