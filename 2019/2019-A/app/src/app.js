@@ -20,53 +20,87 @@ function tst(){
 	
 	origen.transform("EPSG:3857","EPSG:4258");
 	destino.transform("EPSG:3857","EPSG:4258");
-	
-	console.log(origen)
-	console.log(destino)
-	
-	
+
 	/**
 	JPC: Esto no se puede programar así en Javascript porque todo es asíncrono.
 	Hay que meterlo todo en los métodos then() de los "Promises"
 	*/
 	CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);
 	
-/**
-JPC: Movido a function procesaruta 
+	
+}
 
-	ruta.transform("EPSG:4258","EPSG:3857");
-	
-	var sourcePoints = new ol.source.Vector();
-	
-	 for (i=0; i<ruta.length; i++){
-                var points = ruta[i],
-                    feature = new ol.Feature({ geometry: new ol.geom.Point([points.x, points.y])});
-                
-                sourcePoints.addFeature(feature);
-            }
-	        
-    sourcePoints.addFeature(feature);
-	            var visibilePoints = new ol.layer.Vector({
-                name:"Puntos Visibiles",
-                source: sourcePoints,
-                style: new ol.style.Style({
-                      image: new ol.style.Circle({
-                        fill: new ol.style.Fill({
-                          color: 'rgba(0,255,0,1)'
-                        }),
-                        radius:2,
-                        stroke: new ol.style.Stroke({
-                          color: 'rgba(0,255,255,1)',
-                          width: 2
-                        })
-                      })
-                    })
-            });
-            
-            map.addLayer(visibilePoints);
-            add_layer_to_list(visibilePoints);
-	*/
-	
+function CalculoManhattan(from, distancia, projection){
+	var origen= from.getCoordinates();
+	var SRScode= projection.getCode().substring(5);
+	var WPSSRSname = "http://www.opengis.net/gml/srs/epsg.xml#" + SRScode;
+
+var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
+    <ows:Identifier>org.cnig.cartociudad.wps.ManhattanGenerator</ows:Identifier>
+    <wps:DataInputs>
+        <wps:Input>
+            <ows:Identifier>punto</ows:Identifier>
+    <wps:Data>
+                <wps:ComplexData mimeType="text/xml">        
+      <wfs:FeatureCollection xmlns:ogc="http://www.opengis.net/ogc" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ows="http://www.opengis.net/ows" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sp="http://localhost/singlepoint" xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://localhost http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd http://www.opengis.net/gml http://schemas.opengis.net/gml/3.1.1/base/feature.xsd http://localhost:8080/wps/schemas/singlepoint.xsd">
+        <gml:featureMembers>
+          <sp:singlepoint gml:id="1">
+            <sp:geom>
+              <gml:Point srsDimension="2" srsName="http://www.opengis.net/gml/srs/epsg.xml#4258">
+                <gml:pos>${origen[0]} ${origen[1]}</gml:pos>
+              </gml:Point>
+            </sp:geom>
+          </sp:singlepoint>
+        </gml:featureMembers>
+      </wfs:FeatureCollection>
+    </wps:ComplexData>
+        </wps:Data>
+        </wps:Input>
+  <wps:Input>
+    <ows:Identifier>radio</ows:Identifier>
+    <wps:Data>
+      <wps:LiteralData>${distancia}</wps:LiteralData>
+    </wps:Data>
+  </wps:Input>
+    </wps:DataInputs>
+  <wps:ResponseForm>
+    <wps:ResponseDocument>
+      <wps:Output schema="http://schemas.opengis.net/gml/3.1.1/base/feature.xsd" mimeType="text/xml" encoding="UTF-8">
+        <ows:Identifier>result</ows:Identifier>
+      </wps:Output>
+    </wps:ResponseDocument>
+  </wps:ResponseForm>
+</wps:Execute>`;
+    
+return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/xml"
+                    },
+                    body: layerWPS
+                }).then(function(response){
+					return response.text();
+				}).then(function(gml){
+					var doc = ol.xml.parse(gml);
+					var colls = doc.getElementsByTagName("gml:FeatureCollection");
+					var coll = colls[0];
+                    // WPS uses random namespaces and Featuretypes each request.
+					var ns = coll.getAttribute("xmlns:n52");
+					var sufix = ns.substring("http://www.52north.org/".length);
+					var featuretype = 'Feature-' + sufix;
+					var options={
+						srsName: projection.getCode(), //proyeccion de openlayers
+						featureNS: ns,//poner el necesario en cada caso
+						featurePrefix: 'n52',
+						featureType: featuretype
+						 }
+				    // Register the alias for the SRS.
+					proj4.defs(WPSSRSname, projection);
+					var wfsformat = new ol.format.GML(options);
+					var rutacoll =wfsformat.readFeatures(coll);
+					return Promise.resolve(rutacoll);
+				});	
 }
 
 function CalculoRuta(from, to, projection){
