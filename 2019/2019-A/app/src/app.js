@@ -17,7 +17,7 @@ function tst(){
 
 	var origen=new ol.geom.Point([-524447.14,4637888.47]);
 	var destino=new ol.geom.Point([-410927.12,4503102.50]);
-	
+	var distancia=3000;
 	origen.transform("EPSG:3857","EPSG:4258");
 	destino.transform("EPSG:3857","EPSG:4258");
 
@@ -25,7 +25,8 @@ function tst(){
 	JPC: Esto no se puede programar así en Javascript porque todo es asíncrono.
 	Hay que meterlo todo en los métodos then() de los "Promises"
 	*/
-	CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);
+	CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258"));
+	/**CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);*/
 	
 	
 }
