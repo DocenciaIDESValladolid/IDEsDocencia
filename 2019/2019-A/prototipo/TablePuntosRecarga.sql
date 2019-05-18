@@ -1,69 +1,25 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 11.2
--- Dumped by pg_dump version 11.2
-
--- Started on 2019-04-10 18:53:56
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-SET row_security = off;
-
-DROP DATABASE "IDE";
---
--- TOC entry 4252 (class 1262 OID 16393)
--- Name: IDE; Type: DATABASE; Schema: -; Owner: postgres
---
-
-CREATE DATABASE "IDE" WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'English_United States.1252' LC_CTYPE = 'English_United States.1252';
-
-
-ALTER DATABASE "IDE" OWNER TO postgres;
-
-\connect "IDE"
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-SET row_security = off;
-
-SET default_tablespace = '';
-
-SET default_with_oids = false;
 
 --
 -- TOC entry 213 (class 1259 OID 18018)
 -- Name: puntosrecarga; Type: TABLE; Schema: public; Owner: postgres
 --
+DROP TABLE public.puntosrecarga;
 
 CREATE TABLE public.puntosrecarga (
     id integer NOT NULL,
-    "OperatorInfo/Title" character varying(255),
-    "UsageType/Title" character varying(255),
-    "AddressInfo/Title" character varying(255),
-    "AddressInfo/AddressLine1" character varying(255),
-    "AddressInfo/AddressLine2" character varying(255),
-    "AddressInfo/Latitude" double precision,
-    "AddressInfo/Longitude" double precision,
+    "OperatorInfoTitle" character varying(255),
+    "UsageTypeTitle" character varying(255),
+    "AddressInfoTitle" character varying(255),
+    "AddressInfoAddressLine1" character varying(255),
+    "AddressInfoAddressLine2" character varying(255),
+    "AddressInfoLatitude" double precision,
+    "AddressInfoLongitude" double precision,
     "NumberOfPoints" numeric(2,0),
-    "Connections/0/ConnectionType/Title" character varying(255),
-    "Connections/0/Level/Title" character varying(255),
-    "Connections/0/Amps" double precision,
-    "Connections/0/Voltage" double precision,
-    "Connections/0/PowerKW" double precision,
+    "ConnectionsConnectionType" character varying(255),
+    "ConnectionsLevel" character varying(255),
+    "ConnectionsAmps" double precision,
+    "ConnectionsVoltage" double precision,
+    "ConnectionsPowerKW" double precision,
     geom public.geometry(Point,4326)
 );
 
