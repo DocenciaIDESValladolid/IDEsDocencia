@@ -199,8 +199,6 @@ function obtenerPtosRecargaMunicipio(){
 
 	  //Coordenadas de ejemplo. ELIMINAR por localización actual
 		var aux =new ol.geom.Point([41.634887,-4.743307]);
-		//41.634887, -4.743307 coordenadas valladolid ( tipo multipolygon)
-		//41.528555, -4.750846 coordenadas de municipio tipo polygon
 		var posicionActual = aux.getCoordinates();
 		
       // peticion a ign para obtener el municipio en el que se encuentra el usuario
@@ -277,18 +275,17 @@ function obtenerPtosRecargaMunicipio(){
 				return response.text();
 			  }).then(function(gml){
 				  
-				  var doc = ol.xml.parse(gml);
-				  var wfsformat = new ol.format.GML();
-				  
-				  //var colls = doc.getElementsByTagName("wfs:FeatureCollection");
-				  //var coll = colls[0];
-				  //var features = wfsformat.readFeatures(coll);
+				 var doc = ol.xml.parse(gml);
+				 var wfsformat = new ol.format.GML();
 				 
-				  var features = wfsformat.readFeatures(gml);
+				 var features = wfsformat.readFeatures(gml);
+
+				 console.log(gml);
 				  
-				  console.log(gml);
-				  				  
-			  });
+				 //Se dibujan los diferentes puntos de recarga
+				 //map.addLayer(features[0]);
+											  
+		    });
 	  });
 }
 
