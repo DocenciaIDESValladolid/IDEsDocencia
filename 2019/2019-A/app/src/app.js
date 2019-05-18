@@ -25,8 +25,8 @@ function tst(){
 	JPC: Esto no se puede programar así en Javascript porque todo es asíncrono.
 	Hay que meterlo todo en los métodos then() de los "Promises"
 	*/
-	CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258"));
-	/**CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);*/
+	/**CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258"));*/
+	CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);
 	
 	
 }
@@ -194,14 +194,24 @@ function procesaruta(ruta) {
 	
 	var sourcePoints = new ol.source.Vector();
 	
-	 for (i=0; i<ruta.length; i++){
-                var points = ruta[i],
-                    feature = new ol.Feature({ geometry: new ol.geom.Point([points.x, points.y])});
+	var tipo = geom.getType();
+
+	console.log(tipo);
+	
+	var multi = new ol.geom.MultiLineString();
+	//var multi2 = new ol.geom.MultiLineString();
+	//multi2 = geom.getLineStrings();
+	multi = geom.getLineString(0);
+
+
+
+	for (i=0; i<multi.getLength(); i++){
+                var points = multi[i],
+                    feature = new ol.Feature({ geometry: new ol.geom.Point()});
                 
                 sourcePoints.addFeature(feature);
             }
-	        
-    sourcePoints.addFeature(feature);
+
 	            var visibilePoints = new ol.layer.Vector({
                 name:"Puntos Visibiles",
                 source: sourcePoints,
