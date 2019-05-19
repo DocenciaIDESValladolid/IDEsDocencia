@@ -204,8 +204,11 @@ function initmap() {
             var coordinates = map.getEventCoordinate(evt.originalEvent);
             markerFeature.setGeometry(coordinates ?
                 new ol.geom.Point(coordinates) : null);
+           if (coordinates) {
+               toast("Las coordenadas son: "+ markerFeature.getGeometry().getCoordinates());
+           }
+
         }
-		toast("Las coordenadas son: "+ markerFeature.getGeometry().getCoordinates());
     });
 }
 /*-------------------------------Functions-----------------------------------*/
