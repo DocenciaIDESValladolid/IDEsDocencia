@@ -1,8 +1,8 @@
 /**
 * Place WPS request.
 * Example:
-* 
-*	var 
+* 	
+*	var href = '/geoserver/wps';
 *	wpsclient_featurecollection(href, wpsbody, ol.proj.get("EPSG:4258")).then(function (featuresarray){});
 *	
 * @param {href} url of the server.
@@ -33,7 +33,7 @@ return fetch(href, {
 					
 					var options={
 						srsName: projection.getCode(), //proyeccion de openlayers
-						featureNS: ns,//poner el necesario en cada caso
+						featureNS: namespace,//poner el necesario en cada caso
 						featurePrefix: prefix,
 						featureType: featuretype
 						 }
@@ -44,3 +44,24 @@ return fetch(href, {
 					return Promise.resolve(rutacoll);
 				});	
 }
+/**
+* Write GML Feature collection from an array of Feature
+* @param {Feature}[] array
+* @param {namespace}  namespace uri. i.e. "http://itastdevserver.tel.uva.es/ide2019b"
+* @param {featuretype} name of the featuretype. i.e. "Aeropuertos3587"
+* @param {Projection} SRS of the input and output geometries.
+* @return string GML
+*/
+function writeGMLFeatureCollection(features, prefix, namespace, featuretype, projection) {
+	var options={
+				srsName: projection.getCode(), //proyeccion de openlayers
+				featureNS: namespace,
+				featurePrefix: prefix,
+				featureType: featuretype
+				}
+	var format = ol.format.GML3();
+	var gml = format.writeFeatures(features);
+	return gml;
+}
+	
+	
