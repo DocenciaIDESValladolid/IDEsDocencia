@@ -21,12 +21,55 @@ function tst(){
 	origen.transform("EPSG:3857","EPSG:4258");
 	destino.transform("EPSG:3857","EPSG:4258");
 
-	/**
-	JPC: Esto no se puede programar así en Javascript porque todo es asíncrono.
-	Hay que meterlo todo en los métodos then() de los "Promises"
-	*/
-	/**CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258"));*/
-	CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);
+
+	CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258")).then(intersectManhattanRecarga);
+	/*CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);*/
+	
+	
+}
+
+function intersectManhattanRecarga(geom){
+			// peticion a la BBDD para obtener los puntos de recarga mediante el municipio en el que se encuentra el usuario
+		  var bodyPtosRecargaWFS =`<wfs:GetFeature service="WFS" version="1.1.0"
+			  xmlns:topp="http://www.openplans.org/topp"
+			  xmlns:wfs="http://www.opengis.net/wfs"
+			  xmlns="http://www.opengis.net/ogc"
+			  xmlns:gml="http://www.opengis.net/gml"
+			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			  xsi:schemaLocation="http://www.opengis.net/wfs
+								  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+			  <wfs:Query typeName="proytectoIDE:puntosrecarga">
+				<Filter>
+				  <Within>
+					<PropertyName>geom</PropertyName>` + geom + `
+					
+					</Within>
+				  </Filter>
+			  </wfs:Query>
+			</wfs:GetFeature>`;
+			
+		// then post the request and add the received features to a layer
+			fetch("/geoserver/wfs", {
+				   method: "POST",
+				   headers: {
+					   "Content-Type": "application/xml; charset=UTF-8"
+				   },
+				   body: bodyPtosRecargaWFS
+			  }).then(function(response) {
+				return response.text();
+			  }).then(function(gml){
+				  
+				 var doc = ol.xml.parse(gml);
+				 var wfsformat = new ol.format.GML();
+				 
+				 var features = wfsformat.readFeatures(gml);
+
+				 console.log(gml);
+									  
+		    });
+}
+
+function calculoDistancia(){
 	
 	
 }
@@ -83,24 +126,14 @@ return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
                 }).then(function(response){
 					return response.text();
 				}).then(function(gml){
-					var doc = ol.xml.parse(gml);
-					var colls = doc.getElementsByTagName("gml:FeatureCollection");
-					var coll = colls[0];
-                    // WPS uses random namespaces and Featuretypes each request.
-					var ns = coll.getAttribute("xmlns:n52");
-					var sufix = ns.substring("http://www.52north.org/".length);
-					var featuretype = 'Feature-' + sufix;
-					var options={
-						srsName: projection.getCode(), //proyeccion de openlayers
-						featureNS: ns,//poner el necesario en cada caso
-						featurePrefix: 'n52',
-						featureType: featuretype
-						 }
-				    // Register the alias for the SRS.
-					proj4.defs(WPSSRSname, projection);
-					var wfsformat = new ol.format.GML(options);
-					var rutacoll =wfsformat.readFeatures(coll);
-					return Promise.resolve(rutacoll);
+					//Se divide la respuesta gml para quedarnos con el nodo <au:geometry> con la geomtría del municipio
+		var posInicial = gml.search("<gml:surfaceMember>");
+		var posFinal = gml.search("</gml:surfaceMember>");
+		var geometria = gml.substring(posInicial,posFinal + "</gml:surfaceMember>".length);// 14 es el numero de caracteres de </au:geometry>
+		//A partir de <au:geometry> se obtiene el polígono del municipio (Polygon o Multipolygon)
+		var posFin = geometria.search("</gml:surfaceMember>");
+		var geom = geometria.substring("<gml:surfaceMember>".length,posFin);//13 es el numero de caracteres de <au:geometry>
+		return Promise.resolve(geom);
 				});	
 }
 
