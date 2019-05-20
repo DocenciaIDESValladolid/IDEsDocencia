@@ -187,7 +187,30 @@ return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 JPC: Hay que meter en una función el procesado para que se pueda hacer asíncronamente */				
 function procesaruta(ruta) {
 	
+
 	/*var rutfeat = ruta[0];
+=======
+	// JPC: Crear estas capas en init_map.js y reutilizarlas adecuadamente.
+	// NO crear una capa nueva por cada petición. Vaciar el contenido de sourceLayer mejor.
+	var sourceLayer = new ol.source.Vector({
+        projection: 'EPSG:3857'
+    });
+    var vectorCustomLayer = new ol.layer.Vector({
+        source: sourceLayer,
+       
+    });
+    map.addLayer(vectorCustomLayer);
+    add_layer_to_list(visibilePoints);
+
+    var feat = ruta[0];
+    feat.getGeometry().transform("EPSG:4258","EPSG:3857");
+    sourceLayer.addFeature(feat);
+    var extent = sourceLayer.getExtent();
+    // Dirige el visor a la zona de interés.
+	fly_to(map, null, extent);
+	return;
+	var rutfeat = ruta[0];
+
 	var geom = rutfeat.getGeometry();
 	
 	geom.transform("EPSG:4258","EPSG:3857");
@@ -209,15 +232,7 @@ function procesaruta(ruta) {
 
     fly_to(map, null, extent);
 
-	var sourceLine = new ol.source.Vector({
-    features: sourceLayer
-	});
-
-	var vectorLine = new ol.layer.Vector({
-    source: sourceLine
-	});
-
-	map.addLayer(vectorLine);
+	map.addLayer(sourceLayer);
 
      /*var visibilePoints = new ol.layer.Vector({
                 name:"Puntos Visibiles",
