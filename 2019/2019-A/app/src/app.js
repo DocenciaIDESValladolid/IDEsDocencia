@@ -322,6 +322,7 @@ function obtenerPtosRecargaMunicipio(){
 										  width: 2
 										})
 									  })
+									  
 									})
 						   
 					 });
