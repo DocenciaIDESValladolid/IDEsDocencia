@@ -187,7 +187,7 @@ return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 JPC: Hay que meter en una función el procesado para que se pueda hacer asíncronamente */				
 function procesaruta(ruta) {
 	
-	var rutfeat = ruta[0];
+	/*var rutfeat = ruta[0];
 	var geom = rutfeat.getGeometry();
 	
 	geom.transform("EPSG:4258","EPSG:3857");
@@ -196,8 +196,56 @@ function procesaruta(ruta) {
 	
 	var tipo = geom.getType();
 
-	console.log(tipo);
+	console.log(tipo);*/
+
 	
+	var feat = ruta[0];
+
+    feat.getGeometry().transform("EPSG:4258","EPSG:3857");
+
+    sourceLayer.addFeature(feat);
+
+    var extent = sourceLayer.getExtent();
+
+    fly_to(map, null, extent);
+
+	var sourceLine = new ol.source.Vector({
+    features: sourceLayer
+	});
+
+	var vectorLine = new ol.layer.Vector({
+    source: sourceLine
+	});
+
+	map.addLayer(vectorLine);
+
+     /*var visibilePoints = new ol.layer.Vector({
+                name:"Puntos Visibiles",
+                source: sourceLayer,
+                style: new ol.style.Style({
+                      image: new ol.style.Circle({
+                        fill: new ol.style.Fill({
+                          color: 'rgba(0,255,0,1)'
+                        }),
+                        radius:2,
+                        stroke: new ol.style.Stroke({
+                          color: 'rgba(0,255,255,1)',
+                          width: 2
+                        })
+                      })
+                    })
+            });
+            
+            map.addLayer(visibilePoints);
+            add_layer_to_list(visibilePoints);*/
+
+    // map.addLayer(sourceLayer);
+
+   /** var extent = sourceLayer.getExtent();
+
+    fly_to(map, null, extent);*/
+	
+	/**
 	var multi = new ol.geom.MultiLineString();
 	//var multi2 = new ol.geom.MultiLineString();
 	//multi2 = geom.getLineStrings();
@@ -231,7 +279,7 @@ function procesaruta(ruta) {
             
             map.addLayer(visibilePoints);
             add_layer_to_list(visibilePoints);
-	
+	*/
 }
 				
 
