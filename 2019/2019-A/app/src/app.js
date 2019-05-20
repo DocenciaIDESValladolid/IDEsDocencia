@@ -202,7 +202,7 @@ function procesaruta(ruta) {
     feat.getGeometry().transform("EPSG:4258","EPSG:3857");
     sourceLayer.addFeature(feat);
     var extent = sourceLayer.getExtent();
-    // Dirige el visor a la zona de interÃ©s.
+    // Dirige el visor a la zona de interes.
 	fly_to(map, null, extent);
 	return;
 
@@ -215,11 +215,12 @@ $("#ptosMunicipio").click(function(){
      obtenerPtosRecargaMunicipio();
 });
 
-function obtenerPtosRecargaMunicipio(){ 
+function obtenerPtosRecargaMunicipio(positionFeature){ 
 
 	  //Coordenadas de ejemplo. ELIMINAR por localización actual
-		var aux =new ol.geom.Point([41.529535,-4.750580]);//41.529535,-4.750580 __ 41.634887,-4.743307
-		var posicionActual = aux.getCoordinates();
+	  var aux1 = geolocation.getPosition();
+	  var aux = new ol.geom.Point([geolocation.getPosition()[0],geolocation.getPosition()[1]]);//41.529535,-4.750580 __ 41.634887,-4.743307
+	  var posicionActual = aux.transform("EPSG:3857","EPSG:4326").getCoordinates();
 		
       // peticion a ign para obtener el municipio en el que se encuentra el usuario
       var bodyMunicipiosWFS =`<wfs:GetFeature service="WFS" version="1.1.0"
@@ -240,7 +241,7 @@ function obtenerPtosRecargaMunicipio(){
 				<Intersects>
 				  <PropertyName>geometry</PropertyName>
 					<gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
-					  <gml:coordinates>` + posicionActual[0] + `,` + posicionActual[1] + `</gml:coordinates>
+					  <gml:coordinates>` + posicionActual[1] + `,` + posicionActual[0] + `</gml:coordinates>
 					</gml:Point>
 				  </Intersects>
 				</And>
@@ -257,7 +258,6 @@ function obtenerPtosRecargaMunicipio(){
 	  }).then(function(response) {
         return response.text();
       }).then(function(gml) {
-		  console.log(gml);
 		//Se divide la respuesta gml para quedarnos con el nodo <au:geometry> con la geomtría del municipio
 		var posInicial = gml.search("<au:geometry>");
 		var posFinal = gml.search("</au:geometry>");
@@ -321,8 +321,7 @@ function obtenerPtosRecargaMunicipio(){
 										  color: 'rgba(0,0,0,1)',
 										  width: 2
 										})
-									  })
-									  
+									  })									  
 									})
 						   
 					 });
@@ -338,9 +337,7 @@ function obtenerPtosRecargaMunicipio(){
 					 var extent = sourceLayer.getExtent();
 					 // Dirige el visor a la zona de interÃ©s.
 					 fly_to(map, null, extent);
-				 }
-				 console.log(gml);
-											  
+				 }											  
 		    });
 	  });
 }
