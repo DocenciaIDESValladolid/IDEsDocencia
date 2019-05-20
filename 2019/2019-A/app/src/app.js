@@ -188,10 +188,6 @@ JPC: Hay que meter en una función el procesado para que se pueda hacer asíncro
 function procesaruta(ruta) {
 	
 
-	/*var rutfeat = ruta[0];
-=======
-	// JPC: Crear estas capas en init_map.js y reutilizarlas adecuadamente.
-	// NO crear una capa nueva por cada petición. Vaciar el contenido de sourceLayer mejor.
 	var sourceLayer = new ol.source.Vector({
         projection: 'EPSG:3857'
     });
@@ -200,90 +196,17 @@ function procesaruta(ruta) {
        
     });
     map.addLayer(vectorCustomLayer);
-    add_layer_to_list(visibilePoints);*/
+    add_layer_to_list(vectorCustomLayer);
 
     var feat = ruta[0];
     feat.getGeometry().transform("EPSG:4258","EPSG:3857");
     sourceLayer.addFeature(feat);
     var extent = sourceLayer.getExtent();
-    // Dirige el visor a la zona de interés.
+    // Dirige el visor a la zona de interÃ©s.
 	fly_to(map, null, extent);
 	return;
 
 	
-	/*var feat = ruta[0];
-
-    feat.getGeometry().transform("EPSG:4258","EPSG:3857");
-
-    sourceLayer.addFeature(feat);
-
-    var extent = sourceLayer.getExtent();
-
-    fly_to(map, null, extent);
-
-	map.addLayer(sourceLayer);*/
-
-     /*var visibilePoints = new ol.layer.Vector({
-                name:"Puntos Visibiles",
-                source: sourceLayer,
-                style: new ol.style.Style({
-                      image: new ol.style.Circle({
-                        fill: new ol.style.Fill({
-                          color: 'rgba(0,255,0,1)'
-                        }),
-                        radius:2,
-                        stroke: new ol.style.Stroke({
-                          color: 'rgba(0,255,255,1)',
-                          width: 2
-                        })
-                      })
-                    })
-            });
-            
-            map.addLayer(visibilePoints);
-            add_layer_to_list(visibilePoints);*/
-
-    // map.addLayer(sourceLayer);
-
-   /** var extent = sourceLayer.getExtent();
-
-    fly_to(map, null, extent);*/
-	
-	/**
-	var multi = new ol.geom.MultiLineString();
-	//var multi2 = new ol.geom.MultiLineString();
-	//multi2 = geom.getLineStrings();
-	multi = geom.getLineString(0);
-
-
-
-	for (i=0; i<multi.getLength(); i++){
-                var points = multi[i],
-                    feature = new ol.Feature({ geometry: new ol.geom.Point()});
-                
-                sourcePoints.addFeature(feature);
-            }
-
-	            var visibilePoints = new ol.layer.Vector({
-                name:"Puntos Visibiles",
-                source: sourcePoints,
-                style: new ol.style.Style({
-                      image: new ol.style.Circle({
-                        fill: new ol.style.Fill({
-                          color: 'rgba(0,255,0,1)'
-                        }),
-                        radius:2,
-                        stroke: new ol.style.Stroke({
-                          color: 'rgba(0,255,255,1)',
-                          width: 2
-                        })
-                      })
-                    })
-            });
-            
-            map.addLayer(visibilePoints);
-            add_layer_to_list(visibilePoints);
-	*/
 }
 				
 
