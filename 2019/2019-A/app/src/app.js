@@ -200,7 +200,7 @@ function procesaruta(ruta) {
        
     });
     map.addLayer(vectorCustomLayer);
-    add_layer_to_list(visibilePoints);
+    add_layer_to_list(visibilePoints);*/
 
     var feat = ruta[0];
     feat.getGeometry().transform("EPSG:4258","EPSG:3857");
@@ -209,20 +209,9 @@ function procesaruta(ruta) {
     // Dirige el visor a la zona de interés.
 	fly_to(map, null, extent);
 	return;
-	var rutfeat = ruta[0];
-
-	var geom = rutfeat.getGeometry();
-	
-	geom.transform("EPSG:4258","EPSG:3857");
-	
-	var sourcePoints = new ol.source.Vector();
-	
-	var tipo = geom.getType();
-
-	console.log(tipo);*/
 
 	
-	var feat = ruta[0];
+	/*var feat = ruta[0];
 
     feat.getGeometry().transform("EPSG:4258","EPSG:3857");
 
@@ -232,7 +221,7 @@ function procesaruta(ruta) {
 
     fly_to(map, null, extent);
 
-	map.addLayer(sourceLayer);
+	map.addLayer(sourceLayer);*/
 
      /*var visibilePoints = new ol.layer.Vector({
                 name:"Puntos Visibiles",
