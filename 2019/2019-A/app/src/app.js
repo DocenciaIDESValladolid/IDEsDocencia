@@ -251,7 +251,7 @@ $("#ptosMunicipio").click(function(){
 function obtenerPtosRecargaMunicipio(){ 
 
 	  //Coordenadas de ejemplo. ELIMINAR por localización actual
-		var aux =new ol.geom.Point([41.634887,-4.743307]);
+		var aux =new ol.geom.Point([41.529535,-4.750580]);//41.529535,-4.750580 __ 41.634887,-4.743307
 		var posicionActual = aux.getCoordinates();
 		
       // peticion a ign para obtener el municipio en el que se encuentra el usuario
@@ -290,6 +290,7 @@ function obtenerPtosRecargaMunicipio(){
 	  }).then(function(response) {
         return response.text();
       }).then(function(gml) {
+		  console.log(gml);
 		//Se divide la respuesta gml para quedarnos con el nodo <au:geometry> con la geomtría del municipio
 		var posInicial = gml.search("<au:geometry>");
 		var posFinal = gml.search("</au:geometry>");
@@ -332,11 +333,46 @@ function obtenerPtosRecargaMunicipio(){
 				 var wfsformat = new ol.format.GML();
 				 
 				 var features = wfsformat.readFeatures(gml);
-
-				 console.log(gml);
-				  
+				 
 				 //Se dibujan los diferentes puntos de recarga
-				 //map.addLayer(features[0]);
+				 if(features.length==0){
+					 toast("No hay puntos de recarga cercanos");
+				 }else{
+					 
+					 var sourceLayer = new ol.source.Vector({
+							projection: 'EPSG:3857'
+					 });
+					 var vectorCustomLayer = new ol.layer.Vector({
+							source: sourceLayer,
+							style: new ol.style.Style({
+									  image: new ol.style.Circle({
+										fill: new ol.style.Fill({
+										  color: 'rgba(255,10,0,1)'
+										}),
+										radius: 10,
+										stroke: new ol.style.Stroke({
+										  color: 'rgba(0,0,0,1)',
+										  width: 2
+										})
+									  })
+									  
+									})
+						   
+					 });
+					 map.addLayer(vectorCustomLayer);
+					 add_layer_to_list(vectorCustomLayer);
+					 
+					 for(i=0;i<features.length;i++){
+						 var feat = features[i];
+						 feat.getGeometry().transform("EPSG:4326","EPSG:3857");
+						 sourceLayer.addFeature(feat);
+					 }
+
+					 var extent = sourceLayer.getExtent();
+					 // Dirige el visor a la zona de interÃ©s.
+					 fly_to(map, null, extent);
+				 }
+				 console.log(gml);
 											  
 		    });
 	  });
