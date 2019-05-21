@@ -507,15 +507,16 @@ function calcular(){
 			var projection = ol.proj.get("EPSG:3857");
 			var featuretype2 = 'Aves-3857-Simpl';
 			
-			var buffer = wpsclient_featurecollection(href, BufferWPS, prefix, namespace, featuretype, projection);
-			var union = wpsclient_featurecollection(href, UnionWPS, prefix, namespace, featuretype2, projection);
-			var GMLBuffer = writeGMLFeatureCollection(buffer, prefix, namespace, featuretype, projection);
+		   // Lanza la petición al WPS asíncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
+		   var buffer = wpsclient_featurecollection(href, BufferWPS, prefix, namespace, featuretype, projection);
+		   // Lanza la petición al WPS asíncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
+		   var union = wpsclient_featurecollection(href, UnionWPS, prefix, namespace, featuretype2, projection);
+		   var GMLBuffer = writeGMLFeatureCollection(buffer, prefix, namespace, featuretype, projection);
 
-	
+			
 	
 	
 }
-
 
 /**
 * Place WPS request.
@@ -566,21 +567,23 @@ return fetch(href, {
 
 /**
 * Write GML Feature collection from an array of Feature
-* @param {Feature}[] array
+* @param {Feature[]|Promise} array of Features or Promise
 * @param {namespace}  namespace uri. i.e. "http://itastdevserver.tel.uva.es/ide2019b"
 * @param {featuretype} name of the featuretype. i.e. "Aeropuertos3587"
 * @param {Projection} SRS of the input and output geometries.
 * @return string GML
 */
-function writeGMLFeatureCollection(features, prefix, namespace, featuretype, projection) {
+async function writeGMLFeatureCollection(features, prefix, namespace, featuretype, projection) {
 	var options={
 				srsName: projection.getCode(), //proyeccion de openlayers
 				featureNS: namespace,
 				featurePrefix: prefix,
 				featureType: featuretype
 				}
+	// Hay que esperar a que terminen las anteriores.
+	var featuresarray = await features;
 	var format = ol.format.GML3();
-	var gml = new format.writeFeatures(features);
+	var gml = new format.writeFeatures(featuresarray);
 	return gml;
 }
 
