@@ -3,6 +3,8 @@ $('#mappage').on("pageinit", function(){
   add_demo_functions();
   initmap();
   initApp();
+  WFSQueryCoches();
+  //imprimeRadioButtonMarca();
 });
 
 // El calculo de nuestra ruta
@@ -611,4 +613,69 @@ function get_block_text(title, body) {
   return '<div class="ui-bar ui-bar-a">' + title +
       '</div><div class="ui-body ui-body-a">' + body +
       '</div>';
+}
+function imprimeRadioButtonMarca(marcas){
+	//var marcas=['Audi', 'kia', 'tesla'];
+	
+	//create your innerHTML container var:
+	var innerHTML = '';
+	//iterate through your array:
+	for (var i=0;i<marcas.length;i++)
+	{
+		if(i==0){
+			innerHTML += '<input name="marca" id="'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" checked="checked"/><label for="'+ marcas[i] +'">'+ marcas[i] + '</label>';
+		}else{
+			innerHTML += '<input name="marca" id="'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" /><label for="'+ marcas[i] +'">'+ marcas[i] + '</label>';
+		}
+	}
+	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
+	$("#MarcasGrp").controlgroup("container").append(innerHTML);
+	//and refresh the jQuery Mobile control group like this:
+	$("#MarcasGrp").enhanceWithin().controlgroup("refresh");
+}
+function WFSQueryCoches(){
+
+// generate a GetFeature request
+  var bodyCochesWFS = `<wfs:GetFeature service="WFS" version="1.1.0" outputFormat= "application/json"
+		xmlns:topp="http://www.openplans.org/topp"
+		xmlns:wfs="http://www.opengis.net/wfs"
+		xmlns:ogc="http://www.opengis.net/ogc"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+			<wfs:Query typeName="estacionesC:coches">
+			</wfs:Query>
+		</wfs:GetFeature>`;
+
+      // then post the request and add the received features to a layer
+      fetch("http://localhost:8080/geoserver/wfs", {
+           
+		   method: 'POST', // *GET, POST, PUT, DELETE, etc.
+			mode: 'no-cors', // no-cors, cors, *same-origin
+			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+			credentials: 'same-origin', // include, *same-origin, omit
+           headers: {
+               "Content-Type": "application/xml; charset=UTF-8"
+           },
+           body: bodyCochesWFS
+	  }).then(function(response) {
+		return response.json();
+	     //return JSON.parse(response);
+	  }).then(function(json){
+	  	//console.log(JSON.stringify(json)); //for debug
+		//features: cada uno de los coches
+		//Empty array creation
+		var marcas = [];
+		json.features.forEach(function(value){
+			marcas.push(value.properties["marca"]);
+			console.log(value.properties["marca"]);
+		});
+		console.log(marcas);
+		var marcasUnicas = marcas.filter(function(elem, index,self){
+			return index === self.indexOf(elem);
+		});
+		console.log(marcasUnicas);
+		 imprimeRadioButtonMarca( marcasUnicas);
+				
+	 
+	  });
 }

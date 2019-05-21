@@ -2,13 +2,13 @@
 <html>
 <head>
     <title>WFS - GetFeature</title>
-    <link rel="stylesheet" href="https://openlayers.org/en/v5.3.0/css/ol.css" type="text/css">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
 	<script src="js/jquery2/jquery-2.1.4.min.js"></script>
     <script src="js/jquery-mobile/jquerymobile.js"></script>
     <script src="js/jquery-ui.min.js"></script>
-    <script src="js/jquery-mobile/jquery.mobile-config.js"></script>
+    <!--<script src="js/jquery-mobile/jquery.mobile-config.js"></script>-->
     <script src="js/openlayers/dist/ol-debug.js"></script>
     <script src="js/geocoder/geocoder.js"></script>
     <script src="src/demos/demos.js"></script>
@@ -16,25 +16,46 @@
 
 </head>
 <body>
-
-<h1 id="demo1">Marca</h1>
-
-<select id="marcas-dropdown" name="marcas">
-</select>
-
-<button type="button" onclick="myFunction()">Click Me!</button>
-
-<p id="demo">This is a demonstration.</p>
-
 <script>
+
 /**$("marcas-dropdown").click(function(){
      WFSQueryCoches();
 });*/
 function myFunction() { 
+				
   document.getElementById("demo").innerHTML = "Hello JavaScript!";
   WFSQueryCoches();
 }
-
+function imprimeRadioButtonMarca( marcas){
+	
+	//create your innerHTML container var:
+	var innerHTML = '';
+	//iterate through your array:
+	for (var i=0;i<marcas.length;i++)
+	{
+	//current marca is marcas[i]
+	innerHTML += '<input name="marca" id="marca-'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" /><label for="marca-'+ marcas[i] +'">'+ marcas[i] + '</label>';
+	}
+	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
+	$("#MarcasGrp").controlgroup("container").append(innerHTML);
+	//and refresh the jQuery Mobile control group like this:
+	$("#MarcasGrp").enhanceWithin().controlgroup("refresh");
+}
+function imprimeRadioButtonModelo(model){
+	
+	//create your innerHTML container var:
+	var innerHTML = '';
+	//iterate through your array:
+	for (var i=0;i<model.length;i++)
+	{
+	//current model is model[i]
+	innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" /><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
+	}
+	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
+	$("#ModeloGrp").controlgroup("container").append(innerHTML);
+	//and refresh the jQuery Mobile control group like this:
+	$("#ModeloGrp").enhanceWithin().controlgroup("refresh");
+}
 function WFSQueryCoches(){
 
 // generate a GetFeature request
@@ -65,13 +86,128 @@ function WFSQueryCoches(){
 	  }).then(function(json){
 	  	//console.log(JSON.stringify(json)); //for debug
 		//features: cada uno de los coches
-		var marca1 =  json.features[1].properties["marca"];
-		console.log(marca1);
-		document.getElementById("demo1").innerHTML = marca1;
+		//Empty array creation
+		var marcas = [];
+		json.features.forEach(function(value){
+			marcas.push(value.properties["marca"]);
+			console.log(value.properties["marca"]);
+		});
+		console.log(marcas);
+		var marcasUnicas = marcas.filter(function(elem, index,self){
+			return index === self.indexOf(elem);
+		});
+		console.log(marcasUnicas);
+		 imprimeRadioButtonMarca( marcasUnicas);
+				
+	 
 	  });
-    
 }
 </script>
 
+<p id="demo">This is a demonstration.</p>
+<button type="button" onclick="myFunction()">Click Me!</button>
+
+<form>
+    <div class="ui-body ui-body-d ui-corner-all">
+        <p>Marca Vehículo</p>
+        <div data-role="controlgroup" id="my-controlgroup"><!-- items will be injected here --></div>
+    </div>
+</form>
+<fieldset data-role="controlgroup" data-type="horizontal" id="MarcasGrp"></fieldset>
+<fieldset data-role="controlgroup" data-type="horizontal" id="ModeloGrp"></fieldset>
+
 </body>
+
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Cosas en app.js:
+
+
+function imprimeRadioButtonMarca(marcas){
+	//var marcas=['Audi', 'kia', 'tesla'];
+	
+	//create your innerHTML container var:
+	var innerHTML = '';
+	//iterate through your array:
+	for (var i=0;i<marcas.length;i++)
+	{
+		if(i==0){
+			innerHTML += '<input name="marca" id="'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" checked="checked"/><label for="'+ marcas[i] +'">'+ marcas[i] + '</label>';
+		}else{
+			innerHTML += '<input name="marca" id="'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" /><label for="'+ marcas[i] +'">'+ marcas[i] + '</label>';
+		}
+	}
+	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
+	$("#MarcasGrp").controlgroup("container").append(innerHTML);
+	//and refresh the jQuery Mobile control group like this:
+	$("#MarcasGrp").enhanceWithin().controlgroup("refresh");
+}
+function WFSQueryCoches(){
+
+// generate a GetFeature request
+  var bodyCochesWFS = `<wfs:GetFeature service="WFS" version="1.1.0" outputFormat= "application/json"
+		xmlns:topp="http://www.openplans.org/topp"
+		xmlns:wfs="http://www.opengis.net/wfs"
+		xmlns:ogc="http://www.opengis.net/ogc"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+			<wfs:Query typeName="estacionesC:coches">
+			</wfs:Query>
+		</wfs:GetFeature>`;
+
+      // then post the request and add the received features to a layer
+      fetch("http://localhost:8080/geoserver/wfs", {
+           
+		   method: 'POST', // *GET, POST, PUT, DELETE, etc.
+			mode: 'no-cors', // no-cors, cors, *same-origin
+			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+			credentials: 'same-origin', // include, *same-origin, omit
+           headers: {
+               "Content-Type": "application/xml; charset=UTF-8"
+           },
+           body: bodyCochesWFS
+	  }).then(function(response) {
+		return response.json();
+	     //return JSON.parse(response);
+	  }).then(function(json){
+	  	//console.log(JSON.stringify(json)); //for debug
+		//features: cada uno de los coches
+		//Empty array creation
+		var marcas = [];
+		json.features.forEach(function(value){
+			marcas.push(value.properties["marca"]);
+			console.log(value.properties["marca"]);
+		});
+		console.log(marcas);
+		var marcasUnicas = marcas.filter(function(elem, index,self){
+			return index === self.indexOf(elem);
+		});
+		console.log(marcasUnicas);
+		 imprimeRadioButtonMarca( marcasUnicas);
+				
+	 
+	  });
+}
