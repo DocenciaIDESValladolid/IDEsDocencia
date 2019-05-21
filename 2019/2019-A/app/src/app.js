@@ -296,10 +296,10 @@ function obtenerPtosRecargaMunicipio(positionFeature){
 		//Se divide la respuesta gml para quedarnos con el nodo <au:geometry> con la geomtría del municipio
 		var posInicial = gml.search("<au:geometry>");
 		var posFinal = gml.search("</au:geometry>");
-		var geometria = gml.substring(posInicial,posFinal + "</au:geometry>".length);// 14 es el numero de caracteres de </au:geometry>
+		var geometria = gml.substring(posInicial,posFinal + "</au:geometry>".length);
 		//A partir de <au:geometry> se obtiene el polígono del municipio (Polygon o Multipolygon)
 		var posFin = geometria.search("</au:geometry>");
-		var geom = geometria.substring("<au:geometry>".length,posFin);//13 es el numero de caracteres de <au:geometry>
+		var geom = geometria.substring("<au:geometry>".length,posFin);
 		
 		// peticion a la BBDD para obtener los puntos de recarga mediante el municipio en el que se encuentra el usuario
 		  var bodyPtosRecargaWFS =`<wfs:GetFeature service="WFS" version="1.1.0"
