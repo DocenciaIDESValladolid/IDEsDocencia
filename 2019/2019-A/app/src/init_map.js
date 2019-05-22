@@ -113,7 +113,7 @@ function initmap() {
             features: [accuracyFeature, positionFeature]
         })
     });
-    var markerFeature = new ol.Feature();
+    markerFeature = new ol.Feature();
     markerFeature.setGeometry(null);
     markerFeature.setStyle(markerFeatureStyle);
     var markerVector = new ol.layer.Vector({

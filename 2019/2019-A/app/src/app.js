@@ -15,8 +15,6 @@ $("#apptst").click(function(){
 	
 function tst(){
 	toast("Calculando ruta al destino");
-	
-
 	var origen=new ol.geom.Point([-524447.14,4637888.47]);
 	var destino=new ol.geom.Point([-410927.12,4503102.50]);
 	var distancia=3000;
@@ -26,7 +24,6 @@ function tst(){
 
 	CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258")).then(intersectManhattanRecarga);
 	/*CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);*/
-	
 	
 }
 
@@ -71,9 +68,30 @@ function intersectManhattanRecarga(geom){
 		    });
 }
 
-function calculoDistancia(){
+/** Función para obtener el punto de recarga más cercano a un desttino de entre un grupo de puntos de recarga
+*/
+function calculoDistancia(puntosRecarga){
+	// Se obtiene el punto de destino
+	var aux = markerFeature.getGeometry().transform("EPSG:3857","EPSG:4326"); //Se cambia a  4326 porque los puntos de recarga vienen en ese sistema
+	var destino = aux.getCoordinates();
 	
+	//Bucle para obtener la mínima distancia
+	var minDistancia;	
+	var featureIndex;
+	var distancia;
+	for(i=0;i<features.length;i++){
+		
+		coordenadas = features[i].getGeometry().getCoordinates();
+		distancia = Math.sqrt(Math.pow(coordenadas[0]-destino[0],2)+Math.pow(coordenadas[1]-destino[1],2));//Se calcula la distancia como el modulo de la diferencia de las coordenadas
+		if(i==0){
+			minDistancia=distancia;
+		}else if((distancia<=minDistancia)){
+			minDistancia = distancia;
+			featureIndex = i;
+		}
+	}
 	
+	return features[featureIndex].getGeometry();
 }
 
 function CalculoManhattan(from, distancia, projection){
@@ -331,9 +349,8 @@ function obtenerPtosRecargaMunicipio(positionFeature){
 				return response.text();
 			  }).then(function(gml){
 				  
-				 var doc = ol.xml.parse(gml);
-				 var wfsformat = new ol.format.GML();
-				 
+				 //var doc = ol.xml.parse(gml);
+				 var wfsformat = new ol.format.GML();		 
 				 var features = wfsformat.readFeatures(gml);
 				 
 				 //Se dibujan los diferentes puntos de recarga
