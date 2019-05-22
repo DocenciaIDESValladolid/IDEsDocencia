@@ -633,6 +633,28 @@ function imprimeRadioButtonMarca(marcas){
 	//and refresh the jQuery Mobile control group like this:
 	$("#MarcasGrp").enhanceWithin().controlgroup("refresh");
 }
+
+function imprimeRadioButtonModelo(model){
+	
+	//create your innerHTML container var:
+	var innerHTML = '';
+	//iterate through your array:
+	for (var i=0;i<model.length;i++)
+	{
+		if(i==0){
+			innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" checked="checked"/><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
+		}else{
+			innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" /><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
+		}
+	}
+	// empty your group container
+	$("#ModeloGrp").controlgroup("container").empty();
+	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
+	$("#ModeloGrp").controlgroup("container").append(innerHTML);
+	//and refresh the jQuery Mobile control group like this:
+	$("#ModeloGrp").enhanceWithin().controlgroup("refresh");
+}
+
 function WFSQueryCoches(){
 
 // generate a GetFeature request
@@ -674,8 +696,44 @@ function WFSQueryCoches(){
 			return index === self.indexOf(elem);
 		});
 		console.log(marcasUnicas);
-		 imprimeRadioButtonMarca( marcasUnicas);
-				
-	 
+		
+		//Imprimos por pantalla los radio buttons de las marcas con
+		//la primera seleccionada y los modelos asociados a esta
+		imprimeRadioButtonMarca( marcasUnicas);
+		marcaElegida= $("#MarcasGrp :radio:checked").val();
+		var modelo = [];
+			json.features.forEach(function(value){
+				if(value.properties["marca"]=== marcaElegida){
+					modelo.push(value.properties["modelo"]);
+					console.log(value.properties["modelo"]);
+				}
+			});
+			imprimeRadioButtonModelo(modelo);
+			
+			
+		 $("input[name='marca']").on("change", function() {
+			marcaElegida=$("input[name='marca']:checked").val();
+			console.log(marcaElegida);
+			var modelo = [];
+			json.features.forEach(function(value){
+				if(value.properties["marca"]=== marcaElegida){
+					modelo.push(value.properties["modelo"]);
+					console.log(value.properties["modelo"]);
+				}
+			});
+			imprimeRadioButtonModelo(modelo);
+		});
+		
+		$("input[name='model']").on("change", function() {
+			modeloElegido=$("input[name='model']:checked").val();
+			json.features.forEach(function(value){
+				if(value.properties["modelo"]=== modeloElegido){
+					autonomia=value.properties["rangokm"];
+					console.log(autonomia);
+				}
+		});
+		
 	  });
+    });
 }
+
