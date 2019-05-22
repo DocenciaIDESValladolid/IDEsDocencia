@@ -35,7 +35,7 @@
             <div data-role="header" data-position="fixed" data-tap-toggle="false">
                 <a href="#" data-role="button" data-rel="close" class=" ui-btn-inline ui-nodisc-icon ui-btn 
                    ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
-                <h1>Información</h1>
+                <h1>Opciones</h1>
             </div>
             <div><br></div>
 			
@@ -69,11 +69,14 @@
                     </div>
                 </div>
                 <div data-role="collapsible" data-theme="a" data-iconpos="right">
-                    <h3>Modelo vehículo</h3>
+                    <h3>Vehículo</h3>
                     <div>
                         <div class="no-overflow">
+						<h4>Marca</h4>
                         <form name="vehiculo" method="get" action="ejemploGet.php">
-
+								<fieldset data-role="controlgroup" data-type="vertical" id="MarcasGrp">
+									
+								</fieldset>
                                 <input id="vehiculo" name="vehiculo" placeholder="Vehículo">
                             </div>
 

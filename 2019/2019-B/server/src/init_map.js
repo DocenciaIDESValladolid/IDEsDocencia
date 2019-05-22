@@ -86,8 +86,8 @@ function initmap() {
     roadlayer.set("name", "roadview");
     var layergroup = new ol.layer.Group({ layers: [aeriallayer, roadlayer] });
     var view = new ol.View({
-        center: [0, 0],
-        zoom: 2,
+        center: [-474521.071594, 4940889.508354],
+        zoom: 6,
         minZoom: 2
     });
     select = new ol.interaction.Select({
@@ -294,9 +294,9 @@ function dibujar(){
 	dibujo=dibujo+1;
 	}
 	else{
-		var opcion=confirm('Ya hay una ruta dibujada. �Desea empezar de nuevo?');
+		var opcion=confirm('Ya hay una ruta dibujada. �Desea empezar de nuevo?');
 		if (opcion == true){
-			location.reload();
+			draw.removeAllFeatures();
 		}
 		else{
 			
@@ -338,7 +338,7 @@ function editar(){
 }
 
 //FUNCION PARA REALIZAR EL PROCESAMIENTO
-function calcular(){
+async function calcular(){
 	
 	
 	
@@ -347,8 +347,8 @@ function calcular(){
 		var WFS = new ol.format.WFS();
 		var options={
 		srsName: "EPSG:3857", //proyeccion de openlayers
-		featureNS: 'http://dron',//poner el necesario en cada caso
-		featurePrefix: 'DronFree',
+		featureNS: 'http://itastdevserver.tel.uva.es/IDE2019B',//poner el necesario en cada caso
+		featurePrefix: 'ide2019b',
 		featureType: 'dron'
 		 }
 
@@ -358,7 +358,7 @@ function calcular(){
 		
 		s = new XMLSerializer();
 		str = s.serializeToString(node);
-		fetch('/geoserver/DronFree/wfs',{
+		fetch('/geoserver/ide2019b/wfs',{
 		method: 'POST',
 		body: str
 		}).then(function (node){
@@ -371,9 +371,10 @@ function calcular(){
 		calculo=calculo+1;
 	}
 	else{
-		var opcion=confirm('La ruta ya se ha calulado o esta en proceso. �Desea empezar de nuevo?');
+		var opcion=confirm('La ruta ya se ha calulado o esta en proceso. �Desea empezar de nuevo?');
 		if (opcion == true){
 			location.reload();
+			draw.removeAllFeatures();
 		}
 		else{
 			
@@ -381,14 +382,257 @@ function calcular(){
 	}
 	
 	
-	//CONSULTAR EL ID DE LA ULTIMA RUTA PARA REALIZAR LOS CALCULOS CON ELLA
+	//CONSULTAS WPS
+
+	//Obtener el bounding box de la ruta para pasarlo a la consulta
+	var b=geometria.values_.geometry.flatCoordinates;
+	var minimoX=9999999999; var maximoX=-9999999999; var minimoY=9999999999; var maximoY=-9999999999;
+	var xmin=0; var xmax=0; var ymin=0; var ymax=0;
+	var j=0; var i=0;
+	while(j==0)
+	{
+		if(i>b.length)
+		{
+			j=1;
+		}
+		else{
+			if(i%2==0){
+				if(b[i]<minimoX)
+				{
+					xmin=b[i];
+					minimoX=xmin;
+				}
+				else if(b[i]>maximoX)
+				{
+					xmax=b[i];
+					maximoX=xmax;
+				}
+			}
+			else{
+				if(b[i]<minimoY)
+				{
+					ymin=b[i];
+					minimoY=ymin;
+				}
+				else if(b[i]>maximoY)
+				{
+					ymax=b[i];
+					maximoY=ymax;
+				}
+			}
+			
+			i++;
+		}
+	}
 	
-	var coordenadas = geometria.values_.geometry.extent_;
+	//var a= ol.extent.boundingExtent(b);
+	//alert("bbox"+ xmin +"x"+ ymin +"x"+ xmax +"x"+ ymax);
 	
 	
+	var BufferWPS=`<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
+			<ows:Identifier>gs:BufferFeatureCollection</ows:Identifier>
+			<wps:DataInputs>
+				<wps:Input>
+					<ows:Identifier>features</ows:Identifier>
+					<wps:Reference mimeType="text/xml" xlink:href="http://localhost:8081/geoserver/wps" method="POST">
+						<wps:Body><![CDATA[
+							<wfs:GetFeature service="WFS" version="1.1.0" maxFeatures="20" outputFormat="GML2"
+							  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
+							  xmlns:wfs="http://www.opengis.net/wfs"
+							  xmlns:ogc="http://www.opengis.net/ogc"
+							  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+							  xsi:schemaLocation="http://www.opengis.net/wfs
+							  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+								<wfs:Query typeName="ide2019b:Aeropuertos-3857">
+									<ogc:Filter>
+										<ogc:And>
+											<ogc:PropertyIsEqualTo>
+												<ogc:PropertyName>tip_area</ogc:PropertyName>
+												<ogc:Literal>1</ogc:Literal>
+											</ogc:PropertyIsEqualTo>
+											<ogc:BBOX>
+												<ogc:PropertyName>geom</ogc:PropertyName>
+												<Envelope srsName="http://www.opengis.net/gml/srs/epsg.xml#3857">
+													<lowerCorner>${xmin} ${ymin}</lowerCorner>
+													<upperCorner>${xmax} ${ymax}</upperCorner>
+												</Envelope>
+											</ogc:BBOX>
+										</ogc:And>
+									</ogc:Filter>
+								</wfs:Query>
+							</wfs:GetFeature>
+							
+						]]></wps:Body>
+					</wps:Reference>
+				</wps:Input>
+				<wps:Input>
+					<ows:Identifier>distance</ows:Identifier>
+					<wps:Data>
+						<wps:LiteralData>10667</wps:LiteralData>
+					</wps:Data>
+				</wps:Input>
+				</wps:DataInputs>
+				<wps:ResponseForm>
+					<wps:RawDataOutput mimeType="text/xml; subtype=wfs-collection/1.1">
+						<ows:Identifier>result</ows:Identifier>
+					</wps:RawDataOutput>
+				</wps:ResponseForm>
+			</wps:Execute>`;
+			
+			
+			
+			var UnionWPS=`<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
+			  <ows:Identifier>gs:UnionFeatureCollection</ows:Identifier>
+			  <wps:DataInputs>
+				<wps:Input>
+				  <ows:Identifier>first</ows:Identifier>
+				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8081/geoserver/wfs" method="POST">
+					<wps:Body><![CDATA[<wfs:GetFeature service="WFS" version="1.1.0"
+
+			  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
+			  xmlns:wfs="http://www.opengis.net/wfs"
+			  xmlns:ogc="http://www.opengis.net/ogc"
+			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			  xsi:schemaLocation="http://www.opengis.net/wfs
+								  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+			  <wfs:Query typeName="ide2019b:Aves-3857-Simpl">
+				<ogc:Filter>
+					 <ogc:BBOX>
+					<ogc:PropertyName>geom</ogc:PropertyName>
+					<Envelope srsName="http://www.opengis.net/gml/srs/epsg.xml#3857">
+					   <lowerCorner>${xmin} ${ymin}</lowerCorner>
+					   <upperCorner>${xmax} ${ymax}</upperCorner>
+					</Envelope>
+				  </ogc:BBOX>     
+				</ogc:Filter>
+				</wfs:Query>
+			</wfs:GetFeature>]]></wps:Body>
+				  </wps:Reference>
+				</wps:Input>
+				<wps:Input>
+				  <ows:Identifier>second</ows:Identifier>
+				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8081/geoserver/wfs" method="POST">
+					<wps:Body><![CDATA[<wfs:GetFeature service="WFS" version="1.1.0"
+
+			  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
+			  xmlns:wfs="http://www.opengis.net/wfs"
+			  xmlns:ogc="http://www.opengis.net/ogc"
+			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			  xsi:schemaLocation="http://www.opengis.net/wfs
+								  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+			  <wfs:Query typeName="ide2019b:ParquesNaturales-3857-Simpl">
+				<ogc:Filter>
+					 <ogc:BBOX>
+					<ogc:PropertyName>geom</ogc:PropertyName>
+					<Envelope srsName="http://www.opengis.net/gml/srs/epsg.xml#3857">
+					   <lowerCorner>${xmin} ${ymin}</lowerCorner>
+					   <upperCorner>${xmax} ${ymax}</upperCorner>
+					</Envelope>
+				  </ogc:BBOX>   
+				</ogc:Filter>
+				</wfs:Query>
+			</wfs:GetFeature>]]></wps:Body>
+				  </wps:Reference>
+				</wps:Input>
+			  </wps:DataInputs>
+			  <wps:ResponseForm>
+				<wps:RawDataOutput mimeType="text/xml; subtype=wfs-collection/1.1">
+				  <ows:Identifier>result</ows:Identifier>
+				</wps:RawDataOutput>
+			  </wps:ResponseForm>
+			</wps:Execute>`;
+			
+			var href='/geoserver/ide2019b/wps';
+			var prefix = 'feature';
+			var namespace = 'http://itastdevserver.tel.uva.es/IDE2019B';
+			var featuretype = 'Aeropuertos-3857';
+			var projection = ol.proj.get("EPSG:3857");
+			var featuretype2 = 'Aves-3857-Simpl';
+			
+		   // Lanza la petición al WPS asíncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
+		   var buffercollection = await wpsclient_featurecollection(href, BufferWPS, prefix, namespace, featuretype, projection);//.then(function(featuresarray){});
+		   // Lanza la petición al WPS asíncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
+		   var unioncollection = await wpsclient_featurecollection(href, UnionWPS, prefix, namespace, featuretype2, projection);
+		   	
+			unioncollection.concat(buffercollection);
+			
+			
+		   var GML = writeGMLFeatureCollection(unioncollection, prefix, namespace, featuretype, projection);
+
+			
 	
 	
 }
+
+/**
+* Place WPS request.
+* Example:
+* 
+*	var 
+*	wpsclient_featurecollection(href, wpsbody, ol.proj.get("EPSG:4258")).then(function (featuresarray){});
+*	
+* @param {href} url of the server.
+* @param {wpsbody} text content of the request.
+* @param {namespace}  namespace uri. i.e. "http://itastdevserver.tel.uva.es/ide2019b"
+* @param {featuretype} name of the featuretype. i.e. "Aeropuertos3587"
+* @param {Projection} SRS of the input and output geometries.
+* @return {Promise} with an array of {Feature} with the feature collection.
+*/
+function wpsclient_featurecollection(href, wpsbody, prefix, namespace, featuretype, projection){
+	var SRScode= projection.getCode().substring(5);
+	var WPSSRSname = "http://www.opengis.net/gml/srs/epsg.xml#" + SRScode;
+    
+return fetch(href, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/xml"
+                    },
+                    body: wpsbody
+                }).then(function(response){
+					return response.text();
+				}).then(function(gml){
+					var doc = ol.xml.parse(gml);
+					var colls = doc.getElementsByTagName("wfs:FeatureCollection");
+					var coll = colls[0];
+                    
+					
+					var options={
+						srsName: projection.getCode(), //proyeccion de openlayers
+						featureNS: namespace,//poner el necesario en cada caso
+						featurePrefix: prefix,
+						featureType: featuretype
+						 }
+				    // Register the alias for the SRS.
+					proj4.defs(WPSSRSname, projection);
+					var wfsformat = new ol.format.GML(options);
+					var rutacoll =wfsformat.readFeatures(coll);
+					return Promise.resolve(rutacoll);
+				});	
+}
+
+/**
+* Write GML Feature collection from an array of Feature
+* @param {Feature[]|Promise} array of Features or Promise
+* @param {namespace}  namespace uri. i.e. "http://itastdevserver.tel.uva.es/ide2019b"
+* @param {featuretype} name of the featuretype. i.e. "Aeropuertos3587"
+* @param {Projection} SRS of the input and output geometries.
+* @return string GML
+*/
+async function writeGMLFeatureCollection(features, prefix, namespace, featuretype, projection) {
+	var options={
+				srsName: projection.getCode(), //proyeccion de openlayers
+				featureNS: namespace,
+				featurePrefix: prefix,
+				featureType: featuretype
+				}
+	// Hay que esperar a que terminen las anteriores.
+	var featuresarray = await features;
+	var format = new ol.format.GML();
+	var gml = new format.writeFeatures(featuresarray);
+	return gml;
+}
+
+
 
 
 
