@@ -642,12 +642,12 @@ function WFSQueryCoches(){
 		xmlns:ogc="http://www.opengis.net/ogc"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-			<wfs:Query typeName="estacionesC:coches">
+			<wfs:Query typeName="proyectoIDE:coches">
 			</wfs:Query>
 		</wfs:GetFeature>`;
 
       // then post the request and add the received features to a layer
-      fetch("http://localhost:8080/geoserver/wfs", {
+      fetch("http://localhost:8081/geoserver/wfs", {
            
 		   method: 'POST', // *GET, POST, PUT, DELETE, etc.
 			mode: 'no-cors', // no-cors, cors, *same-origin
