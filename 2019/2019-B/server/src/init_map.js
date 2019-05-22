@@ -338,7 +338,7 @@ function editar(){
 }
 
 //FUNCION PARA REALIZAR EL PROCESAMIENTO
-function calcular(){
+async function calcular(){
 	
 	
 	
@@ -477,8 +477,7 @@ function calcular(){
 						<ows:Identifier>result</ows:Identifier>
 					</wps:RawDataOutput>
 				</wps:ResponseForm>
-			</wps:Execute>
-			`;
+			</wps:Execute>`;
 			
 			
 			
@@ -541,7 +540,7 @@ function calcular(){
 				  <ows:Identifier>result</ows:Identifier>
 				</wps:RawDataOutput>
 			  </wps:ResponseForm>
-			</wps:Execute> `;
+			</wps:Execute>`;
 			
 			var href='/geoserver/ide2019b/wps';
 			var prefix = 'feature';
@@ -551,12 +550,14 @@ function calcular(){
 			var featuretype2 = 'Aves-3857-Simpl';
 			
 		   // Lanza la petición al WPS asíncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
-		   wpsclient_featurecollection(href, BufferWPS, prefix, namespace, featuretype, projection).then(function(featuresarray){});
+		   var buffercollection = await wpsclient_featurecollection(href, BufferWPS, prefix, namespace, featuretype, projection);//.then(function(featuresarray){});
 		   // Lanza la petición al WPS asíncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
-		   wpsclient_featurecollection(href, UnionWPS, prefix, namespace, featuretype2, projection).then(function(featuresarray){
+		   var unioncollection = await wpsclient_featurecollection(href, UnionWPS, prefix, namespace, featuretype2, projection);
 		   	
-		   });
-		   //var GMLBuffer = writeGMLFeatureCollection(featuresarray, prefix, namespace, featuretype, projection);
+			unioncollection.concat(buffercollection);
+			
+			
+		   var GML = writeGMLFeatureCollection(unioncollection, prefix, namespace, featuretype, projection);
 
 			
 	
@@ -591,14 +592,13 @@ return fetch(href, {
 					return response.text();
 				}).then(function(gml){
 					var doc = ol.xml.parse(gml);
-					var colls = doc.getElementsByTagName("gml:FeatureCollection");
+					var colls = doc.getElementsByTagName("wfs:FeatureCollection");
 					var coll = colls[0];
-                    // WPS uses random namespaces and Featuretypes each request.
-					var ns = coll.getAttribute("xmlns:" + prefix);
+                    
 					
 					var options={
 						srsName: projection.getCode(), //proyeccion de openlayers
-						featureNS: ns,//poner el necesario en cada caso
+						featureNS: namespace,//poner el necesario en cada caso
 						featurePrefix: prefix,
 						featureType: featuretype
 						 }
@@ -627,7 +627,7 @@ async function writeGMLFeatureCollection(features, prefix, namespace, featuretyp
 				}
 	// Hay que esperar a que terminen las anteriores.
 	var featuresarray = await features;
-	var format = ol.format.GML3();
+	var format = new ol.format.GML();
 	var gml = new format.writeFeatures(featuresarray);
 	return gml;
 }
