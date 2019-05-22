@@ -54,6 +54,7 @@ async function tst(){
 	
 	//CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258")).then(intersectManhattanRecarga);
 	//CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);
+
 	while(1){
 	if(contador>0){
 		origen2=ptoCerca;
@@ -61,14 +62,19 @@ async function tst(){
 	var manharea = await CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258"));
 	var ptosRecManh = await intersectManhattanRecarga(manharea);
 	var ptoCerca = await calculoDistancia(ptosRecManh);
-	if(distancia<100){
+	var distancia = await calculoDistancia2(ptoCerca,destino);
+	if(distancia<10000){
 				destino2=destino;
 			}else{
 				destino2=ptoCerca;
 			}
+
+	var rutaLista = await CalculoRuta(origen2, destino2, ol.proj.get("EPSG:4258"));
+	procesaruta(rutaLista);
+	
 	if(contador==5){
 				toast("Máximo de paradas alcanzado");
-				//break;
+				break;
 			}
 	}
 }
