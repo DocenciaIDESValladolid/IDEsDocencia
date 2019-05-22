@@ -61,7 +61,7 @@ async function tst(){
 	}
 	var manharea = await CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258"));
 	var ptosRecManh = await intersectManhattanRecarga(manharea);
-	var ptoCerca = await calculoDistancia(ptosRecManh);
+	var ptoCerca = await calculoDistancia(ptosRecManh, destino);
 	var distancia = await calculoDistancia2(ptoCerca,destino);
 	if(distancia<10000){
 				destino2=destino;
@@ -85,7 +85,7 @@ function calculoDistancia2(punto1,punto2){
 	
 }
 
-function calculoDistancia(ptosRec){
+function calculoDistancia(ptosRec,destino){
 	// Se obtiene el punto de destino
 	var aux = markerFeature.getGeometry().transform("EPSG:3857","EPSG:4326"); //Se cambia a  4326 porque los puntos de recarga vienen en ese sistema
 	var destino = aux.getCoordinates();
