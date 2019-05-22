@@ -86,8 +86,8 @@ function initmap() {
     roadlayer.set("name", "roadview");
     var layergroup = new ol.layer.Group({ layers: [aeriallayer, roadlayer] });
     var view = new ol.View({
-        center: [0, 0],
-        zoom: 2,
+        center: [-474521.071594, 4940889.508354],
+        zoom: 6,
         minZoom: 2
     });
     select = new ol.interaction.Select({
@@ -296,7 +296,7 @@ function dibujar(){
 	else{
 		var opcion=confirm('Ya hay una ruta dibujada. �Desea empezar de nuevo?');
 		if (opcion == true){
-			location.reload();
+			draw.removeAllFeatures();
 		}
 		else{
 			
@@ -347,8 +347,8 @@ function calcular(){
 		var WFS = new ol.format.WFS();
 		var options={
 		srsName: "EPSG:3857", //proyeccion de openlayers
-		featureNS: 'http://dron',//poner el necesario en cada caso
-		featurePrefix: 'DronFree',
+		featureNS: 'http://itastdevserver.tel.uva.es/IDE2019B',//poner el necesario en cada caso
+		featurePrefix: 'ide2019b',
 		featureType: 'dron'
 		 }
 
@@ -358,7 +358,7 @@ function calcular(){
 		
 		s = new XMLSerializer();
 		str = s.serializeToString(node);
-		fetch('/geoserver/DronFree/wfs',{
+		fetch('/geoserver/ide2019b/wfs',{
 		method: 'POST',
 		body: str
 		}).then(function (node){
@@ -374,6 +374,7 @@ function calcular(){
 		var opcion=confirm('La ruta ya se ha calulado o esta en proceso. �Desea empezar de nuevo?');
 		if (opcion == true){
 			location.reload();
+			draw.removeAllFeatures();
 		}
 		else{
 			
@@ -382,9 +383,51 @@ function calcular(){
 	
 	
 	//CONSULTAS WPS
-	
-	
+
 	//Obtener el bounding box de la ruta para pasarlo a la consulta
+	var b=geometria.values_.geometry.flatCoordinates;
+	var minimoX=9999999999; var maximoX=-9999999999; var minimoY=9999999999; var maximoY=-9999999999;
+	var xmin=0; var xmax=0; var ymin=0; var ymax=0;
+	var j=0; var i=0;
+	while(j==0)
+	{
+		if(i>b.length)
+		{
+			j=1;
+		}
+		else{
+			if(i%2==0){
+				if(b[i]<minimoX)
+				{
+					xmin=b[i];
+					minimoX=xmin;
+				}
+				else if(b[i]>maximoX)
+				{
+					xmax=b[i];
+					maximoX=xmax;
+				}
+			}
+			else{
+				if(b[i]<minimoY)
+				{
+					ymin=b[i];
+					minimoY=ymin;
+				}
+				else if(b[i]>maximoY)
+				{
+					ymax=b[i];
+					maximoY=ymax;
+				}
+			}
+			
+			i++;
+		}
+	}
+	
+	//var a= ol.extent.boundingExtent(b);
+	//alert("bbox"+ xmin +"x"+ ymin +"x"+ xmax +"x"+ ymax);
+	
 	
 	var BufferWPS=`<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
 			<ows:Identifier>gs:BufferFeatureCollection</ows:Identifier>
@@ -394,13 +437,13 @@ function calcular(){
 					<wps:Reference mimeType="text/xml" xlink:href="http://localhost:8081/geoserver/wps" method="POST">
 						<wps:Body><![CDATA[
 							<wfs:GetFeature service="WFS" version="1.1.0" maxFeatures="20" outputFormat="GML2"
-							  xmlns:DronFree="http://dron"
+							  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
 							  xmlns:wfs="http://www.opengis.net/wfs"
 							  xmlns:ogc="http://www.opengis.net/ogc"
 							  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 							  xsi:schemaLocation="http://www.opengis.net/wfs
 							  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-								<wfs:Query typeName="DronFree:Aeropuertos-3857">
+								<wfs:Query typeName="ide2019b:Aeropuertos-3857">
 									<ogc:Filter>
 										<ogc:And>
 											<ogc:PropertyIsEqualTo>
@@ -410,8 +453,8 @@ function calcular(){
 											<ogc:BBOX>
 												<ogc:PropertyName>geom</ogc:PropertyName>
 												<Envelope srsName="http://www.opengis.net/gml/srs/epsg.xml#3857">
-													<lowerCorner>-732572.479085 4940889.508354</lowerCorner>
-													<upperCorner>-327761.977287 5258867.546020</upperCorner>
+													<lowerCorner>${xmin} ${ymin}</lowerCorner>
+													<upperCorner>${xmax} ${ymax}</upperCorner>
 												</Envelope>
 											</ogc:BBOX>
 										</ogc:And>
@@ -447,19 +490,19 @@ function calcular(){
 				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8081/geoserver/wfs" method="POST">
 					<wps:Body><![CDATA[<wfs:GetFeature service="WFS" version="1.1.0"
 
-			  xmlns:topp="http://www.openplans.org/topp"
+			  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
 			  xmlns:wfs="http://www.opengis.net/wfs"
 			  xmlns:ogc="http://www.opengis.net/ogc"
 			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			  xsi:schemaLocation="http://www.opengis.net/wfs
 								  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-			  <wfs:Query typeName="DronFree:Aves-3857-Simpl">
+			  <wfs:Query typeName="ide2019b:Aves-3857-Simpl">
 				<ogc:Filter>
 					 <ogc:BBOX>
 					<ogc:PropertyName>geom</ogc:PropertyName>
 					<Envelope srsName="http://www.opengis.net/gml/srs/epsg.xml#3857">
-					   <lowerCorner>-758866.816815 4847330.585733</lowerCorner>
-					   <upperCorner>-291683.699936 5260702.034699</upperCorner>
+					   <lowerCorner>${xmin} ${ymin}</lowerCorner>
+					   <upperCorner>${xmax} ${ymax}</upperCorner>
 					</Envelope>
 				  </ogc:BBOX>     
 				</ogc:Filter>
@@ -472,19 +515,19 @@ function calcular(){
 				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8081/geoserver/wfs" method="POST">
 					<wps:Body><![CDATA[<wfs:GetFeature service="WFS" version="1.1.0"
 
-			  xmlns:topp="http://www.openplans.org/topp"
+			  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
 			  xmlns:wfs="http://www.opengis.net/wfs"
 			  xmlns:ogc="http://www.opengis.net/ogc"
 			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			  xsi:schemaLocation="http://www.opengis.net/wfs
 								  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-			  <wfs:Query typeName="DronFree:ParquesNaturales-3857-Simpl">
+			  <wfs:Query typeName="ide2019b:ParquesNaturales-3857-Simpl">
 				<ogc:Filter>
 					 <ogc:BBOX>
 					<ogc:PropertyName>geom</ogc:PropertyName>
 					<Envelope srsName="http://www.opengis.net/gml/srs/epsg.xml#3857">
-					   <lowerCorner>-758866.816815 4847330.585733</lowerCorner>
-					   <upperCorner>-291683.699936 5260702.034699</upperCorner>
+					   <lowerCorner>${xmin} ${ymin}</lowerCorner>
+					   <upperCorner>${xmax} ${ymax}</upperCorner>
 					</Envelope>
 				  </ogc:BBOX>   
 				</ogc:Filter>
@@ -500,18 +543,20 @@ function calcular(){
 			  </wps:ResponseForm>
 			</wps:Execute> `;
 			
-			var href='/geoserver/DronFree/wps';
+			var href='/geoserver/ide2019b/wps';
 			var prefix = 'feature';
-			var namespace = 'http://dron';
+			var namespace = 'http://itastdevserver.tel.uva.es/IDE2019B';
 			var featuretype = 'Aeropuertos-3857';
 			var projection = ol.proj.get("EPSG:3857");
 			var featuretype2 = 'Aves-3857-Simpl';
 			
 		   // Lanza la petición al WPS asíncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
-		   var buffer = wpsclient_featurecollection(href, BufferWPS, prefix, namespace, featuretype, projection);
+		   wpsclient_featurecollection(href, BufferWPS, prefix, namespace, featuretype, projection).then(function(featuresarray){});
 		   // Lanza la petición al WPS asíncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
-		   var union = wpsclient_featurecollection(href, UnionWPS, prefix, namespace, featuretype2, projection);
-		   var GMLBuffer = writeGMLFeatureCollection(buffer, prefix, namespace, featuretype, projection);
+		   wpsclient_featurecollection(href, UnionWPS, prefix, namespace, featuretype2, projection).then(function(featuresarray){
+		   	
+		   });
+		   //var GMLBuffer = writeGMLFeatureCollection(featuresarray, prefix, namespace, featuretype, projection);
 
 			
 	

@@ -296,10 +296,10 @@ function obtenerPtosRecargaMunicipio(positionFeature){
 		//Se divide la respuesta gml para quedarnos con el nodo <au:geometry> con la geomtría del municipio
 		var posInicial = gml.search("<au:geometry>");
 		var posFinal = gml.search("</au:geometry>");
-		var geometria = gml.substring(posInicial,posFinal + "</au:geometry>".length);// 14 es el numero de caracteres de </au:geometry>
+		var geometria = gml.substring(posInicial,posFinal + "</au:geometry>".length);
 		//A partir de <au:geometry> se obtiene el polígono del municipio (Polygon o Multipolygon)
 		var posFin = geometria.search("</au:geometry>");
-		var geom = geometria.substring("<au:geometry>".length,posFin);//13 es el numero de caracteres de <au:geometry>
+		var geom = geometria.substring("<au:geometry>".length,posFin);
 		
 		// peticion a la BBDD para obtener los puntos de recarga mediante el municipio en el que se encuentra el usuario
 		  var bodyPtosRecargaWFS =`<wfs:GetFeature service="WFS" version="1.1.0"
@@ -664,12 +664,12 @@ function WFSQueryCoches(){
 		xmlns:ogc="http://www.opengis.net/ogc"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-			<wfs:Query typeName="estacionesC:coches">
+			<wfs:Query typeName="proyectoIDE:coches">
 			</wfs:Query>
 		</wfs:GetFeature>`;
 
       // then post the request and add the received features to a layer
-      fetch("http://localhost:8080/geoserver/wfs", {
+      fetch("http://localhost:8081/geoserver/wfs", {
            
 		   method: 'POST', // *GET, POST, PUT, DELETE, etc.
 			mode: 'no-cors', // no-cors, cors, *same-origin
