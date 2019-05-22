@@ -11,25 +11,67 @@ $("#apptst").click(function(){
 });
 
 	
-function tst(){
+async function tst(){
 	toast("Calculando ruta al destino");
 	
+	var aux1 = geolocation.getPosition();
+	var aux2 = markerFeature.getGeometry().getCoordinates();
+	var origen=new ol.geom.Point([aux1[0],aux1[1]]);
+	var destino=new ol.geom.Point([aux2[0],aux2[1]]);
+	var distancia=30000;
+	var destinoPuntoRecarga=new ol.geom.Point([0,0]);
 
-	var origen=new ol.geom.Point([-524447.14,4637888.47]);
-	var destino=new ol.geom.Point([-410927.12,4503102.50]);
-	var distancia=3000;
+	var origen2 = origen;
+	var destino2 = destino;
+
 	origen.transform("EPSG:3857","EPSG:4258");
 	destino.transform("EPSG:3857","EPSG:4258");
-
-
-	CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258")).then(intersectManhattanRecarga);
-	/*CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);*/
+	
+	var contador = 0;
+	while(1){
+			if(contador>0){
+				origen2=ptoCerca;
+			}
+			var manharea = await CalculoManhattan(origen2, distancia, ol.proj.get("EPSG:4258"));
+			var ptosRecManh = await intersectManhattanRecarga(manharea);
+			var ptoCerca = await calculoDistancia(ptosRecManh);
+			var distancia = await calculoDistancia2(ptoCerca,destino)
+			if(distancia<100){
+				destino2=destino;
+			}else{
+				destino2=ptoCerca;
+			}
+			var rutaLista = await CalculoRuta(origen2, destino2, ol.proj.get("EPSG:4258"));
+			procesaruta(rutaLista);
+			contador++;
+			if(contador==5){
+				toast("Máximo de paradas alcanzado");
+				break;
+			}
+			
+	}
+		
+	
+	//CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258")).then(intersectManhattanRecarga);
+	//CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);
 	
 	
 }
 
+function calculoDistancia2(punto1,punto2){
+	var distance = ol.sphere.WGS84.haversineDistance([punto1[0],punto1[1]],[punto2[0],punto2[1]]);
+	return Promise.resolve(distance);
+	
+}
+
+function calculoDistancia(punto1,punto2){
+	var distance = ol.sphere.WGS84.haversineDistance([punto1[0],punto1[1]],[punto2[0],punto2[1]]);
+	return Promise.resolve(distance);
+	
+}
+
 function intersectManhattanRecarga(geom){
-			// peticion a la BBDD para obtener los puntos de recarga mediante el municipio en el que se encuentra el usuario
+		
 		  var bodyPtosRecargaWFS =`<wfs:GetFeature service="WFS" version="1.1.0"
 			  xmlns:topp="http://www.openplans.org/topp"
 			  xmlns:wfs="http://www.opengis.net/wfs"
@@ -63,16 +105,52 @@ function intersectManhattanRecarga(geom){
 				 var wfsformat = new ol.format.GML();
 				 
 				 var features = wfsformat.readFeatures(gml);
+				
+					 //Se dibujan los diferentes puntos de recarga
+				 if(features.length==0){
+					 toast("No hay puntos de recarga cercanos");
+				 }else{
+					 
+					 var sourceLayer = new ol.source.Vector({
+							projection: 'EPSG:3857'
+					 });
+					 var vectorCustomLayer = new ol.layer.Vector({
+							source: sourceLayer,
+							style: new ol.style.Style({
+									  image: new ol.style.Circle({
+										fill: new ol.style.Fill({
+										  color: 'rgba(255,10,0,1)'
+										}),
+										radius: 10,
+										stroke: new ol.style.Stroke({
+										  color: 'rgba(0,0,0,1)',
+										  width: 2
+										})
+									  })
+									  
+									})
+						   
+					 });
+					 map.addLayer(vectorCustomLayer);
+					 add_layer_to_list(vectorCustomLayer);
+					 
+					 for(i=0;i<features.length;i++){
+						 var feat = features[i];
+						 feat.getGeometry().transform("EPSG:4326","EPSG:3857");
+						 sourceLayer.addFeature(feat);
+					 }
 
-				 console.log(gml);
+					 var extent = sourceLayer.getExtent();
+					 // Dirige el visor a la zona de interés.
+					 fly_to(map, null, extent);
+				 }
+					
+				 return Promise.resolve(features);
 									  
 		    });
 }
 
-function calculoDistancia(){
-	
-	
-}
+
 
 function CalculoManhattan(from, distancia, projection){
 	var origen= from.getCoordinates();
@@ -127,13 +205,13 @@ return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 					return response.text();
 				}).then(function(gml){
 					//Se divide la respuesta gml para quedarnos con el nodo <au:geometry> con la geomtría del municipio
-		var posInicial = gml.search("<gml:surfaceMember>");
-		var posFinal = gml.search("</gml:surfaceMember>");
-		var geometria = gml.substring(posInicial,posFinal + "</gml:surfaceMember>".length);// 14 es el numero de caracteres de </au:geometry>
+		var posInicial = gml.search("<gml:MultiSurface");
+		var posFinal = gml.search("</gml:MultiSurface");
+		var geometria = gml.substring(posInicial,posFinal + "</gml:MultiSurface>".length);// 14 es el numero de caracteres de </au:geometry>
 		//A partir de <au:geometry> se obtiene el polígono del municipio (Polygon o Multipolygon)
-		var posFin = geometria.search("</gml:surfaceMember>");
-		var geom = geometria.substring("<gml:surfaceMember>".length,posFin);//13 es el numero de caracteres de <au:geometry>
-		return Promise.resolve(geom);
+		//var posFin = geometria.search("<n52:GEOMETRY>");
+		//var geom = geometria.substring("<n52:GEOMETRY>".length,posFin);//13 es el numero de caracteres de <au:geometry>
+		return Promise.resolve(geometria);
 				});	
 }
 
@@ -228,6 +306,7 @@ function procesaruta(ruta) {
         source: sourceLayer,
        
     });
+	vectorCustomLayer.set("name", "Ruta a destino");
     map.addLayer(vectorCustomLayer);
     add_layer_to_list(vectorCustomLayer);
 
@@ -251,7 +330,7 @@ $("#ptosMunicipio").click(function(){
 function obtenerPtosRecargaMunicipio(){ 
 
 	  //Coordenadas de ejemplo. ELIMINAR por localización actual
-		var aux =new ol.geom.Point([41.529535,-4.750580]);//41.529535,-4.750580 __ 41.634887,-4.743307
+		var aux =new ol.geom.Point([41.634887,-4.743307]);//41.529535,-4.750580 __ 41.634887,-4.743307 
 		var posicionActual = aux.getCoordinates();
 		
       // peticion a ign para obtener el municipio en el que se encuentra el usuario
