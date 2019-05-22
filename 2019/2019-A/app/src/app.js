@@ -12,7 +12,6 @@ $("#apptst").click(function(){
      tst();
 });
 
-	
 function tst(){
 	toast("Calculando ruta al destino");
 	var origen=new ol.geom.Point([-524447.14,4637888.47]);
@@ -268,11 +267,11 @@ $("#ptosMunicipio").click(function(){
      obtenerPtosRecargaMunicipio();
 });
 
-function obtenerPtosRecargaMunicipio(positionFeature){ 
+function obtenerPtosRecargaMunicipio(){ 
 
-	  //Coordenadas de ejemplo. ELIMINAR por localización actual
+	  //Coordenadas actuales
 	  var aux1 = geolocation.getPosition();
-	  var aux = new ol.geom.Point([geolocation.getPosition()[0],geolocation.getPosition()[1]]);//41.529535,-4.750580 __ 41.634887,-4.743307
+	  var aux = new ol.geom.Point([geolocation.getPosition()[0],geolocation.getPosition()[1]]);
 	  var posicionActual = aux.transform("EPSG:3857","EPSG:4326").getCoordinates();
 		
       // peticion a ign para obtener el municipio en el que se encuentra el usuario
