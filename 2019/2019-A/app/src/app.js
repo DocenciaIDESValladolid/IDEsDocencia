@@ -13,6 +13,12 @@ $("#apptst").click(function(){
 });
 
 function tst(){
+	
+	if((markerFeature.getGeometry()==null)||(geolocation.getPosition()==null)){
+		
+		toast("Seleccione destino y active ubucacion");
+		return;
+	}
 	toast("Calculando ruta al destino");
 	var origen=new ol.geom.Point([-524447.14,4637888.47]);
 	var destino=new ol.geom.Point([-410927.12,4503102.50]);
@@ -67,7 +73,7 @@ function intersectManhattanRecarga(geom){
 		    });
 }
 
-/** Función para obtener el punto de recarga más cercano a un desttino de entre un grupo de puntos de recarga
+/** Función para obtener el punto de recarga más cercano a un desttino de entre un grupo de puntos
 */
 function calculoDistancia(puntosRecarga){
 	// Se obtiene el punto de destino
@@ -267,7 +273,7 @@ $("#ptosMunicipio").click(function(){
      obtenerPtosRecargaMunicipio();
 });
 
-function obtenerPtosRecargaMunicipio(){ 
+function obtenerPtosRecargaMunicipio(){
 
 	  //Coordenadas actuales
 	  var aux1 = geolocation.getPosition();
