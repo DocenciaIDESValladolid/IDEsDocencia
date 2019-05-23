@@ -61,12 +61,12 @@ function initmap() {
     /*-------------------------------Layers-----------------------------------*/
     var layers = [];
     var geoJSONFormat = new ol.format.GeoJSON();
-    sourceLayer = new ol.source.Vector({
+    drawSource = new ol.source.Vector({
         projection: 'EPSG:3857'//Anterior 3857
     });
 	var vectorCustomLayer;
     vectorCustomLayer = new ol.layer.Vector({
-        source: sourceLayer,
+        source: drawSource,
     });
     var aeriallayer = new ol.layer.Tile({
         visible: false,
@@ -265,11 +265,10 @@ function autolocate(center, validate) {
 //FUNCION PARA DIBUJAR RUTA
 function dibujar(){
 	
-	
 	var collection = new ol.Collection();
 	
-	
-	if(dibujo == 0){
+	if(dibujo == 0)
+		{
 		if (typeof(draw) !='undefined') {
 			map.removeInteraction(draw);
 		}
@@ -278,10 +277,10 @@ function dibujar(){
 			map.removeInteraction(modify);
 		}
 		
-		
+			 drawSource.clear();
 			 draw = new ol.interaction.Draw({
 				features: collection,
-				source: sourceLayer,
+				source: drawSource,
 				type: "LineString"
 			  });
 			  draw.on("drawend", function(event){
@@ -291,19 +290,8 @@ function dibujar(){
 			  });
 		 map.addInteraction(draw);
 	
-	dibujo=dibujo+1;
+	//dibujo=dibujo+1;
 	}
-	else{
-		var opcion=confirm('Ya hay una ruta dibujada. �Desea empezar de nuevo?');
-		if (opcion == true){
-			draw.removeAllFeatures();
-		}
-		else{
-			
-		}
-		
-	}
-	
 	
 }
 
@@ -321,7 +309,7 @@ function editar(){
       });
 	
 	 modify = new ol.interaction.Modify({
-		 source: sourceLayer,
+		 source: drawSource,
 		 features: selectInteraction.getFeatures()
 		 });
      
@@ -338,9 +326,7 @@ function editar(){
 }
 
 //FUNCION PARA REALIZAR EL PROCESAMIENTO
-async function calcular(){
-	
-	
+async function calcular(){	
 	
 	if(calculo==0){
 		//wfs transaccional
@@ -427,14 +413,14 @@ async function calcular(){
 	
 	//var a= ol.extent.boundingExtent(b);
 	//alert("bbox"+ xmin +"x"+ ymin +"x"+ xmax +"x"+ ymax);
-	
-	
+	// JPC: Usar window.location.origin para no tener que poner host y puerto a mano.
+	var baseurl = window.location.origin;
 	var BufferWPS=`<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
 			<ows:Identifier>gs:BufferFeatureCollection</ows:Identifier>
 			<wps:DataInputs>
 				<wps:Input>
 					<ows:Identifier>features</ows:Identifier>
-					<wps:Reference mimeType="text/xml" xlink:href="http://localhost:8081/geoserver/wps" method="POST">
+					<wps:Reference mimeType="text/xml" xlink:href="${baseurl}/geoserver/wps" method="POST">
 						<wps:Body><![CDATA[
 							<wfs:GetFeature service="WFS" version="1.1.0" maxFeatures="20" outputFormat="GML2"
 							  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
@@ -451,7 +437,7 @@ async function calcular(){
 												<ogc:Literal>1</ogc:Literal>
 											</ogc:PropertyIsEqualTo>
 											<ogc:BBOX>
-												<ogc:PropertyName>geom</ogc:PropertyName>
+												<ogc:PropertyName>the_geom</ogc:PropertyName>
 												<Envelope srsName="http://www.opengis.net/gml/srs/epsg.xml#3857">
 													<lowerCorner>${xmin} ${ymin}</lowerCorner>
 													<upperCorner>${xmax} ${ymax}</upperCorner>
@@ -486,7 +472,7 @@ async function calcular(){
 			  <wps:DataInputs>
 				<wps:Input>
 				  <ows:Identifier>first</ows:Identifier>
-				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8081/geoserver/wfs" method="POST">
+				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="${baseurl}/geoserver/wfs" method="POST">
 					<wps:Body><![CDATA[<wfs:GetFeature service="WFS" version="1.1.0"
 
 			  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
@@ -511,7 +497,7 @@ async function calcular(){
 				</wps:Input>
 				<wps:Input>
 				  <ows:Identifier>second</ows:Identifier>
-				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8081/geoserver/wfs" method="POST">
+				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="${baseurl}/geoserver/wfs" method="POST">
 					<wps:Body><![CDATA[<wfs:GetFeature service="WFS" version="1.1.0"
 
 			  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
@@ -554,87 +540,12 @@ async function calcular(){
 		   // Lanza la petición al WPS asíncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
 		   var unioncollection = await wpsclient_featurecollection(href, UnionWPS, prefix, namespace, featuretype2, projection);
 		   	
-			unioncollection.concat(buffercollection);
-			
-			
-		   var GML = writeGMLFeatureCollection(unioncollection, prefix, namespace, featuretype, projection);
+		   var fusionado = buffercollection.concat(unioncollection);
+		   var GML = writeGMLFeatureMembers(fusionado, prefix, namespace, featuretype, projection);	
 
-			
-	
-	
+		   console.log(GML);
+		   return Promise.resolve(GML);
 }
-
-/**
-* Place WPS request.
-* Example:
-* 
-*	var 
-*	wpsclient_featurecollection(href, wpsbody, ol.proj.get("EPSG:4258")).then(function (featuresarray){});
-*	
-* @param {href} url of the server.
-* @param {wpsbody} text content of the request.
-* @param {namespace}  namespace uri. i.e. "http://itastdevserver.tel.uva.es/ide2019b"
-* @param {featuretype} name of the featuretype. i.e. "Aeropuertos3587"
-* @param {Projection} SRS of the input and output geometries.
-* @return {Promise} with an array of {Feature} with the feature collection.
-*/
-function wpsclient_featurecollection(href, wpsbody, prefix, namespace, featuretype, projection){
-	var SRScode= projection.getCode().substring(5);
-	var WPSSRSname = "http://www.opengis.net/gml/srs/epsg.xml#" + SRScode;
-    
-return fetch(href, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/xml"
-                    },
-                    body: wpsbody
-                }).then(function(response){
-					return response.text();
-				}).then(function(gml){
-					var doc = ol.xml.parse(gml);
-					var colls = doc.getElementsByTagName("wfs:FeatureCollection");
-					var coll = colls[0];
-                    
-					
-					var options={
-						srsName: projection.getCode(), //proyeccion de openlayers
-						featureNS: namespace,//poner el necesario en cada caso
-						featurePrefix: prefix,
-						featureType: featuretype
-						 }
-				    // Register the alias for the SRS.
-					proj4.defs(WPSSRSname, projection);
-					var wfsformat = new ol.format.GML(options);
-					var rutacoll =wfsformat.readFeatures(coll);
-					return Promise.resolve(rutacoll);
-				});	
-}
-
-/**
-* Write GML Feature collection from an array of Feature
-* @param {Feature[]|Promise} array of Features or Promise
-* @param {namespace}  namespace uri. i.e. "http://itastdevserver.tel.uva.es/ide2019b"
-* @param {featuretype} name of the featuretype. i.e. "Aeropuertos3587"
-* @param {Projection} SRS of the input and output geometries.
-* @return string GML
-*/
-async function writeGMLFeatureCollection(features, prefix, namespace, featuretype, projection) {
-	var options={
-				srsName: projection.getCode(), //proyeccion de openlayers
-				featureNS: namespace,
-				featurePrefix: prefix,
-				featureType: featuretype
-				}
-	// Hay que esperar a que terminen las anteriores.
-	var featuresarray = await features;
-	var format = new ol.format.GML();
-	var gml = new format.writeFeatures(featuresarray);
-	return gml;
-}
-
-
-
-
 
 function fly_to(map, point, extent) {
     var duration = 700;
