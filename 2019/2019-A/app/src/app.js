@@ -100,6 +100,8 @@ function calculoDistancia2(punto1,punto2){
 	
 }
 
+/** Función que calcula el punto más cercano a "destino" de entre los recogidos en "ptosRec"
+*/
 function calculoDistancia(ptosRec,destino){
 	// Se obtiene el punto de destino
 	var dest = destino.getCoordinates();
@@ -475,6 +477,7 @@ function obtenerPtosRecargaMunicipio(){
 				 //Se dibujan los diferentes puntos de recarga
 				 if(features.length==0){
 					 toast("No hay puntos de recarga cercanos");
+					 return;
 				 }else{
 					 
 					 var sourceLayer = new ol.source.Vector({
