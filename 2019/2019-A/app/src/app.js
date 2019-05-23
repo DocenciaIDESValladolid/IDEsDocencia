@@ -62,6 +62,7 @@ async function tst(){
 	var manharea = await CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258"));
 	var ptosRecManh = await intersectManhattanRecarga(manharea);
 	var ptoCerca = await calculoDistancia(ptosRecManh, destino);
+	ptoCerca.transform("EPSG:4326","EPSG:4258"); //Para que ptoCerca y destino estén en el mismo srs
 	var distancia = await calculoDistancia2(ptoCerca,destino);
 	if(distancia<10000){
 				destino2=destino;
@@ -80,7 +81,10 @@ async function tst(){
 }
 
 function calculoDistancia2(punto1,punto2){
-	var distance = ol.sphere.WGS84.haversineDistance([punto1[0],punto1[1]],[punto2[0],punto2[1]]);
+	var point1= punto1.getCoordinates();
+	var point2= punto2.getCoordinates();
+	//var distance = ol.sphere.WGS84.haversineDistance([punto1[0],punto1[1]],[punto2[0],punto2[1]]);
+	var distance = Math.sqrt(Math.pow(point1[0]-point2[0],2)+Math.pow(point1[1]-point2[1],2));//Se calcula la distancia como el modulo de la diferencia de las coordenadas
 	return Promise.resolve(distance);
 	
 }
