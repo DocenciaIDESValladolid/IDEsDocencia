@@ -109,7 +109,7 @@ function calculoDistancia(ptosRec,destino){
 	return ptosRec[featureIndex].getGeometry();
 }
 
-function intersectManhattanRecarga(geom){
+async function intersectManhattanRecarga(geom){
 		
 		  var bodyPtosRecargaWFS =`<wfs:GetFeature service="WFS" version="1.1.0"
 			  xmlns:topp="http://www.openplans.org/topp"
@@ -130,7 +130,7 @@ function intersectManhattanRecarga(geom){
 			</wfs:GetFeature>`;
 			
 		// then post the request and add the received features to a layer
-			fetch("/geoserver/wfs", {
+			return fetch("/geoserver/wfs", {
 				   method: "POST",
 				   headers: {
 					   "Content-Type": "application/xml; charset=UTF-8"
@@ -150,7 +150,9 @@ function intersectManhattanRecarga(geom){
 					 toast("No hay puntos de recarga cercanos");
 				 }else{
 					 
-					 var sourceLayer = new ol.source.Vector({
+					/* 
+					JPC: No añadir capas nuevas tras cada ejecución. Reutilizar!!
+					var sourceLayer = new ol.source.Vector({
 							projection: 'EPSG:3857'
 					 });
 					 var vectorCustomLayer = new ol.layer.Vector({
@@ -172,6 +174,7 @@ function intersectManhattanRecarga(geom){
 					 });
 					 map.addLayer(vectorCustomLayer);
 					 add_layer_to_list(vectorCustomLayer);
+					 */
 					 
 					 for(i=0;i<features.length;i++){
 						 var feat = features[i];
@@ -314,6 +317,9 @@ return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 				}).then(function(gml){
 					var doc = ol.xml.parse(gml);
 					var colls = doc.getElementsByTagName("gml:FeatureCollection");
+					if (colls.length == 0) {
+						return Promise.reject(new Error('No hay respuesta del WPS de Cartociudad. Reintente.'));
+					}
 					var coll = colls[0];
                     // WPS uses random namespaces and Featuretypes each request.
 					var ns = coll.getAttribute("xmlns:n52");
