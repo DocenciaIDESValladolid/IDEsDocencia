@@ -28,7 +28,7 @@ async function tst(){
 	var aux2 = markerFeature.getGeometry().getCoordinates();
 	var origen=new ol.geom.Point([aux1[0],aux1[1]]);
 	var destino=new ol.geom.Point([aux2[0],aux2[1]]);
-	var distancia=30000;
+	var distancia=100000;
 	var destinoPuntoRecarga=new ol.geom.Point([0,0]);
 
 	var origen2 = origen;
@@ -64,18 +64,20 @@ async function tst(){
 	
 	//CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258")).then(intersectManhattanRecarga);
 	//CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);
-
-	while(1){
+	var llegada=0;
+	
+	while(contador<5 && llegada==0){
 		if(contador>0){
 			origen2=ptoCerca;
 		}
-		var manharea = await CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258"));
+		var manharea = await CalculoManhattan(origen2, distancia, ol.proj.get("EPSG:4258"));
 		var ptosRecManh = await intersectManhattanRecarga(manharea);
 		var ptoCerca = await calculoDistancia(ptosRecManh, destino);
-		//ptoCerca.transform("EPSG:4326","EPSG:4258"); //Para que ptoCerca y destino estén en el mismo srs
+		ptoCerca.transform("EPSG:4326","EPSG:4258"); //Para que ptoCerca y destino estén en el mismo srs
 		var distancia = await calculoDistancia2(ptoCerca,destino);
-		if(distancia<10000){
+		if(distancia<0.01720){
 					destino2=destino;
+					llegada=1;
 		}else{
 					destino2=ptoCerca;
 		}
@@ -196,10 +198,10 @@ async function intersectManhattanRecarga(geom){
 						 feat.getGeometry().transform("EPSG:4326","EPSG:3857");
 						 sourceLayer.addFeature(feat);
 					 }
-
+/*
 					 var extent = sourceLayer.getExtent();
 					 // Dirige el visor a la zona de interés.
-					 fly_to(map, null, extent);
+					 fly_to(map, null, extent);*/
 				 }
 					
 				 return Promise.resolve(features);
@@ -806,7 +808,7 @@ function WFSQueryCoches(){
 		</wfs:GetFeature>`;
 
       // then post the request and add the received features to a layer
-      fetch("http://localhost:8081/geoserver/wfs", {
+      fetch("/geoserver/wfs", {
            
 		   method: 'POST', // *GET, POST, PUT, DELETE, etc.
 			mode: 'no-cors', // no-cors, cors, *same-origin
