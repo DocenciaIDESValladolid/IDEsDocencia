@@ -3,8 +3,6 @@ $('#mappage').on("pageinit", function(){
   add_demo_functions();
   initmap();
   initApp();
-  WFSQueryCoches();
-  //imprimeRadioButtonMarca();
 });
 
 // El calculo de nuestra ruta
@@ -13,25 +11,110 @@ $("#apptst").click(function(){
 });
 
 	
-function tst(){
+async function tst(){
 	toast("Calculando ruta al destino");
 	
+	var aux1 = geolocation.getPosition();
+	var aux2 = markerFeature.getGeometry().getCoordinates();
+	var origen=new ol.geom.Point([aux1[0],aux1[1]]);
+	var destino=new ol.geom.Point([aux2[0],aux2[1]]);
+	var distancia=30000;
+	var destinoPuntoRecarga=new ol.geom.Point([0,0]);
 
-	var origen=new ol.geom.Point([-524447.14,4637888.47]);
-	var destino=new ol.geom.Point([-410927.12,4503102.50]);
-	var distancia=3000;
+	var origen2 = origen;
+	var destino2 = destino;
+
 	origen.transform("EPSG:3857","EPSG:4258");
 	destino.transform("EPSG:3857","EPSG:4258");
-
-
-	CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258")).then(intersectManhattanRecarga);
-	/*CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);*/
 	
+	var contador = 0;
+	//while(1){
+			/*if(contador>0){
+				origen2=ptoCerca;
+			}*/
+		/*	var manharea = await CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258"));
+			var ptosRecManh = await intersectManhattanRecarga(manharea);
+			//var ptoCerca = await calculoDistancia(ptosRecManh);
+			var distancia = await calculoDistancia2(ptoCerca,destino)
+			if(distancia<100){
+				destino2=destino;
+			}else{
+				destino2=ptoCerca;
+			}
+			var rutaLista = await CalculoRuta(origen2, destino2, ol.proj.get("EPSG:4258"));
+			procesaruta(rutaLista);
+			contador++;
+			if(contador==5){
+				toast("Máximo de paradas alcanzado");
+				//break;
+			}*/
+			
+	//}
+		
+	
+	//CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258")).then(intersectManhattanRecarga);
+	//CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);
+
+	while(1){
+	if(contador>0){
+		origen2=ptoCerca;
+	}
+	var manharea = await CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258"));
+	var ptosRecManh = await intersectManhattanRecarga(manharea);
+	var ptoCerca = await calculoDistancia(ptosRecManh, destino);
+	ptoCerca.transform("EPSG:4326","EPSG:4258"); //Para que ptoCerca y destino estén en el mismo srs
+	var distancia = await calculoDistancia2(ptoCerca,destino);
+	if(distancia<10000){
+				destino2=destino;
+			}else{
+				destino2=ptoCerca;
+			}
+
+	var rutaLista = await CalculoRuta(origen2, destino2, ol.proj.get("EPSG:4258"));
+	procesaruta(rutaLista);
+	
+	if(contador==5){
+				toast("Máximo de paradas alcanzado");
+				break;
+			}
+	}
+}
+
+function calculoDistancia2(punto1,punto2){
+	var point1= punto1.getCoordinates();
+	var point2= punto2.getCoordinates();
+	//var distance = ol.sphere.WGS84.haversineDistance([punto1[0],punto1[1]],[punto2[0],punto2[1]]);
+	var distance = Math.sqrt(Math.pow(point1[0]-point2[0],2)+Math.pow(point1[1]-point2[1],2));//Se calcula la distancia como el modulo de la diferencia de las coordenadas
+	return Promise.resolve(distance);
 	
 }
 
-function intersectManhattanRecarga(geom){
-			// peticion a la BBDD para obtener los puntos de recarga mediante el municipio en el que se encuentra el usuario
+function calculoDistancia(ptosRec,destino){
+	// Se obtiene el punto de destino
+	var aux = markerFeature.getGeometry().transform("EPSG:3857","EPSG:4326"); //Se cambia a  4326 porque los puntos de recarga vienen en ese sistema
+	var destino = aux.getCoordinates();
+	
+	//Bucle para obtener la mínima distancia
+	var minDistancia;	
+	var featureIndex;
+	var distancia;
+	for(i=0;i<ptosRec.length;i++){
+		
+		coordenadas = ptosRec[i].getGeometry().getCoordinates();
+		distancia = Math.sqrt(Math.pow(coordenadas[0]-destino[0],2)+Math.pow(coordenadas[1]-destino[1],2));//Se calcula la distancia como el modulo de la diferencia de las coordenadas
+		if(i==0){
+			minDistancia=distancia;
+		}else if((distancia<=minDistancia)){
+			minDistancia = distancia;
+			featureIndex = i;
+		}
+	}
+	
+	return ptosRec[featureIndex].getGeometry();
+}
+
+async function intersectManhattanRecarga(geom){
+		
 		  var bodyPtosRecargaWFS =`<wfs:GetFeature service="WFS" version="1.1.0"
 			  xmlns:topp="http://www.openplans.org/topp"
 			  xmlns:wfs="http://www.opengis.net/wfs"
@@ -51,7 +134,7 @@ function intersectManhattanRecarga(geom){
 			</wfs:GetFeature>`;
 			
 		// then post the request and add the received features to a layer
-			fetch("/geoserver/wfs", {
+			return fetch("/geoserver/wfs", {
 				   method: "POST",
 				   headers: {
 					   "Content-Type": "application/xml; charset=UTF-8"
@@ -59,22 +142,61 @@ function intersectManhattanRecarga(geom){
 				   body: bodyPtosRecargaWFS
 			  }).then(function(response) {
 				return response.text();
-			  }).then(function(gml){
+			  },function(error){console.log(error);}).then(function(gml){
 				  
 				 var doc = ol.xml.parse(gml);
 				 var wfsformat = new ol.format.GML();
 				 
 				 var features = wfsformat.readFeatures(gml);
+				
+					 //Se dibujan los diferentes puntos de recarga
+				 if(features.length==0){
+					 toast("No hay puntos de recarga cercanos");
+				 }else{
+					 
+					/* 
+					JPC: No añadir capas nuevas tras cada ejecución. Reutilizar!!
+					var sourceLayer = new ol.source.Vector({
+							projection: 'EPSG:3857'
+					 });
+					 var vectorCustomLayer = new ol.layer.Vector({
+							source: sourceLayer,
+							style: new ol.style.Style({
+									  image: new ol.style.Circle({
+										fill: new ol.style.Fill({
+										  color: 'rgba(255,10,0,1)'
+										}),
+										radius: 10,
+										stroke: new ol.style.Stroke({
+										  color: 'rgba(0,0,0,1)',
+										  width: 2
+										})
+									  })
+									  
+									})
+						   
+					 });
+					 map.addLayer(vectorCustomLayer);
+					 add_layer_to_list(vectorCustomLayer);
+					 */
+					 
+					 for(i=0;i<features.length;i++){
+						 var feat = features[i];
+						 feat.getGeometry().transform("EPSG:4326","EPSG:3857");
+						 sourceLayer.addFeature(feat);
+					 }
 
-				 console.log(gml);
+					 var extent = sourceLayer.getExtent();
+					 // Dirige el visor a la zona de interés.
+					 fly_to(map, null, extent);
+				 }
+					
+				 return Promise.resolve(features);
 									  
 		    });
 }
 
-function calculoDistancia(){
-	
-	
-}
+
 
 function CalculoManhattan(from, distancia, projection){
 	var origen= from.getCoordinates();
@@ -129,13 +251,13 @@ return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 					return response.text();
 				}).then(function(gml){
 					//Se divide la respuesta gml para quedarnos con el nodo <au:geometry> con la geomtría del municipio
-		var posInicial = gml.search("<gml:surfaceMember>");
-		var posFinal = gml.search("</gml:surfaceMember>");
-		var geometria = gml.substring(posInicial,posFinal + "</gml:surfaceMember>".length);// 14 es el numero de caracteres de </au:geometry>
+		var posInicial = gml.search("<gml:MultiSurface");
+		var posFinal = gml.search("</gml:MultiSurface");
+		var geometria = gml.substring(posInicial,posFinal + "</gml:MultiSurface>".length);// 14 es el numero de caracteres de </au:geometry>
 		//A partir de <au:geometry> se obtiene el polígono del municipio (Polygon o Multipolygon)
-		var posFin = geometria.search("</gml:surfaceMember>");
-		var geom = geometria.substring("<gml:surfaceMember>".length,posFin);//13 es el numero de caracteres de <au:geometry>
-		return Promise.resolve(geom);
+		//var posFin = geometria.search("<n52:GEOMETRY>");
+		//var geom = geometria.substring("<n52:GEOMETRY>".length,posFin);//13 es el numero de caracteres de <au:geometry>
+		return Promise.resolve(geometria);
 				});	
 }
 
@@ -199,6 +321,9 @@ return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 				}).then(function(gml){
 					var doc = ol.xml.parse(gml);
 					var colls = doc.getElementsByTagName("gml:FeatureCollection");
+					if (colls.length == 0) {
+						return Promise.reject(new Error('No hay respuesta del WPS de Cartociudad. Reintente.'));
+					}
 					var coll = colls[0];
                     // WPS uses random namespaces and Featuretypes each request.
 					var ns = coll.getAttribute("xmlns:n52");
@@ -230,6 +355,7 @@ function procesaruta(ruta) {
         source: sourceLayer,
        
     });
+	vectorCustomLayer.set("name", "Ruta a destino");
     map.addLayer(vectorCustomLayer);
     add_layer_to_list(vectorCustomLayer);
 
@@ -237,7 +363,7 @@ function procesaruta(ruta) {
     feat.getGeometry().transform("EPSG:4258","EPSG:3857");
     sourceLayer.addFeature(feat);
     var extent = sourceLayer.getExtent();
-    // Dirige el visor a la zona de interes.
+    // Dirige el visor a la zona de interÃ©s.
 	fly_to(map, null, extent);
 	return;
 
@@ -250,11 +376,11 @@ $("#ptosMunicipio").click(function(){
      obtenerPtosRecargaMunicipio();
 });
 
-function obtenerPtosRecargaMunicipio(positionFeature){ 
+function obtenerPtosRecargaMunicipio(){ 
 
-	  //Coordenadas de ejemplo. ELIMINAR por localización actual
+	  //Coordenadas actuales
 	  var aux1 = geolocation.getPosition();
-	  var aux = new ol.geom.Point([geolocation.getPosition()[0],geolocation.getPosition()[1]]);//41.529535,-4.750580 __ 41.634887,-4.743307
+	  var aux = new ol.geom.Point([geolocation.getPosition()[0],geolocation.getPosition()[1]]);
 	  var posicionActual = aux.transform("EPSG:3857","EPSG:4326").getCoordinates();
 		
       // peticion a ign para obtener el municipio en el que se encuentra el usuario
@@ -331,9 +457,8 @@ function obtenerPtosRecargaMunicipio(positionFeature){
 				return response.text();
 			  }).then(function(gml){
 				  
-				 var doc = ol.xml.parse(gml);
-				 var wfsformat = new ol.format.GML();
-				 
+				 //var doc = ol.xml.parse(gml);
+				 var wfsformat = new ol.format.GML();		 
 				 var features = wfsformat.readFeatures(gml);
 				 
 				 //Se dibujan los diferentes puntos de recarga
@@ -614,126 +739,3 @@ function get_block_text(title, body) {
       '</div><div class="ui-body ui-body-a">' + body +
       '</div>';
 }
-function imprimeRadioButtonMarca(marcas){
-	//var marcas=['Audi', 'kia', 'tesla'];
-	
-	//create your innerHTML container var:
-	var innerHTML = '';
-	//iterate through your array:
-	for (var i=0;i<marcas.length;i++)
-	{
-		if(i==0){
-			innerHTML += '<input name="marca" id="'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" checked="checked"/><label for="'+ marcas[i] +'">'+ marcas[i] + '</label>';
-		}else{
-			innerHTML += '<input name="marca" id="'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" /><label for="'+ marcas[i] +'">'+ marcas[i] + '</label>';
-		}
-	}
-	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
-	$("#MarcasGrp").controlgroup("container").append(innerHTML);
-	//and refresh the jQuery Mobile control group like this:
-	$("#MarcasGrp").enhanceWithin().controlgroup("refresh");
-}
-
-function imprimeRadioButtonModelo(model){
-	
-	//create your innerHTML container var:
-	var innerHTML = '';
-	//iterate through your array:
-	for (var i=0;i<model.length;i++)
-	{
-		if(i==0){
-			innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" checked="checked"/><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
-		}else{
-			innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" /><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
-		}
-	}
-	// empty your group container
-	$("#ModeloGrp").controlgroup("container").empty();
-	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
-	$("#ModeloGrp").controlgroup("container").append(innerHTML);
-	//and refresh the jQuery Mobile control group like this:
-	$("#ModeloGrp").enhanceWithin().controlgroup("refresh");
-}
-
-function WFSQueryCoches(){
-
-// generate a GetFeature request
-  var bodyCochesWFS = `<wfs:GetFeature service="WFS" version="1.1.0" outputFormat= "application/json"
-		xmlns:topp="http://www.openplans.org/topp"
-		xmlns:wfs="http://www.opengis.net/wfs"
-		xmlns:ogc="http://www.opengis.net/ogc"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-			<wfs:Query typeName="proyectoIDE:coches">
-			</wfs:Query>
-		</wfs:GetFeature>`;
-
-      // then post the request and add the received features to a layer
-      fetch("http://localhost:8081/geoserver/wfs", {
-           
-		   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-			mode: 'no-cors', // no-cors, cors, *same-origin
-			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'same-origin', // include, *same-origin, omit
-           headers: {
-               "Content-Type": "application/xml; charset=UTF-8"
-           },
-           body: bodyCochesWFS
-	  }).then(function(response) {
-		return response.json();
-	     //return JSON.parse(response);
-	  }).then(function(json){
-	  	//console.log(JSON.stringify(json)); //for debug
-		//features: cada uno de los coches
-		//Empty array creation
-		var marcas = [];
-		json.features.forEach(function(value){
-			marcas.push(value.properties["marca"]);
-			console.log(value.properties["marca"]);
-		});
-		console.log(marcas);
-		var marcasUnicas = marcas.filter(function(elem, index,self){
-			return index === self.indexOf(elem);
-		});
-		console.log(marcasUnicas);
-		
-		//Imprimos por pantalla los radio buttons de las marcas con
-		//la primera seleccionada y los modelos asociados a esta
-		imprimeRadioButtonMarca( marcasUnicas);
-		marcaElegida= $("#MarcasGrp :radio:checked").val();
-		var modelo = [];
-			json.features.forEach(function(value){
-				if(value.properties["marca"]=== marcaElegida){
-					modelo.push(value.properties["modelo"]);
-					console.log(value.properties["modelo"]);
-				}
-			});
-			imprimeRadioButtonModelo(modelo);
-			
-			
-		 $("input[name='marca']").on("change", function() {
-			marcaElegida=$("input[name='marca']:checked").val();
-			console.log(marcaElegida);
-			var modelo = [];
-			json.features.forEach(function(value){
-				if(value.properties["marca"]=== marcaElegida){
-					modelo.push(value.properties["modelo"]);
-					console.log(value.properties["modelo"]);
-				}
-			});
-			imprimeRadioButtonModelo(modelo);
-		});
-		
-		$("input[name='model']").on("change", function() {
-			modeloElegido=$("input[name='model']:checked").val();
-			json.features.forEach(function(value){
-				if(value.properties["modelo"]=== modeloElegido){
-					autonomia=value.properties["rangokm"];
-					console.log(autonomia);
-				}
-		});
-		
-	  });
-    });
-}
-
