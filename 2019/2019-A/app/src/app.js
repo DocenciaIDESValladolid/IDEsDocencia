@@ -13,6 +13,15 @@ $("#apptst").click(function(){
 
 	
 async function tst(){
+	
+	// Comprobación de que haya marcado un orgien y destino al calcular la ruta
+	if(geolocation.getPosition()==null){
+		toast("Habilite la geolocalización");
+		return;
+	}else if(markerFeature.getGeometry()==null){
+		toast("Marque un punto de destino");
+		return;
+	}
 	toast("Calculando ruta al destino");
 	
 	var aux1 = geolocation.getPosition();
@@ -57,27 +66,28 @@ async function tst(){
 	//CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);
 
 	while(1){
-	if(contador>0){
-		origen2=ptoCerca;
-	}
-	var manharea = await CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258"));
-	var ptosRecManh = await intersectManhattanRecarga(manharea);
-	var ptoCerca = await calculoDistancia(ptosRecManh, destino);
-	ptoCerca.transform("EPSG:4326","EPSG:4258"); //Para que ptoCerca y destino estén en el mismo srs
-	var distancia = await calculoDistancia2(ptoCerca,destino);
-	if(distancia<10000){
-				destino2=destino;
-			}else{
-				destino2=ptoCerca;
-			}
+		if(contador>0){
+			origen2=ptoCerca;
+		}
+		var manharea = await CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258"));
+		var ptosRecManh = await intersectManhattanRecarga(manharea);
+		var ptoCerca = await calculoDistancia(ptosRecManh, destino);
+		//ptoCerca.transform("EPSG:4326","EPSG:4258"); //Para que ptoCerca y destino estén en el mismo srs
+		var distancia = await calculoDistancia2(ptoCerca,destino);
+		if(distancia<10000){
+					destino2=destino;
+		}else{
+					destino2=ptoCerca;
+		}
 
-	var rutaLista = await CalculoRuta(origen2, destino2, ol.proj.get("EPSG:4258"));
-	procesaruta(rutaLista);
-	
-	if(contador==5){
-				toast("Máximo de paradas alcanzado");
-				break;
-			}
+		var rutaLista = await CalculoRuta(origen2, destino2, ol.proj.get("EPSG:4258"));
+		procesaruta(rutaLista);
+		
+		if(contador==5){
+					toast("Máximo de paradas alcanzado");
+					break;
+		}
+		contador = contador + 1;
 	}
 }
 
@@ -92,8 +102,7 @@ function calculoDistancia2(punto1,punto2){
 
 function calculoDistancia(ptosRec,destino){
 	// Se obtiene el punto de destino
-	var aux = markerFeature.getGeometry().transform("EPSG:3857","EPSG:4326"); //Se cambia a  4326 porque los puntos de recarga vienen en ese sistema
-	var destino = aux.getCoordinates();
+	var dest = destino.getCoordinates();
 	
 	//Bucle para obtener la mínima distancia
 	var minDistancia;	
@@ -101,11 +110,12 @@ function calculoDistancia(ptosRec,destino){
 	var distancia;
 	for(i=0;i<ptosRec.length;i++){
 		
-		coordenadas = ptosRec[i].getGeometry().getCoordinates();
-		distancia = Math.sqrt(Math.pow(coordenadas[0]-destino[0],2)+Math.pow(coordenadas[1]-destino[1],2));//Se calcula la distancia como el modulo de la diferencia de las coordenadas
+		coordenadas = ptosRec[i].getGeometry().transform("EPSG:3857","EPSG:4326").getCoordinates();//Se cambia a  4326 porque los puntos de recarga vienen en ese sistema
+		distancia = Math.sqrt(Math.pow(coordenadas[0]-dest[0],2)+Math.pow(coordenadas[1]-dest[1],2));//Se calcula la distancia como el modulo de la diferencia de las coordenadas
 		if(i==0){
 			minDistancia=distancia;
 		}else if((distancia<=minDistancia)){
+			//Se guarda la distancia y el indice del Point
 			minDistancia = distancia;
 			featureIndex = i;
 		}
@@ -796,7 +806,7 @@ function WFSQueryCoches(){
 		</wfs:GetFeature>`;
 
       // then post the request and add the received features to a layer
-      fetch("http://localhost:8080/geoserver/wfs", {
+      fetch("http://localhost:8081/geoserver/wfs", {
            
 		   method: 'POST', // *GET, POST, PUT, DELETE, etc.
 			mode: 'no-cors', // no-cors, cors, *same-origin
