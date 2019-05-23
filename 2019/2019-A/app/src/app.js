@@ -28,7 +28,7 @@ async function tst(){
 	var aux2 = markerFeature.getGeometry().getCoordinates();
 	var origen=new ol.geom.Point([aux1[0],aux1[1]]);
 	var destino=new ol.geom.Point([aux2[0],aux2[1]]);
-	var distancia=100000;
+	var autonomiaCoche=100000;
 	var destinoPuntoRecarga=new ol.geom.Point([0,0]);
 
 	var origen2 = origen;
@@ -70,12 +70,12 @@ async function tst(){
 		if(contador>0){
 			origen2=ptoCerca;
 		}
-		var manharea = await CalculoManhattan(origen2, distancia, ol.proj.get("EPSG:4258"));
+		var manharea = await CalculoManhattan(origen2, autonomiaCoche, ol.proj.get("EPSG:4258"));
 		var ptosRecManh = await intersectManhattanRecarga(manharea);
 		var ptoCerca = await calculoDistancia(ptosRecManh, destino);
 		ptoCerca.transform("EPSG:4326","EPSG:4258"); //Para que ptoCerca y destino estén en el mismo srs
 		var distancia = await calculoDistancia2(ptoCerca,destino);
-		if(distancia<0.01720){
+		if(distancia<0.03){
 					destino2=destino;
 					llegada=1;
 		}else{
@@ -91,6 +91,7 @@ async function tst(){
 		}
 		contador = contador + 1;
 	}
+	toast("Ruta obtenida correctamente");
 }
 
 function calculoDistancia2(punto1,punto2){
