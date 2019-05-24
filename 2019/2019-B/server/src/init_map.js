@@ -296,7 +296,7 @@ function dibujar(){
 	else{
 		var opcion=confirm('Ya hay una ruta dibujada. �Desea empezar de nuevo?');
 		if (opcion == true){
-			draw.removeAllFeatures();
+			location.reload();
 		}
 		else{
 			
@@ -374,7 +374,7 @@ async function calcular(){
 		var opcion=confirm('La ruta ya se ha calulado o esta en proceso. �Desea empezar de nuevo?');
 		if (opcion == true){
 			location.reload();
-			draw.removeAllFeatures();
+			vectorCustomLayer.removeAllFeatures();
 		}
 		else{
 			
@@ -425,8 +425,6 @@ async function calcular(){
 		}
 	}
 	
-	//var a= ol.extent.boundingExtent(b);
-	//alert("bbox"+ xmin +"x"+ ymin +"x"+ xmax +"x"+ ymax);
 	
 	
 	var BufferWPS=`<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
@@ -542,23 +540,79 @@ async function calcular(){
 			  </wps:ResponseForm>
 			</wps:Execute>`;
 			
+			
+			var CuentaWPS=`<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
+			  <ows:Identifier>vec:Count</ows:Identifier>
+			  <wps:DataInputs>
+				<wps:Input>
+				  <ows:Identifier>features</ows:Identifier>
+				  <wps:Reference mimeType="text/xml" xlink:href="http://geoserver/wfs" method="POST">
+					<wps:Body>
+					  <wfs:GetFeature service="WFS" version="1.0.0" outputFormat="GML2" xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B">
+						<wfs:Query typeName="ide2019b:dron"/>
+					  </wfs:GetFeature>
+					</wps:Body>
+				  </wps:Reference>
+				</wps:Input>
+			  </wps:DataInputs>
+			  <wps:ResponseForm>
+				<wps:RawDataOutput>
+				  <ows:Identifier>result</ows:Identifier>
+				</wps:RawDataOutput>
+			  </wps:ResponseForm>
+			</wps:Execute>`;
+			
+			
+			
+			
+			
+			
 			var href='/geoserver/ide2019b/wps';
 			var prefix = 'feature';
 			var namespace = 'http://itastdevserver.tel.uva.es/IDE2019B';
 			var featuretype = 'Aeropuertos-3857';
 			var projection = ol.proj.get("EPSG:3857");
 			var featuretype2 = 'Aves-3857-Simpl';
+			var featuretype3='dron';
 			
 		   // Lanza la petición al WPS asíncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
 		   var buffercollection = await wpsclient_featurecollection(href, BufferWPS, prefix, namespace, featuretype, projection);//.then(function(featuresarray){});
 		   // Lanza la petición al WPS asíncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
 		   var unioncollection = await wpsclient_featurecollection(href, UnionWPS, prefix, namespace, featuretype2, projection);
-		   	
-			unioncollection.concat(buffercollection);
-			
-			
-		   var GML = writeGMLFeatureCollection(unioncollection, prefix, namespace, featuretype, projection);
+		   
+		   
+		   //LAnza una peticion al WPS asincrona para obtener el numero de rutas dibujas 
+		   var cuenta = await wpsclient_count(href, CuentaWPS, prefix, namespace, featuretype3, projection);
+		   var Rfid="dron." + cuenta;
+		   
+		   //consulta WFS para quedarme con la ultima ruta para realizar la interseccion posteriormente
+		   var ruta=`<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="GML2"
+		  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
+		  xmlns:wfs="http://www.opengis.net/wfs"
+		  xmlns:ogc="http://www.opengis.net/ogc"
+		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xsi:schemaLocation="http://www.opengis.net/wfs
+							  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+		  <wfs:Query typeName="ide2019b:dron">
+			<ogc:Filter>
+				<ogc:FeatureId fid="dron.${cuenta}"/>
+			</ogc:Filter>
+			</wfs:Query>
+		</wfs:GetFeature>`;
+		   
 
+		   var rutaDron = await wpsclient_featurecollection(href, ruta, prefix, namespace, featuretype3, projection);
+
+			//unioncollection.concat(buffercollection);
+			var union =[];
+			union.push(buffercollection);
+			union.push(unioncollection);
+			
+		   var GMLUnion = await writeGMLFeatureCollection(union, prefix, namespace, featuretype, projection);
+		   var GMLUnionR = await writeGMLFeatureCollection(geometria, prefix, namespace, featuretype3, projection);
+		   var GMLRuta = await writeGMLFeatureNode(b, prefix, namespace, featuretype3, projection);
+			
+			
 			
 	
 	
@@ -610,6 +664,22 @@ return fetch(href, {
 				});	
 }
 
+function wpsclient_count(href, wpsbody, prefix, namespace, featuretype, projection){
+	var SRScode= projection.getCode().substring(5);
+	var WPSSRSname = "http://www.opengis.net/gml/srs/epsg.xml#" + SRScode;
+    
+return fetch(href, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/xml"
+                    },
+                    body: wpsbody
+                }).then(function(response){
+					return response.text();
+
+				});
+}
+
 /**
 * Write GML Feature collection from an array of Feature
 * @param {Feature[]|Promise} array of Features or Promise
@@ -627,11 +697,24 @@ async function writeGMLFeatureCollection(features, prefix, namespace, featuretyp
 				}
 	// Hay que esperar a que terminen las anteriores.
 	var featuresarray = await features;
-	var format = new ol.format.GML();
-	var gml = new format.writeFeatures(featuresarray);
+	var format = new ol.format.GML(options);
+	var gml = format.writeFeatures(featuresarray);
 	return gml;
 }
 
+async function writeGMLFeatureNode(feature, prefix, namespace, featuretype, projection) {
+	var options={
+				srsName: projection.getCode(), //proyeccion de openlayers
+				featureNS: namespace,
+				featurePrefix: prefix,
+				featureType: featuretype
+				}
+	// Hay que esperar a que terminen las anteriores.
+	
+	var format = new ol.format.GML(options);
+	var gml = format.writeGeometryNode(feature);
+	return gml;
+}
 
 
 
