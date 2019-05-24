@@ -81,7 +81,7 @@ function initApp() {
           } else {
               map.updateSize();
               // Do something smart in this update
-              fit_map_to_layer(sourceLayer);
+              fit_map_to_layer(drawSource);
           }
       } else if (pageId === 'historypage') {
           if (event.type === 'pagecontainershow') {
@@ -109,7 +109,10 @@ function initApp() {
       editar(true);
   });
   $('#calcular').on('click', function () {
-      calcular(true);
+      calcular(true).then(function(data) {
+        $("#popupdialog").popup("close");
+        // JPC: Incluir aquí lo que se hace al terminar el procesado.
+      });
   });
   $('#infopanel').panel({
       beforeclose: function () {

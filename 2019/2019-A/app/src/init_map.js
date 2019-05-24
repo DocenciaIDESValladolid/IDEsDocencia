@@ -63,9 +63,19 @@ function initmap() {
     });
     var vectorCustomLayer = new ol.layer.Vector({
         source: sourceLayer,
-        style: style_function
-        /*updateWhileAnimating: true,
-         updateWhileInteracting: true*/
+        style: new ol.style.Style({
+									  image: new ol.style.Circle({
+										fill: new ol.style.Fill({
+										  color: 'rgba(255,10,0,1)'
+										}),
+										radius: 10,
+										stroke: new ol.style.Stroke({
+										  color: 'rgba(0,0,0,1)',
+										  width: 2
+										})
+									  })
+									  
+									})
     });
     var aeriallayer = new ol.layer.Tile({
         visible: false,
@@ -121,7 +131,7 @@ function initmap() {
             features: [markerFeature]
         })
     });
-    layers = [layergroup, userPosition, markerVector];
+    layers = [layergroup, userPosition, markerVector, vectorCustomLayer];
     // New Custom zoom.
     var zoom = new ol.control.Zoom({ target: "navigation", className: "custom-zoom" });
     map = new ol.Map({

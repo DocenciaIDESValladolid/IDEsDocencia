@@ -3,6 +3,7 @@ $('#mappage').on("pageinit", function(){
   add_demo_functions();
   initmap();
   initApp();
+  WFSQueryCoches();
 });
 
 // El calculo de nuestra ruta
@@ -12,13 +13,22 @@ $("#apptst").click(function(){
 
 	
 async function tst(){
+	
+	// Comprobación de que haya marcado un orgien y destino al calcular la ruta
+	if(geolocation.getPosition()==null){
+		toast("Habilite la geolocalización");
+		return;
+	}else if(markerFeature.getGeometry()==null){
+		toast("Marque un punto de destino");
+		return;
+	}
 	toast("Calculando ruta al destino");
 	
 	var aux1 = geolocation.getPosition();
 	var aux2 = markerFeature.getGeometry().getCoordinates();
 	var origen=new ol.geom.Point([aux1[0],aux1[1]]);
 	var destino=new ol.geom.Point([aux2[0],aux2[1]]);
-	var distancia=30000;
+	var autonomiaCoche=100000;
 	var destinoPuntoRecarga=new ol.geom.Point([0,0]);
 
 	var origen2 = origen;
@@ -54,35 +64,50 @@ async function tst(){
 	
 	//CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258")).then(intersectManhattanRecarga);
 	//CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);
-	while(1){
-	if(contador>0){
-		origen2=ptoCerca;
+	var llegada=0;
+	
+	while(contador<5 && llegada==0){
+		if(contador>0){
+			origen2=ptoCerca;
+		}
+		var manharea = await CalculoManhattan(origen2, autonomiaCoche, ol.proj.get("EPSG:4258"));
+		var ptosRecManh = await intersectManhattanRecarga(manharea);
+		var ptoCerca = await calculoDistancia(ptosRecManh, destino);
+		ptoCerca.transform("EPSG:4326","EPSG:4258"); //Para que ptoCerca y destino estén en el mismo srs
+		var distancia = await calculoDistancia2(ptoCerca,destino);
+		if(distancia<0.03){
+					destino2=destino;
+					llegada=1;
+		}else{
+					destino2=ptoCerca;
+		}
+
+		var rutaLista = await CalculoRuta(origen2, destino2, ol.proj.get("EPSG:4258"));
+		procesaruta(rutaLista);
+		
+		if(contador==5){
+					toast("Máximo de paradas alcanzado");
+					break;
+		}
+		contador = contador + 1;
 	}
-	var manharea = await CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258"));
-	var ptosRecManh = await intersectManhattanRecarga(manharea);
-	var ptoCerca = await calculoDistancia(ptosRecManh);
-	if(distancia<100){
-				destino2=destino;
-			}else{
-				destino2=ptoCerca;
-			}
-	if(contador==5){
-				toast("Máximo de paradas alcanzado");
-				//break;
-			}
-	}
+	toast("Ruta obtenida correctamente");
 }
 
 function calculoDistancia2(punto1,punto2){
-	var distance = ol.sphere.WGS84.haversineDistance([punto1[0],punto1[1]],[punto2[0],punto2[1]]);
+	var point1= punto1.getCoordinates();
+	var point2= punto2.getCoordinates();
+	//var distance = ol.sphere.WGS84.haversineDistance([punto1[0],punto1[1]],[punto2[0],punto2[1]]);
+	var distance = Math.sqrt(Math.pow(point1[0]-point2[0],2)+Math.pow(point1[1]-point2[1],2));//Se calcula la distancia como el modulo de la diferencia de las coordenadas
 	return Promise.resolve(distance);
 	
 }
 
-function calculoDistancia(ptosRec){
+/** Función que calcula el punto más cercano a "destino" de entre los recogidos en "ptosRec"
+*/
+function calculoDistancia(ptosRec,destino){
 	// Se obtiene el punto de destino
-	var aux = markerFeature.getGeometry().transform("EPSG:3857","EPSG:4326"); //Se cambia a  4326 porque los puntos de recarga vienen en ese sistema
-	var destino = aux.getCoordinates();
+	var dest = destino.getCoordinates();
 	
 	//Bucle para obtener la mínima distancia
 	var minDistancia;	
@@ -90,11 +115,12 @@ function calculoDistancia(ptosRec){
 	var distancia;
 	for(i=0;i<ptosRec.length;i++){
 		
-		coordenadas = ptosRec[i].getGeometry().getCoordinates();
-		distancia = Math.sqrt(Math.pow(coordenadas[0]-destino[0],2)+Math.pow(coordenadas[1]-destino[1],2));//Se calcula la distancia como el modulo de la diferencia de las coordenadas
+		coordenadas = ptosRec[i].getGeometry().transform("EPSG:3857","EPSG:4326").getCoordinates();//Se cambia a  4326 porque los puntos de recarga vienen en ese sistema
+		distancia = Math.sqrt(Math.pow(coordenadas[0]-dest[0],2)+Math.pow(coordenadas[1]-dest[1],2));//Se calcula la distancia como el modulo de la diferencia de las coordenadas
 		if(i==0){
 			minDistancia=distancia;
 		}else if((distancia<=minDistancia)){
+			//Se guarda la distancia y el indice del Point
 			minDistancia = distancia;
 			featureIndex = i;
 		}
@@ -103,7 +129,7 @@ function calculoDistancia(ptosRec){
 	return ptosRec[featureIndex].getGeometry();
 }
 
-function intersectManhattanRecarga(geom){
+async function intersectManhattanRecarga(geom){
 		
 		  var bodyPtosRecargaWFS =`<wfs:GetFeature service="WFS" version="1.1.0"
 			  xmlns:topp="http://www.openplans.org/topp"
@@ -124,7 +150,7 @@ function intersectManhattanRecarga(geom){
 			</wfs:GetFeature>`;
 			
 		// then post the request and add the received features to a layer
-			fetch("/geoserver/wfs", {
+			return fetch("/geoserver/wfs", {
 				   method: "POST",
 				   headers: {
 					   "Content-Type": "application/xml; charset=UTF-8"
@@ -144,7 +170,9 @@ function intersectManhattanRecarga(geom){
 					 toast("No hay puntos de recarga cercanos");
 				 }else{
 					 
-					 var sourceLayer = new ol.source.Vector({
+					/* 
+					JPC: No añadir capas nuevas tras cada ejecución. Reutilizar!!
+					var sourceLayer = new ol.source.Vector({
 							projection: 'EPSG:3857'
 					 });
 					 var vectorCustomLayer = new ol.layer.Vector({
@@ -166,16 +194,17 @@ function intersectManhattanRecarga(geom){
 					 });
 					 map.addLayer(vectorCustomLayer);
 					 add_layer_to_list(vectorCustomLayer);
+					 */
 					 
 					 for(i=0;i<features.length;i++){
 						 var feat = features[i];
 						 feat.getGeometry().transform("EPSG:4326","EPSG:3857");
 						 sourceLayer.addFeature(feat);
 					 }
-
+/*
 					 var extent = sourceLayer.getExtent();
 					 // Dirige el visor a la zona de interés.
-					 fly_to(map, null, extent);
+					 fly_to(map, null, extent);*/
 				 }
 					
 				 return Promise.resolve(features);
@@ -308,6 +337,9 @@ return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 				}).then(function(gml){
 					var doc = ol.xml.parse(gml);
 					var colls = doc.getElementsByTagName("gml:FeatureCollection");
+					if (colls.length == 0) {
+						return Promise.reject(new Error('No hay respuesta del WPS de Cartociudad. Reintente.'));
+					}
 					var coll = colls[0];
                     // WPS uses random namespaces and Featuretypes each request.
 					var ns = coll.getAttribute("xmlns:n52");
@@ -448,6 +480,7 @@ function obtenerPtosRecargaMunicipio(){
 				 //Se dibujan los diferentes puntos de recarga
 				 if(features.length==0){
 					 toast("No hay puntos de recarga cercanos");
+					 return;
 				 }else{
 					 
 					 var sourceLayer = new ol.source.Vector({
@@ -722,4 +755,127 @@ function get_block_text(title, body) {
   return '<div class="ui-bar ui-bar-a">' + title +
       '</div><div class="ui-body ui-body-a">' + body +
       '</div>';
+}
+
+function imprimeRadioButtonMarca(marcas){
+	//var marcas=['Audi', 'kia', 'tesla'];
+	
+	//create your innerHTML container var:
+	var innerHTML = '';
+	//iterate through your array:
+	for (var i=0;i<marcas.length;i++)
+	{
+		if(i==0){
+			innerHTML += '<input name="marca" id="'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" checked="checked"/><label for="'+ marcas[i] +'">'+ marcas[i] + '</label>';
+		}else{
+			innerHTML += '<input name="marca" id="'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" /><label for="'+ marcas[i] +'">'+ marcas[i] + '</label>';
+		}
+	}
+	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
+	$("#MarcasGrp").controlgroup("container").append(innerHTML);
+	//and refresh the jQuery Mobile control group like this:
+	$("#MarcasGrp").enhanceWithin().controlgroup("refresh");
+}
+
+function imprimeRadioButtonModelo(model){
+	
+	//create your innerHTML container var:
+	var innerHTML = '';
+	//iterate through your array:
+	for (var i=0;i<model.length;i++)
+	{
+		if(i==0){
+			innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" checked="checked"/><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
+		}else{
+			innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" /><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
+		}
+	}
+	// empty your group container
+	$("#ModeloGrp").controlgroup("container").empty();
+	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
+	$("#ModeloGrp").controlgroup("container").append(innerHTML);
+	//and refresh the jQuery Mobile control group like this:
+	$("#ModeloGrp").enhanceWithin().controlgroup("refresh");
+}
+
+function WFSQueryCoches(){
+
+// generate a GetFeature request
+  var bodyCochesWFS = `<wfs:GetFeature service="WFS" version="1.1.0" outputFormat= "application/json"
+		xmlns:topp="http://www.openplans.org/topp"
+		xmlns:wfs="http://www.opengis.net/wfs"
+		xmlns:ogc="http://www.opengis.net/ogc"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+			<wfs:Query typeName="estacionesC:coches">
+			</wfs:Query>
+		</wfs:GetFeature>`;
+
+      // then post the request and add the received features to a layer
+      fetch("/geoserver/wfs", {
+           
+		   method: 'POST', // *GET, POST, PUT, DELETE, etc.
+			mode: 'no-cors', // no-cors, cors, *same-origin
+			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+			credentials: 'same-origin', // include, *same-origin, omit
+           headers: {
+               "Content-Type": "application/xml; charset=UTF-8"
+           },
+           body: bodyCochesWFS
+	  }).then(function(response) {
+		return response.json();
+	     //return JSON.parse(response);
+	  }).then(function(json){
+	  	//console.log(JSON.stringify(json)); //for debug
+		//features: cada uno de los coches
+		//Empty array creation
+		var marcas = [];
+		json.features.forEach(function(value){
+			marcas.push(value.properties["marca"]);
+			console.log(value.properties["marca"]);
+		});
+		console.log(marcas);
+		var marcasUnicas = marcas.filter(function(elem, index,self){
+			return index === self.indexOf(elem);
+		});
+		console.log(marcasUnicas);
+		
+		//Imprimos por pantalla los radio buttons de las marcas con
+		//la primera seleccionada y los modelos asociados a esta
+		imprimeRadioButtonMarca( marcasUnicas);
+		marcaElegida= $("#MarcasGrp :radio:checked").val();
+		var modelo = [];
+			json.features.forEach(function(value){
+				if(value.properties["marca"]=== marcaElegida){
+					modelo.push(value.properties["modelo"]);
+					console.log(value.properties["modelo"]);
+				}
+			});
+			imprimeRadioButtonModelo(modelo);
+			
+			
+		 $("input[name='marca']").on("change", function() {
+			marcaElegida=$("input[name='marca']:checked").val();
+			console.log(marcaElegida);
+			var modelo = [];
+			json.features.forEach(function(value){
+				if(value.properties["marca"]=== marcaElegida){
+					modelo.push(value.properties["modelo"]);
+					console.log(value.properties["modelo"]);
+				}
+			});
+			imprimeRadioButtonModelo(modelo);
+		});
+		
+		$("input[name='model']").on("change", function() {
+			modeloElegido=$("input[name='model']:checked").val();
+			json.features.forEach(function(value){
+				if(value.properties["modelo"]=== modeloElegido){
+					autonomia=value.properties["rangokm"];
+					console.log(autonomia);
+				}
+		});
+		
+	  });
+    });
 }
