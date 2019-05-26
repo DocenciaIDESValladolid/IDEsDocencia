@@ -175,6 +175,7 @@ function CalculoManhattan(from, distancia, projection){
 	var origen= from.getCoordinates();
 	var SRScode= projection.getCode().substring(5);
 	var WPSSRSname = "http://www.opengis.net/gml/srs/epsg.xml#" + SRScode;
+	distancia=distancia*1000;
 
 var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
