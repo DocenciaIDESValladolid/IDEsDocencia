@@ -758,8 +758,7 @@ function get_block_text(title, body) {
 }
 
 function imprimeRadioButtonMarca(marcas){
-	//var marcas=['Audi', 'kia', 'tesla'];
-	
+		
 	//create your innerHTML container var:
 	var innerHTML = '';
 	//iterate through your array:
@@ -777,7 +776,7 @@ function imprimeRadioButtonMarca(marcas){
 	$("#MarcasGrp").enhanceWithin().controlgroup("refresh");
 }
 
-function imprimeRadioButtonModelo(model){
+function imprimeRadioButtonModelo(model, json){
 	
 	//create your innerHTML container var:
 	var innerHTML = '';
@@ -790,6 +789,9 @@ function imprimeRadioButtonModelo(model){
 			innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" /><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
 		}
 	}
+	modeloElegido=json[0].properties["modelo"];
+	autonomia=json[0].properties["rangokm"];
+	
 	// empty your group container
 	$("#ModeloGrp").controlgroup("container").empty();
 	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
@@ -824,7 +826,6 @@ function WFSQueryCoches(){
            body: bodyCochesWFS
 	  }).then(function(response) {
 		return response.json();
-	     //return JSON.parse(response);
 	  }).then(function(json){
 	  	//console.log(JSON.stringify(json)); //for debug
 		//features: cada uno de los coches
@@ -832,26 +833,25 @@ function WFSQueryCoches(){
 		var marcas = [];
 		json.features.forEach(function(value){
 			marcas.push(value.properties["marca"]);
-			console.log(value.properties["marca"]);
 		});
-		console.log(marcas);
+		//Eliminamos las marcas repetidas
 		var marcasUnicas = marcas.filter(function(elem, index,self){
 			return index === self.indexOf(elem);
 		});
-		console.log(marcasUnicas);
 		
 		//Imprimos por pantalla los radio buttons de las marcas con
 		//la primera seleccionada y los modelos asociados a esta
 		imprimeRadioButtonMarca( marcasUnicas);
 		marcaElegida= $("#MarcasGrp :radio:checked").val();
 		var modelo = [];
-			json.features.forEach(function(value){
-				if(value.properties["marca"]=== marcaElegida){
-					modelo.push(value.properties["modelo"]);
-					console.log(value.properties["modelo"]);
-				}
-			});
-			imprimeRadioButtonModelo(modelo);
+		json.features.forEach(function(value){
+			if(value.properties["marca"]=== marcaElegida){
+				modelo.push(value.properties["modelo"]);
+			}
+		});
+		imprimeRadioButtonModelo(modelo, json.features);
+		modeloElegido=json[0].properties["modelo"];
+		autonomia=json[0].properties["rangokm"];
 			
 			
 		 $("input[name='marca']").on("change", function() {
@@ -861,16 +861,15 @@ function WFSQueryCoches(){
 			json.features.forEach(function(value){
 				if(value.properties["marca"]=== marcaElegida){
 					modelo.push(value.properties["modelo"]);
-					console.log(value.properties["modelo"]);
 				}
 			});
-			imprimeRadioButtonModelo(modelo);
+			imprimeRadioButtonModelo(modelo, json.features);
 		});
 		
-		$("input[name='model']").on("change", function() {
+		$("body").on("change", "input[name='model']:radio", function() {
 			modeloElegido=$("input[name='model']:checked").val();
 			json.features.forEach(function(value){
-				if(value.properties["modelo"]=== modeloElegido){
+				if(value.properties.modelo=== modeloElegido){
 					autonomia=value.properties["rangokm"];
 					console.log(autonomia);
 				}
