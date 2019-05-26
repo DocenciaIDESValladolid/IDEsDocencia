@@ -223,13 +223,13 @@ return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 					return response.text();
 				}).then(function(gml){
 					//Se divide la respuesta gml para quedarnos con el nodo <au:geometry> con la geomtría del municipio
-		var posInicial = gml.search("<gml:MultiSurface");
-		var posFinal = gml.search("</gml:MultiSurface");
-		var geometria = gml.substring(posInicial,posFinal + "</gml:MultiSurface>".length);// 14 es el numero de caracteres de </au:geometry>
-		//A partir de <au:geometry> se obtiene el polígono del municipio (Polygon o Multipolygon)
-		//var posFin = geometria.search("<n52:GEOMETRY>");
-		//var geom = geometria.substring("<n52:GEOMETRY>".length,posFin);//13 es el numero de caracteres de <au:geometry>
-		return Promise.resolve(geometria);
+					var posInicial = gml.search("<gml:MultiSurface");
+					var posFinal = gml.search("</gml:MultiSurface");
+					var geometria = gml.substring(posInicial,posFinal + "</gml:MultiSurface>".length);// 14 es el numero de caracteres de </au:geometry>
+					//A partir de <au:geometry> se obtiene el polígono del municipio (Polygon o Multipolygon)
+					//var posFin = geometria.search("<n52:GEOMETRY>");
+					//var geom = geometria.substring("<n52:GEOMETRY>".length,posFin);//13 es el numero de caracteres de <au:geometry>
+					return Promise.resolve(geometria);
 				});	
 }
 
@@ -475,7 +475,7 @@ function obtenerPtosRecargaMunicipio(){
 					 }
 
 					 var extent = sourceLayer.getExtent();
-					 // Dirige el visor a la zona de interÃ©s.
+					 // Dirige el visor a la zona de interés.
 					 fly_to(map, null, extent);
 				 }											  
 		    });
