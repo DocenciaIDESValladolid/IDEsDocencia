@@ -31,7 +31,7 @@ async function tst(){
 	var aux2 = markerFeature.getGeometry().getCoordinates();
 	var origen=new ol.geom.Point([aux1[0],aux1[1]]);
 	var destino=new ol.geom.Point([aux2[0],aux2[1]]);
-	var autonomiaCoche=100000;
+	//var autonomiaCoche=100000;
 	var destinoPuntoRecarga=new ol.geom.Point([0,0]);
 
 	var origen2 = origen;
@@ -47,7 +47,8 @@ async function tst(){
 		if(contador>0){
 			origen2=ptoCerca;
 		}
-		var manharea = await CalculoManhattan(origen2, autonomiaCoche, ol.proj.get("EPSG:4258"));
+		//var manharea = await CalculoManhattan(origen2, autonomiaCoche, ol.proj.get("EPSG:4258"));
+		var manharea = await CalculoManhattan(origen2, autonomia, ol.proj.get("EPSG:4258"));
 		var ptosRecManh = await intersectManhattanRecarga(manharea);
 		var ptoCerca = await calculoDistancia(ptosRecManh, destino);
 		ptoCerca.transform("EPSG:4326","EPSG:4258"); //Para que ptoCerca y destino estén en el mismo srs
@@ -483,8 +484,7 @@ function obtenerPtosRecargaMunicipio(){
 }
 
 function imprimeRadioButtonMarca(marcas){
-	//var marcas=['Audi', 'kia', 'tesla'];
-	
+		
 	//create your innerHTML container var:
 	var innerHTML = '';
 	//iterate through your array:
@@ -502,7 +502,7 @@ function imprimeRadioButtonMarca(marcas){
 	$("#MarcasGrp").enhanceWithin().controlgroup("refresh");
 }
 
-function imprimeRadioButtonModelo(model){
+function imprimeRadioButtonModelo(model, json){
 	
 	//create your innerHTML container var:
 	var innerHTML = '';
@@ -515,6 +515,15 @@ function imprimeRadioButtonModelo(model){
 			innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" /><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
 		}
 	}
+	
+	//Obtenemos la autonomía de la primera opcion
+	json.features.forEach(function(value){
+		if(value.properties.modelo=== model[0]){
+			autonomia = value.properties["rangokm"];
+			console.log(autonomia);
+		}
+	});
+	
 	// empty your group container
 	$("#ModeloGrp").controlgroup("container").empty();
 	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
@@ -549,7 +558,6 @@ function WFSQueryCoches(){
            body: bodyCochesWFS
 	  }).then(function(response) {
 		return response.json();
-	     //return JSON.parse(response);
 	  }).then(function(json){
 	  	//console.log(JSON.stringify(json)); //for debug
 		//features: cada uno de los coches
@@ -557,26 +565,25 @@ function WFSQueryCoches(){
 		var marcas = [];
 		json.features.forEach(function(value){
 			marcas.push(value.properties["marca"]);
-			console.log(value.properties["marca"]);
 		});
-		console.log(marcas);
+		//Eliminamos las marcas repetidas
 		var marcasUnicas = marcas.filter(function(elem, index,self){
 			return index === self.indexOf(elem);
 		});
-		console.log(marcasUnicas);
 		
 		//Imprimos por pantalla los radio buttons de las marcas con
 		//la primera seleccionada y los modelos asociados a esta
 		imprimeRadioButtonMarca( marcasUnicas);
 		marcaElegida= $("#MarcasGrp :radio:checked").val();
 		var modelo = [];
-			json.features.forEach(function(value){
-				if(value.properties["marca"]=== marcaElegida){
-					modelo.push(value.properties["modelo"]);
-					console.log(value.properties["modelo"]);
-				}
-			});
-			imprimeRadioButtonModelo(modelo);
+		json.features.forEach(function(value){
+			if(value.properties["marca"]=== marcaElegida){
+				modelo.push(value.properties["modelo"]);
+			}
+		});
+		imprimeRadioButtonModelo(modelo, json);
+		//modeloElegido=json[0].properties["modelo"];
+		//autonomia=json[0].properties["rangokm"];
 			
 			
 		 $("input[name='marca']").on("change", function() {
@@ -586,16 +593,15 @@ function WFSQueryCoches(){
 			json.features.forEach(function(value){
 				if(value.properties["marca"]=== marcaElegida){
 					modelo.push(value.properties["modelo"]);
-					console.log(value.properties["modelo"]);
 				}
 			});
-			imprimeRadioButtonModelo(modelo);
+			imprimeRadioButtonModelo(modelo, json);
 		});
 		
-		$("input[name='model']").on("change", function() {
+		$("body").on("change", "input[name='model']:radio", function() {
 			modeloElegido=$("input[name='model']:checked").val();
 			json.features.forEach(function(value){
-				if(value.properties["modelo"]=== modeloElegido){
+				if(value.properties.modelo=== modeloElegido){
 					autonomia=value.properties["rangokm"];
 					console.log(autonomia);
 				}
@@ -844,124 +850,3 @@ function get_block_text(title, body) {
       '</div>';
 }
 
-function imprimeRadioButtonMarca(marcas){
-		
-	//create your innerHTML container var:
-	var innerHTML = '';
-	//iterate through your array:
-	for (var i=0;i<marcas.length;i++)
-	{
-		if(i==0){
-			innerHTML += '<input name="marca" id="'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" checked="checked"/><label for="'+ marcas[i] +'">'+ marcas[i] + '</label>';
-		}else{
-			innerHTML += '<input name="marca" id="'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" /><label for="'+ marcas[i] +'">'+ marcas[i] + '</label>';
-		}
-	}
-	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
-	$("#MarcasGrp").controlgroup("container").append(innerHTML);
-	//and refresh the jQuery Mobile control group like this:
-	$("#MarcasGrp").enhanceWithin().controlgroup("refresh");
-}
-
-function imprimeRadioButtonModelo(model, json){
-	
-	//create your innerHTML container var:
-	var innerHTML = '';
-	//iterate through your array:
-	for (var i=0;i<model.length;i++)
-	{
-		if(i==0){
-			innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" checked="checked"/><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
-		}else{
-			innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" /><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
-		}
-	}
-	modeloElegido=json[0].properties["modelo"];
-	autonomia=json[0].properties["rangokm"];
-	
-	// empty your group container
-	$("#ModeloGrp").controlgroup("container").empty();
-	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
-	$("#ModeloGrp").controlgroup("container").append(innerHTML);
-	//and refresh the jQuery Mobile control group like this:
-	$("#ModeloGrp").enhanceWithin().controlgroup("refresh");
-}
-
-function WFSQueryCoches(){
-
-// generate a GetFeature request
-  var bodyCochesWFS = `<wfs:GetFeature service="WFS" version="1.1.0" outputFormat= "application/json"
-		xmlns:topp="http://www.openplans.org/topp"
-		xmlns:wfs="http://www.opengis.net/wfs"
-		xmlns:ogc="http://www.opengis.net/ogc"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-			<wfs:Query typeName="estacionesC:coches">
-			</wfs:Query>
-		</wfs:GetFeature>`;
-
-      // then post the request and add the received features to a layer
-      fetch("/geoserver/wfs", {
-           
-		   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-			mode: 'no-cors', // no-cors, cors, *same-origin
-			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'same-origin', // include, *same-origin, omit
-           headers: {
-               "Content-Type": "application/xml; charset=UTF-8"
-           },
-           body: bodyCochesWFS
-	  }).then(function(response) {
-		return response.json();
-	  }).then(function(json){
-	  	//console.log(JSON.stringify(json)); //for debug
-		//features: cada uno de los coches
-		//Empty array creation
-		var marcas = [];
-		json.features.forEach(function(value){
-			marcas.push(value.properties["marca"]);
-		});
-		//Eliminamos las marcas repetidas
-		var marcasUnicas = marcas.filter(function(elem, index,self){
-			return index === self.indexOf(elem);
-		});
-		
-		//Imprimos por pantalla los radio buttons de las marcas con
-		//la primera seleccionada y los modelos asociados a esta
-		imprimeRadioButtonMarca( marcasUnicas);
-		marcaElegida= $("#MarcasGrp :radio:checked").val();
-		var modelo = [];
-		json.features.forEach(function(value){
-			if(value.properties["marca"]=== marcaElegida){
-				modelo.push(value.properties["modelo"]);
-			}
-		});
-		imprimeRadioButtonModelo(modelo, json.features);
-		modeloElegido=json[0].properties["modelo"];
-		autonomia=json[0].properties["rangokm"];
-			
-			
-		 $("input[name='marca']").on("change", function() {
-			marcaElegida=$("input[name='marca']:checked").val();
-			console.log(marcaElegida);
-			var modelo = [];
-			json.features.forEach(function(value){
-				if(value.properties["marca"]=== marcaElegida){
-					modelo.push(value.properties["modelo"]);
-				}
-			});
-			imprimeRadioButtonModelo(modelo, json.features);
-		});
-		
-		$("body").on("change", "input[name='model']:radio", function() {
-			modeloElegido=$("input[name='model']:checked").val();
-			json.features.forEach(function(value){
-				if(value.properties.modelo=== modeloElegido){
-					autonomia=value.properties["rangokm"];
-					console.log(autonomia);
-				}
-		});
-		
-	  });
-    });
-}
