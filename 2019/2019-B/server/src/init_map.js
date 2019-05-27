@@ -626,12 +626,8 @@ async function calcular(){
 </wps:Execute>`;
 		
 		var interseccionConAP = await wpsclient_featurecollection(href, InterseccionConAvesParques, prefix, namespace, featuretype2, projection);
-
-		
 		
 		 var node1= WFS.writeTransaction([interseccionConAP],null,null,options1);
-		
-
 		
 		s = new XMLSerializer();
 		str = s.serializeToString(node1);
