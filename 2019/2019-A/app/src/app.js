@@ -42,10 +42,11 @@ async function tst(){
 	
 	var contador = 0;
 	var llegada=0;
+	var ptosIntermedios = new Array(6);
 	
 	while((contador<5)&&(llegada==0)){
 		if(contador>0){
-			origen2=ptoCerca.transform("EPSG:3857","EPSG:4258");
+			origen2=ptoCerca;//.transform("EPSG:3857","EPSG:4258");
 		}
 		//var manharea = await CalculoManhattan(origen2, autonomiaCoche, ol.proj.get("EPSG:4258"));
 		var manharea = await CalculoManhattan(origen2, autonomia, ol.proj.get("EPSG:4258"));
@@ -62,7 +63,7 @@ async function tst(){
 
 		var rutaLista = await CalculoRuta(origen2, destino2, ol.proj.get("EPSG:4258"));
 		procesaruta(rutaLista);
-		anadePto(destino2);
+		ptosIntermedios[contador]=destino2;//Se guarda el punto de recarga (o destino en la ultima iteracion) para mostrarlos posteriormente
 		
 		if(contador==5){
 					toast("Máximo de paradas alcanzado");
@@ -70,6 +71,7 @@ async function tst(){
 		}
 		contador = contador + 1;
 	}
+	anadePto(ptosIntermedios);
 	toast("Ruta obtenida correctamente");
 }
 
@@ -336,7 +338,7 @@ function procesaruta(ruta) {
 /**
 * Función para mostrar los puntos de recarga por los que se pasa
 */
-function anadePto(punto){
+function anadePto(puntos){
 	// Se dibujarán también los puntos de recarga por los que se pasa
 	var sourceLayer = new ol.source.Vector({
 				projection: 'EPSG:3857'
@@ -362,10 +364,13 @@ function anadePto(punto){
 	map.addLayer(vectorCustomLayer);
 	add_layer_to_list(vectorCustomLayer);
 	
-	var drawPoint = new ol.Feature({
-		  geometry: punto.transform("EPSG:4258","EPSG:3857"),
-	});
-	sourceLayer.addFeature(drawPoint);
+	for(i=0;i<puntos.length;i++){
+						 var punto = puntos[i];
+						 var drawPoint = new ol.Feature({
+						  geometry: punto.transform("EPSG:4258","EPSG:3857"),
+						 });
+						 sourceLayer.addFeature(drawPoint);
+	}
 	
 	return;	
 }
