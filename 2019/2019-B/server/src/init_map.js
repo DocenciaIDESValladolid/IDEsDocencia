@@ -387,8 +387,15 @@ async function calcular(){
 		featurePrefix: 'ide2019b',
 		featureType: 'InterseccionConAvesParques'
 		 }
+		var options2={
+		srsName: "EPSG:3857", //proyeccion de openlayers
+		featureNS: 'http://localhost:8080',//poner el necesario en cada caso
+		featurePrefix: 'ide2019b',
+		featureType: 'dron'
+		 }
 
-		 var node= WFS.writeTransaction([geometria],null,null,options);
+		 var node= WFS.writeTransaction([geometria],null,null,options2);// var node= WFS.writeTransaction([geometria],null,null,options);
+																			// JMZ: var node= WFS.writeTransaction([geometria],null,null,options2); 
 		
 
 		
@@ -470,7 +477,7 @@ async function calcular(){
 			<wps:DataInputs>
 				<wps:Input>
 					<ows:Identifier>features</ows:Identifier>
-					<wps:Reference mimeType="text/xml" xlink:href="http://localhost:8081/geoserver/wps" method="POST">
+					<wps:Reference mimeType="text/xml" xlink:href="http://localhost:8080/geoserver/wps" method="POST">//<wps:Reference mimeType="text/xml" xlink:href="http://localhost:8081/geoserver/wps" method="POST">
 						<wps:Body><![CDATA[
 							<wfs:GetFeature service="WFS" version="1.1.0" maxFeatures="20" outputFormat="GML2"
 							  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
@@ -522,7 +529,7 @@ async function calcular(){
 			  <wps:DataInputs>
 				<wps:Input>
 				  <ows:Identifier>first</ows:Identifier>
-				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8081/geoserver/wfs" method="POST">
+				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8080/geoserver/wfs" method="POST">//<wps:Reference mimeType="text/xml" xlink:href="http://localhost:8081/geoserver/wps" method="POST">
 					<wps:Body><![CDATA[<wfs:GetFeature service="WFS" version="1.1.0"
 
 			  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
@@ -547,7 +554,7 @@ async function calcular(){
 				</wps:Input>
 				<wps:Input>
 				  <ows:Identifier>second</ows:Identifier>
-				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8081/geoserver/wfs" method="POST">
+				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8080/geoserver/wfs" method="POST">//<wps:Reference mimeType="text/xml" xlink:href="http://localhost:8081/geoserver/wps" method="POST">
 					<wps:Body><![CDATA[<wfs:GetFeature service="WFS" version="1.1.0"
 
 			  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
@@ -655,7 +662,7 @@ async function calcular(){
     </wps:Input>
     <wps:Input>
       <ows:Identifier>second feature collection</ows:Identifier>
-      <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8081/geoserver/wfs" method="POST">
+      <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8080/geoserver/wfs" method="POST">//<wps:Reference mimeType="text/xml" xlink:href="http://localhost:8081/geoserver/wps" method="POST">
         <wps:Body><![CDATA[
 			${ruta}
 		]]></wps:Body>

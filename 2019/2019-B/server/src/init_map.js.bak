@@ -123,9 +123,48 @@ function initmap() {
 	var selectInteraction;
 
 	//var gg = new OpenLayers.Projection("EPSG:4326");
-	
+	aeroSource = new ol.source.Vector({
+							projection: 'EPSG:3857'
+					 });
+					 var aeroLayer = new ol.layer.Vector({
+						  visible: false,
+							source: aeroSource,
+							style: new ol.style.Style({
+								
+										fill: new ol.style.Fill({
+										  color: 'rgba(255,20,0,1)'
+										}),
+										stroke: new ol.style.Stroke({
+										  color: 'rgba(0,0,0,1)',
+										  width: 2
+										})
+									  									  
+									})
+						   
+					 });
+	parqueSource = new ol.source.Vector({
+							projection: 'EPSG:3857'
+					 });
+					 var parqueLayer = new ol.layer.Vector({
+						  visible: false,
+							source: parqueSource,
+							style: new ol.style.Style({
+								
+										fill: new ol.style.Fill({
+										  color: 'rgba(255,255,0,1)'
+										}),
+										stroke: new ol.style.Stroke({
+										  color: 'rgba(0,0,0,1)',
+										  width: 2
+										})
+									  									  
+									})
+						   
+					 });
 
-    layers = [layergroup, userPosition,vectorCustomLayer];
+
+
+    layers = [layergroup, userPosition,vectorCustomLayer,aeroLayer,parqueLayer];
     // New Custom zoom.
     var zoom = new ol.control.Zoom({ target: "navigation", className: "custom-zoom" });
     map = new ol.Map({
@@ -137,7 +176,12 @@ function initmap() {
         /*loadTilesWhileAnimating: true,
          loadTilesWhileInteracting: true*/
     });
-
+aeroLayer.set("name", "Aeropuertos");
+	add_layer_to_list(aeroLayer);
+	
+	parqueLayer.set("name", "Parques Naturales");
+	add_layer_to_list(parqueLayer);
+					
 
     // Initialize the page layers.
     add_layergroup_to_list(layergroup);
