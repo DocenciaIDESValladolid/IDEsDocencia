@@ -45,12 +45,12 @@ async function tst(){
 	
 	while((contador<5)&&(llegada==0)){
 		if(contador>0){
-			origen2=ptoCerca;
+			origen2=ptoCerca.transform("EPSG:3857","EPSG:4258");
 		}
 		//var manharea = await CalculoManhattan(origen2, autonomiaCoche, ol.proj.get("EPSG:4258"));
 		var manharea = await CalculoManhattan(origen2, autonomia, ol.proj.get("EPSG:4258"));
 		var ptosRecManh = await intersectManhattanRecarga(manharea);
-		var ptoCerca = await calculoDistancia(ptosRecManh, destino);
+		var ptoCerca = calculoDistancia(ptosRecManh, destino);
 		ptoCerca.transform("EPSG:4326","EPSG:4258"); //Para que ptoCerca y destino estén en el mismo srs
 		var distancia = await calculoDistancia2(ptoCerca,destino);
 		if(distancia<0.03){
@@ -313,7 +313,6 @@ return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 JPC: Hay que meter en una función el procesado para que se pueda hacer asíncronamente */				
 function procesaruta(ruta) {
 	
-
 	var sourceLayer = new ol.source.Vector({
         projection: 'EPSG:3857'
     });
@@ -332,8 +331,6 @@ function procesaruta(ruta) {
     // Dirige el visor a la zona de interÃ©s.
 	fly_to(map, null, extent);
 	return;
-
-	
 }
 		
 /**
@@ -492,6 +489,7 @@ function obtenerPtosRecargaMunicipio(){
 									})
 						   
 					 });
+					 vectorCustomLayer.set("name", "Puntos de recarga cercanos");
 					 map.addLayer(vectorCustomLayer);
 					 add_layer_to_list(vectorCustomLayer);
 					 
