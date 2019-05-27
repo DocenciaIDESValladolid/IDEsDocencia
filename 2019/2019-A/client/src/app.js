@@ -11,7 +11,10 @@ $("#apptst").click(function(){
      tst();
 });
 
-	
+/**
+* Función encargada de implementar los pasos necesariso para obtener la ruta
+* entre los dos puntos y mostrarla en el mapa
+*/	
 async function tst(){
 	
 	// Comprobación de que haya marcado un orgien y destino al calcular la ruta
@@ -28,7 +31,7 @@ async function tst(){
 	var aux2 = markerFeature.getGeometry().getCoordinates();
 	var origen=new ol.geom.Point([aux1[0],aux1[1]]);
 	var destino=new ol.geom.Point([aux2[0],aux2[1]]);
-	var autonomiaCoche=100000;
+	//var autonomiaCoche=100000;
 	var destinoPuntoRecarga=new ol.geom.Point([0,0]);
 
 	var origen2 = origen;
@@ -38,41 +41,17 @@ async function tst(){
 	destino.transform("EPSG:3857","EPSG:4258");
 	
 	var contador = 0;
-	//while(1){
-			/*if(contador>0){
-				origen2=ptoCerca;
-			}*/
-		/*	var manharea = await CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258"));
-			var ptosRecManh = await intersectManhattanRecarga(manharea);
-			//var ptoCerca = await calculoDistancia(ptosRecManh);
-			var distancia = await calculoDistancia2(ptoCerca,destino)
-			if(distancia<100){
-				destino2=destino;
-			}else{
-				destino2=ptoCerca;
-			}
-			var rutaLista = await CalculoRuta(origen2, destino2, ol.proj.get("EPSG:4258"));
-			procesaruta(rutaLista);
-			contador++;
-			if(contador==5){
-				toast("Máximo de paradas alcanzado");
-				//break;
-			}*/
-			
-	//}
-		
-	
-	//CalculoManhattan(origen, distancia, ol.proj.get("EPSG:4258")).then(intersectManhattanRecarga);
-	//CalculoRuta(origen, destino, ol.proj.get("EPSG:4258")).then(procesaruta);
 	var llegada=0;
+	var ptosIntermedios = new Array(6);
 	
-	while(contador<5 && llegada==0){
+	while((contador<5)&&(llegada==0)){
 		if(contador>0){
-			origen2=ptoCerca;
+			origen2=ptoCerca;//.transform("EPSG:3857","EPSG:4258");
 		}
-		var manharea = await CalculoManhattan(origen2, autonomiaCoche, ol.proj.get("EPSG:4258"));
+		//var manharea = await CalculoManhattan(origen2, autonomiaCoche, ol.proj.get("EPSG:4258"));
+		var manharea = await CalculoManhattan(origen2, autonomia, ol.proj.get("EPSG:4258"));
 		var ptosRecManh = await intersectManhattanRecarga(manharea);
-		var ptoCerca = await calculoDistancia(ptosRecManh, destino);
+		var ptoCerca = calculoDistancia(ptosRecManh, destino);
 		ptoCerca.transform("EPSG:4326","EPSG:4258"); //Para que ptoCerca y destino estén en el mismo srs
 		var distancia = await calculoDistancia2(ptoCerca,destino);
 		if(distancia<0.03){
@@ -84,6 +63,7 @@ async function tst(){
 
 		var rutaLista = await CalculoRuta(origen2, destino2, ol.proj.get("EPSG:4258"));
 		procesaruta(rutaLista);
+		ptosIntermedios[contador]=destino2;//Se guarda el punto de recarga (o destino en la ultima iteracion) para mostrarlos posteriormente
 		
 		if(contador==5){
 					toast("Máximo de paradas alcanzado");
@@ -91,9 +71,13 @@ async function tst(){
 		}
 		contador = contador + 1;
 	}
+	anadePto(ptosIntermedios);
 	toast("Ruta obtenida correctamente");
 }
 
+/**
+* Función que calcula y devuelve la distancia entre dos puntos pasados como parámetros
+*/
 function calculoDistancia2(punto1,punto2){
 	var point1= punto1.getCoordinates();
 	var point2= punto2.getCoordinates();
@@ -103,11 +87,12 @@ function calculoDistancia2(punto1,punto2){
 	
 }
 
-/** Función que calcula el punto más cercano a "destino" de entre los recogidos en "ptosRec"
+/** 
+* Función que obtiene y devuelve el punto más cercano a "destino" de entre los recogidos en "ptosRec"
 */
 function calculoDistancia(ptosRec,destino){
 	// Se obtiene el punto de destino
-	var dest = destino.getCoordinates();
+	var dest = destino.transform("EPSG:4258","EPSG:4326").getCoordinates();//Se cambia a  4326 porque los puntos de recarga vienen en ese sistema
 	
 	//Bucle para obtener la mínima distancia
 	var minDistancia;	
@@ -115,7 +100,7 @@ function calculoDistancia(ptosRec,destino){
 	var distancia;
 	for(i=0;i<ptosRec.length;i++){
 		
-		coordenadas = ptosRec[i].getGeometry().transform("EPSG:3857","EPSG:4326").getCoordinates();//Se cambia a  4326 porque los puntos de recarga vienen en ese sistema
+		coordenadas = ptosRec[i].getGeometry().getCoordinates();
 		distancia = Math.sqrt(Math.pow(coordenadas[0]-dest[0],2)+Math.pow(coordenadas[1]-dest[1],2));//Se calcula la distancia como el modulo de la diferencia de las coordenadas
 		if(i==0){
 			minDistancia=distancia;
@@ -129,6 +114,10 @@ function calculoDistancia(ptosRec,destino){
 	return ptosRec[featureIndex].getGeometry();
 }
 
+/**
+* Función que realiza la petición correspondiente para obtener los puntos de recarga
+* que se encuentran en la geometría "geom" y devolverlos
+*/
 async function intersectManhattanRecarga(geom){
 		
 		  var bodyPtosRecargaWFS =`<wfs:GetFeature service="WFS" version="1.1.0"
@@ -150,7 +139,7 @@ async function intersectManhattanRecarga(geom){
 			</wfs:GetFeature>`;
 			
 		// then post the request and add the received features to a layer
-			return fetch("/geoserver/wfs", {
+			return fetch("/geoserver/wfs", { //sustituir por http://itastdevserver.tel.uva.es/IDE2019A
 				   method: "POST",
 				   headers: {
 					   "Content-Type": "application/xml; charset=UTF-8"
@@ -164,60 +153,20 @@ async function intersectManhattanRecarga(geom){
 				 var wfsformat = new ol.format.GML();
 				 
 				 var features = wfsformat.readFeatures(gml);
-				
-					 //Se dibujan los diferentes puntos de recarga
-				 if(features.length==0){
-					 toast("No hay puntos de recarga cercanos");
-				 }else{
-					 
-					/* 
-					JPC: No añadir capas nuevas tras cada ejecución. Reutilizar!!
-					var sourceLayer = new ol.source.Vector({
-							projection: 'EPSG:3857'
-					 });
-					 var vectorCustomLayer = new ol.layer.Vector({
-							source: sourceLayer,
-							style: new ol.style.Style({
-									  image: new ol.style.Circle({
-										fill: new ol.style.Fill({
-										  color: 'rgba(255,10,0,1)'
-										}),
-										radius: 10,
-										stroke: new ol.style.Stroke({
-										  color: 'rgba(0,0,0,1)',
-										  width: 2
-										})
-									  })
-									  
-									})
-						   
-					 });
-					 map.addLayer(vectorCustomLayer);
-					 add_layer_to_list(vectorCustomLayer);
-					 */
-					 
-					 for(i=0;i<features.length;i++){
-						 var feat = features[i];
-						 feat.getGeometry().transform("EPSG:4326","EPSG:3857");
-						 sourceLayer.addFeature(feat);
-					 }
-/*
-					 var extent = sourceLayer.getExtent();
-					 // Dirige el visor a la zona de interés.
-					 fly_to(map, null, extent);*/
-				 }
-					
-				 return Promise.resolve(features);
-									  
+
+				 return Promise.resolve(features);									  
 		    });
 }
 
-
-
+/**
+* Función que obtiene y devuelve una geometría calculada a partir de la distancia
+* Manhattan entre un punto ("from") y de distancia ("distancia")
+*/
 function CalculoManhattan(from, distancia, projection){
 	var origen= from.getCoordinates();
 	var SRScode= projection.getCode().substring(5);
 	var WPSSRSname = "http://www.opengis.net/gml/srs/epsg.xml#" + SRScode;
+	distancia=distancia*1000;
 
 var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
@@ -267,16 +216,19 @@ return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 					return response.text();
 				}).then(function(gml){
 					//Se divide la respuesta gml para quedarnos con el nodo <au:geometry> con la geomtría del municipio
-		var posInicial = gml.search("<gml:MultiSurface");
-		var posFinal = gml.search("</gml:MultiSurface");
-		var geometria = gml.substring(posInicial,posFinal + "</gml:MultiSurface>".length);// 14 es el numero de caracteres de </au:geometry>
-		//A partir de <au:geometry> se obtiene el polígono del municipio (Polygon o Multipolygon)
-		//var posFin = geometria.search("<n52:GEOMETRY>");
-		//var geom = geometria.substring("<n52:GEOMETRY>".length,posFin);//13 es el numero de caracteres de <au:geometry>
-		return Promise.resolve(geometria);
+					var posInicial = gml.search("<gml:MultiSurface");
+					var posFinal = gml.search("</gml:MultiSurface");
+					var geometria = gml.substring(posInicial,posFinal + "</gml:MultiSurface>".length);// 14 es el numero de caracteres de </au:geometry>
+					//A partir de <au:geometry> se obtiene el polígono del municipio (Polygon o Multipolygon)
+					//var posFin = geometria.search("<n52:GEOMETRY>");
+					//var geom = geometria.substring("<n52:GEOMETRY>".length,posFin);//13 es el numero de caracteres de <au:geometry>
+					return Promise.resolve(geometria);
 				});	
 }
 
+/**
+* Función que calcula la ruta entre dos puntos pasados como parámetros
+*/
 function CalculoRuta(from, to, projection){
 	var origen= from.getCoordinates();
 	var destino= to.getCoordinates();
@@ -363,7 +315,6 @@ return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 JPC: Hay que meter en una función el procesado para que se pueda hacer asíncronamente */				
 function procesaruta(ruta) {
 	
-
 	var sourceLayer = new ol.source.Vector({
         projection: 'EPSG:3857'
     });
@@ -382,16 +333,57 @@ function procesaruta(ruta) {
     // Dirige el visor a la zona de interÃ©s.
 	fly_to(map, null, extent);
 	return;
-
-	
 }
-				
-
-// Obtencio de los puntos de recarga por municipio
+		
+/**
+* Función para mostrar los puntos de recarga por los que se pasa
+*/
+function anadePto(puntos){
+	// Se dibujarán también los puntos de recarga por los que se pasa
+	var sourceLayer = new ol.source.Vector({
+				projection: 'EPSG:3857'
+	});
+	 var vectorCustomLayer = new ol.layer.Vector({
+				source: sourceLayer,
+				style: new ol.style.Style({
+						image: new ol.style.Circle({
+							fill: new ol.style.Fill({
+										  color: 'rgba(255,10,0,1)'
+							}),
+							radius: 10,
+							stroke: new ol.style.Stroke({
+									  color: 'rgba(0,0,0,1)',
+									  width: 2
+							})
+						})									  
+				})
+						   
+	});
+	
+	vectorCustomLayer.set("name", "Puntos de recarga en la ruta");
+	map.addLayer(vectorCustomLayer);
+	add_layer_to_list(vectorCustomLayer);
+	
+	for(i=0;i<puntos.length;i++){
+						 var punto = puntos[i];
+						 var drawPoint = new ol.Feature({
+						  geometry: punto.transform("EPSG:4258","EPSG:3857"),
+						 });
+						 sourceLayer.addFeature(drawPoint);
+	}
+	
+	return;	
+}
+		
+// Obtención de los puntos de recarga por municipio
 $("#ptosMunicipio").click(function(){
      obtenerPtosRecargaMunicipio();
 });
 
+/**
+* Función encargada de implementar los pasos necesarios para obtener los puntos de recarga
+* situados en el municipio en el que se encuentra el usuario
+*/
 function obtenerPtosRecargaMunicipio(){ 
 
 	  //Coordenadas actuales
@@ -502,6 +494,7 @@ function obtenerPtosRecargaMunicipio(){
 									})
 						   
 					 });
+					 vectorCustomLayer.set("name", "Puntos de recarga cercanos");
 					 map.addLayer(vectorCustomLayer);
 					 add_layer_to_list(vectorCustomLayer);
 					 
@@ -512,13 +505,142 @@ function obtenerPtosRecargaMunicipio(){
 					 }
 
 					 var extent = sourceLayer.getExtent();
-					 // Dirige el visor a la zona de interÃ©s.
+					 // Dirige el visor a la zona de interés.
 					 fly_to(map, null, extent);
 				 }											  
 		    });
 	  });
 }
 
+function imprimeRadioButtonMarca(marcas){
+		
+	//create your innerHTML container var:
+	var innerHTML = '';
+	//iterate through your array:
+	for (var i=0;i<marcas.length;i++)
+	{
+		if(i==0){
+			innerHTML += '<input name="marca" id="'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" checked="checked"/><label for="'+ marcas[i] +'">'+ marcas[i] + '</label>';
+		}else{
+			innerHTML += '<input name="marca" id="'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" /><label for="'+ marcas[i] +'">'+ marcas[i] + '</label>';
+		}
+	}
+	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
+	$("#MarcasGrp").controlgroup("container").append(innerHTML);
+	//and refresh the jQuery Mobile control group like this:
+	$("#MarcasGrp").enhanceWithin().controlgroup("refresh");
+}
+
+function imprimeRadioButtonModelo(model, json){
+	
+	//create your innerHTML container var:
+	var innerHTML = '';
+	//iterate through your array:
+	for (var i=0;i<model.length;i++)
+	{
+		if(i==0){
+			innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" checked="checked"/><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
+		}else{
+			innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" /><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
+		}
+	}
+	
+	//Obtenemos la autonomía de la primera opcion
+	json.features.forEach(function(value){
+		if(value.properties.modelo=== model[0]){
+			autonomia = value.properties["rangokm"];
+			console.log(autonomia);
+		}
+	});
+	
+	// empty your group container
+	$("#ModeloGrp").controlgroup("container").empty();
+	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
+	$("#ModeloGrp").controlgroup("container").append(innerHTML);
+	//and refresh the jQuery Mobile control group like this:
+	$("#ModeloGrp").enhanceWithin().controlgroup("refresh");
+}
+
+function WFSQueryCoches(){
+
+// generate a GetFeature request
+  var bodyCochesWFS = `<wfs:GetFeature service="WFS" version="1.1.0" outputFormat= "application/json"
+		xmlns:topp="http://www.openplans.org/topp"
+		xmlns:wfs="http://www.opengis.net/wfs"
+		xmlns:ogc="http://www.opengis.net/ogc"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+			<wfs:Query typeName="estacionesC:coches">
+			</wfs:Query>
+		</wfs:GetFeature>`;
+
+      // then post the request and add the received features to a layer
+      fetch("/geoserver/wfs", {
+           
+		   method: 'POST', // *GET, POST, PUT, DELETE, etc.
+			mode: 'no-cors', // no-cors, cors, *same-origin
+			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+			credentials: 'same-origin', // include, *same-origin, omit
+           headers: {
+               "Content-Type": "application/xml; charset=UTF-8"
+           },
+           body: bodyCochesWFS
+	  }).then(function(response) {
+		return response.json();
+	  }).then(function(json){
+	  	//console.log(JSON.stringify(json)); //for debug
+		//features: cada uno de los coches
+		//Empty array creation
+		var marcas = [];
+		json.features.forEach(function(value){
+			marcas.push(value.properties["marca"]);
+		});
+		//Eliminamos las marcas repetidas
+		var marcasUnicas = marcas.filter(function(elem, index,self){
+			return index === self.indexOf(elem);
+		});
+		
+		//Imprimos por pantalla los radio buttons de las marcas con
+		//la primera seleccionada y los modelos asociados a esta
+		imprimeRadioButtonMarca( marcasUnicas);
+		marcaElegida= $("#MarcasGrp :radio:checked").val();
+		var modelo = [];
+		json.features.forEach(function(value){
+			if(value.properties["marca"]=== marcaElegida){
+				modelo.push(value.properties["modelo"]);
+			}
+		});
+		imprimeRadioButtonModelo(modelo, json);
+		//modeloElegido=json[0].properties["modelo"];
+		//autonomia=json[0].properties["rangokm"];
+			
+			
+		 $("input[name='marca']").on("change", function() {
+			marcaElegida=$("input[name='marca']:checked").val();
+			console.log(marcaElegida);
+			var modelo = [];
+			json.features.forEach(function(value){
+				if(value.properties["marca"]=== marcaElegida){
+					modelo.push(value.properties["modelo"]);
+				}
+			});
+			imprimeRadioButtonModelo(modelo, json);
+		});
+		
+		$("body").on("change", "input[name='model']:radio", function() {
+			modeloElegido=$("input[name='model']:checked").val();
+			json.features.forEach(function(value){
+				if(value.properties.modelo=== modeloElegido){
+					autonomia=value.properties["rangokm"];
+					console.log(autonomia);
+				}
+		});
+		
+	  });
+    });
+}
+
+ /*-------------------------------Initialize app -------------*/
 function initApp() {
      /**
      * Location searching panel
@@ -757,125 +879,3 @@ function get_block_text(title, body) {
       '</div>';
 }
 
-function imprimeRadioButtonMarca(marcas){
-	//var marcas=['Audi', 'kia', 'tesla'];
-	
-	//create your innerHTML container var:
-	var innerHTML = '';
-	//iterate through your array:
-	for (var i=0;i<marcas.length;i++)
-	{
-		if(i==0){
-			innerHTML += '<input name="marca" id="'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" checked="checked"/><label for="'+ marcas[i] +'">'+ marcas[i] + '</label>';
-		}else{
-			innerHTML += '<input name="marca" id="'+ marcas[i] + '" value="'+ marcas[i] + '" type="radio" /><label for="'+ marcas[i] +'">'+ marcas[i] + '</label>';
-		}
-	}
-	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
-	$("#MarcasGrp").controlgroup("container").append(innerHTML);
-	//and refresh the jQuery Mobile control group like this:
-	$("#MarcasGrp").enhanceWithin().controlgroup("refresh");
-}
-
-function imprimeRadioButtonModelo(model){
-	
-	//create your innerHTML container var:
-	var innerHTML = '';
-	//iterate through your array:
-	for (var i=0;i<model.length;i++)
-	{
-		if(i==0){
-			innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" checked="checked"/><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
-		}else{
-			innerHTML += '<input name="model" id="model-'+ model[i] + '" value="'+ model[i] + '" type="radio" /><label for="model-'+ model[i] +'">'+ model[i] + '</label>';
-		}
-	}
-	// empty your group container
-	$("#ModeloGrp").controlgroup("container").empty();
-	//now that you have your innerHTML - append it to the jQuery Mobile control group like this:
-	$("#ModeloGrp").controlgroup("container").append(innerHTML);
-	//and refresh the jQuery Mobile control group like this:
-	$("#ModeloGrp").enhanceWithin().controlgroup("refresh");
-}
-
-function WFSQueryCoches(){
-
-// generate a GetFeature request
-  var bodyCochesWFS = `<wfs:GetFeature service="WFS" version="1.1.0" outputFormat= "application/json"
-		xmlns:topp="http://www.openplans.org/topp"
-		xmlns:wfs="http://www.opengis.net/wfs"
-		xmlns:ogc="http://www.opengis.net/ogc"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-			<wfs:Query typeName="estacionesC:coches">
-			</wfs:Query>
-		</wfs:GetFeature>`;
-
-      // then post the request and add the received features to a layer
-      fetch("/geoserver/wfs", {
-           
-		   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-			mode: 'no-cors', // no-cors, cors, *same-origin
-			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'same-origin', // include, *same-origin, omit
-           headers: {
-               "Content-Type": "application/xml; charset=UTF-8"
-           },
-           body: bodyCochesWFS
-	  }).then(function(response) {
-		return response.json();
-	     //return JSON.parse(response);
-	  }).then(function(json){
-	  	//console.log(JSON.stringify(json)); //for debug
-		//features: cada uno de los coches
-		//Empty array creation
-		var marcas = [];
-		json.features.forEach(function(value){
-			marcas.push(value.properties["marca"]);
-			console.log(value.properties["marca"]);
-		});
-		console.log(marcas);
-		var marcasUnicas = marcas.filter(function(elem, index,self){
-			return index === self.indexOf(elem);
-		});
-		console.log(marcasUnicas);
-		
-		//Imprimos por pantalla los radio buttons de las marcas con
-		//la primera seleccionada y los modelos asociados a esta
-		imprimeRadioButtonMarca( marcasUnicas);
-		marcaElegida= $("#MarcasGrp :radio:checked").val();
-		var modelo = [];
-			json.features.forEach(function(value){
-				if(value.properties["marca"]=== marcaElegida){
-					modelo.push(value.properties["modelo"]);
-					console.log(value.properties["modelo"]);
-				}
-			});
-			imprimeRadioButtonModelo(modelo);
-			
-			
-		 $("input[name='marca']").on("change", function() {
-			marcaElegida=$("input[name='marca']:checked").val();
-			console.log(marcaElegida);
-			var modelo = [];
-			json.features.forEach(function(value){
-				if(value.properties["marca"]=== marcaElegida){
-					modelo.push(value.properties["modelo"]);
-					console.log(value.properties["modelo"]);
-				}
-			});
-			imprimeRadioButtonModelo(modelo);
-		});
-		
-		$("input[name='model']").on("change", function() {
-			modeloElegido=$("input[name='model']:checked").val();
-			json.features.forEach(function(value){
-				if(value.properties["modelo"]=== modeloElegido){
-					autonomia=value.properties["rangokm"];
-					console.log(autonomia);
-				}
-		});
-		
-	  });
-    });
-}
