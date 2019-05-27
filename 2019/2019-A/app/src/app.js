@@ -43,7 +43,7 @@ async function tst(){
 	var contador = 0;
 	var llegada=0;
 	
-	while(contador<5 && llegada==0){
+	while((contador<5)&&(llegada==0)){
 		if(contador>0){
 			origen2=ptoCerca;
 		}
@@ -62,6 +62,7 @@ async function tst(){
 
 		var rutaLista = await CalculoRuta(origen2, destino2, ol.proj.get("EPSG:4258"));
 		procesaruta(rutaLista);
+		anadePto(destino2);
 		
 		if(contador==5){
 					toast("Máximo de paradas alcanzado");
@@ -89,7 +90,7 @@ function calculoDistancia2(punto1,punto2){
 */
 function calculoDistancia(ptosRec,destino){
 	// Se obtiene el punto de destino
-	var dest = destino.getCoordinates();
+	var dest = destino.transform("EPSG:4258","EPSG:4326").getCoordinates();//Se cambia a  4326 porque los puntos de recarga vienen en ese sistema
 	
 	//Bucle para obtener la mínima distancia
 	var minDistancia;	
@@ -97,7 +98,7 @@ function calculoDistancia(ptosRec,destino){
 	var distancia;
 	for(i=0;i<ptosRec.length;i++){
 		
-		coordenadas = ptosRec[i].getGeometry().transform("EPSG:3857","EPSG:4326").getCoordinates();//Se cambia a  4326 porque los puntos de recarga vienen en ese sistema
+		coordenadas = ptosRec[i].getGeometry().getCoordinates();
 		distancia = Math.sqrt(Math.pow(coordenadas[0]-dest[0],2)+Math.pow(coordenadas[1]-dest[1],2));//Se calcula la distancia como el modulo de la diferencia de las coordenadas
 		if(i==0){
 			minDistancia=distancia;
@@ -150,19 +151,7 @@ async function intersectManhattanRecarga(geom){
 				 var wfsformat = new ol.format.GML();
 				 
 				 var features = wfsformat.readFeatures(gml);
-				
-					 //Se dibujan los diferentes puntos de recarga
-				 if(features.length==0){
-					 toast("No hay puntos de recarga cercanos");
-				 }else{
-					 
-					 for(i=0;i<features.length;i++){
-						 var feat = features[i];
-						 feat.getGeometry().transform("EPSG:4326","EPSG:3857");
-						 sourceLayer.addFeature(feat);
-					 }
-				 }
-					
+
 				 return Promise.resolve(features);									  
 		    });
 }
@@ -346,8 +335,44 @@ function procesaruta(ruta) {
 
 	
 }
-				
-
+		
+/**
+* Función para mostrar los puntos de recarga por los que se pasa
+*/
+function anadePto(punto){
+	// Se dibujarán también los puntos de recarga por los que se pasa
+	var sourceLayer = new ol.source.Vector({
+				projection: 'EPSG:3857'
+	});
+	 var vectorCustomLayer = new ol.layer.Vector({
+				source: sourceLayer,
+				style: new ol.style.Style({
+						image: new ol.style.Circle({
+							fill: new ol.style.Fill({
+										  color: 'rgba(255,10,0,1)'
+							}),
+							radius: 10,
+							stroke: new ol.style.Stroke({
+									  color: 'rgba(0,0,0,1)',
+									  width: 2
+							})
+						})									  
+				})
+						   
+	});
+	
+	vectorCustomLayer.set("name", "Puntos de recarga en la ruta");
+	map.addLayer(vectorCustomLayer);
+	add_layer_to_list(vectorCustomLayer);
+	
+	var drawPoint = new ol.Feature({
+		  geometry: punto.transform("EPSG:4258","EPSG:3857"),
+	});
+	sourceLayer.addFeature(drawPoint);
+	
+	return;	
+}
+		
 // Obtención de los puntos de recarga por municipio
 $("#ptosMunicipio").click(function(){
      obtenerPtosRecargaMunicipio();
