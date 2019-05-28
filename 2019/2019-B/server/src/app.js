@@ -9,7 +9,7 @@ $('#mappage').on("pageinit", function(){
 
 mostrarparques();
 mostraraeropuertos();
-
+mostraraves();
 
 });
 
@@ -138,6 +138,36 @@ function mostrarparques(){
 				 											  
 		    });
 }
+function mostraraves(){
+	
+	var avesWFS=`<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="application/json"
+  xmlns:topp="http://www.openplans.org/topp"
+  xmlns:wfs="http://www.opengis.net/wfs"
+  xmlns:ogc="http://www.opengis.net/ogc"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.opengis.net/wfs
+                      http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+  <wfs:Query typeName="ide2019b:Aves-3857-Simpl">
+    </wfs:Query>
+</wfs:GetFeature>`;
+			
+			// then post the request and add the received features to a layer
+			fetch("/geoserver/wfs", {
+				   method: "POST",
+				   headers: {
+					   "Content-Type": "application/xml; charset=UTF-8"
+				   },
+				   body: avesWFS
+			  }).then(function(response) {
+				return response.json();
+			  }).then(function(json){
+				  var features = new ol.format.GeoJSON().readFeatures(json);
+				  avesSource.clear();
+					avesSource.addFeatures(features);
+				 											  
+		    });
+}
+
 function initApp() {
      /**
      * Location searching panel

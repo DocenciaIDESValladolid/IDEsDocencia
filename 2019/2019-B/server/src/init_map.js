@@ -132,10 +132,10 @@ function initmap() {
 							style: new ol.style.Style({
 								
 										fill: new ol.style.Fill({
-										  color: 'rgba(255,20,0,1)'
+										  color: '#ff21bc'
 										}),
 										stroke: new ol.style.Stroke({
-										  color: 'rgba(0,0,0,1)',
+										  color: '#7c105c',
 										  width: 2
 										})
 									  									  
@@ -151,11 +151,11 @@ function initmap() {
 			style: new ol.style.Style({
 				
 						fill: new ol.style.Fill({
-						  color: 'rgba(255,20,0,1)'
+						  color: '#20ff45'
 						}),
 						stroke: new ol.style.Stroke({
-						  color: 'rgba(0,0,0,1)',
-						  width: 2
+						  color: '#ffffff',
+						  width: 3
 						})
 														  
 					})
@@ -170,10 +170,29 @@ function initmap() {
 							style: new ol.style.Style({
 								
 										fill: new ol.style.Fill({
-										  color: 'rgba(255,255,0,1)'
+										  color: '#59cc33'
 										}),
 										stroke: new ol.style.Stroke({
-										  color: 'rgba(0,0,0,1)',
+										  color: '#2f6d1b',
+										  width: 2
+										})
+									  									  
+									})
+						   
+					 });
+avesSource = new ol.source.Vector({
+							projection: 'EPSG:3857'
+					 });
+					 var avesLayer = new ol.layer.Vector({
+						  visible: false,
+							source: avesSource,
+							style: new ol.style.Style({
+								
+										fill: new ol.style.Fill({
+										  color: '#eadb38'
+										}),
+										stroke: new ol.style.Stroke({
+										  color: '#bcb134',
 										  width: 2
 										})
 									  									  
@@ -182,8 +201,7 @@ function initmap() {
 					 });
 
 
-
-    layers = [layergroup, userPosition,vectorCustomLayer,aeroLayer,parqueLayer,InterseccionLayer];
+    layers = [layergroup, userPosition,vectorCustomLayer,aeroLayer,parqueLayer,avesLayer,InterseccionLayer];
     // New Custom zoom.
     var zoom = new ol.control.Zoom({ target: "navigation", className: "custom-zoom" });
     map = new ol.Map({
@@ -200,7 +218,10 @@ aeroLayer.set("name", "Aeropuertos");
 	
 	parqueLayer.set("name", "Parques Naturales");
 	add_layer_to_list(parqueLayer);
-					
+
+avesLayer.set("name", "Espacios de Aves Protegido");
+	add_layer_to_list(avesLayer);
+						
 					
 	InterseccionLayer.set("name", "Interseccion");
 	add_layer_to_list(InterseccionLayer);
