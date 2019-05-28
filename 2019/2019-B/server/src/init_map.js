@@ -154,8 +154,8 @@ function initmap() {
 						  color: '#20ff45'
 						}),
 						stroke: new ol.style.Stroke({
-						  color: '#ffffff',
-						  width: 3
+						  color: '#17441b',
+						  width: 4
 						})
 														  
 					})

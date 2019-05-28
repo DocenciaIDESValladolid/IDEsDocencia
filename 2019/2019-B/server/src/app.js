@@ -799,9 +799,23 @@ async function calcular(){
 		
 		
 		
-		create_popup('info', 'Interseccion', "La ruta pasa por las siguientes zonas de proteccion de aves:<br />" + cadenaAves + "   "+"<br />los responsables de estos espacios son: " + cadenaResponsableAves +
-		"<br /><br /><br />"+ "La ruta pasa por las siguientes zonas de proteccion de parques naturales:<br />" + cadenaParques + "<br />los responsables de estos espacios son: " + cadenaResponsableParques);
+		if(cadenaAves=="" && cadenaParques!=""){
+			create_popup('info', 'Resultado de la ruta', "La ruta pasa por las siguientes zonas de parques naturales:<br />" + cadenaParques + "<br />los responsables de estos espacios son: " + cadenaResponsableParques);
+			
+		}
+		else if (cadenaParques=="" && cadenaAves!=""){
+			create_popup('info', 'Resultado de la ruta', "La ruta pasa por las siguientes zonas de proteccion de aves:<br />" + cadenaAves + "<br />los responsables de estos espacios son: " + cadenaResponsableAves);
 
+		}
+		else if(cadenaParques=="" && cadenaAves=="")
+		{
+			create_popup('info', 'Resultado de la ruta', "La ruta es correcta no se sobrevuela zonas conflitivas");
+
+		}
+		else{
+		create_popup('info', 'resultado de la Ruta', "La ruta pasa por las siguientes zonas de proteccion de aves:<br />" + cadenaAves + "   "+"<br />los responsables de estos espacios son: " + cadenaResponsableAves +
+		"<br /><br /><br />"+ "La ruta pasa por las siguientes zonas de proteccion de parques naturales:<br />" + cadenaParques + "<br />los responsables de estos espacios son: " + cadenaResponsableParques);
+		}
 }
 
 function wpsclient_count(href, wpsbody, prefix, namespace, featuretype, projection){
