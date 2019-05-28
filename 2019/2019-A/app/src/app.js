@@ -31,7 +31,6 @@ async function tst(){
 	var aux2 = markerFeature.getGeometry().getCoordinates();
 	var origen=new ol.geom.Point([aux1[0],aux1[1]]);
 	var destino=new ol.geom.Point([aux2[0],aux2[1]]);
-	//var autonomiaCoche=100000;
 	var destinoPuntoRecarga=new ol.geom.Point([0,0]);
 
 	var origen2 = origen;
@@ -46,7 +45,7 @@ async function tst(){
 	
 	while((contador<5)&&(llegada==0)){
 		if(contador>0){
-			origen2=ptoCerca;//.transform("EPSG:3857","EPSG:4258");
+			origen2=ptoCerca;
 		}
 
 		var manharea = await CalculoManhattan(origen2, autonomia, ol.proj.get("EPSG:4258"));
@@ -54,7 +53,7 @@ async function tst(){
 		var ptoCerca = calculoDistancia(ptosRecManh, destino);
 		ptoCerca.transform("EPSG:4326","EPSG:4258"); //Para que ptoCerca y destino estén en el mismo srs
 		var distancia = await calculoDistancia2(ptoCerca,destino);
-		if(distancia<0.03){
+		if(distancia<0.03){//Valor de distancia optimizable (escogido de forma "práctica")
 					destino2=destino;
 					llegada=1;
 		}else{
@@ -63,7 +62,7 @@ async function tst(){
 
 		var rutaLista = await CalculoRuta(origen2, destino2, ol.proj.get("EPSG:4258"));
 		procesaruta(rutaLista);
-		ptosIntermedios[contador]=destino2;//Se guarda el punto de recarga (o destino en la ultima iteracion) para mostrarlos posteriormente
+		ptosIntermedios[contador]=destino2;//Se guarda el punto de recarga (o destino en la ultima iteración) para mostrarlos posteriormente
 		
 		if(contador==5){
 					toast("Máximo de paradas alcanzado");
