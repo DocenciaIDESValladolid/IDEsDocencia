@@ -127,7 +127,7 @@ async function intersectManhattanRecarga(geom){
 			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			  xsi:schemaLocation="http://www.opengis.net/wfs
 								  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-			  <wfs:Query typeName="proytectoIDE:puntosrecarga">
+			  <wfs:Query typeName="ide2019a:puntosrecarga">
 				<Filter>
 				  <Within>
 					<PropertyName>geom</PropertyName>` + geom + `
@@ -443,7 +443,7 @@ function obtenerPtosRecargaMunicipio(){
 			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			  xsi:schemaLocation="http://www.opengis.net/wfs
 								  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-			  <wfs:Query typeName="proytectoIDE:puntosrecarga">
+			  <wfs:Query typeName="ide2019a:puntosrecarga">
 				<Filter>
 				  <Within>
 					<PropertyName>geom</PropertyName>` + geom + `
@@ -569,7 +569,7 @@ function WFSQueryCoches(){
 		xmlns:ogc="http://www.opengis.net/ogc"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
-			<wfs:Query typeName="estacionesC:coches">
+			<wfs:Query typeName="ide2019a:coches">
 			</wfs:Query>
 		</wfs:GetFeature>`;
 
