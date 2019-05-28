@@ -48,7 +48,7 @@ async function tst(){
 		if(contador>0){
 			origen2=ptoCerca;//.transform("EPSG:3857","EPSG:4258");
 		}
-		//var manharea = await CalculoManhattan(origen2, autonomiaCoche, ol.proj.get("EPSG:4258"));
+
 		var manharea = await CalculoManhattan(origen2, autonomia, ol.proj.get("EPSG:4258"));
 		var ptosRecManh = await intersectManhattanRecarga(manharea);
 		var ptoCerca = calculoDistancia(ptosRecManh, destino);
@@ -81,7 +81,7 @@ async function tst(){
 function calculoDistancia2(punto1,punto2){
 	var point1= punto1.getCoordinates();
 	var point2= punto2.getCoordinates();
-	//var distance = ol.sphere.WGS84.haversineDistance([punto1[0],punto1[1]],[punto2[0],punto2[1]]);
+
 	var distance = Math.sqrt(Math.pow(point1[0]-point2[0],2)+Math.pow(point1[1]-point2[1],2));//Se calcula la distancia como el modulo de la diferencia de las coordenadas
 	return Promise.resolve(distance);
 	
@@ -455,7 +455,7 @@ function obtenerPtosRecargaMunicipio(){
 			</wfs:GetFeature>`;
 			
 			// then post the request and add the received features to a layer
-			fetch("/geoserver/wfs", {
+			fetch("/geoserver/wfs", { //sustituir por http://itastdevserver.tel.uva.es/IDE2019A
 				   method: "POST",
 				   headers: {
 					   "Content-Type": "application/xml; charset=UTF-8"
@@ -575,7 +575,7 @@ function WFSQueryCoches(){
 		</wfs:GetFeature>`;
 
       // then post the request and add the received features to a layer
-      fetch("/geoserver/wfs", {
+      fetch("/geoserver/wfs", { //sustituir por http://itastdevserver.tel.uva.es/IDE2019A
            
 		   method: 'POST', // *GET, POST, PUT, DELETE, etc.
 			mode: 'no-cors', // no-cors, cors, *same-origin
