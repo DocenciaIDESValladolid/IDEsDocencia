@@ -8,6 +8,7 @@ $('#mappage').on("pageinit", function(){
 mostraraeropuertos();
 mostrarparques();
 
+
 });
 function mostraraeropuertos(){
 	
@@ -290,7 +291,7 @@ function initApp() {
   $('#calcular').on('click', function () {
       calcular(true).then(function(data) {
         $("#popupdialog").popup("close");
-		//mostrarinterseccion();
+		mostrarinterseccion();
         // JPC: Incluir aquí lo que se hace al terminar el procesado.
       });
   });

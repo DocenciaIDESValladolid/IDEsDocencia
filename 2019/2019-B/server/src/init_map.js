@@ -724,6 +724,50 @@ async function calcular(){
 
 		});
 		}
+		var cadena;
+		var vector=[];
+		var cadenaREsponsable;
+		var vectorR=[];
+		for (var i=0; i<numeroFeatures; i++){
+			
+			
+			if(interseccionConAP[i].values_['Aves-3857-Simpl_site_name']==null)
+			{
+				//Tenemos interseccion con los parques
+				var valor= interseccionConAP[i].values_['Aves-3857-Simpl_sitename']
+				vector.push('hola');
+				//var parquesResponsable[i]=interseccionConAP[i].values_['Aves-3857-Simpl_ccaa_n_enp'];
+				
+				
+				
+				
+				
+			}else{
+				//tenemos interseccion con las aves
+				
+				if(interseccionConAP[i].values_['Aves-3857-Simpl_sitename']== null)
+				{
+				}
+				else{
+					var valor= interseccionConAP[i].values_['Aves-3857-Simpl_sitename']
+				}
+				//vectorR.push(cadenaREsponsable=+interseccionConAP[i].values_['Aves-3857-Simpl_site_name']);
+				vectorR.push(valor);
+				
+			}
+			
+			
+		}
+		cadena=vector.join();
+		cadenaREsponsable=vectorR.join();
+		alert(cadena);
+		alert(cadenaREsponsable);
+		
+		
+		
+		
+		
+		
 }
 
 function wpsclient_count(href, wpsbody, prefix, namespace, featuretype, projection){
