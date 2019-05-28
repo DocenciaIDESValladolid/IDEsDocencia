@@ -7,6 +7,7 @@ $('#mappage').on("pageinit", function(){
   initApp();
 mostraraeropuertos();
 mostrarparques();
+
 });
 function mostraraeropuertos(){
 	
@@ -21,8 +22,8 @@ function mostraraeropuertos(){
     <ogc:Filter>
        <And>
        <PropertyIsEqualTo>
-                <PropertyName>tip_aread</PropertyName>
-                <Literal>Aeródromo</Literal>
+                <PropertyName>tip_area</PropertyName>
+                <Literal>1</Literal>
           </PropertyIsEqualTo>
          <ogc:BBOX>
         <ogc:PropertyName>geom</ogc:PropertyName>
@@ -37,7 +38,7 @@ function mostraraeropuertos(){
 </wfs:GetFeature>`;
 			
 			// then post the request and add the received features to a layer
-			fetch("/geoserver/wfs", {
+			fetch("/geoserver/ide2019b/wfs", {
 				   method: "POST",
 				   headers: {
 					   "Content-Type": "application/xml; charset=UTF-8"
@@ -57,6 +58,91 @@ function mostraraeropuertos(){
 				 											  
 		    });
 }
+
+
+async function mostrarinterseccion(){
+	
+	var CuentaWPS=`<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
+			  <ows:Identifier>vec:Count</ows:Identifier>
+			  <wps:DataInputs>
+				<wps:Input>
+				  <ows:Identifier>features</ows:Identifier>
+				  <wps:Reference mimeType="text/xml" xlink:href="http://geoserver/wfs" method="POST">
+					<wps:Body>
+					  <wfs:GetFeature service="WFS" version="1.0.0" outputFormat="GML2" xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B">
+						<wfs:Query typeName="ide2019b:dron"/>
+					  </wfs:GetFeature>
+					</wps:Body>
+				  </wps:Reference>
+				</wps:Input>
+			  </wps:DataInputs>
+			  <wps:ResponseForm>
+				<wps:RawDataOutput>
+				  <ows:Identifier>result</ows:Identifier>
+				</wps:RawDataOutput>
+			  </wps:ResponseForm>
+			</wps:Execute>`;
+			
+			
+			var href='/geoserver/ide2019b/wps';
+			var prefixBD= 'ide2019b';
+			var namespace = 'http://itastdevserver.tel.uva.es/IDE2019B';
+			var featuretype = 'Aeropuertos-3857';
+			var projection = ol.proj.get("EPSG:3857");
+			var featuretype='dron';
+
+			
+		   
+		   //Lanza una peticion al WPS asincrona para obtener el numero de rutas dibujas 
+		   var cuenta = await wpsclient_count(href, CuentaWPS, prefixBD, namespace, featuretype, projection);
+		   
+		   
+		   //consulta WFS para quedarme con la ultima ruta para realizar la interseccion posteriormente
+		   var interseccion=`<wfs:GetFeature service="WFS" version="1.1.0" outputFormat="application/json"
+		  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
+		  xmlns:wfs="http://www.opengis.net/wfs"
+		  xmlns:ogc="http://www.opengis.net/ogc"
+		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xsi:schemaLocation="http://www.opengis.net/wfs
+							  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+		  <wfs:Query typeName="ide2019b:interseccion">
+			<ogc:Filter>
+				<ogc:PropertyIsEqualTo>
+						<ogc:PropertyName>idRuta</ogc:PropertyName>
+						<ogc:Literal>${cuenta}</ogc:Literal>
+				</ogc:PropertyIsEqualTo>
+			</ogc:Filter>
+			</wfs:Query>
+		</wfs:GetFeature>`;
+			
+			
+			
+			
+			// then post the request and add the received features to a layer
+			fetch("/geoserver/ide2019b/wfs", {
+				   method: "POST",
+				   headers: {
+					   "Content-Type": "application/xml; charset=UTF-8"
+				   },
+				   body: interseccion
+			  }).then(function(response) {
+				return response.json();
+			  }).then(function(json){
+				  var features = new ol.format.GeoJSON().readFeatures(json);
+				  InterseccionSource.clear();
+					InterseccionSource.addFeatures(features);
+
+					 
+					 //var extent = sourceLayer.getExtent();
+				
+					 //fly_to(map, null, extent);
+				 											  
+		    });
+}
+
+
+
+
 
 function mostrarparques(){
 	
@@ -78,7 +164,7 @@ function mostrarparques(){
 </wfs:GetFeature>`;
 			
 			// then post the request and add the received features to a layer
-			fetch("/geoserver/wfs", {
+			fetch("/geoserver/ide2019b/wfs", {
 				   method: "POST",
 				   headers: {
 					   "Content-Type": "application/xml; charset=UTF-8"
@@ -200,9 +286,11 @@ function initApp() {
   $('#editar').on('click', function () {
       editar(true);
   });
+ 
   $('#calcular').on('click', function () {
       calcular(true).then(function(data) {
         $("#popupdialog").popup("close");
+		//mostrarinterseccion();
         // JPC: Incluir aquí lo que se hace al terminar el procesado.
       });
   });

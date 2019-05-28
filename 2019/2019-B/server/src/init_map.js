@@ -142,6 +142,25 @@ function initmap() {
 									})
 						   
 					 });
+	 InterseccionSource = new ol.source.Vector({
+			projection: 'EPSG:3857'
+	 });
+	 var InterseccionLayer = new ol.layer.Vector({
+		  visible: false,
+			source: InterseccionSource,
+			style: new ol.style.Style({
+				
+						fill: new ol.style.Fill({
+						  color: 'rgba(255,20,0,1)'
+						}),
+						stroke: new ol.style.Stroke({
+						  color: 'rgba(0,0,0,1)',
+						  width: 2
+						})
+														  
+					})
+		   
+	 });
 	parqueSource = new ol.source.Vector({
 							projection: 'EPSG:3857'
 					 });
@@ -164,7 +183,7 @@ function initmap() {
 
 
 
-    layers = [layergroup, userPosition,vectorCustomLayer,aeroLayer,parqueLayer];
+    layers = [layergroup, userPosition,vectorCustomLayer,aeroLayer,parqueLayer,InterseccionLayer];
     // New Custom zoom.
     var zoom = new ol.control.Zoom({ target: "navigation", className: "custom-zoom" });
     map = new ol.Map({
@@ -182,6 +201,9 @@ aeroLayer.set("name", "Aeropuertos");
 	parqueLayer.set("name", "Parques Naturales");
 	add_layer_to_list(parqueLayer);
 					
+					
+	InterseccionLayer.set("name", "Interseccion");
+	add_layer_to_list(InterseccionLayer);
 
     // Initialize the page layers.
     add_layergroup_to_list(layergroup);
@@ -385,16 +407,16 @@ async function calcular(){
 		srsName: "EPSG:3857", //proyeccion de openlayers
 		featureNS: 'http://itastdevserver.tel.uva.es/IDE2019B',//poner el necesario en cada caso
 		featurePrefix: 'ide2019b',
-		featureType: 'InterseccionConAvesParques'
+		featureType: 'interseccion'
 		 }
 		var options2={
 		srsName: "EPSG:3857", //proyeccion de openlayers
-		featureNS: 'http://localhost:8080',//poner el necesario en cada caso
+		featureNS: '/geoserver/ide2019b/wfs',//poner el necesario en cada caso
 		featurePrefix: 'ide2019b',
 		featureType: 'dron'
 		 }
 
-		 var node= WFS.writeTransaction([geometria],null,null,options2);// var node= WFS.writeTransaction([geometria],null,null,options);
+		 var node= WFS.writeTransaction([geometria],null,null,options);// var node= WFS.writeTransaction([geometria],null,null,options);
 																			// JMZ: var node= WFS.writeTransaction([geometria],null,null,options2); 
 		
 
@@ -477,7 +499,7 @@ async function calcular(){
 			<wps:DataInputs>
 				<wps:Input>
 					<ows:Identifier>features</ows:Identifier>
-					<wps:Reference mimeType="text/xml" xlink:href="http://localhost:8080/geoserver/wps" method="POST">//<wps:Reference mimeType="text/xml" xlink:href="http://localhost:8081/geoserver/wps" method="POST">
+					<wps:Reference mimeType="text/xml" xlink:href="${baseurl}/geoserver/wps" method="POST">
 						<wps:Body><![CDATA[
 							<wfs:GetFeature service="WFS" version="1.1.0" maxFeatures="20" outputFormat="GML2"
 							  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
@@ -529,7 +551,7 @@ async function calcular(){
 			  <wps:DataInputs>
 				<wps:Input>
 				  <ows:Identifier>first</ows:Identifier>
-				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8080/geoserver/wfs" method="POST">//<wps:Reference mimeType="text/xml" xlink:href="http://localhost:8081/geoserver/wps" method="POST">
+				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="${baseurl}/geoserver/wfs" method="POST">
 					<wps:Body><![CDATA[<wfs:GetFeature service="WFS" version="1.1.0"
 
 			  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
@@ -554,7 +576,7 @@ async function calcular(){
 				</wps:Input>
 				<wps:Input>
 				  <ows:Identifier>second</ows:Identifier>
-				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8080/geoserver/wfs" method="POST">//<wps:Reference mimeType="text/xml" xlink:href="http://localhost:8081/geoserver/wps" method="POST">
+				  <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="${baseurl}/geoserver/wfs" method="POST">
 					<wps:Body><![CDATA[<wfs:GetFeature service="WFS" version="1.1.0"
 
 			  xmlns:ide2019b="http://itastdevserver.tel.uva.es/IDE2019B"
@@ -586,8 +608,7 @@ async function calcular(){
 			</wps:Execute>`;
 			
 			
-			
-				var CuentaWPS=`<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
+			var CuentaWPS=`<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
 			  <ows:Identifier>vec:Count</ows:Identifier>
 			  <wps:DataInputs>
 				<wps:Input>
@@ -608,27 +629,31 @@ async function calcular(){
 			  </wps:ResponseForm>
 			</wps:Execute>`;
 			
+			
+			
 			var href='/geoserver/ide2019b/wps';
 			var prefix = 'feature';
+			var prefixBD= 'ide2019b';
 			var namespace = 'http://itastdevserver.tel.uva.es/IDE2019B';
 			var featuretype = 'Aeropuertos-3857';
 			var projection = ol.proj.get("EPSG:3857");
 			var featuretype2 = 'Aves-3857-Simpl';
 			var featuretype3='dron';
+			var featuretype4='Interseccion';
 			
-		   // Lanza la petición al WPS asíncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
-		   var buffercollection = await wpsclient_featurecollection(href, BufferWPS, prefix, namespace, featuretype, projection);//.then(function(featuresarray){});
-		   // Lanza la petición al WPS asíncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
-		   var unioncollection = await wpsclient_featurecollection(href, UnionWPS, prefix, namespace, featuretype2, projection);
+		   // Lanza la peticiï¿½n al WPS asï¿½ncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
+		   var buffercollection = await wpsclient_featurecollection(href, BufferWPS, prefixBD, namespace, featuretype, projection);//.then(function(featuresarray){});
+		   // Lanza la peticiï¿½n al WPS asï¿½ncrona. Se devuelve un objeto Promise. Hay que esperar a que se resuelva.
+		   var unioncollection = await wpsclient_featurecollection(href, UnionWPS, prefixBD, namespace, featuretype2, projection);
 		   	
 		   var fusionado = buffercollection.concat(unioncollection);
-		   var GML = writeGMLFeatureMembers(fusionado, prefix, namespace, featuretype, projection);	
+		   var GML = writeGMLFeatureMembers(fusionado, prefixBD, namespace, featuretype, projection);	
 
-		   console.log(GML);
+		   //console.log(GML);
 		   //return Promise.resolve(GML);
 		   
 		   //Lanza una peticion al WPS asincrona para obtener el numero de rutas dibujas 
-		   var cuenta = await wpsclient_count(href, CuentaWPS, prefix, namespace, featuretype3, projection);
+		   var cuenta = await wpsclient_count(href, CuentaWPS, prefixBD, namespace, featuretype3, projection);
 		   var Rfid="dron." + cuenta;
 		   
 		   //consulta WFS para quedarme con la ultima ruta para realizar la interseccion posteriormente
@@ -646,7 +671,7 @@ async function calcular(){
 			</wfs:Query>
 		</wfs:GetFeature>`;
 		
-		var rutaDron = await wpsclient_featurecollection(href, ruta, prefix, namespace, featuretype3, projection);
+		var rutaDron = await wpsclient_featurecollection(href, ruta, prefixBD, namespace, featuretype3, projection);
 		
 		
 		var InterseccionConAvesParques=`<?xml version="1.0" encoding="UTF-8"?><wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
@@ -656,16 +681,16 @@ async function calcular(){
       <ows:Identifier>first feature collection</ows:Identifier>
       <wps:Reference mimeType="text/xml" xlink:href="http://geoserver/wps" method="POST">
         <wps:Body>
-         ${UnionWPS}
+        ${UnionWPS}
         </wps:Body>
       </wps:Reference>
     </wps:Input>
     <wps:Input>
       <ows:Identifier>second feature collection</ows:Identifier>
-      <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="http://localhost:8080/geoserver/wfs" method="POST">//<wps:Reference mimeType="text/xml" xlink:href="http://localhost:8081/geoserver/wps" method="POST">
-        <wps:Body><![CDATA[
-			${ruta}
-		]]></wps:Body>
+      <wps:Reference mimeType="text/xml; subtype=wfs-collection/1.1" xlink:href="${baseurl}/geoserver/wfs" method="POST">
+        <wps:Body>
+		<![CDATA[${ruta}]]>
+		</wps:Body>
       </wps:Reference>
     </wps:Input>
   </wps:DataInputs>
@@ -677,22 +702,28 @@ async function calcular(){
 </wps:Execute>`;
 		
 		var interseccionConAP = await wpsclient_featurecollection(href, InterseccionConAvesParques, prefix, namespace, featuretype2, projection);
+		//calculo el numero de features de interseccion que hay con la ruta
+		var numeroFeatures=interseccionConAP.length;
 		
-		 var node1= WFS.writeTransaction([interseccionConAP],null,null,options1);
+		for(var i=0; i<numeroFeatures; i++){
+		//Añade una nueva feature para tener un identificador de la ruta con la que intersecciona
+		//Envio cada una de las intersecciones a geoserver
+		interseccionConAP[i].set('idRuta', cuenta);
+		 var node1= WFS.writeTransaction([interseccionConAP[i]],null,null,options1);
 		
 		s = new XMLSerializer();
 		str = s.serializeToString(node1);
 		fetch('/geoserver/ide2019b/wfs',{
 		method: 'POST',
 		body: str
-		}).then(function (node){
-			return node.text();
+		}).then(function (node1){
+			return node1.text();
 		}).then(function(res){
 				var resultado1=WFS.readTransactionResponse(res);
 				
 
 		});
-		
+		}
 }
 
 function wpsclient_count(href, wpsbody, prefix, namespace, featuretype, projection){
@@ -710,6 +741,7 @@ return fetch(href, {
 
 				});
 }
+
 
 
 function fly_to(map, point, extent) {
