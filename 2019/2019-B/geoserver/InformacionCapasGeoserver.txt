@@ -1,0 +1,18 @@
+Las capas de aeropuertos, parques naturales y aves estan reproyectadas a 3857 y simplificadas.
+Para subirlas al geoserver las he subido primero a postgres mediante el programa shp2pgsql-gui indicando el SRID - 3857 y formato UTF-8 
+	(no es necesario cambiar nada, ya se encuentran en UTF-8).
+En GeoServer despues de haber realizado los pasos de indicados en el documento /docs/AlmacenarRutas.txt ya solo hay que añadir las capas.
+	Vamos a Capas-> Agregar nuevo recurso.
+		Elegimos ide2019b:PostgisDron (nombre para acceder a la base de datos de postgrees a traves de geoserver)
+		Publicamos las capas indicando en encuadre:
+			Nombre de las capas -> Aves-3857-Simpl
+					       ParquesNaturales-3857-Simpl
+					       Aeropuertos-3857
+			Encuadre nativo -> Compute from SRS bounds
+			Encuadre Lon/Lat -> calcular desde encuadre nativo
+
+
+
+Despues de realizar estos pasos comprobar que el nombre de los atributos de las capas se encuentran en minuscula para que el algoritmo funcione correctamente
+(Ejemplo site_name para la capa de Aves )
+		
