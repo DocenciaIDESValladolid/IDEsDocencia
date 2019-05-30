@@ -123,6 +123,8 @@ function initmap() {
 	var selectInteraction;
 
 	//var gg = new OpenLayers.Projection("EPSG:4326");
+/* JPC: Para este uso mejor WMS. Desactivo capas vectoriales.
+
 	aeroSource = new ol.source.Vector({
 							projection: 'EPSG:3857'
 					 });
@@ -142,25 +144,6 @@ function initmap() {
 									})
 						   
 					 });
-	 InterseccionSource = new ol.source.Vector({
-			projection: 'EPSG:3857'
-	 });
-	 var InterseccionLayer = new ol.layer.Vector({
-		  visible: false,
-			source: InterseccionSource,
-			style: new ol.style.Style({
-				
-						fill: new ol.style.Fill({
-						  color: '#20ff45'
-						}),
-						stroke: new ol.style.Stroke({
-						  color: '#17441b',
-						  width: 4
-						})
-														  
-					})
-		   
-	 });
 	parqueSource = new ol.source.Vector({
 							projection: 'EPSG:3857'
 					 });
@@ -200,6 +183,55 @@ avesSource = new ol.source.Vector({
 						   
 					 });
 
+*/
+	 InterseccionSource = new ol.source.Vector({
+			projection: 'EPSG:3857'
+	 });
+	 var InterseccionLayer = new ol.layer.Vector({
+		  visible: false,
+			source: InterseccionSource,
+			style: new ol.style.Style({
+				
+						fill: new ol.style.Fill({
+						  color: '#20ff45'
+						}),
+						stroke: new ol.style.Stroke({
+						  color: '#17441b',
+						  width: 4
+						})
+														  
+					})
+		   
+	 });
+// JPC: Use WMS
+// JPC: Use WMS for large datasets!!
+    var avesLayer = new ol.layer.Tile({
+          source: new ol.source.TileWMS({
+            url: '/geoserver/wms',
+            params: {'LAYERS': 'ide2019b:Aves-3857-Simpl', 'TILED': true, 'TRANSPARENT' : true},
+            serverType: 'geoserver',
+            // layer have transparency, so do not fade tiles:
+            transition: 0
+          })
+        });
+    var parqueLayer = new ol.layer.Tile({
+          source: new ol.source.TileWMS({
+            url: '/geoserver/wms',
+            params: {'LAYERS': 'ide2019b:ParquesNaturales-3857-Simpl', 'TILED': true, 'TRANSPARENT' : true},
+            serverType: 'geoserver',
+            // layer have transparency, so do not fade tiles:
+            transition: 0
+          })
+        })
+    var aeroLayer = new ol.layer.Tile({
+          source: new ol.source.TileWMS({
+            url: '/geoserver/wms',
+            params: {'LAYERS': 'ide2019b:Aeropuertos-3857', 'TILED': true, 'TRANSPARENT' : true},
+            serverType: 'geoserver',
+            // layer have transparency, so do not fade tiles:
+            transition: 0
+          })
+        })
 
     layers = [layergroup, userPosition,vectorCustomLayer,aeroLayer,parqueLayer,avesLayer,InterseccionLayer];
     // New Custom zoom.
@@ -213,13 +245,13 @@ avesSource = new ol.source.Vector({
         /*loadTilesWhileAnimating: true,
          loadTilesWhileInteracting: true*/
     });
-aeroLayer.set("name", "Aeropuertos");
+	aeroLayer.set("name", "Aeropuertos");
 	add_layer_to_list(aeroLayer);
-	
+
 	parqueLayer.set("name", "Parques Naturales");
 	add_layer_to_list(parqueLayer);
 
-avesLayer.set("name", "Espacios de Aves Protegido");
+	avesLayer.set("name", "Espacios de Aves Protegido");
 	add_layer_to_list(avesLayer);
 						
 					
