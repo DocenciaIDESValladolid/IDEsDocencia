@@ -3,13 +3,13 @@
  */
 
 $('#mappage').on("pageinit", function(){
-  add_demo_functions();
+//  add_demo_functions();
   initmap();
   initApp();
-
-mostrarparques();
-mostraraeropuertos();
-mostraraves();
+// JPC: Esto se muestra con WMS ahora.
+//mostrarparques();
+//mostraraeropuertos();
+//mostraraves();
 
 });
 

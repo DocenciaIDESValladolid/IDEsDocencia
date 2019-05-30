@@ -205,7 +205,7 @@ var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
   </wps:ResponseForm>
 </wps:Execute>`;
     
-return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
+return fetch("https://www.cartociudad.es/wps/WebProcessingService", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/xml"
@@ -277,7 +277,7 @@ var layerWPS=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 </wps:Execute>
 `;
     
-return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
+return fetch("https://www.cartociudad.es/wps/WebProcessingService", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/xml"
@@ -314,22 +314,11 @@ return fetch("http://www.cartociudad.es/wps/WebProcessingService", {
 JPC: Hay que meter en una función el procesado para que se pueda hacer asíncronamente */				
 function procesaruta(ruta) {
 	
-	var sourceLayer = new ol.source.Vector({
-        projection: 'EPSG:3857'
-    });
-    var vectorCustomLayer = new ol.layer.Vector({
-        source: sourceLayer,
-       
-    });
-	vectorCustomLayer.set("name", "Ruta a destino");
-    map.addLayer(vectorCustomLayer);
-    add_layer_to_list(vectorCustomLayer);
-
     var feat = ruta[0];
     feat.getGeometry().transform("EPSG:4258","EPSG:3857");
-    sourceLayer.addFeature(feat);
-    var extent = sourceLayer.getExtent();
-    // Dirige el visor a la zona de interÃ©s.
+    rutaSourceLayer.addFeature(feat);
+    var extent = rutaSourceLayer.getExtent();
+    // Dirige el visor a la zona de interes.
 	fly_to(map, null, extent);
 	return;
 }
@@ -339,36 +328,15 @@ function procesaruta(ruta) {
 */
 function anadePto(puntos){
 	// Se dibujarán también los puntos de recarga por los que se pasa
-	var sourceLayer = new ol.source.Vector({
-				projection: 'EPSG:3857'
-	});
-	 var vectorCustomLayer = new ol.layer.Vector({
-				source: sourceLayer,
-				style: new ol.style.Style({
-						image: new ol.style.Circle({
-							fill: new ol.style.Fill({
-										  color: 'rgba(255,10,0,1)'
-							}),
-							radius: 10,
-							stroke: new ol.style.Stroke({
-									  color: 'rgba(0,0,0,1)',
-									  width: 2
-							})
-						})									  
-				})
-						   
-	});
+// JPC: Use previously created source.
 	
-	vectorCustomLayer.set("name", "Puntos de recarga en la ruta");
-	map.addLayer(vectorCustomLayer);
-	add_layer_to_list(vectorCustomLayer);
-	
+	chargerSourceLayer.clear();
 	for(i=0;i<puntos.length;i++){
 						 var punto = puntos[i];
 						 var drawPoint = new ol.Feature({
 						  geometry: punto.transform("EPSG:4258","EPSG:3857"),
 						 });
-						 sourceLayer.addFeature(drawPoint);
+						 chargerSourceLayer.addFeature(drawPoint);
 	}
 	
 	return;	
@@ -417,7 +385,7 @@ function obtenerPtosRecargaMunicipio(){
 		  </wfs:Query>
 		</wfs:GetFeature>`;
       // then post the request
-      fetch("http://www.ign.es/wfs-inspire/unidades-administrativas", {
+      fetch("https://www.ign.es/wfs-inspire/unidades-administrativas", {
            method: "POST",
        //    headers: {
        //        "content-type": "application/xml"
@@ -715,7 +683,7 @@ function initApp() {
           } else {
               map.updateSize();
               // Do something smart in this update
-              fit_map_to_layer(sourceLayer);
+              //fit_map_to_layer(sourceLayer);
           }
       } else if (pageId === 'historypage') {
           if (event.type === 'pagecontainershow') {

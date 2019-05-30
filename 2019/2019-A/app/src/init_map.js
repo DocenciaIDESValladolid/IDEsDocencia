@@ -58,25 +58,43 @@ function initmap() {
     /*-------------------------------Layers-----------------------------------*/
     var layers = [];
     var geoJSONFormat = new ol.format.GeoJSON();
-    sourceLayer = new ol.source.Vector({
+
+// JPC: Initialize reporting layer.
+    rutaSourceLayer = new ol.source.Vector({
+        projection: 'EPSG:3857'
+    });
+    var vectorRouteLayer = new ol.layer.Vector({
+        source: rutaSourceLayer,
+        style:  new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'blue',
+            width: 5
+          }),
+        })
+    });
+    vectorRouteLayer.set("name", "Ruta a destino");
+
+
+    chargerSourceLayer = new ol.source.Vector({
         projection: 'EPSG:3857'
     });
     var vectorCustomLayer = new ol.layer.Vector({
-        source: sourceLayer,
+        source: chargerSourceLayer,
         style: new ol.style.Style({
-									  image: new ol.style.Circle({
-										fill: new ol.style.Fill({
-										  color: 'rgba(255,10,0,1)'
-										}),
-										radius: 10,
-										stroke: new ol.style.Stroke({
-										  color: 'rgba(0,0,0,1)',
-										  width: 2
-										})
-									  })
-									  
-									})
+				  image: new ol.style.Circle({
+	 				fill: new ol.style.Fill({
+					  color: 'rgba(255,10,0,1)'
+					}),
+					radius: 10,
+					stroke: new ol.style.Stroke({
+					  color: 'rgba(0,0,0,1)',
+					  width: 2
+					})
+				  })			  
+			})
     });
+    vectorCustomLayer.set("name", "Puntos de recarga en la ruta");
+
     var aeriallayer = new ol.layer.Tile({
         visible: false,
         source: new ol.source.BingMaps({
@@ -88,12 +106,15 @@ function initmap() {
             // maxZoom: 19
         })
     });
-    aeriallayer.set("name", "aerialview");
+ 
+   aeriallayer.set("name", "aerialview");
+
     var roadlayer = new ol.layer.Tile({
         source: new ol.source.OSM()
     });
     roadlayer.set("name", "roadview");
     var layergroup = new ol.layer.Group({ layers: [aeriallayer, roadlayer] });
+
     var view = new ol.View({
         center: [0, 0],
         zoom: 2,
@@ -131,7 +152,19 @@ function initmap() {
             features: [markerFeature]
         })
     });
-    layers = [layergroup, userPosition, markerVector, vectorCustomLayer];
+
+    // JPC: Use WMS for large datasets!!
+    var wmsPuntosRecarga = new ol.layer.Tile({
+          source: new ol.source.TileWMS({
+            url: '/geoserver/wms',
+            params: {'LAYERS': 'ide2019a:puntosrecarga', 'TILED': true, 'TRANSPARENT' : true},
+            serverType: 'geoserver',
+            // layer have transparency, so do not fade tiles:
+            transition: 0
+          })
+        })
+
+    layers = [layergroup, wmsPuntosRecarga, userPosition, markerVector, vectorCustomLayer, vectorRouteLayer];
     // New Custom zoom.
     var zoom = new ol.control.Zoom({ target: "navigation", className: "custom-zoom" });
     map = new ol.Map({
@@ -145,8 +178,11 @@ function initmap() {
     });
     map.addInteraction(select);
 
+
     // Initialize the page layers.
     add_layergroup_to_list(layergroup);
+    add_layer_to_list(vectorCustomLayer);
+    add_layer_to_list(vectorRouteLayer);
     geolocation = new ol.Geolocation({
         projection: view.getProjection(),
         trackingOptions: {
