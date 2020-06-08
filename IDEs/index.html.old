@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <title>FixCity</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+		
+        <link rel="stylesheet" href="../2014/FixCity/jquery.mobile-1.4.2.min.css">
+		<link rel="stylesheet" href="../2014/FixCity/theme/default/style.mobile.css" type="text/css">
+        <link rel="stylesheet" href="../2014/FixCity/style.mobile-jq.css" type="text/css">
+		<link rel="stylesheet" href="listview-grid.css">
+		<script src="../2014/FixCity/jquery-1.9.0.js"></script>
+        <script src="../2014/FixCity/jquery.mobile-1.4.2.min.js"></script>
+		
+
+    </head>
+    <body>
+        <h1 id="title">Infraestructuras de Datos Espaciales</h1>  
+<!-- Página principal de la aplicación-->
+<div data-role="page" id="mainpage"  data-quicklinks="true" data-theme="b">	
+
+	<!--
+	Cabecera y barra de herramientas.
+	-->
+				<div data-role="header" class="bgimg" >
+				<a href="#infopanel"  data-rel="panel" data-dismissible="true" class="ui-btn ui-btn-left ui-btn-inline ui-icon-bars ui-btn-icon-notext">Información</a>
+				
+				<h1>Infraestructuras de Datos Espaciales</h1>
+				</div>		
+				<div data-role="content">		  
+					
+	<p>La asignatura culmina con la realización de un proyecto práctico de aplicación de las tecnologías estudiadas.</p>
+	<p>Algunos ejemplos de cursos pasados son los siguientes:</p>
+	
+	<h2>2013-2014 (1)</h2>
+    <ul data-role="listview" data-inset="true">
+	<li>
+		<a rel="external" href="../2014/FixCity">
+			<h2>FixCity</h2>
+			<img src="../2014/FixCity/images/marker-icon-fixit.png" class="ui-li-thumb"><p class="ui-li-aside">Calificación: <strong>Sobresaliente</strong></p>
+			<p style="white-space: normal"><strong>Contribuye a mantener las ciudades en buenas condiciones.</strong></p>
+			<p style="white-space: normal" >Utiliza los recursos públicos de las IDEs para identificar términos municipales y realizar mapas temáticos. Usa servidores propios para la información espacial propia y realizar análisis espaciales sencillos.</p>
+		</a>
+	</li>
+   </ul>
+
+
+
+				</div>
+				<div data-role="footer" >
+					<img src="http://idelab.uva.es/sites/all/themes/itast/logo.png" height="32">
+				</div>
+	
+</div> <!-- mainpage -->
+</body>
+</html>
