@@ -1,0 +1,1 @@
+- database : scripts sql para la creación del esquema de base de datos. Debe incluir la creación de las tablas y la carga de los datos iniciales. Los scripts deben identificarse por separado para distinguir los que son parte de los prototipos iniciales y los que son definitivos.

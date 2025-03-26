@@ -1,0 +1,43 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-28fdeaed:171d470969e:-7ffe</id>
+  <name>usos_suelo_cyl_validas</name>
+  <nativeName>usos_suelo_cyl_validas</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl--695196b3:17134febec6:-7ffe</id>
+  </namespace>
+  <title>usos_suelo_cyl_validas</title>
+  <keywords>
+    <string>features</string>
+    <string>usos_suelo_cyl_validas</string>
+  </keywords>
+  <srs>EPSG:25830</srs>
+  <nativeBoundingBox>
+    <minx>165023.0625</minx>
+    <maxx>601857.5625</maxx>
+    <miny>4439227.0</miny>
+    <maxy>4789032.5</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-7.121533676123642</minx>
+    <maxx>-1.7453063732920724</maxx>
+    <miny>40.03676936157398</miny>
+    <maxy>43.25406147294401</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="cachingEnabled">false</entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-28fdeaed:171d470969e:-7fff</id>
+  </store>
+  <serviceConfiguration>false</serviceConfiguration>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <padWithZeros>false</padWithZeros>
+  <forcedDecimal>false</forcedDecimal>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

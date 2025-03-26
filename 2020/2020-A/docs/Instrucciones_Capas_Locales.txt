@@ -1,0 +1,14 @@
+Contamos con una capa local en formato vectorial (formada por MultiLineStrings) que representa la ruta que sigue el camino a lo largo del norte de la península.
+
+
+Esta está almacenada en Postgress, en una base de datos llamada "CaminoSantiago", en una tabla "CaminoCompleto" dentro del schema "public".
+
+
+Se accede a ella mediante GeoServer, en un espacio de trabajo "CaminoSantiago" en el que se importa dicha tabla al almacén de datos "Postgress". La capa a la que se accede se llama "CaminoCompleto", y permite hacer operaciones WPS para su uso en nuestro proyecto (operaciones LRS).
+
+
+Ejemplo consulta de inserción en la tabla USERDATA
+
+INSERT INTO public."UserData"(
+	id, login, password, mail, name)
+	VALUES (0, 'danielconcab', '12345', 'condeuva@gmail.com', 'danielconcab');

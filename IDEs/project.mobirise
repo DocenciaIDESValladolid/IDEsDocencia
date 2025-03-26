@@ -40,7 +40,9 @@
     ],
     "uniqCompNum": 18,
     "versionPublish": "5.9.11",
-    "screenshot": "screenshot.png"
+    "screenshot": "screenshot.png",
+    "publishType": "local",
+    "publishPath": "@PROJECT_PATH@"
   },
   "pages": {
     "index.html": {

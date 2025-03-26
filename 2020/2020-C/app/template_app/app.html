@@ -1,0 +1,295 @@
+<html dir="ltr" lang="es" xml:lang="es">
+
+<head>
+    <title>Aplicación IDEs</title>
+    <link rel="shortcut icon" href="pix/app-icon.png" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,maximum-scale=1.0" >
+    <meta name="keywords" content="IDEs, UVa" />
+    <link rel="stylesheet" href="css/jquerymobile.css" type="text/css">
+    <link rel="stylesheet" href="css/styles.css" type="text/css">
+    <link rel="stylesheet" href="css/introjs.css" type="text/css">
+    <link rel="stylesheet" href="css/ol.css" type="text/css">
+    <script src="lib/jquery2/jquery-2.1.4.min.js"></script>
+    <script src="lib/jquery-mobile/jquerymobile.js"></script>
+    <script src="lib/jquery-ui.min.js"></script>
+    <script src="lib/jquery-mobile/jquery.mobile-config.js"></script>
+    <script src="lib/openlayers/dist/ol-debug.js"></script>
+    <script src="lib/geocoder/geocoder.js"></script>
+    <script src="lib/proj4js/proj4.js"></script>
+    <script src="js/demos/demos.js"></script>
+    <script src="js/init_map.js"></script>
+    <script src="js/demos/wpscartociudad.js"></script>
+    <script src="js/carga_incidencias.js"></script>
+    <script src="js/carga_ruta.js"></script>
+    <script src="js/reprojection.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+    <!-- CARGA DE SIMPLE FACEBOOK GRAPH -->
+    <script src="lib/facebook.js"></script>
+</head>
+
+<body id="page-main">
+
+    <div data-role="page" id="mappage" data-quicklinks="true" data-theme="b">
+
+
+        <!--Panel de acciones a la izquierda del mapa-->
+        <div data-role="panel" data-position="left" data-position-fixed="true" data-display="overlay" id="infopanel">
+            <div data-role="header" data-position="fixed" data-tap-toggle="false">
+                <a href="#" data-role="button" data-rel="close" class=" ui-btn-inline ui-nodisc-icon ui-btn 
+                   ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
+                <h1>Buscar Ruta</h1>
+            </div>
+            <div id ="origen" >
+                <h3>Origen</h3>
+                <div class="ui-bar ui-bar-b">
+                    <form class="ui-filterable">
+                        <input id="autocomplete-input" data-type="search" placeholder="Find a city...">
+                    </form>
+                </div>
+                <ul id="autocomplete" data-role="listview" data-inset="true" data-filter="true" data-input="#autocomplete-input"></ul>
+            </div>
+            <div id ="destino" >
+                <h3>Destino</h3>
+                <div class="ui-bar ui-bar-b">
+                    <form class="ui-filterable">
+                        <input id="autocomplete-input2" data-type="search" placeholder="Find a city...">
+                    </form>
+                </div>
+                <ul id="autocomplete2" data-role="listview" data-inset="true" data-filter="true" data-input="#autocomplete-input2"></ul>
+            </div>
+            <div id ="botonRuta" >
+                <a href="#page-main" data-role="button" data-rel="close">Calcular Ruta</a>
+            </div>
+        </div>
+
+        <style>
+      .ol-popup {
+        position: absolute;
+        background-color: black;
+        -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+        filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #cccccc;
+        bottom: 12px;
+        left: -50px;
+        min-width: 280px;
+      }
+      .ol-popup:after, .ol-popup:before {
+        top: 100%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+      }
+      .ol-popup:after {
+        border-top-color: white;
+        border-width: 10px;
+        left: 48px;
+        margin-left: -10px;
+      }
+      .ol-popup:before {
+        border-top-color: #cccccc;
+        border-width: 11px;
+        left: 48px;
+        margin-left: -11px;
+      }
+      .ol-popup-closer {
+        text-decoration: none;
+        position: absolute;
+        top: 2px;
+        right: 8px;
+      }
+      .ol-popup-closer:after {
+        content: "✖";
+      }
+    </style>
+
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <a href="#infopanel" data-rel="panel" data-dismissible="true" class="ui-btn ui-btn-left ui-btn-inline ui-icon-bars ui-btn-icon-notext"></a>
+            <h1><img class="smallicon" alt=" app icon " title=" app icon " src="pix/app-icon.png" height="24" />  VialSecureInfo</h1>
+        </div>
+        <div data-role="content" id="content">
+            <div id="map"></div>
+            <div id="popup" class="ol-popup">
+			    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+			    <div id="popup-content"></div>
+			</div>
+        </div>
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+            <a href="#page-main" data-role="button" data-rel="close" id ="botonIncidencias">Mostrar Incidencias</a>
+            <a href="#page-main" data-role="button" data-rel="close" id ="botonRutaBanderita">Calcular Ruta Ubicación-Marca de Destino</a>
+            <a href="#layerspage" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-bullets ui-btn-icon-notext">
+                Capas
+            </a>
+            <a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-location ui-btn-icon-notext" id="autolocate"></a>
+            <a href="#authors" data-transition="fade" data-role="button" class="ui-btn">About Us</a>
+            <!--div id="navigation"></div-->
+        </div>
+    </div>
+    <div data-role="page" id="layerspage" data-theme="b">
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <a href="#mappage" data-role="button" class="ui-btn-left  ui-nodisc-icon ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
+            <h1>Capas</h1>
+        </div>
+        <div data-role="content">
+            <ul data-role="listview" data-inset="true" data-theme="b" data-divider-theme="b" id="layerslist">
+                <li data-role="list-divider" id="baseLayer">Vista del mapa</li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="page" id="historypage" data-theme="b">
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <a href="#mappage" data-role="button" class="ui-btn-left  ui-nodisc-icon ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
+            <h1>Historial</h1>
+        </div>
+        <div data-role="content">
+            <ol data-role="listview" data-inset="true" data-theme="b" id="historylist">
+                <li>No has realizado ningún intento</li>
+            </ol>
+        </div>
+    </div>
+    <!--
+		Página de "About us"
+		-->
+    <div data-role="page" id="authors" data-theme="b">
+        <div data-role="header">
+            <h1>About Us</h1>
+        </div>
+        <div role="content">
+            <ul data-role="listview" data-inset="true">
+                <li>
+                    <a href="authors.html#director" data-prefetch="true">
+                        <h2>JUAN PABLO DE CASTRO</h2>
+                        <p>Profesor de la Escuela Técnica Superior de Ingenieros de Telecomunicación, en la Universidad de Valladolid.</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#creador1" data-prefetch="true">
+                        <h2>Javier Delgado Rodríguez</h2>
+                        <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención
+                            en Telemática.</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#creador2" data-prefetch="true">
+                        <h2>Borja García Martín</h2>
+                        <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención
+                            en Telemática.</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#creador3" data-prefetch="true">
+                        <h2>Álvaro Gutiérrez Sánchez</h2>
+                        <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención
+                            en Telemática.</p>
+                    </a>
+                </li>
+				<li>
+                    <a href="#creador4" data-prefetch="true">
+                        <h2>Pablo Ruiz Calvo</h2>
+                        <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención
+                            en Telemática.</p>
+                    </a>
+                </li>
+            </ul>
+            <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+        </div>
+    </div>
+
+    <!--
+		Página de "About us": Director
+		-->
+    <div data-role="page" id="director" data-theme="b">
+        <div data-role="header" data-position="fixed">
+            <h1>Director del trabajo</h1>
+        </div>
+        <div data-role="content" class="ui-content">
+            <h3 class="ui-bar ui-bar-a ui-corner-all">Juan Pablo De Castro</h3>
+
+            <div class="ui-body ui-body-a ui-corner-all">
+                <p>Profesor de la asignatura "Infraestructuras de Datos Espaciales" de la E.T.S.I.Telecomunicación de Valladolid</p>
+                <p><a href="mailto:jpdecastro@tel.uva.es">jpdecastro@tel.uva.es</a></p>
+            </div>
+            <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+        </div>
+    </div>
+
+    <!--
+		Página de "About us": Creador 1
+		-->
+    <div data-role="page" id="creador1" data-theme="b">
+        <div data-role="header">
+            <h1>Miembro del equipo</h1>
+        </div>
+        <div data-role="content" class="ui-content">
+            <h3 class="ui-bar ui-bar-a ui-corner-all">Javier Delgado Rodríguez</h3>
+            <div class="ui-body ui-body-a ui-corner-all">
+                <p>Escuela Técnica Superior de Ingenieros de Telecomunicaciones. Grado en Ingeniería de Tecnologías Específicas
+                    de Telecomunicación, Mención en Telemática</p>
+                <p><a href="mailto:email@gmail.com">javier.delgo@alumnos.uva.es</p>
+				</div>		
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+            </div>
+        </div>
+
+        <!--
+		Página de "About us": Creador 2
+		-->
+        <div data-role="page" id="creador2" data-theme="b">
+            <div data-role="header">
+                <h1>Miembro del equipo</h1>
+            </div>
+            <div data-role="content" class="ui-content">
+                <h3 class="ui-bar ui-bar-a ui-corner-all">Borja García Martín</h3>
+                <div class="ui-body ui-body-a ui-corner-all">
+                    <p>Escuela Técnica Superior de Ingenieros de Telecomunicaciones. Grado en Ingeniería de Tecnologías Específicas
+                        de Telecomunicación, Mención en Telemática</p>
+                    <p><a href="mailto:email@gmail.com"><br>borja.garcia@alumnos.uva.es</p>
+				</div>		
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+                </div>
+            </div>
+
+            <!--
+		Página de "About us": Creador 3
+		-->
+            <div data-role="page" id="creador3" data-theme="b">
+                <div data-role="header">
+                    <h1>Miembro del equipo</h1>
+                </div>
+                <div data-role="content" class="ui-content">
+                    <h3 class="ui-bar ui-bar-a ui-corner-all">Álvaro Gutiérrez Sánchez</h3>
+                    <div class="ui-body ui-body-a ui-corner-all">
+                        <p>Escuela Técnica Superior de Ingenieros de Telecomunicaciones. Grado en Ingeniería de Tecnologías
+                            Específicas de Telecomunicación, Mención en Telemática</p>
+                        <p><a href="mailto:email@gmail.com"><br>alvaro.guti@alumnos.uva.es</p>
+				</div>		
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+                    </div>
+                </div>
+				
+			<!--
+		Página de "About us": Creador 4
+		-->
+            <div data-role="page" id="creador4" data-theme="b">
+                <div data-role="header">
+                    <h1>Miembro del equipo</h1>
+                </div>
+                <div data-role="content" class="ui-content">
+                    <h3 class="ui-bar ui-bar-a ui-corner-all">Pablo Ruiz Calvo</h3>
+                    <div class="ui-body ui-body-a ui-corner-all">
+                        <p>Escuela Técnica Superior de Ingenieros de Telecomunicaciones. Grado en Ingeniería de Tecnologías
+                            Específicas de Telecomunicación, Mención en Telemática</p>
+                        <p><a href="mailto:email@gmail.com">pablo.ruiz@alumnos.uva.es</p>
+				</div>		
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+                    </div>
+                </div>
+<script src="js/app.js"></script>
+</body>

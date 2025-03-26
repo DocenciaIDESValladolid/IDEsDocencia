@@ -1,0 +1,1 @@
+- server : scripts de servidor como por ejemplo los PHP.

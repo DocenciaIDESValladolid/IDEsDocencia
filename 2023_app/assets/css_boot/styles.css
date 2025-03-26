@@ -1,0 +1,599 @@
+.path-map html,
+body {
+  height: 100%;
+}
+
+.path-map .treasurehunt-editor {
+  width: 100%;
+  position: relative;
+}
+
+.path-map #edition label {
+  display: inline-block;
+  margin: 0 auto;
+}
+/*Si no se me pone un background-image posterior*/
+.path-map .treasurehunt-editor button {
+  background-image: none;
+}
+
+.path-map #addstage,
+.path-map #addroad {
+  margin: 0 auto;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+.path-map #savestage,
+.path-map #removefeature {
+  margin: 0 auto;
+  margin-left: 1%;
+}
+
+.path-map #controlpanel {
+  margin: 0 auto;
+}
+
+.path-map #mapedit {
+  position: relative;
+  overflow: hidden;
+}
+/*Selectable y sortable*/
+.path-map #stagelistpanel {
+  float: left;
+  width: 250px;
+  max-width: 60%;
+  min-width: 100px;
+  position: relative;
+}
+
+.path-map #roadlistpanel {
+  width: 100%;
+  position: static;
+  overflow-x: auto;
+  overflow-y: hidden;
+  top: 0;
+  left: 0;
+  display: block;
+  cursor: default;
+  clear: both;
+}
+
+.path-map #stagelist {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  margin: 0 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.path-map #roadlist {
+  position: relative;
+  white-space: nowrap;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  margin: 0 auto;
+  display: table;
+}
+
+.path-map #stagelist li,
+.path-map #roadlist li {
+  border: 2px solid gray;
+  list-style: none;
+  cursor: default;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box; /* Firefox, other Gecko */
+  box-sizing: border-box; /* Opera/IE 8+ */
+}
+
+.path-map #stagelist li {
+  width: 100%;
+  display: table;
+  table-layout: fixed;
+}
+
+.path-map #roadlist li {
+  display: table-cell;
+}
+
+.path-map #stagelist li:hover,
+.path-map #roadlist li:hover {
+  background: #eee;
+}
+
+.path-map .handle,
+.path-map .nohandle {
+  background: #f8f8f8;
+  position: relative;
+  width: 30px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.path-map .handle {
+  cursor: n-resize;
+}
+
+.path-map .modifystage,
+.path-map .modifyroad {
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  width: 20px;
+}
+
+.path-map .stagename,
+.path-map .roadname {
+  padding-left: 5px;
+  padding-right: 5px;
+  position: relative;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.path-map .ui-selected {
+  background: rgba(22, 145, 190, 0.2);
+}
+
+.path-map .ui-selected:hover {
+  background: rgba(22, 145, 190, 0.2) !important;
+}
+
+.path-map .sortable-number {
+  font-weight: bold;
+}
+
+.path-map .validstage {
+  box-shadow: 0 0 12px #28921f;
+  z-index: 10;
+}
+
+.path-map .invalidstage {
+  box-shadow: 0 0 12px #b03535;
+  z-index: 10;
+}
+
+.path-map .invisible {
+  display: none;
+}
+
+.path-map .highlightbutton {
+  box-shadow: 0 0 13px #2f33ba;
+  z-index: 10;
+}
+.path-map .selectedbutton {
+  border: 3px solid darkgray;
+  z-index: 10;
+}
+.path-map .ui-icon-trash,
+.path-map .ui-icon-pencil,
+.path-map .ui-icon-alert,
+.path-map .ui-icon-info {
+  cursor: pointer;
+}
+
+.path-map .ui-autocomplete-loading {
+  background: white
+    url("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/images/ui-anim_basic_16x16.gif")
+    right center no-repeat;
+}
+
+.path-map .ui-autocomplete {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+/** Usado para meter el icono dentro del input**/
+.path-map #searchcontainer {
+  display: inline-block;
+  position: relative;
+  padding: 0;
+  margin-left: 1%;
+}
+
+.path-map .searchicon {
+  position: absolute;
+  bottom: 8px;
+  left: 9px;
+  width: 15px;
+}
+
+.path-map .closeicon {
+  position: absolute;
+  bottom: 7px;
+  right: 25px;
+  width: 15px;
+  cursor: pointer;
+}
+
+.path-map .searchaddress {
+  border: 1px solid #999 !important;
+  padding: 3px 43px 3px 30px !important;
+  margin: 0 !important;
+}
+/* Usado para el resizable**/
+.path-map .egrip-container {
+  position: absolute;
+  top: 70px;
+  right: -35px;
+  cursor: pointer;
+  z-index: 90;
+}
+/* Usado para la tabla**/
+#page-map-view .successfulattempt,
+.path-map .successwithoutfailures {
+  background-color: #5cd053 !important;
+  color: black !important;
+}
+
+#page-map-view .failedattempt,
+.path-map .failure {
+  background-color: #d45252 !important;
+  color: black !important;
+}
+
+.path-map .successwithfailures {
+  background-color: #ebf044 !important;
+  color: black !important;
+}
+
+.path-map .noattempt {
+  background-color: #c0c0c0 !important;
+  color: black !important;
+}
+
+.path-map .singlebutton,
+.path-map .treasurehuntinfo {
+  text-align: center;
+}
+
+.path-map .treasurehunt-editor-loader {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.path-map .loader-circle-outside {
+  background-color: rgba(19, 19, 19, 1);
+  border: 5px solid rgba(255, 255, 255, 1);
+  opacity: 0.9;
+  border-right: 5px solid rgba(19, 19, 19, 1);
+  border-left: 5px solid rgba(19, 19, 19, 1);
+  border-radius: 50px;
+  box-shadow: 0 0 35px #131313;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+  animation: spinPulse 1s infinite ease-in-out;
+  -moz-animation: spinPulse 1s infinite ease-in-out;
+  -webkit-animation: spinPulse 1s infinite ease-in-out;
+  -o-animation: spinPulse 1s infinite ease-in-out;
+  -ms-animation: spinPulse 1s infinite ease-in-out;
+}
+
+.path-map .loader-circle-inside {
+  background-color: rgba(19, 19, 19, 0);
+  border: 5px solid rgba(255, 255, 255, 1);
+  opacity: 0.9;
+  border-left: 5px solid rgba(19, 19, 19, 1);
+  border-right: 5px solid rgba(19, 19, 19, 1);
+  border-radius: 50px;
+  box-shadow: 0 0 15px #131313;
+  width: 30px;
+  height: 30px;
+  margin: 0 auto;
+  position: relative;
+  top: -50px;
+  animation: spinoffPulse 1s infinite linear;
+  -moz-animation: spinoffPulse 1s infinite linear;
+  -webkit-animation: spinoffPulse 1s infinite linear;
+  -o-animation: spinoffPulse 1s infinite linear;
+  -ms-animation: spinoffPulse 1s infinite linear;
+}
+
+@keyframes spinPulse {
+  0% {
+    transform: rotate(160deg);
+    opacity: 0;
+    box-shadow: 0 0 1px #131313;
+  }
+
+  50% {
+    transform: rotate(145deg);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(-320deg);
+    opacity: 0;
+  }
+}
+@keyframes spinoffPulse {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes spinPulse {
+  0% {
+    -moz-transform: rotate(160deg);
+    opacity: 0;
+    box-shadow: 0 0 1px #131313;
+  }
+
+  50% {
+    -moz-transform: rotate(145deg);
+    opacity: 1;
+  }
+  100% {
+    -moz-transform: rotate(-320deg);
+    opacity: 0;
+  }
+}
+@-moz-keyframes spinoffPulse {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spinPulse {
+  0% {
+    -webkit-transform: rotate(160deg);
+    opacity: 0;
+    box-shadow: 0 0 1px #131313;
+  }
+
+  50% {
+    -webkit-transform: rotate(145deg);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: rotate(-320deg);
+    opacity: 0;
+  }
+}
+@-webkit-keyframes spinoffPulse {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-o-keyframes spinPulse {
+  0% {
+    -o-transform: rotate(160deg);
+    opacity: 0;
+    box-shadow: 0 0 1px #131313;
+  }
+
+  50% {
+    -o-transform: rotate(145deg);
+    opacity: 1;
+  }
+  100% {
+    -o-transform: rotate(-320deg);
+    opacity: 0;
+  }
+}
+@-o-keyframes spinoffPulse {
+  0% {
+    -o-transform: rotate(0deg);
+  }
+
+  100% {
+    -o-transform: rotate(360deg);
+  }
+}
+@-ms-keyframes spinPulse {
+  0% {
+    -ms-transform: rotate(160deg);
+    opacity: 0;
+    box-shadow: 0 0 1px #131313;
+  }
+
+  50% {
+    -ms-transform: rotate(145deg);
+    opacity: 1;
+  }
+  100% {
+    -ms-transform: rotate(-320deg);
+    opacity: 0;
+  }
+}
+@-ms-keyframes spinoffPulse {
+  0% {
+    -ms-transform: rotate(0deg);
+  }
+
+  100% {
+    -ms-transform: rotate(360deg);
+  }
+}
+@media screen and (max-height: 480px) {
+  .path-map #mapedit {
+    height: 160px;
+  }
+  .path-map #stagelistpanel {
+    height: 160px;
+  }
+  .path-map .treasurehunt-editor-loader {
+    margin-top: 75px;
+  }
+  .path-map .ui-autocomplete {
+    max-height: 192px;
+  }
+}
+
+@media screen and (min-height: 481px) {
+  .path-map #mapedit {
+    height: 325px;
+  }
+  .path-map #stagelistpanel {
+    height: 325px;
+  }
+  .path-map .treasurehunt-editor-loader {
+    margin-top: 157px;
+  }
+  .path-map .ui-autocomplete {
+    max-height: 357px;
+  }
+}
+
+@media screen and (min-height: 620px) {
+  .path-map #mapedit {
+    height: 450px;
+  }
+  .path-map #stagelistpanel {
+    height: 450px;
+  }
+  .path-map .treasurehunt-editor-loader {
+    margin-top: 220px;
+  }
+  .path-map .ui-autocomplete {
+    max-height: 482px;
+  }
+}
+
+@media screen and (min-height: 750px) {
+  .path-map #mapedit {
+    height: 560px;
+  }
+  .path-map #stagelistpanel {
+    height: 560px;
+  }
+  .path-map .treasurehunt-editor-loader {
+    margin-top: 275px;
+  }
+  .path-map .ui-autocomplete {
+    max-height: 592px;
+  }
+}
+/* MAP PAGE*/
+#page-map-play,
+#page-map-play #content {
+  overflow: hidden;
+  padding: 0;
+}
+
+#page-map-play #container {
+  overflow: hidden;
+}
+
+#page-map-play .ui-page,
+#page-map-play #content,
+#page-map-play #mapplay {
+  height: 100%;
+  width: 100%;
+}
+
+#page-map-play .successfulattempt::after {
+  background-color: #5cd053 !important;
+}
+
+#page-map-play .failedattempt::after {
+  background-color: #d45252 !important;
+}
+
+#page-map-play .ui-listview > .ui-li-static,
+#page-map-play .ui-listview > .ui-li-divider,
+#page-map-play .ui-listview > li > a.ui-btn,
+#page-map-play .ui-btn,
+#page-map-play [data-role="popup"] .ui-title {
+  white-space: normal !important;
+}
+
+#page-map-play #navigation {
+  position: absolute;
+  top: -80px;
+  right: 10px;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  padding: 1px;
+}
+
+#page-map-play #navigation button {
+  display: block;
+  height: 1.375em;
+  width: 1.375em;
+  font-size: 1.14em;
+  background-image: none;
+  margin: 1px;
+  padding: 0;
+}
+#page-map-play .ui-panel {
+  height: 100%;
+  overflow: hidden;
+}
+
+#page-map-play .ui-panel-inner {
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#page-map-play .ui-panel-inner .ui-content {
+  flex: 1;
+  overflow: auto;
+}
+
+#page-map-play .ui-popup {
+  max-width: 800px;
+  min-width: 250px;
+}
+
+#page-map-play .ui-popup-container [data-role="content"] {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#page-map-play [data-role="popup"] .ui-title {
+  margin: 0 40px;
+}
+
+#page-map-play .center-wrapper,
+.ui-footer {
+  text-align: center;
+}
+
+#page-map-play .checked {
+  opacity: 1;
+}
+
+#page-map-play .unchecked {
+  opacity: 0.3;
+}
+
+#page-map-play .custom-count-pos {
+  font-size: 11px;
+  font-weight: bold;
+  padding: 0.2em 0.5em;
+  float: right;
+}
+
+#page-map-play .toast {
+  display: block;
+  opacity: 0.9;
+  position: fixed;
+  padding: 7px;
+  text-align: center;
+  width: 270px;
+  background-color: black;
+}

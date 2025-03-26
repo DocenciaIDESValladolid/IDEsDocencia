@@ -1,0 +1,15 @@
+<layer>
+  <name>usos_suelo_cyl_validas</name>
+  <id>LayerInfoImpl-28fdeaed:171d470969e:-7ffd</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--695196b3:17134febec6:-7ff3</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-28fdeaed:171d470969e:-7ffe</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

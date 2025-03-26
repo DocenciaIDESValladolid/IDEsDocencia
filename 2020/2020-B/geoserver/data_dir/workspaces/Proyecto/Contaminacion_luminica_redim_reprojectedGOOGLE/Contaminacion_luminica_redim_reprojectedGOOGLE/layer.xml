@@ -1,0 +1,15 @@
+<layer>
+  <name>Contaminacion_luminica_redim_reprojectedGOOGLE</name>
+  <id>LayerInfoImpl--2ae19b6c:171ea7039ab:-7ffa</id>
+  <type>RASTER</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--570ae188:124761b8d78:-7fe2</id>
+  </defaultStyle>
+  <resource class="coverage">
+    <id>CoverageInfoImpl--2ae19b6c:171ea7039ab:-7ffb</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

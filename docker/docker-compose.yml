@@ -1,0 +1,14 @@
+version: "3"
+services:
+  geoserver:
+    build: ./geoserver
+    image: juacasides/geoserver
+    ports: 
+      - "8080:8080"
+    volumes:
+      - C:\GIS\geoserver_datadir:/usr/share/geoserver/data_dir
+    container_name: geoserverjetty
+    networks: 
+      - backend
+networks: 
+  backend:

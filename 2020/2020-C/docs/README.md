@@ -1,0 +1,1 @@
+- docs : carpeta para otros documentos explicativos, instrucciones de instalación, etc.

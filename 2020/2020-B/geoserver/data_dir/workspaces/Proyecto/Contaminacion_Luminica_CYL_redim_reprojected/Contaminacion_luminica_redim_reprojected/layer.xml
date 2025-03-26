@@ -1,0 +1,15 @@
+<layer>
+  <name>Contaminacion_luminica_redim_reprojected</name>
+  <id>LayerInfoImpl--33931cc7:171d0a9307e:-7ffd</id>
+  <type>RASTER</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--570ae188:124761b8d78:-7fe2</id>
+  </defaultStyle>
+  <resource class="coverage">
+    <id>CoverageInfoImpl--33931cc7:171d0a9307e:-7ffe</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>
