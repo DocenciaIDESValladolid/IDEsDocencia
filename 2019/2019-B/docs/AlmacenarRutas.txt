@@ -1,0 +1,5 @@
+Para poder almacenar las rutas dibujadas en la aplicación es necesario:
+	1 Crear un espacio de trabajo en geoserver llamado "DronFree" con uri "http://itastdevserver.tel.uva.es/IDE2019B".
+	2 Agregar un nuevo almacen de tipo Postigis
+	3 Crear la tabla con nombre "dron" con una columna llamada "geometry". Esto puede hacerse desde GeoServer.
+	4 Guardar la tabla y publicarla. De esta forma se creara también en Postgis.

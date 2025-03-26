@@ -1,0 +1,45 @@
+CREATE TABLE interseccion(
+   id  SERIAL PRIMARY KEY,
+   name char(50),
+   --Aeropuertos 
+   id_aerodro double precision,
+   id_area double precision,
+   tip_area int,
+   tip_aread char(60),
+   desigandor char(20),
+   nombre char(200),
+   longitud int,
+   longitudd char(20),
+   anchura int,
+   anchurad char(20),
+   comp_sup int,
+   comp_supd char(20),
+   tip_pista int,
+   tip_pistad char(20),
+   fuente int,
+   fuented char(40),
+   fecha_alta date,
+   --Aves
+   	Aves-3857-Simpl_site_code char(20),
+   	Aves-3857-Simpl_site_name char(100),
+   	Aves-3857-Simpl_ac char(150),
+   	Aves-3857-Simpl_hectareas double,
+   	Aves-3857-Simpl_shape_leng double,
+   	Aves-3857-Simpl_shape_area double,
+   --Parques
+   	Aves-3857-Simpl_sitecode char(20),
+   	Aves-3857-Simpl_sitename char(254),
+   	Aves-3857-Simpl_figura_lp char(100),
+   	Aves-3857-Simpl_area_ha double,
+   	Aves-3857-Simpl_year_a char(4),
+   	Aves-3857-Simpl_ccaa double,
+   	Aves-3857-Simpl_enp_fgral double,
+   	Aves-3857-Simpl_ccaa_n_enp char(254),
+   	Aves-3857-Simpl_shape_len double,
+   	Aves-3857-Simpl_layer char(100),
+   path_a char(254),
+   idRuta double,
+   --
+   geom geometry(MULTILINESTRING,3857)
+   
+);

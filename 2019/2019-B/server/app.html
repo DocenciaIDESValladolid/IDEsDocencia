@@ -1,0 +1,294 @@
+<html dir="ltr" lang="es" xml:lang="es">
+
+<head>
+    <title>Dron Free</title>
+    <link rel="shortcut icon" href="pix/app-icon.png" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,maximum-scale=1.0" >
+    <meta name="keywords" content="IDEs, UVa" />
+    <link rel="stylesheet" href="css/jquerymobile.css" type="text/css">
+    <link rel="stylesheet" href="css/styles.css" type="text/css">
+    <link rel="stylesheet" href="css/introjs.css" type="text/css">
+    <link rel="stylesheet" href="js/openlayers/dist/ol.css" type="text/css">
+    <script src="js/jquery2/jquery-2.1.4.min.js"></script>
+    <script src="js/jquery-mobile/jquerymobile.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery-mobile/jquery.mobile-config.js"></script>
+	<script type="text/javascript" src="js/proj4js/proj4js-compressed.js"></script>
+    <script src="js/openlayers/dist/ol-debug.js"></script>
+    <script src="js/geocoder/geocoder.js"></script>
+    <script src="src/demos/demos.js"></script>
+	<script src="src/app.js"></script>
+    <script src="src/demos/wps_tools.js"></script>
+    <script src="src/init_map.js"></script>
+	
+
+
+    <!-- CARGA DE SIMPLE FACEBOOK GRAPH -->
+    <script src="js/facebook.js"></script>
+</head>
+
+<body id="page-main">
+
+    <div data-role="page" id="mappage" data-quicklinks="true" data-theme="b">
+        <div data-role="panel" data-position="left" data-position-fixed="true" data-display="overlay" id="infopanel">
+            <div data-role="header" data-position="fixed" data-tap-toggle="false">
+                <a href="#" data-role="button" data-rel="close" class=" ui-btn-inline ui-nodisc-icon ui-btn 
+                   ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
+                <h1>Información</h1>
+            </div>
+            <div id="estadoLogin" class="ui-bar ui-bar-b">
+                <a href="#" id="iniciosesionFacebookEstado" class="ui-btn  ui-btn-icon-left ui-icon-fb ui-btn-inline" onclick="login(); return false;">Identificarse</a>
+                <!--<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline" id="iniciosesionGoogle" >Google+</a>-->
+            </div>
+            <div id="collapsibleset" data-role="collapsibleset" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b"
+                data-content-theme="b">
+                <div data-role="collapsible" data-theme="a" data-iconpos="right">
+                    <!--<h3>Ejemplo de app IDEs</h3>
+                    <div>
+                        <p>
+                            <div class="no-overflow">
+                                <p>Algunas funciones adaptadas de <a href="http://openlayers.org/en/latest/examples/">OpenLayers</a></p>
+                            </div>
+                        </p>
+                        <ul id="listdemos" data-role="listview" data-inset="true" data-divider-theme="b">
+                            <li data-role="list-divider">WFS</li>
+                            <li><a href="#" onclick="addWFSLayer()">Añade capa WFS</a></li>
+                            <li data-role="list-divider">WMS</li>
+                            <li><a href="#" onclick="addWMSLayer()">Añade capa WMS</a></li>
+                            <li data-role="list-divider">WPS</li>
+                            <li><a href="#" onclick="addWPSLayer()">Añade capa WPS</a></li>
+                        </ul>
+                    </div>-->
+                </div>
+				 <div data-role="collapsible" data-theme="a" data-iconpos="right">
+					<h3>Instrucciones.</h3>
+					<div id="welcomingInfo">
+						<p>Instrucciones de uso de la aplicación.</p>
+							<ul>
+								<li>Dibuja la ruta por la que quieres volar el dron mediante el botón "Dibujar"</li>
+								<li>En caso de ser necesario puedes editar la ruta mediante el botón "Editar"</li>
+								<li>Para realizar el cálculo de la ruta pulsa el botón "Calcular ruta"</li>
+								<li>El resultado se mostrara cuando termine de procesar los datos</li>
+							</ul>
+					</div>
+					<div id="instructions2">
+						<p>Instrucciones adicionales.</p>
+							<ul>
+								<li>En caso de tener algún problema al utilzar la aplicación contacte con nosotros.</li>
+							</ul>
+					</div>
+					<a href="#mappage" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" data-rel="close">No Text</a>
+				</div>
+            </div>
+        </div>
+        <div data-role="panel" data-position="right" data-position-fixed="true" data-display="overlay" id="searchpanel">
+            <div data-role="header" data-position="fixed" data-tap-toggle="false">
+                <a href="#" data-role="button" data-rel="close" class="ui-btn-right ui-nodisc-icon ui-btn 
+                   ui-icon-carat-r ui-btn-icon-notext ui-corner-all"></a>
+                <h1>Buscar</h1>
+                <div class="ui-bar ui-bar-b">
+                    <form class="ui-filterable">
+                        <input id="autocomplete-input" data-type="search" placeholder="Encuentra tu ciudad..">
+                    </form>
+                </div>
+            </div>
+            <ul id="autocomplete" data-role="listview" data-inset="true" data-filter="true" data-input="#autocomplete-input"></ul>
+
+        </div>
+
+        <div data-role="popup" id="popupdialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+            <div data-role="header" data-theme="b">
+                <h1>La ruta ha sido enviada.</h1>
+            </div>
+            <div role="content" id="popup_content" class="ui-content ui-overlay-b">
+                <p>En breve se mostrará el resultado.</p>
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-b" style="margin:0 9vh">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-transition="flow" id="sendLocation">
+                            Aceptar
+                        </a>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <a href="#infopanel" data-rel="panel" data-dismissible="true" class="ui-btn ui-btn-left ui-btn-inline ui-icon-bars ui-btn-icon-notext"></a>
+            <a href="#searchpanel" data-transition="none" class="ui-btn  ui-btn-right ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-search">
+                Buscar
+            </a>
+            <h1><img class="smallicon" alt=" app icon " title=" app icon " src="pix/app-icon.png" height="24" /> DronFree App</h1>
+        </div>
+        <div data-role="content" id="content">
+            <div id="map"></div>
+			<div id="coords">
+				<ul id="lns_p"></ul>
+			</div>
+        </div>
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+			<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus" id="dibujar">Dibujar</a>
+			<a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-edit" id="editar">Editar</a>
+            <a href="#popupdialog" data-rel="popup" data-position-to="window" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-check"
+                id="calcular">
+                Calcular ruta
+            </a>
+			
+            <a href="#layerspage" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-bullets ui-btn-icon-notext">
+                Capas
+            </a>
+            <a href="#historypage" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-info ui-btn-icon-notext">
+                Historial
+            </a>
+            <a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-btn-inline ui-icon-location ui-btn-icon-notext" id="autolocate"></a>
+            <a href="#authors" data-transition="fade" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-inline">About Us</a>
+            <!--div id="navigation"></div-->
+	
+            
+			
+
+        </div>
+    </div>
+    <div data-role="page" id="layerspage" data-theme="b">
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <a href="#mappage" data-role="button" class="ui-btn-left  ui-nodisc-icon ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
+            <h1>Capas</h1>
+        </div>
+        <div data-role="content">
+            <ul data-role="listview" data-inset="true" data-theme="b" data-divider-theme="b" id="layerslist">
+                <li data-role="list-divider" id="baseLayer">Vista del mapa</li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="page" id="historypage" data-theme="b">
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <a href="#mappage" data-role="button" class="ui-btn-left  ui-nodisc-icon ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
+            <h1>Historial</h1>
+        </div>
+        <div data-role="content">
+            <ol data-role="listview" data-inset="true" data-theme="b" id="historylist">
+                <li>No has realizado ningún intento</li>
+				
+            </ol>
+        </div>
+    </div>
+	<!--
+	Pagina de resultado
+	-->
+	
+	
+	
+    <!--
+		Página de "About us"
+		-->
+    <div data-role="page" id="authors" data-theme="b">
+        <div data-role="header">
+            <h1>About Us</h1>
+        </div>
+        <div role="content">
+            <ul data-role="listview" data-inset="true">
+                <li>
+                    <a href="authors.html#director" data-prefetch="true">
+                        <h2>JUAN PABLO DE CASTRO</h2>
+                        <p>Profesor de la Escuela Técnica Superior de Ingenieros de Telecomunicación, en la Universidad de Valladolid.</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#creador1" data-prefetch="true">
+                        <h2>Fuente Bartolomé, Ismael de la</h2>
+                        <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención
+                            en Telemática.</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#creador2" data-prefetch="true">
+                        <h2>Verdnik Corredera, Daniel</h2>
+                        <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención
+                            en Telemática.</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#creador3" data-prefetch="true">
+                        <h2>Zarzuela Zarzuela, Juan Moisés</h2>
+                        <p>Alumno del cuarto curso del Grado en Ingeniería de Tecnologías Específicas de Telecomunicación, mención
+                            en Telemática.</p>
+                    </a>
+                </li>
+            </ul>
+            <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+        </div>
+    </div>
+
+    <!--
+		Página de "About us": Director
+		-->
+    <div data-role="page" id="director" data-theme="b">
+        <div data-role="header" data-position="fixed">
+            <h1>Director del trabajo</h1>
+        </div>
+        <div data-role="content" class="ui-content">
+            <h3 class="ui-bar ui-bar-a ui-corner-all">Juan Pablo De Castro</h3>
+
+            <div class="ui-body ui-body-a ui-corner-all">
+                <p>Profesor de la asignatura "Infraestructuras de Datos Espaciales" de la E.T.S.I.Telecomunicación de Valladolid</p>
+                <p><a href="mailto:jpdecastro@tel.uva.es">jpdecastro@tel.uva.es</a></p>
+            </div>
+            <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+        </div>
+    </div>
+
+    <!--
+		Página de "About us": Creador 1
+		-->
+    <div data-role="page" id="creador1" data-theme="b">
+        <div data-role="header">
+            <h1>Miembro del equipo</h1>
+        </div>
+        <div data-role="content" class="ui-content">
+            <h3 class="ui-bar ui-bar-a ui-corner-all">Fuente Bartolomé, Ismael de la</h3>
+            <div class="ui-body ui-body-a ui-corner-all">
+                <p>Escuela Técnica Superior de Ingenieros de Telecomunicaciones. Grado en Ingeniería de Tecnologías Específicas
+                    de Telecomunicación, Mención en Telemática</p>
+                <p><a href="mailto:email@gmail.com">isma.delafuente@gmail.com</p>
+				</div>		
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+            </div>
+        </div>
+
+        <!--
+		Página de "About us": Creador 2
+		-->
+        <div data-role="page" id="creador2" data-theme="b">
+            <div data-role="header">
+                <h1>Miembro del equipo</h1>
+            </div>
+            <div data-role="content" class="ui-content">
+                <h3 class="ui-bar ui-bar-a ui-corner-all">Verdnik Corredera, Daniel</h3>
+                <div class="ui-body ui-body-a ui-corner-all">
+                    <p>Escuela Técnica Superior de Ingenieros de Telecomunicaciones. Grado en Ingeniería de Tecnologías Específicas
+                        de Telecomunicación, Mención en Telemática</p>
+                    <p><a href="mailto:email@gmail.com">danielverdnik@gmail.com</p>
+				</div>		
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+                </div>
+            </div>
+
+            <!--
+		Página de "About us": Creador 3
+		-->
+            <div data-role="page" id="creador3" data-theme="b">
+                <div data-role="header">
+                    <h1>Miembro del equipo</h1>
+                </div>
+                <div data-role="content" class="ui-content">
+                    <h3 class="ui-bar ui-bar-a ui-corner-all">Zarzuela Zarzuela, Juan Moisés</h3>
+                    <div class="ui-body ui-body-a ui-corner-all">
+                        <p>Escuela Técnica Superior de Ingenieros de Telecomunicaciones. Grado en Ingeniería de Tecnologías
+                            Específicas de Telecomunicación, Mención en Telemática</p>
+                        <p><a href="mailto:email@gmail.com">jmoizar@gmail.com</p>
+				</div>		
+				<a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Back</a>
+                    </div>
+                </div>
+<script src="src/app.js"></script>
+</body>
