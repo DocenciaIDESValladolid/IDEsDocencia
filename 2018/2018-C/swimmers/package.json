@@ -9,7 +9,7 @@
     "http-proxy-middleware": "",
     "jquery": "",
     "openlayers": "",
-    "pg": "^6.1.5",
+    "pg": "^8.18.0",
     "postgeo": "^0.1.2"
   },
   "devDependencies": {},
